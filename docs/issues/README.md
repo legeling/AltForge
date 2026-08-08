@@ -1,0 +1,19 @@
+# Issue Register
+
+本目录跟踪尚未解决的项目风险、阻塞项和技术债。GitHub Issue 用于公开协作，本目录保存会影响设计、验证和交付的稳定摘要。
+
+| ID | 标题 | 优先级 | 状态 | 关联 |
+|---|---|---:|---|---|
+| [`ISSUE-20260808-001`](ISSUE-20260808-001-unicode-regression-tests.md) | Unicode IPA 修复缺少持久自动化测试 | P1 | Open | `FR-004`, `FR-005`, `T-001` |
+| [`ISSUE-20260808-002`](ISSUE-20260808-002-swift-version-baseline.md) | Swift 6 文档口径与 Swift 5 build setting 不一致 | P2 | Open / 待确认 | `NFR-003`, `T-002` |
+| [`ISSUE-20260808-003`](ISSUE-20260808-003-macos-distribution-signing.md) | macOS release 未签名且未 notarize | P1 | Open / 待确认 | `DES-010` |
+| [`ISSUE-20260808-004`](ISSUE-20260808-004-windows-scope.md) | Windows AltServer 不在当前仓库目标中 | P2 | Open / 待确认 | Intake non-goal |
+| [`ISSUE-20260808-005`](ISSUE-20260808-005-clean-build-reproducibility.md) | 干净 checkout 的本地完整构建尚未验证 | P1 | Open | `FR-014`, `T-002` |
+| [`ISSUE-20260808-006`](ISSUE-20260808-006-altsign-classic-baseline.md) | AltSign submodule 仍基于 Marketplace 配置 | P0 | Open | `FR-001`, `FR-002`, `T-011` |
+
+## 状态规则
+
+- `Open`：仍影响计划或交付。
+- `Blocked`：连续确认无法推进且依赖外部输入。
+- `Resolved`：修复已验证，并同步 requirements/design/verification/change。
+- `Accepted`：风险被明确接受，有 owner 与复查条件。

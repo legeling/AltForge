@@ -30,6 +30,10 @@ AltForge builds on [AltStore](https://github.com/altstoreio/AltStore), an iOS ap
 - iOS 14.0 (AltStore)
 - macOS 11.0 (AltServer)
 
+## Documentation
+
+Project requirements, architecture, verification strategy, change records, known issues, and contributor rules live in [`docs/`](docs/README.md). Start with the [documentation index](docs/README.md) and the project-level [`AGENTS.md`](AGENTS.md) before making cross-module or signing-related changes.
+
 ## Project Overview
 
 ### AltStore
