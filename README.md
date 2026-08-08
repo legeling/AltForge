@@ -1,14 +1,20 @@
-# AltStore
+# AltForge
 
-> AltStore is an alternative app store for non-jailbroken iOS devices. 
+> A maintained and enhanced AltStore derivative focused on reliability, compatibility, and better sideloading.
 
 [![Swift Version](https://img.shields.io/badge/swift-5.0-orange.svg)](https://swift.org/)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-AltStore is an iOS application that allows you to sideload other apps (.ipa files) onto your iOS device with just your Apple ID. AltStore resigns apps with your personal development certificate and sends them to a desktop app, AltServer, which installs the resigned apps back to your device using iTunes WiFi sync. To prevent apps from expiring, AltStore will also periodically refresh your apps in the background when on the same WiFi as AltServer.
+AltForge builds on [AltStore](https://github.com/altstoreio/AltStore), an iOS application that allows you to sideload other apps (`.ipa` files) with your Apple ID. It preserves the existing AltStore and AltServer architecture while providing an actively maintained home for compatibility fixes and practical enhancements.
 
-For the initial release, I focused on building a solid foundation for distributing my own apps — primarily Delta, [my all-in-one emulator for iOS](https://github.com/rileytestut/Delta). Now that Delta has been released, however, I'm beginning work on adding support for *anyone* to list and distribute their apps through AltStore (contributions welcome! 🙂).
+## Project Goals
+
+- Resolve long-standing installation and signing issues
+- Support Unicode app names and international workflows reliably
+- Improve diagnostics, device handling, and installation ergonomics
+- Track new iOS and macOS releases without abandoning older regressions
+- Contribute suitable fixes back upstream whenever practical
 
 ## Features
 - Installs apps over WiFi using AltServer
@@ -49,11 +55,11 @@ AltStore and AltServer are both fairly straightforward to compile and run if you
 
 1. Clone the repository 
 	``` 
-	git clone https://github.com/rileytestut/AltStore.git
+	git clone --recurse-submodules https://github.com/legeling/AltForge.git
 	```
 2. Update submodules: 
 	```
-	cd AltStore 
+	cd AltForge
 	git submodule update --init --recursive
 	```
 3. Open `AltStore.xcworkspace` and select the AltStore project in the project navigator. On the `Signing & Capabilities` tab, change the team from `Yvette Testut` to your own account.
@@ -61,14 +67,8 @@ AltStore and AltServer are both fairly straightforward to compile and run if you
 5. **(AltStore only)** Change the value for `ALTServerID` in the Info.plist to your AltServer's serverID. This is embedded by AltServer during installation to help AltStore distinguish between multiple AltServers on the same network, and you can find this by using a Bonjour browsing application and noting the serverID advertised by AltServer. This isn't strictly necessary, because if AltStore can't find the AltServer with the embedded serverID it still falls back to trying another AltServer. However, this will help in cases where there are multiple AltServers running (plus the error messages are more helpful).
 6. Build + run app! 🎉
 
-## Licensing
+## Upstream and Licensing
 
-Due to the licensing of some dependencies used by AltStore, I have no choice but to distribute AltStore under the **AGPLv3 license**. That being said, my goal for AltStore is for it to be an open source project *anyone* can use without restrictions, so I explicitly give permission for anyone to use, modify, and distribute all *my* original code for this project in any form, with or without attribution, without fear of legal consequences (dependencies remain under their original licenses, however).
+AltForge is derived from [altstoreio/AltStore](https://github.com/altstoreio/AltStore). Upstream remains configured as a separate Git remote so compatible updates and fixes can move in either direction.
 
-## Contact Me
-
-* Email: riley@altstore.io
-* Mastodon (Preferred): [@rileytestut@mastodon.social](https://mastodon.social/@rileytestut)
-* Twitter (Less active nowadays): [@rileytestut](https://twitter.com/rileytestut)
-
-Questions about AltStore in general? Make sure to read the FAQ at https://altstore.io/faq/
+The project is distributed under the **GNU Affero General Public License v3.0**. Third-party dependencies remain under their respective licenses. See [LICENSE](LICENSE) for details.
