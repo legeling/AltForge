@@ -19,6 +19,7 @@ AltForge builds on [AltStore](https://github.com/altstoreio/AltStore), an iOS ap
 ## Features
 - Installs apps over WiFi using AltServer
 - Resigns and installs any app with your Apple ID
+- Preserves Unicode app and resource filenames while extracting and rebuilding IPA files
 - Refreshes apps periodically in the background to prevent them from expiring (when on same WiFi as AltServer)
 - Handles app updates directly through AltStore 
 - Supports Simplified Chinese and iOS per-app language switching
