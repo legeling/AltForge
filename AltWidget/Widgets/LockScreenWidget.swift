@@ -98,7 +98,7 @@ private struct ComplicationView: View
                         Text("\(daysRemaining)")
                             .font(.system(size: fontSize, weight: .bold, design: .rounded))
                         
-                        Text(daysRemaining == 1 ? "DAY" : "DAYS")
+                        Text(daysRemaining == 1 ? String(localized: "DAY") : String(localized: "DAYS"))
                             .font(.caption)
                     }
                     .fixedSize()

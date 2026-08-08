@@ -50,17 +50,29 @@ public protocol ALTAppPermission: RawRepresentable<String>, Hashable
     var localizedDisplayName: String { get }
 }
 
+private let permissionLocalizationBundle = Bundle(for: DatabaseManager.self)
+
 private struct KnownPermission: Decodable
 {
-    var localizedName: String
-    var localizedDescription: String?
+    private var name: String
+    private var permissionDescription: String?
     var rawValue: String
     var symbolName: String
+
+    var localizedName: String {
+        permissionLocalizationBundle.localizedString(forKey: self.name, value: self.name, table: nil)
+    }
+
+    var localizedDescription: String? {
+        self.permissionDescription.map {
+            permissionLocalizationBundle.localizedString(forKey: $0, value: $0, table: nil)
+        }
+    }
     
     private enum CodingKeys: String, CodingKey
     {
-        case localizedName = "name"
-        case localizedDescription = "description"
+        case name
+        case permissionDescription = "description"
         case rawValue = "key"
         case symbolName = "symbol"
     }

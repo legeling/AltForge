@@ -22,6 +22,12 @@
             "state" : "translated",
             "value" : "Riley Testut"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riley Testut"
+          }
         }
       }
     },
@@ -45,6 +51,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Olá, pessoal!\n\nSe vocês quiserem apoiar o meu trabalho, podem fazer uma doação aqui. Em troca, vocês terão acesso às versões beta de todos os meus apps e serão os primeiros a testar os recursos mais recentes.\n\nAgradeço todo o apoio 💜\nRiley"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大家好！\n\n如果您想支持我的工作，可以在这里捐款。作为回报，您将可以访问我所有应用的测试版，并成为第一批尝试最新功能的人。\n\n感谢大家的支持💜\nRiley"
           }
         }
       },
@@ -71,6 +83,12 @@
             "state" : "translated",
             "value" : "Vincular conta do Patreon"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关联 Patreon 账户"
+          }
         }
       }
     },
@@ -94,6 +112,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desenvolvedor"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开发者"
           }
         }
       }
@@ -119,6 +143,12 @@
             "state" : "translated",
             "value" : "Operações"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "运营"
+          }
         }
       }
     },
@@ -143,6 +173,12 @@
             "state" : "translated",
             "value" : "Tornar-se um apoiador"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成为赞助者"
+          }
         }
       }
     },
@@ -163,6 +199,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shane Gill"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shane Gill"

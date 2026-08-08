@@ -84,13 +84,13 @@ class ViewController: UIViewController
         
         #if DEBUG
         let button1 = UIButton(type: .system)
-        button1.setTitle("Backup", for: .normal)
+        button1.setTitle(NSLocalizedString("Backup", comment: "Backup button title"), for: .normal)
         button1.setTitleColor(.white, for: .normal)
         button1.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         button1.addTarget(self, action: #selector(ViewController.backup), for: .primaryActionTriggered)
         
         let button2 = UIButton(type: .system)
-        button2.setTitle("Restore", for: .normal)
+        button2.setTitle(NSLocalizedString("Restore", comment: "Restore button title"), for: .normal)
         button2.setTitleColor(.white, for: .normal)
         button2.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         button2.addTarget(self, action: #selector(ViewController.restore), for: .primaryActionTriggered)

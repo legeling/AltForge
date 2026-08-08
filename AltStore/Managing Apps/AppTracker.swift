@@ -116,7 +116,7 @@ private struct AppRow: View
                 
                 Spacer()
                 
-                Text(app.isInstalling ? "Installing…" : "Installed")
+                Text(app.isInstalling ? String(localized: "Installing…") : String(localized: "Installed"))
             }
             
             if let lastError = tracker.error(for: app)

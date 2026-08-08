@@ -14,6 +14,12 @@
             "state" : "translated",
             "value" : "“%@” bloqueado"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@” 被阻止"
+          }
         }
       }
     },
@@ -29,6 +35,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "“%@” não pôde ser adicionado ao AltStore."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@”无法添加到 AltStore。"
           }
         }
       }
@@ -46,6 +58,12 @@
             "state" : "translated",
             "value" : "“%@” receberá automaticamente essas permissões após ser instalado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@”将自动获得这些权限。"
+          }
         }
       }
     },
@@ -62,6 +80,12 @@
             "state" : "translated",
             "value" : "@%@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "@%@"
+          }
         }
       }
     },
@@ -74,6 +98,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@"
@@ -100,6 +130,12 @@
             "state" : "translated",
             "value" : "%1$@%2$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
         }
       }
     },
@@ -121,6 +157,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ %2$@ já está disponível para download."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ 现已可供下载。"
           }
         }
       }
@@ -144,6 +186,12 @@
             "state" : "translated",
             "value" : "Atualização de %1$@ %2$@. Lançado em %3$@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ 更新。发布于 %3$@。"
+          }
         }
       }
     },
@@ -159,6 +207,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ por mês"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 一个月"
           }
         }
       }
@@ -176,6 +230,12 @@
             "state" : "translated",
             "value" : "%@ App IDs"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 个 App ID"
+          }
         }
       }
     },
@@ -192,6 +252,12 @@
             "state" : "translated",
             "value" : "%@ App IDs restantes"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ App IDs 剩余"
+          }
         }
       }
     },
@@ -207,6 +273,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ beta"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 测试版"
           }
         }
       }
@@ -230,6 +302,12 @@
             "state" : "translated",
             "value" : "%1$@ por %2$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 由 %2$@"
+          }
         }
       }
     },
@@ -245,6 +323,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ não pode fazer o jailbreak deste dispositivo a menos que você faça o untether primeiro. Tem certeza de que deseja instalar sem fazer o untether?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必须先将设备转为完美越狱，%@ 才能执行越狱。确定要在不转为完美越狱的情况下安装吗？"
           }
         }
       }
@@ -262,6 +346,12 @@
             "state" : "translated",
             "value" : "%@ só pode ser baixado de sua fonte original"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 只能从其原始软件源下载"
+          }
         }
       }
     },
@@ -277,6 +367,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ não pôde ser baixado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 无法下载。"
           }
         }
       }
@@ -294,6 +390,12 @@
             "state" : "translated",
             "value" : "%@ não pôde ser encontrado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到 %@。"
+          }
         }
       }
     },
@@ -309,6 +411,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ não pôde ser instalado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装 %@。"
           }
         }
       }
@@ -326,6 +434,12 @@
             "state" : "translated",
             "value" : "%@ dias"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 天"
+          }
         }
       }
     },
@@ -341,6 +455,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ DIAS"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 天"
           }
         }
       }
@@ -364,6 +484,12 @@
             "state" : "translated",
             "value" : "%1$@ não é compatível com iOS %2$@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 不支持 iOS %2$@。"
+          }
         }
       }
     },
@@ -379,6 +505,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ não é um servidor Mastodon válido."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 不是有效的 Mastodon 服务器。"
           }
         }
       }
@@ -396,6 +528,12 @@
             "state" : "translated",
             "value" : "%@ não foi adicionado ao AltStore."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 未添加到 AltStore。"
+          }
         }
       }
     },
@@ -411,6 +549,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ não está disponível na sua região."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 在您所在的地区不可用。"
           }
         }
       }
@@ -428,6 +572,12 @@
             "state" : "translated",
             "value" : "%@ pode solicitar acesso ao seguinte:"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 可能请求访问以下内容："
+          }
         }
       }
     },
@@ -443,6 +593,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ novidades"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 新闻"
           }
         }
       }
@@ -466,6 +622,12 @@
             "state" : "translated",
             "value" : "%1$@ requer %2$@ App IDs, mas %3$@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 需要 %2$@ App IDs，但需要 %3$@。"
+          }
         }
       }
     },
@@ -482,6 +644,12 @@
             "state" : "translated",
             "value" : "%@ requer permissões adicionais não especificadas pela fonte."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 需要源未指定的附加权限。"
+          }
         }
       }
     },
@@ -497,6 +665,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ requer uma contribuição ativa para ser instalado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 需要积极的赞助才能安装。"
           }
         }
       }
@@ -520,6 +694,12 @@
             "state" : "translated",
             "value" : "%1$@ requer iOS %2$@ ou anterior."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 需要 iOS %2$@ 或更早版本。"
+          }
         }
       }
     },
@@ -542,6 +722,12 @@
             "state" : "translated",
             "value" : "%1$@ requer iOS %2$@ ou posterior."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 需要 iOS %2$@ 或更高版本。"
+          }
         }
       }
     },
@@ -557,6 +743,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ requer mais permissões do que a versão que já está instalada"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 需要比已安装的版本更多的权限"
           }
         }
       }
@@ -574,6 +766,12 @@
             "state" : "translated",
             "value" : "%@ Atualizações não suportadas disponíveis"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 不支持的可用更新"
+          }
         }
       }
     },
@@ -590,6 +788,12 @@
             "state" : "translated",
             "value" : "%@/mês"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@/月"
+          }
         }
       }
     },
@@ -602,6 +806,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -622,6 +832,12 @@
             "state" : "translated",
             "value" : "^[%lld app](inflect: true)"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^[%lld个App](inflect: true)"
+          }
         }
       }
     },
@@ -637,6 +853,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "^[%lld App](inflect: true)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^[%lld个App](inflect: true)"
           }
         }
       }
@@ -654,6 +876,12 @@
             "state" : "translated",
             "value" : "^[%lld seguidor](inflect: true)"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^[%lld位关注者](inflect: true)"
+          }
         }
       }
     },
@@ -669,6 +897,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "^[%lld curtir](inflect: true)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^[%lld个赞](inflect: true)"
           }
         }
       }
@@ -686,6 +920,12 @@
             "state" : "translated",
             "value" : "^[%lld Fonte](inflect: true) adicionada"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已添加 ^[%lld个软件源](inflect: true)"
+          }
         }
       }
     },
@@ -701,6 +941,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 App ID"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 个 App ID"
           }
         }
       }
@@ -718,6 +964,12 @@
             "state" : "translated",
             "value" : "1 App ID restante"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 App ID 剩余"
+          }
         }
       }
     },
@@ -733,6 +985,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 dia"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 天"
           }
         }
       }
@@ -750,6 +1008,12 @@
             "state" : "translated",
             "value" : "Não foi possível estabelecer uma conexão com o AltServer."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法建立与 AltServer 的连接。"
+          }
         }
       }
     },
@@ -765,6 +1029,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uma permissão de %@ está com a descrição de uso ausente."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的权限缺少使用说明。"
           }
         }
       }
@@ -782,6 +1052,12 @@
             "state" : "translated",
             "value" : "Um app placeholder precisa ser instalado para preparar seu dispositivo para o untethering.\n\nIsso pode levar alguns instantes."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要安装一个占位 App，为设备转为完美越狱做准备。\n\n这可能需要一些时间。"
+          }
         }
       }
     },
@@ -797,6 +1073,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uma fonte não pode mudar seu identificador após ser adicionada e não pode mais ser atualizada."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源一旦添加就无法更改其标识符。该软件源无法再更新。"
           }
         }
       }
@@ -814,6 +1096,12 @@
             "state" : "translated",
             "value" : "Já existe uma fonte com o identificador “%@”"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标识符为“%@”的源已存在"
+          }
         }
       }
     },
@@ -829,6 +1117,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sobre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于"
           }
         }
       }
@@ -846,6 +1140,12 @@
             "state" : "translated",
             "value" : "CONTA"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账户"
+          }
         }
       }
     },
@@ -861,6 +1161,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ativar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "激活"
           }
         }
       }
@@ -878,6 +1184,12 @@
             "state" : "translated",
             "value" : "ATIVAR"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "激活"
+          }
         }
       }
     },
@@ -893,6 +1205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ativar %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "激活 %@"
           }
         }
       }
@@ -910,6 +1228,12 @@
             "state" : "translated",
             "value" : "Ativo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "积极的"
+          }
         }
       }
     },
@@ -925,6 +1249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ADICIONAR"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加"
           }
         }
       }
@@ -942,6 +1272,12 @@
             "state" : "translated",
             "value" : "Adicionar ^[%lld fonte](inflect: true)"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加 ^[%lld个软件源](inflect: true)"
+          }
         }
       }
     },
@@ -957,6 +1293,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adicionar tudo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加全部"
           }
         }
       }
@@ -974,6 +1316,12 @@
             "state" : "translated",
             "value" : "Adicionar mais fontes"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加更多源"
+          }
         }
       }
     },
@@ -989,6 +1337,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adicionar fonte"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加软件源"
           }
         }
       }
@@ -1006,6 +1360,12 @@
             "state" : "translated",
             "value" : "Permissões adicionais"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "附加权限"
+          }
         }
       }
     },
@@ -1021,6 +1381,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "todos os apps baixados a partir dele."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从其中下载的所有应用。"
           }
         }
       }
@@ -1038,6 +1404,12 @@
             "state" : "translated",
             "value" : "Todos os apps foram atualizados."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有 App 均已刷新。"
+          }
         }
       }
     },
@@ -1054,6 +1426,12 @@
             "state" : "translated",
             "value" : "Todas as fontes foram adicionadas com sucesso."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有源均已成功添加。"
+          }
         }
       }
     },
@@ -1066,6 +1444,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "AltServer"
@@ -1086,6 +1470,12 @@
             "state" : "translated",
             "value" : "O AltServer não foi encontrado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer。"
+          }
         }
       }
     },
@@ -1101,6 +1491,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O AltStore só pode instalar apps de marketplace que tenham sido notarizados pela Apple."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 只能安装经过 Apple 公证的市场应用。"
           }
         }
       }
@@ -1118,6 +1514,12 @@
             "state" : "translated",
             "value" : "O AltStore não conseguiu determinar o UDID deste dispositivo."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 无法确定该设备的 UDID。"
+          }
         }
       }
     },
@@ -1133,6 +1535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O AltStore não possui informações detalhadas sobre esses entitlements."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 没有这些权利的详细信息。"
           }
         }
       }
@@ -1150,6 +1558,12 @@
             "state" : "translated",
             "value" : "O AltStore irá expirar em breve"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 即将到期"
+          }
         }
       }
     },
@@ -1165,6 +1579,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Novidades do AltStore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 新闻"
           }
         }
       }
@@ -1182,6 +1602,12 @@
             "state" : "translated",
             "value" : "O AltStore teve a permissão negada para iniciar o %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 被拒绝启动 %@ 的权限。"
+          }
         }
       }
     },
@@ -1197,6 +1623,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O AltStore não conseguiu usar um certificado de assinatura existente, então precisou criar um novo. Isso fará com que quaisquer apps instalados com um certificado anterior expirem, incluindo o próprio AltStore.\n\nPara evitar que o AltStore expire antes do tempo, atualize o app agora. O AltStore será encerrado assim que a atualização for concluída."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 无法使用现有签名证书，因此必须创建一个新证书。这将导致使用现有证书安装的任何应用过期 - 包括 AltStore。\n\n为了防止 AltStore 提前过期，请立即刷新应用。刷新完成后，AltStore 将退出。"
           }
         }
       }
@@ -1214,6 +1646,12 @@
             "state" : "translated",
             "value" : "O AltStore expirará em 24 horas. Abra o app e atualize-o para evitar que ele expire."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 将在 24 小时后过期。打开应用并刷新以防止其过期。"
+          }
         }
       }
     },
@@ -1229,6 +1667,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível acessar o grupo de apps compartilhado do AltStore."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 的共享应用组无法访问。"
           }
         }
       }
@@ -1246,6 +1690,12 @@
             "state" : "translated",
             "value" : "Não foi possível encontrar uma conta com o nome de usuário @%@ ."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到用户名为 @%@ 的账户。"
+          }
         }
       }
     },
@@ -1261,6 +1711,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível encontrar uma conta com este nome de usuário."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到具有此用户名的账户。"
           }
         }
       }
@@ -1278,6 +1734,12 @@
             "state" : "translated",
             "value" : "um app na fonte “%@”"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源“%@”中的应用"
+          }
         }
       }
     },
@@ -1293,6 +1755,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ocorreu um erro HTTP."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发生 HTTP 错误。"
           }
         }
       }
@@ -1310,6 +1778,12 @@
             "state" : "translated",
             "value" : "A captura de tela de iPad de %@ não tem tamanho especificado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的 iPad 屏幕截图未指定其大小"
+          }
         }
       }
     },
@@ -1325,6 +1799,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ocorreu um erro desconhecido."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发生未知错误。"
           }
         }
       }
@@ -1342,6 +1822,12 @@
             "state" : "translated",
             "value" : "Os apps instalados dessa fonte permanecerão, mas não receberão mais atualizações."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您从此软件源安装的任何应用都将保留，但它们将不再接收任何应用更新。"
+          }
         }
       }
     },
@@ -1354,6 +1840,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "App"
@@ -1374,6 +1866,12 @@
             "state" : "translated",
             "value" : "O app contém extensões"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用包含扩展"
+          }
         }
       }
     },
@@ -1389,6 +1887,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "extensão do app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用扩展"
           }
         }
       }
@@ -1406,6 +1910,12 @@
             "state" : "translated",
             "value" : "extensões do app"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用扩展"
+          }
         }
       }
     },
@@ -1421,6 +1931,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App ID:"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App ID："
           }
         }
       }
@@ -1438,6 +1954,12 @@
             "state" : "translated",
             "value" : "Senha do aplicativo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用密码"
+          }
         }
       }
     },
@@ -1453,6 +1975,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dica de atualização de apps"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用刷新提示"
           }
         }
       }
@@ -1470,6 +1998,12 @@
             "state" : "translated",
             "value" : "Atualização do aplicativo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用更新"
+          }
         }
       }
     },
@@ -1485,6 +2019,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aprovar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "批准"
           }
         }
       }
@@ -1502,6 +2042,12 @@
             "state" : "translated",
             "value" : "Tem certeza de que deseja limpar o cache do AltStore?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要清除 AltStore 的缓存吗？"
+          }
         }
       }
     },
@@ -1517,6 +2063,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tem certeza de que deseja limpar o log de erros?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要清除错误日志吗？"
           }
         }
       }
@@ -1534,6 +2086,12 @@
             "state" : "translated",
             "value" : "Tem certeza de que deseja remover a fonte “%@”?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要删除软件源“%@”吗？"
+          }
         }
       }
     },
@@ -1549,6 +2107,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tem certeza de que deseja restaurar este backup?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要恢复此备份吗？"
           }
         }
       }
@@ -1566,6 +2130,12 @@
             "state" : "translated",
             "value" : "Tem certeza de que deseja sair?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要退出吗？"
+          }
         }
       }
     },
@@ -1581,6 +2151,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tem certeza de que deseja desvincular sua conta do Patreon?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要取消与 Patreon 账户的关联吗？"
           }
         }
       }
@@ -1604,6 +2180,12 @@
             "state" : "translated",
             "value" : "Tem certeza de que deseja %1$@ %2$@?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要 %1$@ %2$@ 吗？"
+          }
         }
       }
     },
@@ -1619,6 +2201,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fazer backup"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "备份"
           }
         }
       }
@@ -1636,6 +2224,12 @@
             "state" : "translated",
             "value" : "Fazer backup de %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "备份 %@"
+          }
         }
       }
     },
@@ -1651,6 +2245,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Torne-se um apoiador"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成为赞助者"
           }
         }
       }
@@ -1669,6 +2269,12 @@
             "state" : "translated",
             "value" : "FATURAMENTO"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "计费"
+          }
         }
       }
     },
@@ -1681,6 +2287,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bluesky"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bluesky"
@@ -1701,6 +2313,12 @@
             "state" : "translated",
             "value" : "Conta Bridge"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "桥账户"
+          }
         }
       }
     },
@@ -1716,6 +2334,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Navegar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "浏览"
           }
         }
       }
@@ -1733,6 +2357,12 @@
             "state" : "translated",
             "value" : "Não foi possível ativar mais de 3 apps"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法激活超过 3 个应用"
+          }
         }
       }
     },
@@ -1748,6 +2378,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível ativar mais de 3 apps e extensões de apps"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法激活超过 3 个应用和应用扩展"
           }
         }
       }
@@ -1765,6 +2401,12 @@
             "state" : "translated",
             "value" : "Não foi possível enviar pelo Mail"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法发送邮件"
+          }
         }
       }
     },
@@ -1780,6 +2422,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Categorias"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "类别"
           }
         }
       }
@@ -1797,6 +2445,12 @@
             "state" : "translated",
             "value" : "categoria"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "类别"
+          }
         }
       }
     },
@@ -1812,6 +2466,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alterar ícone do app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改应用图标"
           }
         }
       }
@@ -1829,6 +2489,12 @@
             "state" : "translated",
             "value" : "Alterar ícone"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改图标"
+          }
         }
       }
     },
@@ -1844,6 +2510,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clássico"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "经典"
           }
         }
       }
@@ -1861,6 +2533,12 @@
             "state" : "translated",
             "value" : "Limpar cache"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清除缓存"
+          }
         }
       }
     },
@@ -1876,6 +2554,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Limpar o log de erros"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清除错误日志"
           }
         }
       }
@@ -1893,6 +2577,12 @@
             "state" : "translated",
             "value" : "Coleções"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收藏"
+          }
         }
       }
     },
@@ -1908,6 +2598,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Em breve!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "即将推出！"
           }
         }
       }
@@ -1925,6 +2621,12 @@
             "state" : "translated",
             "value" : "Confirmar ação"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认操作"
+          }
         }
       }
     },
@@ -1940,6 +2642,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmar instalação"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认安装"
           }
         }
       }
@@ -1957,6 +2665,12 @@
             "state" : "translated",
             "value" : "Conectar conta do Patreon"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接 Patreon 账户"
+          }
         }
       }
     },
@@ -1972,6 +2686,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continuar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续"
           }
         }
       }
@@ -1989,6 +2709,12 @@
             "state" : "translated",
             "value" : "Continuar no app"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在应用中继续"
+          }
         }
       }
     },
@@ -2004,6 +2730,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar código de erro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制错误代码"
           }
         }
       }
@@ -2021,6 +2753,12 @@
             "state" : "translated",
             "value" : "Copiar mensagem de erro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制错误消息"
+          }
         }
       }
     },
@@ -2036,6 +2774,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível fazer backup de “%@”."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法备份“%@”。"
           }
         }
       }
@@ -2053,6 +2797,12 @@
             "state" : "translated",
             "value" : "Não foi possível fazer backup do app de jailbreak."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法备份越狱应用。"
+          }
         }
       }
     },
@@ -2068,6 +2818,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível determinar o contexto de apresentação."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确定当前上下文。"
           }
         }
       }
@@ -2085,6 +2841,12 @@
             "state" : "translated",
             "value" : "Não foi possível baixar o arquivo OTA."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法下载 OTA 存档。"
+          }
         }
       }
     },
@@ -2100,6 +2862,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível ativar o JIT para %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法为 %@ 启用 JIT"
           }
         }
       }
@@ -2117,6 +2885,12 @@
             "state" : "translated",
             "value" : "Não foi possível extrair o Spotlight do arquivo OTA."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法从 OTA 存档中提取 Spotlight。"
+          }
         }
       }
     },
@@ -2132,6 +2906,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível instalar o placeholder %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装 %@ 占位符。"
           }
         }
       }
@@ -2149,6 +2929,12 @@
             "state" : "translated",
             "value" : "Não foi possível instalar %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装 %@。"
+          }
         }
       }
     },
@@ -2164,6 +2950,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível carregar as curtidas"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法加载喜欢"
           }
         }
       }
@@ -2181,6 +2973,12 @@
             "state" : "translated",
             "value" : "Não foi possível abrir o placeholder %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法打开 %@ 占位符。"
+          }
         }
       }
     },
@@ -2196,6 +2994,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível abrir %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法打开 %@。"
           }
         }
       }
@@ -2213,6 +3017,12 @@
             "state" : "translated",
             "value" : "Não foi possível aplicar patch no placeholder %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法修补 %@ 占位符。"
+          }
         }
       }
     },
@@ -2228,6 +3038,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível restaurar “%@”."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法恢复“%@”。"
           }
         }
       }
@@ -2245,6 +3061,12 @@
             "state" : "translated",
             "value" : "CRÉDITOS"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "制作人员"
+          }
         }
       }
     },
@@ -2260,6 +3082,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contribuição personalizada"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "定制赞助"
           }
         }
       }
@@ -2277,6 +3105,12 @@
             "state" : "translated",
             "value" : "Desativar"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停用"
+          }
         }
       }
     },
@@ -2292,6 +3126,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "DEPURAR"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试"
           }
         }
       }
@@ -2309,6 +3149,12 @@
             "state" : "translated",
             "value" : "Excluir"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除"
+          }
         }
       }
     },
@@ -2324,6 +3170,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Exclua apps instalados via sideload para liberar slots de App ID."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除侧载应用以释放 App ID 插槽。"
           }
         }
       }
@@ -2341,6 +3193,12 @@
             "state" : "translated",
             "value" : "EXIBIÇÃO"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示"
+          }
         }
       }
     },
@@ -2356,6 +3214,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não sabe por onde começar? Tente adicionar uma das nossas Fontes Recomendadas!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不知道从哪里开始？尝试添加我们推荐的软件源之一！"
           }
         }
       }
@@ -2373,6 +3237,12 @@
             "state" : "translated",
             "value" : "Concluído"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
         }
       }
     },
@@ -2388,6 +3258,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Baixar %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载 %@"
           }
         }
       }
@@ -2411,6 +3287,12 @@
             "state" : "translated",
             "value" : "Baixar %1$@ %2$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载 %1$@ %2$@"
+          }
         }
       }
     },
@@ -2426,6 +3308,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Baixando %@…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在下载 %@…"
           }
         }
       }
@@ -2443,6 +3331,12 @@
             "state" : "translated",
             "value" : "Baixando o firmware do iOS..."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在下载 iOS 固件..."
+          }
         }
       }
     },
@@ -2458,6 +3352,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "versões duplicadas"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重复版本"
           }
         }
       }
@@ -2475,6 +3375,12 @@
             "state" : "translated",
             "value" : "Cada app e extensão de app instalada com o AltStore deve registrar um App ID com a Apple.\n\nEm contas de desenvolvedor pagas, os App IDs nunca expiram e não há limite de criação."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 AltStore 安装的每个应用和应用扩展都必须向 Apple 注册 App ID。\n\n付费开发者账户的 App IDs 永不过期，并且您可以创建的数量没有限制。"
+          }
         }
       }
     },
@@ -2490,6 +3396,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cada app e extensão de app instalada com o AltStore deve registrar um App ID com a Apple. A Apple limita Apple IDs de não desenvolvedor a 10 App IDs por vez.\n\n**Os App IDs não podem ser excluídos**, mas expiram após uma semana. O AltStore os renovará automaticamente para todos os apps ativos quando expirarem."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 AltStore 安装的每个应用和应用扩展都必须向 Apple 注册 App ID。 Apple 将非开发人员 Apple ID 限制为一次最多 10 个 App IDs。\n\n**App IDs 无法删除**，但它们会在一星期后过期。所有活动应用过期后，AltStore 都会自动续订 App IDs。"
           }
         }
       }
@@ -2507,6 +3419,12 @@
             "state" : "translated",
             "value" : "Ative a atualização em segundo plano para atualizar automaticamente os apps em segundo plano quando estiver conectado à mesma rede Wi-Fi que o AltServer."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用后台刷新，以便在连接到与 AltServer 相同的 Wi-Fi 时自动在后台刷新应用。"
+          }
         }
       }
     },
@@ -2522,6 +3440,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ativar JIT"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用 JIT"
           }
         }
       }
@@ -2539,6 +3463,12 @@
             "state" : "translated",
             "value" : "JIT ativado para %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为 %@ 启用 JIT"
+          }
         }
       }
     },
@@ -2554,6 +3484,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Insira abaixo a URL de uma fonte ou adicione uma das fontes recomendadas."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在下面输入源的 URL，或添加推荐的源之一。"
           }
         }
       }
@@ -2571,6 +3507,12 @@
             "state" : "translated",
             "value" : "Entitlements são permissões extras que dão acesso a serviços do sistema, incluindo informações potencialmente sensíveis."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "权利是授予对某些系统服务（包括潜在敏感信息）的访问权限的附加权限。"
+          }
         }
       }
     },
@@ -2586,6 +3528,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detalhes do erro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误详细信息"
           }
         }
       }
@@ -2603,6 +3551,12 @@
             "state" : "translated",
             "value" : "Erro ao carregar apoiadores"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载顾客时出错"
+          }
         }
       }
     },
@@ -2618,6 +3572,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erro:"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误："
           }
         }
       }
@@ -2635,6 +3595,12 @@
             "state" : "translated",
             "value" : "Erros que acontecem ao fazer sideload ou atualizar apps aparecerão aqui."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "侧载或刷新应用时发生的错误将出现在此处。"
+          }
         }
       }
     },
@@ -2650,6 +3616,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erros que ocorram durante a instalação de apps aparecerão aqui."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装应用时发生的错误将显示在此处。"
           }
         }
       }
@@ -2667,6 +3639,12 @@
             "state" : "translated",
             "value" : "Expira em"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "于"
+          }
         }
       }
     },
@@ -2682,6 +3660,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expira em %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "于 %@ 到期"
           }
         }
       }
@@ -2699,6 +3683,12 @@
             "state" : "translated",
             "value" : "Expira em %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 %@ 中过期。"
+          }
         }
       }
     },
@@ -2714,6 +3704,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Exportar backup"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出备份"
           }
         }
       }
@@ -2731,6 +3727,12 @@
             "state" : "translated",
             "value" : "Falha ao ativar %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "激活 %@ 失败"
+          }
         }
       }
     },
@@ -2746,6 +3748,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao fazer backup de %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "备份失败 %@"
           }
         }
       }
@@ -2763,6 +3771,12 @@
             "state" : "translated",
             "value" : "Falha ao limpar o log de erros"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清除错误日志失败"
+          }
         }
       }
     },
@@ -2778,6 +3792,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao desativar %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法停用 %@"
           }
         }
       }
@@ -2795,6 +3815,12 @@
             "state" : "translated",
             "value" : "Falha na ativação do JIT para %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法为 %@ 启用 JIT"
+          }
         }
       }
     },
@@ -2810,6 +3836,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao instalar %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装失败 %@"
           }
         }
       }
@@ -2827,6 +3859,12 @@
             "state" : "translated",
             "value" : "Falha ao vincular o token de comissão com a conta do Patreon. Código de erro: %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法将佣金代币与 Patreon 账户关联。错误代码：%@"
+          }
         }
       }
     },
@@ -2842,6 +3880,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao fazer login"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录失败"
           }
         }
       }
@@ -2859,6 +3903,12 @@
             "state" : "translated",
             "value" : "Falha ao atualizar %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新失败 %@"
+          }
         }
       }
     },
@@ -2874,6 +3924,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao atualizar %@ apps."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法刷新 %@ 应用。"
           }
         }
       }
@@ -2891,6 +3947,12 @@
             "state" : "translated",
             "value" : "Falha ao atualizar 1 app."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法刷新 1 个应用。"
+          }
         }
       }
     },
@@ -2906,6 +3968,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao atualizar o AltStore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新失败 AltStore"
           }
         }
       }
@@ -2923,6 +3991,12 @@
             "state" : "translated",
             "value" : "Falha na atualização dos apps"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新应用失败"
+          }
         }
       }
     },
@@ -2938,6 +4012,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao restaurar backup de %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复 %@ 备份失败"
           }
         }
       }
@@ -2955,6 +4035,12 @@
             "state" : "translated",
             "value" : "Falha ao recuperar o token de comissão da Apple. Código de erro: %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法从 Apple 检索佣金令牌。错误代码：%@"
+          }
         }
       }
     },
@@ -2970,6 +4056,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao obter o URL do manifest.json da publicação no Patreon."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法从 Patreon 帖子中检索 manifest.json URL。"
           }
         }
       }
@@ -2987,6 +4079,12 @@
             "state" : "translated",
             "value" : "Falha ao atualizar %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新 %@ 失败"
+          }
         }
       }
     },
@@ -3002,6 +4100,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha ao verificar %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证 %@ 失败"
           }
         }
       }
@@ -3019,6 +4123,12 @@
             "state" : "translated",
             "value" : "Falha"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失败"
+          }
         }
       }
     },
@@ -3034,6 +4144,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Em destaque"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "精选"
           }
         }
       }
@@ -3051,6 +4167,12 @@
             "state" : "translated",
             "value" : "Apps em destaque"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "特色应用"
+          }
         }
       }
     },
@@ -3066,6 +4188,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Concluir em %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成于 %@"
           }
         }
       }
@@ -3083,6 +4211,12 @@
             "state" : "translated",
             "value" : "Concluir a instalação de %@?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成安装 %@ 吗？"
+          }
         }
       }
     },
@@ -3098,6 +4232,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Siga as instruções em %@ para concluir o jailbreak deste dispositivo."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按照 %@ 中的说明完成该设备的越狱。"
           }
         }
       }
@@ -3115,6 +4255,12 @@
             "state" : "translated",
             "value" : "Para mais detalhes, verifique o Registro de erros nas configurações."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有关更多详细信息，请检查设置中的错误日志。"
+          }
         }
       }
     },
@@ -3130,6 +4276,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para sua proteção, remova a fonte e desinstale"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为了保护您的利益，请删除源并卸载"
           }
         }
       }
@@ -3147,6 +4299,12 @@
             "state" : "translated",
             "value" : "Grátis"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自由的"
+          }
         }
       }
     },
@@ -3162,6 +4320,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Libere espaço em disco removendo dados não essenciais, como arquivos temporários e backups de apps desinstalados."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通过删除非必要数据（例如临时文件和已卸载应用的备份）来释放磁盘空间。"
           }
         }
       }
@@ -3179,6 +4343,12 @@
             "state" : "translated",
             "value" : "Gradiente"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "渐变"
+          }
         }
       }
     },
@@ -3194,6 +4364,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Oi,\n\nVocê é incrível. Sua conta foi vinculada com sucesso, então agora você tem acesso aos nossos apps exclusivos do Patreon. Você pode encontrá-los na aba Explorar.\n\nObrigado por todo o apoio. Aproveite!\nRiley & Shane"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "嘿，\n\n你是最好的。您的账户已成功关联，因此您现在可以访问我们的 Patreon 专属应用。您可以在“浏览”选项卡中找到它们。\n\n感谢大家的支持。享受！\nRiley 和 Shane"
           }
         }
       }
@@ -3211,6 +4387,12 @@
             "state" : "translated",
             "value" : "Oi,\n\nVocê é incrível. Sua conta foi vinculada com sucesso, então agora você tem acesso às versões beta de todos os nossos apps. Você pode encontrá-las na aba Explorar.\n\nObrigado por todo o apoio. Aproveite!\nRiley & Shane"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "嘿，\n\n你是最好的。您的账户已成功关联，因此您现在可以访问我们所有应用的测试版。您可以在“浏览”选项卡中找到它们。\n\n感谢大家的支持。享受！\nRiley 和 Shane"
+          }
         }
       }
     },
@@ -3226,6 +4408,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Oi, pessoal!\n\nVocês podem apoiar o desenvolvimento futuro dos nossos apps fazendo uma contribuição no Patreon. Em troca, receberão acesso às versões beta dos nossos apps e estarão entre os primeiros a experimentar os recursos mais recentes.\n\nObrigado por todo o apoio 💜\nRiley & Shane"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "嘿大家，\n\n您可以通过在 Patreon 上向我们捐款来支持我们应用的未来开发。作为回报，您将可以访问我们应用的测试版，并成为第一批尝试最新功能的人。\n\n感谢大家的支持💜\nRiley 和 Shane"
           }
         }
       }
@@ -3243,6 +4431,12 @@
             "state" : "translated",
             "value" : "Código de status HTTP: %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP 状态代码：%@"
+          }
         }
       }
     },
@@ -3258,6 +4452,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se você estiver usando o exploit MacDirtyCow para remover o limite de 3 apps, poderá instalar até 10 apps e extensões de app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果您使用 MacDirtyCow 漏洞来消除 3 个应用的限制，则最多可以安装 10 个应用和应用扩展。"
           }
         }
       }
@@ -3275,6 +4475,12 @@
             "state" : "translated",
             "value" : "Se você removeu o limite de 3 apps instalados via sideload usando o exploit MacDirtyCow, desative esta opção para fazer sideload de mais de 3 apps ao mesmo tempo."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果您已通过 MacDirtyCow 漏洞删除了 3 个侧载应用限制，请禁用此设置以一次侧载 3 个以上应用。"
+          }
         }
       }
     },
@@ -3290,6 +4496,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para concluir o jailbreak deste dispositivo, você precisa instalar %@ e seguir as instruções no app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为了完成此设备的越狱，您需要安装 %@，然后按照应用中的说明进行操作。"
           }
         }
       }
@@ -3307,6 +4519,12 @@
             "state" : "translated",
             "value" : "Inativo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无效"
+          }
         }
       }
     },
@@ -3322,6 +4540,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nome de usuário ou senha incorretos."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户名或密码不正确。"
           }
         }
       }
@@ -3339,6 +4563,12 @@
             "state" : "translated",
             "value" : "instalar"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装"
+          }
         }
       }
     },
@@ -3354,6 +4584,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装"
           }
         }
       }
@@ -3371,6 +4607,12 @@
             "state" : "translated",
             "value" : "Instalar %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装 %@"
+          }
         }
       }
     },
@@ -3386,6 +4628,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalar mesmo assim"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无论如何安装"
           }
         }
       }
@@ -3403,6 +4651,12 @@
             "state" : "translated",
             "value" : "Instalar jailbreak com untethering"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装完美越狱"
+          }
         }
       }
     },
@@ -3418,6 +4672,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalar sem untethering"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不转为完美越狱并安装"
           }
         }
       }
@@ -3435,6 +4695,12 @@
             "state" : "translated",
             "value" : "Instalado"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已安装"
+          }
         }
       }
     },
@@ -3450,6 +4716,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalando %@ placeholder…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在安装 %@ 占位符..."
           }
         }
       }
@@ -3467,6 +4739,12 @@
             "state" : "translated",
             "value" : "Instalando %@..."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在安装 %@..."
+          }
         }
       }
     },
@@ -3482,6 +4760,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalando…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在安装..."
           }
         }
       }
@@ -3499,6 +4783,12 @@
             "state" : "translated",
             "value" : "O URL de instalação ADP é inválido."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ADP 安装 URL 无效。"
+          }
         }
       }
     },
@@ -3514,6 +4804,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O URL de atualização ADP é inválido."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ADP 更新 URL 无效。"
           }
         }
       }
@@ -3531,6 +4827,12 @@
             "state" : "translated",
             "value" : "Parâmetros inválidos."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "参数无效。"
+          }
         }
       }
     },
@@ -3543,6 +4845,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "iOS"
@@ -3563,6 +4871,12 @@
             "state" : "translated",
             "value" : "iOS %@ ou anterior"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS %@ 或更早版本"
+          }
         }
       }
     },
@@ -3578,6 +4892,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iOS %@ ou posterior"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS %@ 或更高版本"
           }
         }
       }
@@ -3596,6 +4916,12 @@
             "state" : "translated",
             "value" : "Item"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "物品"
+          }
         }
       }
     },
@@ -3611,6 +4937,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O jailbreak requer untethering"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "越狱需要转为完美越狱"
           }
         }
       }
@@ -3628,6 +4960,12 @@
             "state" : "translated",
             "value" : "O jailbreak oferece suporte a untethering"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "越狱支持转为完美越狱"
+          }
         }
       }
     },
@@ -3643,6 +4981,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O JIT permanecerá ativado até que você feche o app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JIT 将保持启用状态，直到您退出应用。"
           }
         }
       }
@@ -3660,6 +5004,12 @@
             "state" : "translated",
             "value" : "Entrar no Patreon"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加入 Patreon"
+          }
         }
       }
     },
@@ -3675,6 +5025,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Manter extensões do app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保留应用扩展"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
           }
         }
       }
@@ -3692,6 +5058,12 @@
             "state" : "translated",
             "value" : "Última atualização: %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最后更新： %@"
+          }
         }
       }
     },
@@ -3707,6 +5079,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Depois"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍后"
           }
         }
       }
@@ -3724,6 +5102,12 @@
             "state" : "translated",
             "value" : "Curtir"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "类似"
+          }
         }
       }
     },
@@ -3739,6 +5123,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Curtido"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "喜欢"
           }
         }
       }
@@ -3756,6 +5146,12 @@
             "state" : "translated",
             "value" : "Curtidas"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "喜欢"
+          }
         }
       }
     },
@@ -3771,6 +5167,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Curtir este app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为此 App 点赞"
           }
         }
       }
@@ -3788,6 +5190,12 @@
             "state" : "translated",
             "value" : "Curte este item"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "喜欢该商品"
+          }
         }
       }
     },
@@ -3803,6 +5211,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vincular conta do Patreon"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关联 Patreon 账户"
           }
         }
       }
@@ -3820,6 +5234,12 @@
             "state" : "translated",
             "value" : "Liquid Glass"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "液体玻璃"
+          }
         }
       }
     },
@@ -3835,6 +5255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Carregando..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在加载..."
           }
         }
       }
@@ -3852,6 +5278,12 @@
             "state" : "translated",
             "value" : "Carregando…"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载中..."
+          }
         }
       }
     },
@@ -3864,6 +5296,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MACDIRTYCOW"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "MACDIRTYCOW"
@@ -3884,6 +5322,12 @@
             "state" : "translated",
             "value" : "Certifique-se de adicionar apenas fontes em que você confia."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确保仅添加您信任的软件源。"
+          }
         }
       }
     },
@@ -3899,6 +5343,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verifique se você está na mesma rede Wi-Fi de um computador com o AltServer em execução ou tente conectar este dispositivo ao computador via USB."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确保您与运行 AltServer 的计算机位于同一 Wi-Fi 网络，或尝试通过 USB 将此设备连接到您的计算机。"
           }
         }
       }
@@ -3917,6 +5367,12 @@
             "state" : "translated",
             "value" : "Gerencie sua assinatura anual do AltStore PAL."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理您的 AltStore PAL 年度订阅。"
+          }
         }
       }
     },
@@ -3929,6 +5385,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mastodon"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mastodon"
@@ -3949,6 +5411,12 @@
             "state" : "translated",
             "value" : "Moderno"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现代"
+          }
         }
       }
     },
@@ -3964,6 +5432,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mais"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多的"
           }
         }
       }
@@ -3981,6 +5455,12 @@
             "state" : "translated",
             "value" : "Nunca"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从不"
+          }
         }
       }
     },
@@ -3996,6 +5476,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Novidades e atualizações"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增和更新"
           }
         }
       }
@@ -4013,6 +5499,12 @@
             "state" : "translated",
             "value" : "Nova atualização disponível"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有新更新"
+          }
         }
       }
     },
@@ -4028,6 +5520,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alerta de novidades"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新闻快讯"
           }
         }
       }
@@ -4045,6 +5543,12 @@
             "state" : "translated",
             "value" : "Nenhum app ativo precisa ser atualizado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有活动的应用需要刷新。"
+          }
         }
       }
     },
@@ -4060,6 +5564,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nenhum aplicativo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有应用"
           }
         }
       }
@@ -4077,6 +5587,12 @@
             "state" : "translated",
             "value" : "Nenhum erro encontrado"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无错误"
+          }
         }
       }
     },
@@ -4092,6 +5608,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ainda não há curtidas"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还没有喜欢"
           }
         }
       }
@@ -4109,6 +5631,12 @@
             "state" : "translated",
             "value" : "Nenhuma tentativa de atualização"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有刷新尝试"
+          }
         }
       }
     },
@@ -4124,6 +5652,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nenhuma atualização disponível"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂无可用更新"
           }
         }
       }
@@ -4147,6 +5681,12 @@
             "state" : "translated",
             "value" : "Apple IDs de não desenvolvedor estão limitados a três apps ativos e extensões de app ativas, e “%1$@” contém %2$@ %3$@. Escolha um app para desativar."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非开发人员 Apple ID 仅限于 3 个活动应用和应用扩展，并且“%1$@”包含 %2$@ %3$@。请选择要停用的应用。"
+          }
         }
       }
     },
@@ -4162,6 +5702,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple IDs de não desenvolvedor estão limitados a três apps ativos e extensões de app ativas."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非开发者 Apple ID 仅限于 3 个活动应用和应用扩展。"
           }
         }
       }
@@ -4179,6 +5725,12 @@
             "state" : "translated",
             "value" : "Apple IDs de não desenvolvedor estão limitados a três apps ativos e extensões de app ativas. Escolha um app para desativar."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非开发者 Apple ID 仅限于 3 个活动应用和应用扩展。请选择要停用的应用。"
+          }
         }
       }
     },
@@ -4194,6 +5746,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple IDs de não desenvolvedor estão limitados a três apps ativos. Escolha um app para desativar."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非开发者 Apple ID 仅限 3 个活动应用。请选择要停用的应用。"
           }
         }
       }
@@ -4211,6 +5769,12 @@
             "state" : "translated",
             "value" : "Apple IDs de não desenvolvedor estão limitados a três apps e extensões. Apps inativos não são contabilizados no total, mas permanecem inacessíveis até serem reativados."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非开发者 Apple ID 仅限 3 个应用和应用扩展。不活动的应用不会计入总数，但在激活之前无法打开。"
+          }
         }
       }
     },
@@ -4226,6 +5790,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple IDs de não desenvolvedor estão limitados a 3 apps. Apps inativos são salvos em backup e desinstalados para não serem contabilizados no total, mas serão reinstalados com todos os dados quando ativados novamente."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非开发者 Apple ID 仅限 3 个应用。不活动的应用会被备份和卸载，因此它们不会计入您的总数，但在再次激活时将重新安装其所有数据。"
           }
         }
       }
@@ -4243,6 +5813,12 @@
             "state" : "translated",
             "value" : "Apple IDs de não desenvolvedor podem criar até 10 App IDs por semana."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "非开发者 Apple ID 每周只能创建 10 个 App IDs。"
+          }
         }
       }
     },
@@ -4258,6 +5834,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "nenhum está disponível"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无可用"
           }
         }
       }
@@ -4275,6 +5857,12 @@
             "state" : "translated",
             "value" : "um ou mais apps"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一个或多个应用"
+          }
         }
       }
     },
@@ -4290,6 +5878,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Um ou mais apps na fonte “%@” estão sem marketplaceID. Isso provavelmente significa que eles não são notarizados, o que não é compatível com esta versão do AltStore."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源“%@”中的一个或多个应用缺少市场 ID。这很可能意味着它们没有经过公证，此版本的 AltStore 不支持这一点。"
           }
         }
       }
@@ -4307,6 +5901,12 @@
             "state" : "translated",
             "value" : "apenas %@ estão disponíveis"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅 %@ 可用"
+          }
         }
       }
     },
@@ -4322,6 +5922,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "apenas 1 disponível"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅 1 个可用"
           }
         }
       }
@@ -4339,6 +5945,12 @@
             "state" : "translated",
             "value" : "abrir"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开"
+          }
         }
       }
     },
@@ -4354,6 +5966,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开"
           }
         }
       }
@@ -4371,6 +5989,12 @@
             "state" : "translated",
             "value" : "Abrir %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 %@"
+          }
         }
       }
     },
@@ -4386,6 +6010,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir no navegador"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在浏览器中打开"
           }
         }
       }
@@ -4403,6 +6033,12 @@
             "state" : "translated",
             "value" : "Abrir placeholder"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开占位符"
+          }
         }
       }
     },
@@ -4418,6 +6054,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falha na operação"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作失败"
           }
         }
       }
@@ -4435,6 +6077,12 @@
             "state" : "translated",
             "value" : "Outros entitlements"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他权利"
+          }
         }
       }
     },
@@ -4450,6 +6098,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aplicar patch no placeholder"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "补丁占位符"
           }
         }
       }
@@ -4467,6 +6121,12 @@
             "state" : "translated",
             "value" : "Aplicando patch no placeholder %@..."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "修补 %@ 占位符…"
+          }
         }
       }
     },
@@ -4482,6 +6142,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aplicando patch no app placeholder..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在修补占位符应用..."
           }
         }
       }
@@ -4499,6 +6165,12 @@
             "state" : "translated",
             "value" : "PATREON"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帕特里翁"
+          }
         }
       }
     },
@@ -4514,6 +6186,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conta do Patreon detectada"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patreon 检测到账户"
           }
         }
       }
@@ -4531,6 +6209,12 @@
             "state" : "translated",
             "value" : "Permissão"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "权限"
+          }
         }
       }
     },
@@ -4546,6 +6230,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalize sua experiência com o AltStore escolhendo um ícone alternativo para o app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通过选择备用应用图标来个性化您的 AltStore 体验。"
           }
         }
       }
@@ -4563,6 +6253,12 @@
             "state" : "translated",
             "value" : "Fotos"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "照片"
+          }
         }
       }
     },
@@ -4578,6 +6274,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Insira o código de verificação de 6 dígitos que foi enviado para seus dispositivos Apple."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入发送到您的 Apple 设备的 6 位数验证码。"
           }
         }
       }
@@ -4595,6 +6297,12 @@
             "state" : "translated",
             "value" : "Insira seu servidor Mastodon."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入您的 Mastodon 服务器。"
+          }
         }
       }
     },
@@ -4610,6 +6318,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verifique se a ortografia está correta ou tente pesquisar por outro app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保您的拼写正确，或尝试搜索其他应用。"
           }
         }
       }
@@ -4627,6 +6341,12 @@
             "state" : "translated",
             "value" : "Abra o app placeholder e siga as instruções para continuar o jailbreak do seu dispositivo."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请打开占位符应用并按照说明继续越狱您的设备。"
+          }
         }
       }
     },
@@ -4642,6 +6362,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remova a fonte existente para adicionar esta."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请删除现有软件源以添加此软件源。"
           }
         }
       }
@@ -4659,6 +6385,12 @@
             "state" : "translated",
             "value" : "Contribuição"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助"
+          }
         }
       }
     },
@@ -4674,6 +6406,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contribuição de %@ por mês"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助 %@ 一个月"
           }
         }
       }
@@ -4691,6 +6429,12 @@
             "state" : "translated",
             "value" : "Contribuição expirada"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助已过期"
+          }
         }
       }
     },
@@ -4706,6 +6450,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Com contribuição"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已赞助"
           }
         }
       }
@@ -4723,6 +6473,12 @@
             "state" : "translated",
             "value" : "Privacidade"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐私"
+          }
         }
       }
     },
@@ -4738,6 +6494,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Promoção"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "促销"
           }
         }
       }
@@ -4755,6 +6517,12 @@
             "state" : "translated",
             "value" : "Torne-se um apoiador e receba acesso a versões beta da AltStore, Delta e outros."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成为订阅会员即可访问 AltStore、Delta 等的测试版。"
+          }
         }
       }
     },
@@ -4770,6 +6538,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recuado"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "嵌入式"
           }
         }
       }
@@ -4788,6 +6562,12 @@
             "state" : "translated",
             "value" : "Fontes recomendadas"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推荐软件源"
+          }
         }
       }
     },
@@ -4803,6 +6583,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Promoção PAL resgatada"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已兑换 PAL 促销"
           }
         }
       }
@@ -4820,6 +6606,12 @@
             "state" : "translated",
             "value" : "Atualizar"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新"
+          }
         }
       }
     },
@@ -4835,6 +6627,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Atualizar %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新 %@"
           }
         }
       }
@@ -4852,6 +6650,12 @@
             "state" : "translated",
             "value" : "Atualizar tudo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新全部"
+          }
         }
       }
     },
@@ -4867,6 +6671,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Atualizar depois"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍后刷新"
           }
         }
       }
@@ -4884,6 +6694,12 @@
             "state" : "translated",
             "value" : "Apps atualizados"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已刷新的 App"
+          }
         }
       }
     },
@@ -4899,6 +6715,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Atualização em andamento"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清爽"
           }
         }
       }
@@ -4916,6 +6738,12 @@
             "state" : "translated",
             "value" : "ATUALIZANDO APPS"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新应用"
+          }
         }
       }
     },
@@ -4931,6 +6759,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AltServer remoto %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "远程 AltServer %@"
           }
         }
       }
@@ -4948,6 +6782,12 @@
             "state" : "translated",
             "value" : "Remover"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除"
+          }
         }
       }
     },
@@ -4963,6 +6803,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "REMOVER"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除"
           }
         }
       }
@@ -4980,6 +6826,12 @@
             "state" : "translated",
             "value" : "Remover “%@” do AltStore?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从 AltStore 中删除“%@”吗？"
+          }
         }
       }
     },
@@ -4995,6 +6847,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remover extensões do app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除应用扩展"
           }
         }
       }
@@ -5012,6 +6870,12 @@
             "state" : "translated",
             "value" : "Remover ícone personalizado"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除自定义图标"
+          }
         }
       }
     },
@@ -5027,6 +6891,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remover fonte"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除源"
           }
         }
       }
@@ -5044,6 +6914,12 @@
             "state" : "translated",
             "value" : "Restaurar backup"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复备份"
+          }
         }
       }
     },
@@ -5059,6 +6935,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tentar novamente"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重试"
           }
         }
       }
@@ -5076,6 +6958,12 @@
             "state" : "translated",
             "value" : "Revisar permissões"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "审核权限"
+          }
         }
       }
     },
@@ -5091,6 +6979,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Buscar na FAQ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索常见问题解答"
           }
         }
       }
@@ -5108,6 +7002,12 @@
             "state" : "translated",
             "value" : "Ver tudo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看全部"
+          }
         }
       }
     },
@@ -5123,6 +7023,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compartilhar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分享"
           }
         }
       }
@@ -5140,6 +7046,12 @@
             "state" : "translated",
             "value" : "Mostra todas as curtidas"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示所有喜欢的"
+          }
         }
       }
     },
@@ -5155,6 +7067,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalado via sideload"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "旁载"
           }
         }
       }
@@ -5172,6 +7090,12 @@
             "state" : "translated",
             "value" : "Iniciar sessão"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录"
+          }
         }
       }
     },
@@ -5187,6 +7111,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Inicie sessão com uma conta de rede social…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用社交网络账户登录..."
           }
         }
       }
@@ -5204,6 +7134,12 @@
             "state" : "translated",
             "value" : "Inicie sessão com seu Apple ID para baixar apps no AltStore."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 Apple ID 登录，从 AltStore 下载应用。"
+          }
         }
       }
     },
@@ -5219,6 +7155,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entre com sua conta Bluesky"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用您的 Bluesky 账户登录"
           }
         }
       }
@@ -5236,6 +7178,12 @@
             "state" : "translated",
             "value" : "Entre com sua conta de rede social para curtir apps, atualizações e novidades no AltStore."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用您的社交网络账户登录，以喜欢 AltStore 中的应用、更新和新闻项目。"
+          }
         }
       }
     },
@@ -5251,6 +7199,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Iniciar sessão com…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录方式..."
           }
         }
       }
@@ -5268,6 +7222,12 @@
             "state" : "translated",
             "value" : "Sair"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出"
+          }
         }
       }
     },
@@ -5283,6 +7243,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "SAIR"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出"
           }
         }
       }
@@ -5300,6 +7266,12 @@
             "state" : "translated",
             "value" : "REDE SOCIAL (BETA)"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "社交网络（测试版）"
+          }
         }
       }
     },
@@ -5315,6 +7287,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "CONTA NA REDE SOCIAL (BETA)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "社交网络账户（测试版）"
           }
         }
       }
@@ -5332,6 +7310,12 @@
             "state" : "translated",
             "value" : "Algumas fontes adicionadas"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加了一些软件源"
+          }
         }
       }
     },
@@ -5347,6 +7331,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ordenar por…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "排序依据..."
           }
         }
       }
@@ -5364,6 +7354,12 @@
             "state" : "translated",
             "value" : "As fontes determinam quais apps estão disponíveis no AltStore. Quanto mais fontes você adicionar, melhor será sua experiência no AltStore."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源决定 AltStore 中可用的应用。您添加的软件源越多，您的 AltStore 体验就会越好。"
+          }
         }
       }
     },
@@ -5379,6 +7375,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Agradecimentos especiais a..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "特别感谢..."
           }
         }
       }
@@ -5396,6 +7398,12 @@
             "state" : "translated",
             "value" : "Iniciar backup?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始备份？"
+          }
         }
       }
     },
@@ -5411,6 +7419,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Concluído com sucesso"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成功"
           }
         }
       }
@@ -5434,6 +7448,12 @@
             "state" : "translated",
             "value" : "^[%1$lld fonte](inflect: true) adicionada com sucesso, mas ^[%2$lld fonte](inflect: true) falhou.\n\nPara mais detalhes, verifique o Registro de erros nas configurações."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已成功添加 ^[%1$lld个软件源](inflect: true)，但有 ^[%2$lld个软件源](inflect: true) 添加失败。\n\n有关详情，请查看设置中的错误日志。"
+          }
         }
       }
     },
@@ -5449,6 +7469,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "CENTRAL DE AJUDA"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持"
           }
         }
       }
@@ -5466,6 +7492,12 @@
             "state" : "translated",
             "value" : "Mudar para a versão beta do AltStore PAL?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切换到 AltStore PAL 测试版？"
+          }
         }
       }
     },
@@ -5481,6 +7513,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toque em uma permissão para saber mais."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点击权限以了解更多信息。"
           }
         }
       }
@@ -5498,6 +7536,12 @@
             "state" : "translated",
             "value" : "Toque para visualizar o progresso."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点击可查看进度。"
+          }
         }
       }
     },
@@ -5514,6 +7558,12 @@
             "state" : "translated",
             "value" : "Toque para visualizar os erros da fonte."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点击可查看源错误。"
+          }
         }
       }
     },
@@ -5529,6 +7579,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ITENS TÉCNICOS"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "科技事物"
           }
         }
       }
@@ -5552,6 +7608,12 @@
             "state" : "translated",
             "value" : "A %1$@ “%2$@” para %3$@ não possui uma descrição de uso."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%3$@ 的 %1$@ '%2$@' 缺少使用说明。"
+          }
         }
       }
     },
@@ -5567,6 +7629,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "o app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用"
           }
         }
       }
@@ -5584,6 +7652,12 @@
             "state" : "translated",
             "value" : "O app"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该应用"
+          }
         }
       }
     },
@@ -5599,6 +7673,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O app está em um formato inválido."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 格式无效。"
           }
         }
       }
@@ -5616,6 +7696,12 @@
             "state" : "translated",
             "value" : "Não foi possível encontrar a listagem do app."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到应用列表。"
+          }
         }
       }
     },
@@ -5631,6 +7717,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A versão de build de “%@” não corresponde à especificada pela fonte."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的构建版本与源指定的构建版本不匹配。"
           }
         }
       }
@@ -5648,6 +7740,12 @@
             "state" : "translated",
             "value" : "O bundle ID de “%@” não corresponde ao especificado pela fonte."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的捆绑包 ID 与源指定的不匹配。"
+          }
         }
       }
     },
@@ -5663,6 +7761,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "o bundle identifier %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "包标识符 %@"
           }
         }
       }
@@ -5680,6 +7784,12 @@
             "state" : "translated",
             "value" : "O certificado não pôde ser encontrado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到证书。"
+          }
         }
       }
     },
@@ -5695,6 +7805,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A chave privada do certificado não foi encontrada."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到证书的私钥。"
           }
         }
       }
@@ -5712,6 +7828,12 @@
             "state" : "translated",
             "value" : "A conexão falhou porque não foi possível estabelecer uma conexão com o host."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接失败，因为无法与主机建立连接。"
+          }
         }
       }
     },
@@ -5727,6 +7849,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A conexão falhou porque a conexão de rede foi perdida."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "由于网络连接丢失，连接失败。"
           }
         }
       }
@@ -5744,6 +7872,12 @@
             "state" : "translated",
             "value" : "A conexão com o AltServer foi interrompida."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与 AltServer 的连接已断开。"
+          }
         }
       }
     },
@@ -5759,6 +7893,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A fonte padrão do AltStore não pode ser removida."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法删除默认的 AltStore 源。"
           }
         }
       }
@@ -5776,6 +7916,12 @@
             "state" : "translated",
             "value" : "As dependências de %@ não puderam ser determinadas."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确定 %@ 的依赖关系。"
+          }
         }
       }
     },
@@ -5791,6 +7937,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível baixar a dependência “%@”."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法下载依赖项“%@”。"
           }
         }
       }
@@ -5808,6 +7960,12 @@
             "state" : "translated",
             "value" : "O certificado de desenvolvedor não foi encontrado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到开发者证书。"
+          }
         }
       }
     },
@@ -5823,6 +7981,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "o aplicativo baixado"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载的应用"
           }
         }
       }
@@ -5840,6 +8004,12 @@
             "state" : "translated",
             "value" : "Os seguintes apps foram reportados:"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以下应用已被标记："
+          }
         }
       }
     },
@@ -5855,6 +8025,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "os seguintes aplicativos:"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以下应用："
           }
         }
       }
@@ -5872,6 +8048,12 @@
             "state" : "translated",
             "value" : "O identificador da fonte “%@” foi alterado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源“%@”的标识符已更改。"
+          }
         }
       }
     },
@@ -5887,6 +8069,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível determinar a versão mais recente de %@ ."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确定 %@ 的最新版本。"
           }
         }
       }
@@ -5904,6 +8092,12 @@
             "state" : "translated",
             "value" : "Não foi possível determinar o ID do marketplace para %@ ."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确定 %@ 的市场 ID。"
+          }
         }
       }
     },
@@ -5919,6 +8113,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O ID do marketplace para %@ não corresponde ao especificado pela fonte."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的市场 ID 与源指定的不匹配。"
           }
         }
       }
@@ -5936,6 +8136,12 @@
             "state" : "translated",
             "value" : "Quanto mais você abre o AltStore, mais oportunidades ele tem de atualizar os apps em segundo plano."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 打开的次数越多，在后台刷新应用的机会就越多。"
+          }
         }
       }
     },
@@ -5951,6 +8157,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quanto mais você usar o AltStore, com mais frequência o iOS permitirá que ele atualize os apps em segundo plano."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您使用 AltStore 的次数越多，iOS 就越频繁地允许其在后台刷新应用。"
           }
         }
       }
@@ -5968,6 +8180,12 @@
             "state" : "translated",
             "value" : "A operação não é permitida."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "禁止该操作。"
+          }
         }
       }
     },
@@ -5983,6 +8201,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A operação retornou um resultado desconhecido."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作返回未知结果。"
           }
         }
       }
@@ -6000,6 +8224,12 @@
             "state" : "translated",
             "value" : "A operação expirou."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作超时。"
+          }
         }
       }
     },
@@ -6015,6 +8245,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível determinar o URL de download OTA para %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确定 %@ 的 OTA 下载 URL。"
           }
         }
       }
@@ -6032,6 +8268,12 @@
             "state" : "translated",
             "value" : "O Servidor de Dados Pessoais para este usuário não foi encontrado."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到该用户的个人数据服务器。"
+          }
         }
       }
     },
@@ -6047,6 +8289,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O DID fornecido %@ é inválido."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 DID %@ 无效。"
           }
         }
       }
@@ -6064,6 +8312,12 @@
             "state" : "translated",
             "value" : "O DID fornecido é inválido."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 DID 无效。"
+          }
         }
       }
     },
@@ -6079,6 +8333,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O domínio fornecido não é um servidor Mastodon válido."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的域不是有效的 Mastodon 服务器。"
           }
         }
       }
@@ -6096,6 +8356,12 @@
             "state" : "translated",
             "value" : "A postagem solicitada não foi encontrada."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到请求的帖子。"
+          }
         }
       }
     },
@@ -6111,6 +8377,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "o mesmo bundle identifier"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相同的包标识符"
           }
         }
       }
@@ -6128,6 +8400,12 @@
             "state" : "translated",
             "value" : "O hash SHA-256 de %@ não corresponde ao hash especificado pela fonte."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的 SHA-256 哈希值与源指定的哈希值不匹配。"
+          }
         }
       }
     },
@@ -6144,6 +8422,12 @@
             "state" : "translated",
             "value" : "A fonte"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该软件源"
+          }
         }
       }
     },
@@ -6159,6 +8443,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A fonte “%@”"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源“%@”"
           }
         }
       }
@@ -6182,6 +8472,12 @@
             "state" : "translated",
             "value" : "A fonte “%1$@” contém %2$@ para %3$@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源“%1$@”包含 %2$@ 和 %3$@。"
+          }
         }
       }
     },
@@ -6204,6 +8500,12 @@
             "state" : "translated",
             "value" : "A fonte “%1$@” contém vários apps com %2$@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源“%1$@”包含多个具有 %2$@ 的应用。"
+          }
         }
       }
     },
@@ -6219,6 +8521,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A fonte “%@” contém apps notarizados, que não são compatíveis com esta versão do AltStore."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源“%@”包含经过公证的应用，此版本的 AltStore 不支持这些应用。"
           }
         }
       }
@@ -6236,6 +8544,12 @@
             "state" : "translated",
             "value" : "A fonte “%@” foi bloqueada pelo AltStore por motivos de segurança."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "出于安全原因，软件源“%@”已被 AltStore 阻止。"
+          }
         }
       }
     },
@@ -6251,6 +8565,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A fonte “%@” não é compatível com esta versão do AltStore."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此版本的 AltStore 不支持软件源“%@”。"
           }
         }
       }
@@ -6268,6 +8588,12 @@
             "state" : "translated",
             "value" : "A tarefa expirou após %@ segundos."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任务在 %@ 秒后超时。"
+          }
         }
       }
     },
@@ -6283,6 +8609,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A versão de %@ não corresponde à versão especificada pela fonte."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的版本与源指定的版本不匹配。"
           }
         }
       }
@@ -6300,6 +8632,12 @@
             "state" : "translated",
             "value" : "Não há nenhuma fonte do AltStore."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有 AltStore 源。"
+          }
         }
       }
     },
@@ -6315,6 +8653,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estas são permissões exigidas por “%@” que o AltStore não reconhece. Certifique-se de que você as compreenda antes de continuar."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这些是“%@”所需的权限，但 AltStore 无法识别。在继续之前请确保您理解它们。"
           }
         }
       }
@@ -6332,6 +8676,12 @@
             "state" : "translated",
             "value" : "Para que o AltStore possa instalar este app, a fonte precisa declarar estas permissões:"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这些权限必须由软件源声明，以便 AltStore 安装此应用："
+          }
         }
       }
     },
@@ -6347,6 +8697,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Essas atualizações não são compatíveis com o iOS %@. Atualize seu dispositivo para a versão mais recente do iOS para instalá-las."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这些更新不支持 iOS %@。请将您的设备更新到最新的 iOS 版本以安装它们。"
           }
         }
       }
@@ -6364,6 +8720,12 @@
             "state" : "translated",
             "value" : "este app"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此应用"
+          }
         }
       }
     },
@@ -6380,6 +8742,12 @@
             "state" : "translated",
             "value" : "Este app"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这个应用"
+          }
         }
       }
     },
@@ -6395,6 +8763,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Este app oferece contribuições personalizadas. Contribua com qualquer valor no Patreon para obter acesso."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此应用支持自定义赞助。在 Patreon 上赞助任意金额即可获得访问权限。"
           }
         }
       }
@@ -6418,6 +8792,12 @@
             "state" : "translated",
             "value" : "Este dispositivo está executando o iOS %1$@, mas %2$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该设备正在运行 iOS %1$@，但 %2$@"
+          }
         }
       }
     },
@@ -6433,6 +8813,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Este jailbreak possui uma versão untethered, o que significa que %@ nunca expirará — mesmo após 7 dias ou ao reiniciar o dispositivo.\n\nA instalação de um jailbreak untethered requer algumas etapas extras, mas o AltStore irá guiar você durante o processo.\n\nDeseja continuar?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此越狱工具支持完美越狱，这意味着 %@ 永不过期，即使超过 7 天或设备重启也不受影响。\n\n进行完美越狱需要一些额外步骤，AltStore 会引导你完成整个过程。\n\n要继续吗？"
           }
         }
       }
@@ -6450,6 +8836,12 @@
             "state" : "translated",
             "value" : "Este jailbreak é untethered, o que significa que %@ nunca expirará — mesmo após 7 dias ou ao reiniciar o dispositivo.\n\nA instalação de um jailbreak untethered requer algumas etapas extras, mas o AltStore irá guiar você durante o processo.\n\nDeseja continuar?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这是完美越狱，因此 %@ 永不过期，即使超过 7 天或设备重启也不受影响。\n\n安装完美越狱需要一些额外步骤，AltStore 会引导你完成整个过程。\n\n要继续吗？"
+          }
         }
       }
     },
@@ -6465,6 +8857,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "É necessário estar autenticado para esta solicitação."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此请求需要经过身份验证的用户。"
           }
         }
       }
@@ -6482,6 +8880,12 @@
             "state" : "translated",
             "value" : "Esta versão de “%@” requer permissões adicionais."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此版本的“%@”需要额外的权限。"
+          }
         }
       }
     },
@@ -6497,6 +8901,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Isso permitirá que você curta apps no AltStore."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这将允许您喜欢 AltStore 中的应用。"
           }
         }
       }
@@ -6514,6 +8924,12 @@
             "state" : "translated",
             "value" : "Isso também apagará todos os dados de backup deste app."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这还将删除该应用的所有备份数据。"
+          }
         }
       }
     },
@@ -6529,6 +8945,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Isso removerá todos os arquivos temporários, bem como os backups de apps desinstalados."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这将删除所有临时文件以及已卸载应用的备份。"
           }
         }
       }
@@ -6546,6 +8968,12 @@
             "state" : "translated",
             "value" : "Isso substituirá todos os dados que você possui atualmente em %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这将替换 %@ 中当前拥有的所有数据。"
+          }
         }
       }
     },
@@ -6561,6 +8989,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Isso substituirá quaisquer backups anteriores. Mantenha o AltStore aberto até que o backup seja concluído."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这将替换任何以前的备份。请将 AltStore 保持打开状态，直至备份完成。"
           }
         }
       }
@@ -6578,6 +9012,12 @@
             "state" : "translated",
             "value" : "Esta etapa levará alguns instantes. Não desligue a tela nem saia do app até que a aplicação do patch esteja concluída."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这需要一些时间。在修补完成之前，请不要关闭屏幕或离开应用。"
+          }
         }
       }
     },
@@ -6593,6 +9033,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O AltStore PAL será atualizado para a versão beta mais recente."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这会将 AltStore PAL 更新到最新的测试版本。"
           }
         }
       }
@@ -6610,6 +9056,12 @@
             "state" : "translated",
             "value" : "Para baixar %@, entre no Patreon deste criador e toque em “Entrar gratuitamente” na próxima tela."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要下载 %@，请在下一个页面轻点“免费加入”，成为该创作者的 Patreon 免费会员。"
+          }
         }
       }
     },
@@ -6625,6 +9077,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoje"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天"
           }
         }
       }
@@ -6642,6 +9100,12 @@
             "state" : "translated",
             "value" : "Tentar novamente"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再试一次"
+          }
         }
       }
     },
@@ -6657,6 +9121,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível adicionar ^[%lld fonte](inflect: true)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法添加 ^[%lld个软件源](inflect: true)"
           }
         }
       }
@@ -6674,6 +9144,12 @@
             "state" : "translated",
             "value" : "Não foi possível adicionar a fonte"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法添加软件源"
+          }
         }
       }
     },
@@ -6689,6 +9165,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível alterar o ícone do app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法更改应用图标"
           }
         }
       }
@@ -6706,6 +9188,12 @@
             "state" : "translated",
             "value" : "Não foi possível verificar atualizações"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法检查更新"
+          }
         }
       }
     },
@@ -6721,6 +9209,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível limpar o cache"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法清除缓存"
           }
         }
       }
@@ -6738,6 +9232,12 @@
             "state" : "translated",
             "value" : "Não foi possível exportar o log detalhado"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法导出详细日志"
+          }
         }
       }
     },
@@ -6753,6 +9253,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível carregar os apps"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法获取应用"
           }
         }
       }
@@ -6770,6 +9276,12 @@
             "state" : "translated",
             "value" : "Não foi possível carregar as novidades"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法获取新闻"
+          }
         }
       }
     },
@@ -6785,6 +9297,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível instalar %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装 %@。"
           }
         }
       }
@@ -6802,6 +9320,12 @@
             "state" : "translated",
             "value" : "Não foi possível iniciar o AltStore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法启动 AltStore"
+          }
         }
       }
     },
@@ -6817,6 +9341,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível curtir %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法点赞 %@"
           }
         }
       }
@@ -6834,6 +9364,12 @@
             "state" : "translated",
             "value" : "Não foi possível curtir o app"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法喜欢应用"
+          }
         }
       }
     },
@@ -6849,6 +9385,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível carregar as fontes em destaque"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法加载特色源"
           }
         }
       }
@@ -6867,6 +9409,12 @@
             "state" : "translated",
             "value" : "Não foi possível carregar as fontes recomendadas"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法加载推荐软件源"
+          }
         }
       }
     },
@@ -6882,6 +9430,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível processar o URL do post do Patreon."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法解析 URL 后的 Patreon。"
           }
         }
       }
@@ -6899,6 +9453,12 @@
             "state" : "translated",
             "value" : "Não foi possível preparar o app"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法准备应用"
+          }
         }
       }
     },
@@ -6914,6 +9474,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível resgatar a promoção PAL"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法兑换 PAL 促销"
           }
         }
       }
@@ -6931,6 +9497,12 @@
             "state" : "translated",
             "value" : "Não foi possível atualizar a fonte “%@”"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法刷新“%@”源"
+          }
         }
       }
     },
@@ -6946,6 +9518,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não é possível atualizar as fontes de %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法刷新 %@ 源"
           }
         }
       }
@@ -6963,6 +9541,12 @@
             "state" : "translated",
             "value" : "Não foi possível atualizar a loja"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法刷新存储"
+          }
         }
       }
     },
@@ -6978,6 +9562,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível remover a fonte"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法删除源"
           }
         }
       }
@@ -6995,6 +9585,12 @@
             "state" : "translated",
             "value" : "Não foi possível iniciar sessão"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法登录"
+          }
         }
       }
     },
@@ -7010,6 +9606,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não foi possível remover a curtida %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法不同于 %@"
           }
         }
       }
@@ -7027,6 +9629,12 @@
             "state" : "translated",
             "value" : "Não foi possível atualizar %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法更新 %@。"
+          }
         }
       }
     },
@@ -7042,6 +9650,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Permissões não declaradas"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未声明的权限"
           }
         }
       }
@@ -7059,6 +9673,12 @@
             "state" : "translated",
             "value" : "Fonte desconhecida"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源未知"
+          }
         }
       }
     },
@@ -7074,6 +9694,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remover curtida"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与"
           }
         }
       }
@@ -7091,6 +9717,12 @@
             "state" : "translated",
             "value" : "Remover curtida deste app"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消对此 App 的点赞"
+          }
         }
       }
     },
@@ -7106,6 +9738,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remover curtida deste item"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不喜欢该商品"
           }
         }
       }
@@ -7123,6 +9761,12 @@
             "state" : "translated",
             "value" : "Desvincular %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消链接 %@"
+          }
         }
       }
     },
@@ -7138,6 +9782,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desvincular conta do Patreon"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消关联 Patreon 账户"
           }
         }
       }
@@ -7155,6 +9805,12 @@
             "state" : "translated",
             "value" : "Versão do iOS não compatível"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持的 iOS 版本"
+          }
         }
       }
     },
@@ -7170,6 +9826,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Atualização disponível não compatível"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持的可用更新"
           }
         }
       }
@@ -7187,6 +9849,12 @@
             "state" : "translated",
             "value" : "Atualizações disponíveis não compatíveis"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持的可用更新"
+          }
         }
       }
     },
@@ -7202,6 +9870,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desvinculação recomendada"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "建议转为完美越狱"
           }
         }
       }
@@ -7219,6 +9893,12 @@
             "state" : "translated",
             "value" : "Desvinculação necessária"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要转为完美越狱"
+          }
         }
       }
     },
@@ -7234,6 +9914,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desvincular este jailbreak impedirá que %@ expire, mesmo após 7 dias ou reiniciar o dispositivo. Tem certeza de que deseja instalar sem desvincular?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将此越狱转为完美越狱后，%@ 即使超过 7 天或设备重启也不会过期。确定要在不转为完美越狱的情况下安装吗？"
           }
         }
       }
@@ -7251,6 +9937,12 @@
             "state" : "translated",
             "value" : "atualizar"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
+          }
         }
       }
     },
@@ -7266,6 +9958,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Atualizar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
           }
         }
       }
@@ -7283,6 +9981,12 @@
             "state" : "translated",
             "value" : "Atualizar %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新 %@"
+          }
         }
       }
     },
@@ -7298,6 +10002,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nome de usuário"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户名"
           }
         }
       }
@@ -7315,6 +10025,12 @@
             "state" : "translated",
             "value" : "Versão %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本 %@"
+          }
         }
       }
     },
@@ -7330,6 +10046,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ver tudo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看全部"
           }
         }
       }
@@ -7347,6 +10069,12 @@
             "state" : "translated",
             "value" : "Ver todos os apps"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看所有应用"
+          }
         }
       }
     },
@@ -7362,6 +10090,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ver erro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看错误"
           }
         }
       }
@@ -7379,6 +10113,12 @@
             "state" : "translated",
             "value" : "Ver curtidas"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看喜欢"
+          }
         }
       }
     },
@@ -7394,6 +10134,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ver mais detalhes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看更多详细信息"
           }
         }
       }
@@ -7411,6 +10157,12 @@
             "state" : "translated",
             "value" : "Ver Patreon"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看 Patreon"
+          }
         }
       }
     },
@@ -7426,6 +10178,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ver permissões"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看权限"
           }
         }
       }
@@ -7443,6 +10201,12 @@
             "state" : "translated",
             "value" : "Ver fontes recomendadas"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看推荐软件源"
+          }
         }
       }
     },
@@ -7458,6 +10222,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "O que são apps inativos?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "什么是非活动应用？"
           }
         }
       }
@@ -7475,6 +10245,12 @@
             "state" : "translated",
             "value" : "O que são fontes?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "什么是软件源？"
+          }
         }
       }
     },
@@ -7490,6 +10266,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enquanto o AltStore 2.0 estiver em versão beta, você pode ignorar este aviso por sua conta e risco até que a fonte seja atualizada."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "虽然 AltStore 2.0 仍处于测试阶段，但在源更新之前，您可以选择忽略此警告，后果自负。"
           }
         }
       }
@@ -7507,6 +10289,12 @@
             "state" : "translated",
             "value" : "AltServer via cabo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有线 AltServer"
+          }
         }
       }
     },
@@ -7522,6 +10310,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gostaria de adicionar a fonte “%@”?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您想添加软件源“%@”吗？"
           }
         }
       }
@@ -7539,6 +10333,12 @@
             "state" : "translated",
             "value" : "Gostaria de vincular sua conta do Bluesky ao fediverse?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您想将您的 Bluesky 账户桥接到 fediverse 吗？"
+          }
         }
       }
     },
@@ -7554,6 +10354,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gostaria de baixar a última versão compatível com este dispositivo?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您想下载与此设备兼容的最新版本吗？"
           }
         }
       }
@@ -7571,6 +10377,12 @@
             "state" : "translated",
             "value" : "Gostaria de remover as extensões deste app para que não sejam contabilizadas no seu limite?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您想删除此应用的扩展程序，以便它们不会计入您的限制吗？"
+          }
         }
       }
     },
@@ -7586,6 +10398,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você não está conectado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您尚未登录。"
           }
         }
       }
@@ -7603,6 +10421,12 @@
             "state" : "translated",
             "value" : "Você poderá registrar outro App ID em %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您可以在 %@ 中注册另一个 App ID。"
+          }
         }
       }
     },
@@ -7618,6 +10442,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você não pode registrar mais de 10 App IDs em um período de 7 dias."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您在 7 天内注册的 App IDs 数量不得超过 10 个。"
           }
         }
       }
@@ -7635,6 +10465,12 @@
             "state" : "translated",
             "value" : "Você precisa adicionar esta fonte antes de instalar apps a partir dela.\n\n“%@” começará a ser baixado assim que for adicionada."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您必须先添加此软件源，然后才能从中安装应用。\n\n添加“%@”后将开始下载。"
+          }
         }
       }
     },
@@ -7650,6 +10486,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você também deve excluí-lo da tela inicial para desinstalar completamente o app."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您还必须将其从主屏幕中删除才能完全卸载该应用。"
           }
         }
       }
@@ -7667,6 +10509,12 @@
             "state" : "translated",
             "value" : "Você não poderá mais instalar ou atualizar apps que exijam contribuição."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您将无法再安装或刷新任何需要赞助的应用。"
+          }
         }
       }
     },
@@ -7682,6 +10530,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você não poderá mais instalar ou atualizar aplicativos após sair da conta."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注销后，您将无法再安装或刷新应用。"
           }
         }
       }
@@ -7699,6 +10553,12 @@
             "state" : "translated",
             "value" : "Você não poderá mais instalar ou atualizar apps que exijam contribuição."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您将无法再安装或更新任何需要赞助的应用。"
+          }
         }
       }
     },
@@ -7714,6 +10574,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ao sair da conta, você não poderá mais curtir apps, atualizações e novidades."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出后，您将无法再对应用、更新和新闻项目进行点赞。"
           }
         }
       }
@@ -7731,6 +10597,12 @@
             "state" : "translated",
             "value" : "Você precisará gerar uma senha específica de app nas configurações do Bluesky."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您需要在 Bluesky 设置中生成应用专用密码。"
+          }
         }
       }
     },
@@ -7746,6 +10618,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você está conectado ao Patreon, mas ainda não vinculou sua conta ao AltStore.\n\nConecte sua conta para baixar apps exclusivos do Patreon."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您已登录 Patreon，但尚未将您的账户与 AltStore 连接。\n\n请连接您的账户以下载 Patreon 专属应用。"
           }
         }
       }
@@ -7763,6 +10641,12 @@
             "state" : "translated",
             "value" : "Você recebeu 1 mês de acesso gratuito ao nosso nível “Early Adopter” no Patreon!\n\nCertifique-se de que você entrou em nossa campanha no Patreon como membro gratuito e conectou sua conta do Patreon em Ajustes."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您已获得我们“早期采用者”Patreon 级别的 1 个月免费访问权！\n\n确保您已作为免费会员加入我们的 Patreon 活动，并在“设置”中连接您的 Patreon 账户。"
+          }
         }
       }
     },
@@ -7778,6 +10662,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seu Apple ID não possui equipes de desenvolvedor."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您的 Apple ID 没有开发团队。"
           }
         }
       }
@@ -7795,6 +10685,12 @@
             "state" : "translated",
             "value" : "a versão do iOS do seu dispositivo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您设备的 iOS 版本"
+          }
         }
       }
     },
@@ -7810,6 +10706,732 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sua contribuição não está mais ativa. Renove-a para continuar usando %@ normalmente."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您的赞助不再有效。请续订以继续正常使用 %@。"
+          }
+        }
+      }
+    },
+    "Switch to public version of AltStore PAL?" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要切换到 AltStore PAL 公共版本吗？"
+          }
+        }
+      }
+    },
+    "View Instructions" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看说明"
+          }
+        }
+      }
+    },
+    "You must delete AltStore PAL then reinstall it to switch back to the public version.\n\nYour apps will remain installed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你必须先删除 AltStore PAL，然后重新安装，才能切换回公共版本。\n\n你的 App 将保持安装状态。"
+          }
+        }
+      }
+    },
+    "Refresh All Apps" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新所有 App"
+          }
+        }
+      }
+    },
+    "Refreshes your sideloaded apps to prevent them from expiring." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新已侧载的 App，防止它们过期。"
+          }
+        }
+      }
+    },
+    "Refresh Apps via Widget" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通过小组件刷新 App"
+          }
+        }
+      }
+    },
+    "%@ error %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ error %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 错误 %2$@。"
+          }
+        }
+      }
+    },
+    "%@ failed with code %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ failed with code %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 失败，代码为 %2$@。"
+          }
+        }
+      }
+    },
+    "%@ failed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 失败。"
+          }
+        }
+      }
+    },
+    "%@ is currently locked." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 当前已锁定。"
+          }
+        }
+      }
+    },
+    "%@ is not currently running on %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ is not currently running on %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 当前未在 %2$@ 上运行。"
+          }
+        }
+      }
+    },
+    "%@ is not installed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未安装 %@。"
+          }
+        }
+      }
+    },
+    "%@ is not running." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 未运行。"
+          }
+        }
+      }
+    },
+    "%@ received an invalid request from AltServer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 收到了来自 AltServer 的无效请求。"
+          }
+        }
+      }
+    },
+    "%@ requires %@ or later." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ requires %2$@ or later."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 要求 %2$@ 或更高版本。"
+          }
+        }
+      }
+    },
+    "%@ returned unexpected output." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 返回了意外输出。"
+          }
+        }
+      }
+    },
+    "%@ timed out." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 超时。"
+          }
+        }
+      }
+    },
+    "%@ unexpectedly quit." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 意外退出。"
+          }
+        }
+      }
+    },
+    "A required dependency" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必需的依赖项"
+          }
+        }
+      }
+    },
+    "AltServer could not connect to Mail plug-in." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法连接到邮件插件。"
+          }
+        }
+      }
+    },
+    "AltServer could not establish a connection to AltStore." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法与 AltStore 建立连接。"
+          }
+        }
+      }
+    },
+    "AltServer could not establish a secure connection to %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法与 %@ 建立安全连接。"
+          }
+        }
+      }
+    },
+    "AltServer could not find this device." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 找不到此设备。"
+          }
+        }
+      }
+    },
+    "AltServer could not write data to this device." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法向此设备写入数据。"
+          }
+        }
+      }
+    },
+    "AltServer does not support this request." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 不支持此请求。"
+          }
+        }
+      }
+    },
+    "AltServer received an invalid request." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 收到了无效请求。"
+          }
+        }
+      }
+    },
+    "AltServer received an invalid response from %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 收到了来自 %@ 的无效响应。"
+          }
+        }
+      }
+    },
+    "AltServer requires additional dependencies to enable JIT on iOS 17." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 需要额外的依赖项才能在 iOS 17 上启用 JIT。"
+          }
+        }
+      }
+    },
+    "AltServer sent an invalid response." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 发送了无效响应。"
+          }
+        }
+      }
+    },
+    "AltServer's connection to %@ timed out." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 与 %@ 的连接超时。"
+          }
+        }
+      }
+    },
+    "AltStore received an unknown response from AltServer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 收到了来自 AltServer 的未知响应。"
+          }
+        }
+      }
+    },
+    "An error occured while removing the app." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除 App 时出错。"
+          }
+        }
+      }
+    },
+    "An error occurred while installing the app." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装 App 时出错。"
+          }
+        }
+      }
+    },
+    "Connection error code: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接错误代码：%@"
+          }
+        }
+      }
+    },
+    "Could not find profile" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到描述文件"
+          }
+        }
+      }
+    },
+    "Debug Description" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试说明"
+          }
+        }
+      }
+    },
+    "Error Description" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误说明"
+          }
+        }
+      }
+    },
+    "Error code: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误代码：%@"
+          }
+        }
+      }
+    },
+    "Failure Reason" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失败原因"
+          }
+        }
+      }
+    },
+    "Make sure Mail is running and the plug-in is enabled in Mail's preferences." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保“邮件”正在运行，并已在“邮件”设置中启用该插件。"
+          }
+        }
+      }
+    },
+    "Make sure the app is running in the foreground on %@ then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保 App 正在 %@ 上的前台运行，然后重试。"
+          }
+        }
+      }
+    },
+    "Make sure the app is running in the foreground on your device then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保 App 正在设备前台运行，然后重试。"
+          }
+        }
+      }
+    },
+    "Make sure you have trusted this device with your computer and Wi-Fi sync is enabled." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保已在电脑上信任此设备，并已启用 Wi-Fi 同步。"
+          }
+        }
+      }
+    },
+    "Please deactivate a sideloaded app in order to install another one.\n\nIf you're running iOS 13.5 or later, make sure “Offload Unused Apps” is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请停用一个已侧载的 App，然后再安装其他 App。\n\n如果你运行的是 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App。"
+          }
+        }
+      }
+    },
+    "Please deactivate a sideloaded app with AltStore in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请使用 AltStore 停用一个已侧载的 App，然后再安装其他 App。\n\n如果你运行的是 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App，以免它们被错误计入此限制。"
+          }
+        }
+      }
+    },
+    "Please follow the instructions on the AltStore FAQ to install all required dependencies, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请按照 AltStore 常见问题中的说明安装所有必需的依赖项，然后重试。"
+          }
+        }
+      }
+    },
+    "Please unlock the device with your passcode and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请使用密码解锁设备，然后重试。"
+          }
+        }
+      }
+    },
+    "Recovery Suggestion" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复建议"
+          }
+        }
+      }
+    },
+    "Source File" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "源文件"
+          }
+        }
+      }
+    },
+    "Source Line" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "源代码行"
+          }
+        }
+      }
+    },
+    "The Developer disk located at %@ is incompatible with %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The Developer disk located at %1$@ is incompatible with %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "位于 %1$@ 的开发者磁盘与 %2$@ 不兼容。"
+          }
+        }
+      }
+    },
+    "The connection to AltServer was lost." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与 AltServer 的连接已断开。"
+          }
+        }
+      }
+    },
+    "The device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备"
+          }
+        }
+      }
+    },
+    "The disk is incompatible with %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该磁盘与 %@ 不兼容。"
+          }
+        }
+      }
+    },
+    "The process" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进程"
+          }
+        }
+      }
+    },
+    "The process '%@'" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进程“%@”"
+          }
+        }
+      }
+    },
+    "The provided anisette data is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 anisette 数据无效。"
+          }
+        }
+      }
+    },
+    "The requested app" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求的 App"
+          }
+        }
+      }
+    },
+    "The target app" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目标 App"
+          }
+        }
+      }
+    },
+    "There was an error connecting to the device." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接设备时出错。"
+          }
+        }
+      }
+    },
+    "There was an issue communicating with the usbmuxd daemon." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与 usbmuxd 守护进程通信时出现问题。"
+          }
+        }
+      }
+    },
+    "Title" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标题"
+          }
+        }
+      }
+    },
+    "Underlying Error" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底层错误"
+          }
+        }
+      }
+    },
+    "Underlying Errors" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底层错误"
+          }
+        }
+      }
+    },
+    "You cannot activate more than 3 apps with a non-developer Apple ID." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用非开发者 Apple ID 最多只能激活 3 个 App。"
+          }
+        }
+      }
+    },
+    "Your device must be running iOS 12.2 or later to install AltStore." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备必须运行 iOS 12.2 或更高版本才能安装 AltStore。"
+          }
+        }
+      }
+    },
+    "the device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备"
+          }
+        }
+      }
+    },
+    "this device's OS version" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备的操作系统版本"
+          }
+        }
+      }
+    },
+    "your device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的设备"
           }
         }
       }

@@ -21,6 +21,7 @@ AltForge builds on [AltStore](https://github.com/altstoreio/AltStore), an iOS ap
 - Resigns and installs any app with your Apple ID
 - Refreshes apps periodically in the background to prevent them from expiring (when on same WiFi as AltServer)
 - Handles app updates directly through AltStore 
+- Supports Simplified Chinese and iOS per-app language switching
 
 ## Minimum Project Requirements
 - Xcode 15

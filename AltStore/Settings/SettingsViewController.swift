@@ -44,6 +44,12 @@ extension SettingsViewController
         case backgroundRefresh
         case addToSiri
     }
+
+    fileprivate enum DisplayRow: Int, CaseIterable
+    {
+        case appIcon
+        case language
+    }
     
     fileprivate enum CreditsRow: Int, CaseIterable
     {
@@ -134,7 +140,7 @@ class SettingsViewController: UITableViewController
         
         if let version = Bundle.main.object(forInfoDictionaryKey: "ALTVersion") as? String
         {
-            self.versionLabel.text = NSLocalizedString(String(format: "Version %@", version), comment: "AltStore Version")
+            self.versionLabel.text = String(format: NSLocalizedString("Version %@", comment: "AltStore Version"), version)
         }
         else if let installedApp = InstalledApp.fetchAltStore(in: DatabaseManager.shared.viewContext)
         {
@@ -150,11 +156,11 @@ class SettingsViewController: UITableViewController
             let localizedVersion = installedApp.version
             #endif
             
-            self.versionLabel.text = NSLocalizedString(String(format: "Version %@", localizedVersion), comment: "AltStore Version")
+            self.versionLabel.text = String(format: NSLocalizedString("Version %@", comment: "AltStore Version"), localizedVersion)
         }
         else if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         {
-            self.versionLabel.text = NSLocalizedString(String(format: "Version %@", version), comment: "AltStore Version")
+            self.versionLabel.text = String(format: NSLocalizedString("Version %@", comment: "AltStore Version"), version)
         }
         else
         {
@@ -713,6 +719,7 @@ extension SettingsViewController
         #endif
             
         case .appRefresh: return AppRefreshRow.allCases.count
+        case .display: return DisplayRow.allCases.count
         default: return super.tableView(tableView, numberOfRowsInSection: section.rawValue)
         }
     }
@@ -724,7 +731,16 @@ extension SettingsViewController
         let section = Section.allCases[indexPath.section]
         switch section
         {
-            
+        case .display:
+            let row = DisplayRow.allCases[indexPath.row]
+            if row == .language
+            {
+                cell.textLabel?.text = NSLocalizedString("Language", comment: "Settings row for choosing the app language")
+
+                let languageIdentifier = Bundle.main.preferredLocalizations.first ?? Bundle.main.developmentLocalization ?? "en"
+                cell.detailTextLabel?.text = Locale.autoupdatingCurrent.localizedString(forIdentifier: languageIdentifier)
+            }
+
         #if MARKETPLACE
         case .signIn:  cell.textLabel?.text = String(localized: "Sign in with Social Web Account…")
         #endif
@@ -868,6 +884,17 @@ extension SettingsViewController
             case .backgroundRefresh: break
             case .addToSiri: self.addRefreshAppsShortcut()
             }
+
+        case .display:
+            let row = DisplayRow.allCases[indexPath.row]
+            switch row
+            {
+            case .appIcon: break
+            case .language:
+                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { break }
+                UIApplication.shared.open(settingsURL)
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }
             
         case .techyThings:
             let row = TechyThingsRow.allCases[indexPath.row]
@@ -956,7 +983,7 @@ extension SettingsViewController
             case .refreshAttempts, .responseCaching, .manageInstalledApps: break
             }
             
-        case .account, .patreon, .display, .instructions, .macDirtyCow: break
+        case .account, .patreon, .instructions, .macDirtyCow: break
         }
     }
 }

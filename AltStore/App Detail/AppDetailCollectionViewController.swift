@@ -206,8 +206,8 @@ private extension AppDetailCollectionViewController
             guard let self, #available(iOS 16, *) else { return }
             
             cell.contentConfiguration = UIHostingConfiguration {
-                AppPermissionsCard(title: "Privacy",
-                                   description: "\(self.app.name) may request access to the following:",
+                AppPermissionsCard(title: String(localized: "Privacy"),
+                                   description: String(format: NSLocalizedString("%@ may request access to the following:", comment: "App privacy permissions description"), self.app.name),
                                    tintColor: Color(uiColor: self.app.tintColor ?? .altPrimary),
                                    permissions: self.privacyPermissions)
             }

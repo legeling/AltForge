@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A17F00000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000011 /* Localizable.xcstrings */; };
+		A17F00000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000012 /* Localizable.xcstrings */; };
+		A17F00000000000000000003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000013 /* Localizable.xcstrings */; };
+		A17F00000000000000000004 /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000015 /* AppShortcuts.xcstrings */; };
+		A17F00000000000000000005 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000016 /* InfoPlist.xcstrings */; };
 		820059C32F36BBAA00C22365 /* SafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820059C22F36BBAA00C22365 /* SafariActivity.swift */; };
 		825DAD9E2F0C329C00E0EDF1 /* FediverseLikesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825DAD9D2F0C329C00E0EDF1 /* FediverseLikesView.swift */; };
 		82BBB9342F185B33005A472E /* AppIcon_Japan.icon in Resources */ = {isa = PBXBuildFile; fileRef = 82BBB9332F185B33005A472E /* AppIcon_Japan.icon */; };
@@ -715,6 +720,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A17F00000000000000000011 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
+		A17F00000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
+		A17F00000000000000000013 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
+		A17F00000000000000000014 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
+		A17F00000000000000000015 /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
+		A17F00000000000000000016 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		11611D46F8A7C8B928E8156B /* Pods-AltServer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AltServer.debug.xcconfig"; path = "Target Support Files/Pods-AltServer/Pods-AltServer.debug.xcconfig"; sourceTree = "<group>"; };
 		589BA531D903B28F292063E5 /* Pods-AltServer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AltServer.release.xcconfig"; path = "Target Support Files/Pods-AltServer/Pods-AltServer.release.xcconfig"; sourceTree = "<group>"; };
 		820059C22F36BBAA00C22365 /* SafariActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariActivity.swift; sourceTree = "<group>"; };
@@ -1625,6 +1636,7 @@
 		BF58047C246A28F7008AE704 /* AltBackup */ = {
 			isa = PBXGroup;
 			children = (
+				A17F00000000000000000012 /* Localizable.xcstrings */,
 				BF580499246A4153008AE704 /* AltBackup.entitlements */,
 				BF58047D246A28F7008AE704 /* AppDelegate.swift */,
 				BF580481246A28F7008AE704 /* ViewController.swift */,
@@ -1839,6 +1851,7 @@
 		BF703194229F36F6006E110F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A17F00000000000000000011 /* Localizable.xcstrings */,
 				BFE4FFB5251BF7BA0018CF9B /* AltPlugin.zip */,
 				BF458693229872EA00BD7491 /* Assets.xcassets */,
 			);
@@ -1883,6 +1896,7 @@
 		BF98916C250AABF3002ACF50 /* AltWidget */ = {
 			isa = PBXGroup;
 			children = (
+				A17F00000000000000000013 /* Localizable.xcstrings */,
 				BF8B17F0250AC62400F8157F /* AltWidgetExtension.entitlements */,
 				D5FD4EC42A952EAD0097BEE8 /* AltWidgetBundle.swift */,
 				D577AB7A2A967DF5007FE952 /* AppsTimelineProvider.swift */,
@@ -2117,6 +2131,8 @@
 		BFD247962284D7C100981D42 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A17F00000000000000000015 /* AppShortcuts.xcstrings */,
+				A17F00000000000000000016 /* InfoPlist.xcstrings */,
 				BF44EEF2246B3A17002A52F2 /* AltBackup.ipa */,
 				BFD247762284B9A700981D42 /* Assets.xcassets */,
 				D5144BA72B8684EF00738A5C /* Icons.xcassets */,
@@ -2967,6 +2983,7 @@
 				Base,
 				ja,
 				"pt-BR",
+				"zh-Hans",
 			);
 			mainGroup = BFD247612284B9A500981D42;
 			packageReferences = (
@@ -3001,6 +3018,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A17F00000000000000000001 /* Localizable.xcstrings in Resources */,
 				BFE4FFB6251BF7BA0018CF9B /* AltPlugin.zip in Resources */,
 				BF458694229872EA00BD7491 /* Assets.xcassets in Resources */,
 				BF458697229872EA00BD7491 /* Main.storyboard in Resources */,
@@ -3011,6 +3029,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A17F00000000000000000002 /* Localizable.xcstrings in Resources */,
 				BF58048A246A28F9008AE704 /* LaunchScreen.storyboard in Resources */,
 				BF580487246A28F9008AE704 /* Assets.xcassets in Resources */,
 			);
@@ -3038,6 +3057,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A17F00000000000000000003 /* Localizable.xcstrings in Resources */,
 				D5FB7A0E2AA25A4E00EF863D /* Previews.xcassets in Resources */,
 				BF989171250AABF4002ACF50 /* Assets.xcassets in Resources */,
 			);
@@ -3047,6 +3067,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A17F00000000000000000004 /* AppShortcuts.xcstrings in Resources */,
+				A17F00000000000000000005 /* InfoPlist.xcstrings in Resources */,
 				BFC57A702416FC7600EB891E /* InstalledAppsCollectionHeaderView.xib in Resources */,
 				BFB4323F22DE852000B7F8BC /* UpdateCollectionViewCell.xib in Resources */,
 				D59162AD29BA616A005CBF47 /* SourceHeaderView.xib in Resources */,
@@ -3711,6 +3733,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				BF458696229872EA00BD7491 /* Base */,
+				A17F00000000000000000014 /* mul */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

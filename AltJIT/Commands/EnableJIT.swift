@@ -157,7 +157,7 @@ private extension EnableJIT
         }
         catch let error as NSError
         {
-            let localizedFailure = NSLocalizedString("Could not connect to device \(self.udid).", comment: "")
+            let localizedFailure = String(format: NSLocalizedString("Could not connect to device %@.", comment: ""), self.udid)
             throw error.withLocalizedFailure(localizedFailure)
         }
     }
@@ -198,7 +198,7 @@ private extension EnableJIT
         }
         catch let error as NSError
         {
-            let localizedFailure = NSLocalizedString("Could not start debugserver on device \(self.udid).", comment: "")
+            let localizedFailure = String(format: NSLocalizedString("Could not start debugserver on device %@.", comment: ""), self.udid)
             throw error.withLocalizedFailure(localizedFailure)
         }
     }
@@ -357,7 +357,7 @@ private extension EnableJIT
         }
         catch let error as NSError
         {
-            let localizedFailure = NSLocalizedString("Could not detach debugger from \(self.process).", comment: "")
+            let localizedFailure = String(format: NSLocalizedString("Could not detach debugger from %@.", comment: ""), self.process.description)
             throw error.withLocalizedFailure(localizedFailure)
         }
     }

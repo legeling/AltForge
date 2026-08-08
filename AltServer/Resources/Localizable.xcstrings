@@ -1,0 +1,1568 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ could not be downloaded." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法下载 %@。"
+          }
+        }
+      }
+    },
+    "%@ could not be installed onto %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ could not be installed onto %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法将 %1$@ 安装到 %2$@。"
+          }
+        }
+      }
+    },
+    "%@ is running %@ %@, but AltStore requires %@ %@ or later." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ is running %2$@ %3$@, but AltStore requires %4$@ %5$@ or later."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 当前运行 %2$@ %3$@，但 AltStore 要求 %4$@ %5$@ 或更高版本。"
+          }
+        }
+      }
+    },
+    "%@ was successfully installed on %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ was successfully installed on %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已成功将 %1$@ 安装到 %2$@。"
+          }
+        }
+      }
+    },
+    "(Error Code: %@)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（错误代码：%@）"
+          }
+        }
+      }
+    },
+    "123456" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "123456"
+          }
+        }
+      }
+    },
+    "A valid signing certificate could not be created." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法创建有效的签名证书。"
+          }
+        }
+      }
+    },
+    "AltServer Running" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 正在运行"
+          }
+        }
+      }
+    },
+    "AltServer could not fetch new provisioning profiles." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法获取新的描述文件。"
+          }
+        }
+      }
+    },
+    "AltServer could not retrieve %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法获取 %@。"
+          }
+        }
+      }
+    },
+    "AltServer could not retrieve anisette data from AOSKit." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法从 AOSKit 获取 anisette 数据。"
+          }
+        }
+      }
+    },
+    "AltServer could not sign in with your Apple ID." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法使用你的 Apple ID 登录。"
+          }
+        }
+      }
+    },
+    "AltServer runs in the background as a menu bar app listening for AltStore." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 会作为菜单栏 App 在后台运行，并等待 AltStore 连接。"
+          }
+        }
+      }
+    },
+    "AltStore" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore"
+          }
+        }
+      }
+    },
+    "App with bundle ID '%@' does not exist in source JSON." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源 JSON 中不存在捆绑包 ID 为“%@”的 App。"
+          }
+        }
+      }
+    },
+    "Apple ID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID"
+          }
+        }
+      }
+    },
+    "Are you sure you want to uninstall the AltServer Mail plug-in?" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确定要卸载 AltServer 邮件插件吗？"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续"
+          }
+        }
+      }
+    },
+    "DeveloperDiskImage.dmg and its signature could not be found in the downloaded archive." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在下载的归档中找不到 DeveloperDiskImage.dmg 及其签名。"
+          }
+        }
+      }
+    },
+    "Download %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Download %1$@ %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载 %1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Failed to Uninstall Mail Plug-in" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法卸载邮件插件"
+          }
+        }
+      }
+    },
+    "Failed to install Mail plug-in." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装邮件插件。"
+          }
+        }
+      }
+    },
+    "Hash:\n%@\n\nExpected Hash:\n%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hash:\n%1$@\n\nExpected Hash:\n%2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "哈希值：\n%1$@\n\n预期哈希值：\n%2$@"
+          }
+        }
+      }
+    },
+    "Install" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装"
+          }
+        }
+      }
+    },
+    "Installation Succeeded" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装成功"
+          }
+        }
+      }
+    },
+    "Installing %@ to %@..." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Installing %1$@ to %2$@..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在将 %1$@ 安装到 %2$@…"
+          }
+        }
+      }
+    },
+    "Installing this app will revoke your iOS development certificate." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装此 App 将撤销你的 iOS 开发证书。"
+          }
+        }
+      }
+    },
+    "JIT could not be enabled for %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法为 %@ 启用 JIT。"
+          }
+        }
+      }
+    },
+    "JIT will remain enabled until you quit the app. You can now disconnect %@ from your computer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JIT 会保持启用，直到你退出此 App。现在可以断开 %@ 与电脑的连接。"
+          }
+        }
+      }
+    },
+    "Loading..." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在载入…"
+          }
+        }
+      }
+    },
+    "Mail Plug-in Uninstalled" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邮件插件已卸载"
+          }
+        }
+      }
+    },
+    "Mail plug-in installation was cancelled." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邮件插件安装已取消。"
+          }
+        }
+      }
+    },
+    "Missing AltJIT Dependencies" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少 AltJIT 依赖项"
+          }
+        }
+      }
+    },
+    "Multiple AltServers Not Supported" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持多个 AltServer"
+          }
+        }
+      }
+    },
+    "No Connected Devices" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有已连接的设备"
+          }
+        }
+      }
+    },
+    "No Sideloaded Apps" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有已侧载的 App"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好"
+          }
+        }
+      }
+    },
+    "Operation Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作失败"
+          }
+        }
+      }
+    },
+    "Password" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "密码"
+          }
+        }
+      }
+    },
+    "Please enter the 6-digit verification code that was sent to your Apple devices." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入发送到你 Apple 设备上的 6 位验证码。"
+          }
+        }
+      }
+    },
+    "Please enter your Apple ID and password." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入你的 Apple ID 和密码。"
+          }
+        }
+      }
+    },
+    "Please restart Mail for changes to take effect." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新启动“邮件”以使更改生效。"
+          }
+        }
+      }
+    },
+    "Please use the same AltServer you previously used with this Apple ID, or else apps installed with other AltServers will stop working.\n\nAre you sure you want to continue?" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请使用之前与此 Apple ID 配合使用的同一个 AltServer，否则通过其他 AltServer 安装的 App 将停止工作。\n\n确定要继续吗？"
+          }
+        }
+      }
+    },
+    "Sideloaded Apps" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已侧载的 App"
+          }
+        }
+      }
+    },
+    "Successfully enabled JIT for %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已成功为 %@ 启用 JIT。"
+          }
+        }
+      }
+    },
+    "The 'versions' array is empty for %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的“versions”数组为空。"
+          }
+        }
+      }
+    },
+    "The Mail plug-in does not exist at the requested URL." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求的 URL 中不存在邮件插件。"
+          }
+        }
+      }
+    },
+    "The URL to download the Developer disk image could not be determined." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确定开发者磁盘映像的下载 URL。"
+          }
+        }
+      }
+    },
+    "The developer certificate could not be found." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到开发者证书。"
+          }
+        }
+      }
+    },
+    "The developer certificate's private key could not be found." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到开发者证书的私钥。"
+          }
+        }
+      }
+    },
+    "The device's operating system does not support installing Developer disk images." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备的操作系统不支持安装开发者磁盘映像。"
+          }
+        }
+      }
+    },
+    "The hash of the downloaded Mail plug-in does not match the expected hash." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载的邮件插件哈希值与预期值不匹配。"
+          }
+        }
+      }
+    },
+    "The operation was cancelled." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作已取消。"
+          }
+        }
+      }
+    },
+    "There is no 'versions' key for %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 中没有“versions”键。"
+          }
+        }
+      }
+    },
+    "There was an error installing the Mail plug-in." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装邮件插件时出错。"
+          }
+        }
+      }
+    },
+    "This may take a few seconds." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这可能需要几秒钟。"
+          }
+        }
+      }
+    },
+    "This will not affect apps you've submitted to the App Store, but may cause apps you've installed to your devices with Xcode to stop working until you reinstall them.\n\nTo prevent this from happening, feel free to try again with another Apple ID." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这不会影响你提交到 App Store 的 App，但可能导致你使用 Xcode 安装到设备上的 App 停止工作，直到重新安装。\n\n为避免这种情况，你可以改用另一个 Apple ID 重试。"
+          }
+        }
+      }
+    },
+    "Two-Factor Authentication Enabled" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已启用双重认证"
+          }
+        }
+      }
+    },
+    "Uninstall Mail Plug-in" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卸载邮件插件"
+          }
+        }
+      }
+    },
+    "Uninstall Plug-in" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卸载插件"
+          }
+        }
+      }
+    },
+    "Unsupported %@ Version" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持的 %@ 版本"
+          }
+        }
+      }
+    },
+    "View Instructions" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看说明"
+          }
+        }
+      }
+    },
+    "View More Details" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看更多详情"
+          }
+        }
+      }
+    },
+    "Would you like to download the last version compatible with your device instead?" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是否改为下载与你的设备兼容的最后一个版本？"
+          }
+        }
+      }
+    },
+    "You are not a member of any developer teams." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你不是任何开发者团队的成员。"
+          }
+        }
+      }
+    },
+    "Your Apple ID and password are not saved and are only sent to Apple for authentication." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的 Apple ID 和密码不会被保存，只会发送给 Apple 进行身份验证。"
+          }
+        }
+      }
+    },
+    "Your device could not be registered with your development team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法将你的设备注册到开发者团队。"
+          }
+        }
+      }
+    },
+    "Your device must be plugged into your computer to enable JIT on iOS 17 or later." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iOS 17 或更高版本上启用 JIT 时，设备必须连接到电脑。"
+          }
+        }
+      }
+    },
+    "anisette data values." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "anisette 数据值。"
+          }
+        }
+      }
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ error %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ error %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 错误 %2$@。"
+          }
+        }
+      }
+    },
+    "%@ failed with code %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ failed with code %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 失败，代码为 %2$@。"
+          }
+        }
+      }
+    },
+    "%@ failed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 失败。"
+          }
+        }
+      }
+    },
+    "%@ is currently locked." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 当前已锁定。"
+          }
+        }
+      }
+    },
+    "%@ is not currently running on %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ is not currently running on %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 当前未在 %2$@ 上运行。"
+          }
+        }
+      }
+    },
+    "%@ is not installed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未安装 %@。"
+          }
+        }
+      }
+    },
+    "%@ is not running." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 未运行。"
+          }
+        }
+      }
+    },
+    "%@ received an invalid request from AltServer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 收到了来自 AltServer 的无效请求。"
+          }
+        }
+      }
+    },
+    "%@ requires %@ or later." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ requires %2$@ or later."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 要求 %2$@ 或更高版本。"
+          }
+        }
+      }
+    },
+    "%@ returned unexpected output." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 返回了意外输出。"
+          }
+        }
+      }
+    },
+    "%@ timed out." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 超时。"
+          }
+        }
+      }
+    },
+    "%@ unexpectedly quit." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 意外退出。"
+          }
+        }
+      }
+    },
+    "A required dependency" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必需的依赖项"
+          }
+        }
+      }
+    },
+    "AltServer could not connect to Mail plug-in." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法连接到邮件插件。"
+          }
+        }
+      }
+    },
+    "AltServer could not establish a connection to AltStore." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法与 AltStore 建立连接。"
+          }
+        }
+      }
+    },
+    "AltServer could not establish a secure connection to %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法与 %@ 建立安全连接。"
+          }
+        }
+      }
+    },
+    "AltServer could not find this device." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 找不到此设备。"
+          }
+        }
+      }
+    },
+    "AltServer could not write data to this device." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 无法向此设备写入数据。"
+          }
+        }
+      }
+    },
+    "AltServer does not support this request." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 不支持此请求。"
+          }
+        }
+      }
+    },
+    "AltServer received an invalid request." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 收到了无效请求。"
+          }
+        }
+      }
+    },
+    "AltServer received an invalid response from %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 收到了来自 %@ 的无效响应。"
+          }
+        }
+      }
+    },
+    "AltServer requires additional dependencies to enable JIT on iOS 17." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 需要额外的依赖项才能在 iOS 17 上启用 JIT。"
+          }
+        }
+      }
+    },
+    "AltServer sent an invalid response." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 发送了无效响应。"
+          }
+        }
+      }
+    },
+    "AltServer's connection to %@ timed out." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltServer 与 %@ 的连接超时。"
+          }
+        }
+      }
+    },
+    "AltStore received an unknown response from AltServer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltStore 收到了来自 AltServer 的未知响应。"
+          }
+        }
+      }
+    },
+    "An error occured while removing the app." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除 App 时出错。"
+          }
+        }
+      }
+    },
+    "An error occurred while installing the app." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装 App 时出错。"
+          }
+        }
+      }
+    },
+    "An unknown error occured." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发生未知错误。"
+          }
+        }
+      }
+    },
+    "Connection error code: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接错误代码：%@"
+          }
+        }
+      }
+    },
+    "Could not find profile" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到描述文件"
+          }
+        }
+      }
+    },
+    "Debug Description" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试说明"
+          }
+        }
+      }
+    },
+    "Error Description" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误说明"
+          }
+        }
+      }
+    },
+    "Error code: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误代码：%@"
+          }
+        }
+      }
+    },
+    "Failure" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失败"
+          }
+        }
+      }
+    },
+    "Failure Reason" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失败原因"
+          }
+        }
+      }
+    },
+    "Make sure Mail is running and the plug-in is enabled in Mail's preferences." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保“邮件”正在运行，并已在“邮件”设置中启用该插件。"
+          }
+        }
+      }
+    },
+    "Make sure the app is running in the foreground on %@ then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保 App 正在 %@ 上的前台运行，然后重试。"
+          }
+        }
+      }
+    },
+    "Make sure the app is running in the foreground on your device then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保 App 正在设备前台运行，然后重试。"
+          }
+        }
+      }
+    },
+    "Make sure you have trusted this device with your computer and Wi-Fi sync is enabled." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保已在电脑上信任此设备，并已启用 Wi-Fi 同步。"
+          }
+        }
+      }
+    },
+    "Please deactivate a sideloaded app in order to install another one.\n\nIf you're running iOS 13.5 or later, make sure “Offload Unused Apps” is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请停用一个已侧载的 App，然后再安装其他 App。\n\n如果你运行的是 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App。"
+          }
+        }
+      }
+    },
+    "Please deactivate a sideloaded app with AltStore in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请使用 AltStore 停用一个已侧载的 App，然后再安装其他 App。\n\n如果你运行的是 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App，以免它们被错误计入此限制。"
+          }
+        }
+      }
+    },
+    "Please follow the instructions on the AltStore FAQ to install all required dependencies, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请按照 AltStore 常见问题中的说明安装所有必需的依赖项，然后重试。"
+          }
+        }
+      }
+    },
+    "Please unlock the device with your passcode and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请使用密码解锁设备，然后重试。"
+          }
+        }
+      }
+    },
+    "Recovery Suggestion" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复建议"
+          }
+        }
+      }
+    },
+    "Source File" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "源文件"
+          }
+        }
+      }
+    },
+    "Source Line" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "源代码行"
+          }
+        }
+      }
+    },
+    "The Developer disk located at %@ is incompatible with %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The Developer disk located at %1$@ is incompatible with %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "位于 %1$@ 的开发者磁盘与 %2$@ 不兼容。"
+          }
+        }
+      }
+    },
+    "The app is in an invalid format." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 格式无效。"
+          }
+        }
+      }
+    },
+    "The connection to AltServer was lost." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与 AltServer 的连接已断开。"
+          }
+        }
+      }
+    },
+    "The device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备"
+          }
+        }
+      }
+    },
+    "The disk is incompatible with %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该磁盘与 %@ 不兼容。"
+          }
+        }
+      }
+    },
+    "The process" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进程"
+          }
+        }
+      }
+    },
+    "The process '%@'" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进程“%@”"
+          }
+        }
+      }
+    },
+    "The provided anisette data is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 anisette 数据无效。"
+          }
+        }
+      }
+    },
+    "The requested app" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求的 App"
+          }
+        }
+      }
+    },
+    "The target app" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目标 App"
+          }
+        }
+      }
+    },
+    "There was an error connecting to the device." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接设备时出错。"
+          }
+        }
+      }
+    },
+    "There was an issue communicating with the usbmuxd daemon." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与 usbmuxd 守护进程通信时出现问题。"
+          }
+        }
+      }
+    },
+    "Title" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标题"
+          }
+        }
+      }
+    },
+    "Underlying Error" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底层错误"
+          }
+        }
+      }
+    },
+    "Underlying Errors" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底层错误"
+          }
+        }
+      }
+    },
+    "You cannot activate more than 3 apps with a non-developer Apple ID." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用非开发者 Apple ID 最多只能激活 3 个 App。"
+          }
+        }
+      }
+    },
+    "Your device must be running iOS 12.2 or later to install AltStore." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备必须运行 iOS 12.2 或更高版本才能安装 AltStore。"
+          }
+        }
+      }
+    },
+    "the device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备"
+          }
+        }
+      }
+    },
+    "this device's OS version" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备的操作系统版本"
+          }
+        }
+      }
+    },
+    "your device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的设备"
+          }
+        }
+      }
+    },
+    "Could not copy provisioning profiles." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法拷贝描述文件。"
+          }
+        }
+      }
+    },
+    "Could not install profile “%@”" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装描述文件“%@”"
+          }
+        }
+      }
+    },
+    "Could not remove profile “%@”" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法移除描述文件“%@”"
+          }
+        }
+      }
+    },
+    "Could not remove “%@”." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法移除“%@”。"
+          }
+        }
+      }
+    },
+    "Please reboot %@ and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新启动 %@，然后重试。"
+          }
+        }
+      }
+    },
+    "The Developer disk image could not be installed onto %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法将开发者磁盘映像安装到 %@。"
+          }
+        }
+      }
+    },
+    "A personalized Developer Disk is already mounted." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已挂载个性化开发者磁盘。"
+          }
+        }
+      }
+    },
+    "Could not attach debugger to %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法将调试器附加到 %@。"
+          }
+        }
+      }
+    },
+    "Could not connect to device %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法连接到设备 %@。"
+          }
+        }
+      }
+    },
+    "Could not detach debugger from %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法从 %@ 分离调试器。"
+          }
+        }
+      }
+    },
+    "Could not start debugserver on device %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法在设备 %@ 上启动 debugserver。"
+          }
+        }
+      }
+    },
+    "The task timed out after %@ seconds." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任务在 %@ 秒后超时。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.2"
+}
