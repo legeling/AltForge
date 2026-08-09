@@ -30,6 +30,10 @@ assert(workflow.include?("--draft"), "release workflow must create a draft relea
 assert(workflow.include?("vcpkg_baseline: ${{ steps.version.outputs.vcpkg_baseline }}"), "prepare must expose the manifest vcpkg baseline")
 assert(workflow.include?("ref: ${{ needs.prepare.outputs.vcpkg_baseline }}"), "Windows must check out the manifest vcpkg baseline")
 
+windows_build = read(root, "AltServer-Windows/Scripts/build-release.ps1")
+assert(windows_build.include?("/DLOG_ERR=kDebugLevelError"), "Windows mDNSResponder build must define the missing LOG_ERR priority")
+assert(windows_build.include?("SetEnvironmentVariable(\"CL\", $previousCompilerOptions"), "Windows mDNSResponder compiler options must be restored")
+
 release_assets = %w[
   AltForge.ipa
   AltForge-AltServer-macOS.dmg

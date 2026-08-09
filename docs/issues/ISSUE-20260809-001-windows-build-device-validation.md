@@ -8,7 +8,7 @@
 
 Windows AltServer 已进入源码、CI 和 Release contract，但当前开发机为 macOS，不能本地执行 MSBuild，也未在 Windows 10/11 + Apple 官网版 iTunes/iCloud 环境完成真实设备安装、刷新和 Wi-Fi discovery smoke test。
 
-前两次 hosted Windows build 均在依赖恢复阶段失败：第一次使用 runner 系统 vcpkg，无法解析固定 baseline；`v2.4.0` 第一次标签构建虽改为 workspace 固定 checkout，但当时选用的 2026-08 vcpkg revision 已移除 `cpprestsdk`。现已将 manifest 固定到该 port 被 deindex 前的 `d015e31e90838a4c9dfa3eed45979bc70d9357fc`，并由 prepare job 从 manifest 输出 checkout revision，避免 workflow 与 manifest 再次漂移，尚待标签构建复验。
+前三次 hosted Windows build 暴露并逐步收敛了可复现性问题：第一次使用 runner 系统 vcpkg，无法解析固定 baseline；`v2.4.0` 第一次标签构建选用的 2026-08 vcpkg revision 已移除 `cpprestsdk`；第二次标签构建完成固定依赖恢复后，Apple `mDNSResponder-2881.0.25` 的 Windows client stub 因使用未定义的 `LOG_ERR` 而编译失败。manifest 已固定到 cpprestsdk deindex 前的 `d015e31e90838a4c9dfa3eed45979bc70d9357fc`，workflow 从 manifest 读取相同 revision；mDNS build 仅在该子构建进程中定义 `LOG_ERR=kDebugLevelError` 并恢复原 `CL` 环境，尚待标签构建复验。
 
 ## 完成条件
 

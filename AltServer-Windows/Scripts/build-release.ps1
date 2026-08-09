@@ -89,12 +89,25 @@ Invoke-CheckedWithRetry -Command $vcpkg -Arguments @(
 
 $mdnsRoot = Join-Path $root "Dependencies\mDNSResponder"
 $mdnsProject = Join-Path $mdnsRoot "mDNSWindows\DLL\dnssd.vcxproj"
-Invoke-Checked -Command $msbuild -Arguments @(
-    $mdnsProject,
-    "/m",
-    "/p:Configuration=Release",
-    "/p:Platform=Win32"
-)
+$previousCompilerOptions = [Environment]::GetEnvironmentVariable("CL", [EnvironmentVariableTarget]::Process)
+$mdnsCompilerOptions = "/DLOG_ERR=kDebugLevelError"
+if ($previousCompilerOptions) {
+    $mdnsCompilerOptions = "$previousCompilerOptions $mdnsCompilerOptions"
+}
+
+try {
+    # Apple mDNSResponder uses LOG_ERR on Windows without defining that syslog priority.
+    [Environment]::SetEnvironmentVariable("CL", $mdnsCompilerOptions, [EnvironmentVariableTarget]::Process)
+    Invoke-Checked -Command $msbuild -Arguments @(
+        $mdnsProject,
+        "/m",
+        "/p:Configuration=Release",
+        "/p:Platform=Win32"
+    )
+}
+finally {
+    [Environment]::SetEnvironmentVariable("CL", $previousCompilerOptions, [EnvironmentVariableTarget]::Process)
+}
 
 $solution = Join-Path $root "AltServer.sln"
 Invoke-Checked -Command $msbuild -Arguments @(
