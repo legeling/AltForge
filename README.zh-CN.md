@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="docs/assets/brand/altforge-app-icon.png" width="132" alt="AltForge 应用图标">
+  <img src="docs/assets/brand/altforge-wordmark.png" width="720" alt="AltForge">
 </p>
-
-<h1 align="center">AltForge</h1>
 
 <p align="center"><strong>为 Unicode 应用、国际用户和现代 Apple 平台持续维护的 AltStore Classic。</strong></p>
 

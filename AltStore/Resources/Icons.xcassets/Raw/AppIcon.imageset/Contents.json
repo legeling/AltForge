@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "GlassIcon.png",
+      "filename" : "AltForgeIcon.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,7 +12,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "GlassIconDark.png",
+      "filename" : "AltForgeIconDark.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

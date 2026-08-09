@@ -1,9 +1,6 @@
 {
   "fill" : {
-    "linear-gradient" : [
-      "display-p3:0.50588,0.82353,0.72549,1.00000",
-      "srgb:0.00000,0.50980,0.50980,1.00000"
-    ]
+    "solid" : "srgb:0.05098,0.05882,0.07059,1.00000"
   },
   "groups" : [
     {
@@ -11,39 +8,18 @@
       "layers" : [
         {
           "hidden" : false,
-          "image-name" : "Top.svg",
-          "name" : "Top",
+          "image-name" : "AltForge.png",
+          "name" : "AltForge",
           "opacity" : 1,
           "position" : {
-            "scale" : 0.85,
-            "translation-in-points" : [
-              0,
-              0
-            ]
-          }
-        },
-        {
-          "glass" : true,
-          "image-name" : "BG.svg",
-          "name" : "BG",
-          "opacity" : 0.25,
-          "position" : {
-            "scale" : 0.85,
+            "scale" : 1,
             "translation-in-points" : [
               0,
               0
             ]
           }
         }
-      ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
+      ]
     }
   ],
   "supported-platforms" : {

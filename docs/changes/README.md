@@ -17,6 +17,7 @@
 | [`CHG-20260808-003`](completed/2026/08/CHG-20260808-003-upstream-maintenance-fixes/README.md) | 上游维护修复筛选与移植 | 2026-08-08 |
 | [`CHG-20260808-004`](completed/2026/08/CHG-20260808-004-project-governance/README.md) | 补齐项目工程治理与提交规则 | 2026-08-08 |
 | [`CHG-20260809-001`](completed/2026/08/CHG-20260809-001-bilingual-readme/README.md) | 建立中英双语 README 与项目改动说明 | 2026-08-09 |
+| [`CHG-20260809-005`](completed/2026/08/CHG-20260809-005-altforge-brand-assets/README.md) | 统一 AltForge 跨平台品牌资产 | 2026-08-09 |
 
 ## 记录要求
 

@@ -26,7 +26,7 @@ end
 
 repository_url = "https://github.com/legeling/AltForge"
 download_url = "#{repository_url}/releases/latest/download/AltForge.ipa"
-icon_url = "https://raw.githubusercontent.com/legeling/AltForge/marketplace/AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/GlassIcon.png"
+icon_url = "https://raw.githubusercontent.com/legeling/AltForge/marketplace/AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/AltForgeIcon.png"
 
 source = {
   "name" => "AltForge",

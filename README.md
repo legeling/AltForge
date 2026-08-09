@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="docs/assets/brand/altforge-app-icon.png" width="132" alt="AltForge app icon">
+  <img src="docs/assets/brand/altforge-wordmark.png" width="720" alt="AltForge">
 </p>
-
-<h1 align="center">AltForge</h1>
 
 <p align="center"><strong>AltStore Classic, maintained for Unicode apps, international users, and modern Apple platforms.</strong></p>
 
