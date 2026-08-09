@@ -11,9 +11,6 @@
 | ID | 标题 | 状态 |
 |---|---|---|
 | [`CHG-20260809-002`](active/CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
-| [`CHG-20260809-003`](active/CHG-20260809-003-tag-only-release-versioning/README.md) | 收敛 tag-only 构建与统一版本 | In progress |
-| [`CHG-20260809-004`](active/CHG-20260809-004-release-safety-update-independence/README.md) | 发布安全与更新独立性 | In progress |
-| [`CHG-20260809-006`](active/CHG-20260809-006-macos-dmg-local-validation/README.md) | macOS DMG 与本地安装验证 | In progress |
 | [`CHG-20260809-007`](active/CHG-20260809-007-macos-server-identity-settings/README.md) | macOS Server 身份、菜单与设置 | In progress |
 
 ## Completed
@@ -28,6 +25,9 @@
 | [`CHG-20260809-005`](completed/2026/08/CHG-20260809-005-altforge-brand-assets/README.md) | 统一 AltForge 跨平台品牌资产 | 2026-08-09 |
 | [`CHG-20260809-008`](completed/2026/08/CHG-20260809-008-brand-system-rollout/README.md) | 统一品牌系统全面替换 | 2026-08-09 |
 | [`CHG-20260809-009`](completed/2026/08/CHG-20260809-009-repository-network-ownership/README.md) | 收敛仓库网络所有权 | 2026-08-09 |
+| [`CHG-20260809-003`](completed/2026/08/CHG-20260809-003-tag-only-release-versioning/README.md) | 收敛 tag-only 构建与统一版本 | 2026-08-10 |
+| [`CHG-20260809-004`](completed/2026/08/CHG-20260809-004-release-safety-update-independence/README.md) | 发布安全与更新独立性 | 2026-08-10 |
+| [`CHG-20260809-006`](completed/2026/08/CHG-20260809-006-macos-dmg-local-validation/README.md) | macOS DMG 与本地安装验证 | 2026-08-10 |
 
 ## 记录要求
 

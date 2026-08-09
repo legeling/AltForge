@@ -1,6 +1,6 @@
 # CHG-20260809-003：收敛 tag-only 构建与统一版本
 
-- 状态：In progress
+- 状态：Completed
 - 日期：2026-08-09
 - 类型：Build / Release
 
@@ -28,7 +28,7 @@
 ## 风险与回滚
 
 - tag-only 模式会降低合并前反馈速度，维护者必须在打标签前运行本地 preflight 和受影响平台测试。
-- 当前开发机不能完成 Windows MSBuild；固定 vcpkg 的修复必须由下一次明确授权的标签构建验证。
+- 当前开发机不能完成 Windows MSBuild；已由正式 `v2.4.0` 的 `windows-2025` hosted job 完成构建与打包验证。
 - 回滚时可恢复 branch/PR CI 并删除 tag-only 限制，但不得放宽 tag 与产品版本一致性后静默替换已发布产物。
 
 ## 收敛门禁
@@ -36,8 +36,8 @@
 - [x] 根版本与 iOS、macOS、Windows 产品版本完成统一。
 - [x] 只保留 tag-triggered GitHub Actions workflow。
 - [x] 关键 metadata/source identity 门禁进入 Release workflow。
-- [ ] 下一版本标签完成 Apple 与 Windows hosted build。
-- [ ] 发布完成后新增对应 release record，并更新相关 issue/task 状态。
+- [x] `v2.4.0` 标签完成 Apple 与 Windows hosted build。
+- [x] 发布完成后新增对应 release record，并更新相关 issue/task 状态。
 
 ## 已执行验证
 
@@ -45,4 +45,4 @@
 - `ruby Scripts/test_release_metadata.rb`：通过。
 - `ruby -c Scripts/check_release_version.rb`、Ruby YAML parser、`plutil -lint AltStore.xcodeproj/project.pbxproj` 与 `git diff --check`：通过。
 - `actionlint 1.7.7`：忽略其尚未收录的 GitHub-hosted `macos-26` label 后通过；该 runner 已在首次 hosted run 实际启动。
-- 本机未安装 PowerShell/MSBuild，未执行 Windows build；真实标签构建尚未执行，不能据此声称三平台发布已通过。
+- `v2.4.0` [run 31329893677](https://github.com/legeling/AltForge/actions/runs/31329893677) 的 prepare、Apple、Windows 和 publish jobs 全部通过，并已公开发布对应 release record。本机仍无 PowerShell/MSBuild，Windows 真实设备 smoke test 由 issue 继续跟踪。

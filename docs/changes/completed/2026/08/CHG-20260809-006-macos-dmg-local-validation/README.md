@@ -1,6 +1,6 @@
 # CHG-20260809-006：macOS DMG 与本地安装验证
 
-- 状态：In progress
+- 状态：Completed
 - 日期：2026-08-09
 - 类型：Release / Packaging / Documentation
 
@@ -53,9 +53,9 @@
 - bundle identifier 为 `com.legeling.AltForge.AltServer`，主 executable 为 arm64，版本为 `2.4.0 (1)`。
 - 验证挂载已推出，DerivedData 与 staging 已清理；只保留 `build/local/AltForge-AltServer-macOS.dmg` 供用户试装。
 - 桌面身份与设置改进后的 preview 重新构建为 `AltForge Server.app`，版本 `2.4.0 (3)`；DMG 再次通过 image、symlink、bundle、arm64/x86_64 和 strict ad-hoc signature 检查。
+- 正式 `v2.4.0 (8)` Universal DMG 由 GitHub macOS runner 产出，artifact verifier 和发布后独立下载复验均通过。
 
 ## 残余风险
 
-- 正式 Draft 的 Universal DMG 尚未在 GitHub macOS runner 生成。
 - 公开产物仍未 Developer ID 签名和 notarize，Gatekeeper 体验不能由本地 ad-hoc build 代表。
 - 真实 iPhone/iPad 安装仍需要脱敏 Apple ID 和设备 smoke test。

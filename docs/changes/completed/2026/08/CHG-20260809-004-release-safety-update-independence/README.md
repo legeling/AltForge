@@ -1,6 +1,6 @@
 # CHG-20260809-004：发布安全与更新独立性
 
-- 状态：In progress
+- 状态：Completed
 - 日期：2026-08-09
 - 类型：Security / Release / Maintenance
 
@@ -59,4 +59,4 @@ source 合并只解析上一正式 `apps.json`，时间和内存均为 `O(versio
 - iPhone 17 Pro Simulator 上运行 `testSourceID` 与 `testAltForgeSourceDeepLink`，2 项通过
 - `AltServer` macOS arm64 Release build 通过；产物 Info.plist 为 `2.4.0 (88)`
 
-`v2.4.0` 标签构建已在 hosted runner 完成 Apple artifact verifier、Universal DMG/unsigned IPA 和 Windows ZIP；首次 publish job 在 artifact 目录运行 `gh release create --verify-tag` 时因未显式指定 repository 而拒绝创建 Draft。workflow 已增加 `--repo "$GITHUB_REPOSITORY"`，尚待下一次标签复验 Draft 与人工公开门禁。真实设备安装仍待验证。
+`v2.4.0` 标签构建已在 hosted runner 完成 Apple artifact verifier、Universal DMG/unsigned IPA 和 Windows ZIP；首次 publish job 在 artifact 目录运行 `gh release create --verify-tag` 时因未显式指定 repository 而拒绝创建 Draft。workflow 增加 `--repo "$GITHUB_REPOSITORY"` 后，[run 31329893677](https://github.com/legeling/AltForge/actions/runs/31329893677) 已创建 Draft；经文件列表、checksum、结构和安装限制人工复核后公开为首个正式 Release。真实设备安装仍由 issue 继续跟踪。

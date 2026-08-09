@@ -22,4 +22,6 @@
 
 每个正式 AltForge release 增加 `v<version>.md`，至少记录：tag/commit、用户可见变化、兼容性、migration、产物 hash、实际验证、已知问题和回滚/升级说明。
 
-本基线未根据本地 inherited tags 推断已正式发布的 AltForge 版本；首次 release 后补具体记录。
+## 正式版本
+
+- [`v2.4.0`](v2.4.0.md)：AltForge 独立版本序列的首个正式版本。
