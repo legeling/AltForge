@@ -995,7 +995,7 @@
         }
       }
     },
-    "A connection to AltServer could not be established." : {
+    "A connection to AltForge Server could not be established." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -1012,7 +1012,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法建立与 AltServer 的连接。"
+            "value" : "无法建立与 AltForge Server 的连接。"
           }
         }
       }
@@ -1435,29 +1435,39 @@
         }
       }
     },
-    "AltServer" : {
+    "AltForge does not operate a Patreon campaign. Link an account only to access apps from compatible sources that require a pledge." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 不运营 Patreon 赞助计划。仅当兼容的软件源要求赞助权限时，才需要关联账户。"
+          }
+        }
+      }
+    },
+    "AltForge Server" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer"
+            "value" : "AltForge Server"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer"
+            "value" : "AltForge Server"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer"
+            "value" : "AltForge Server"
           }
         }
       }
     },
-    "AltServer could not be found." : {
+    "AltForge Server could not be found." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -1474,7 +1484,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer。"
+            "value" : "找不到 AltForge Server。"
           }
         }
       }
@@ -3406,7 +3416,7 @@
         }
       }
     },
-    "Enable Background Refresh to automatically refresh apps in the background when connected to the same Wi-Fi as AltServer." : {
+    "Enable Background Refresh to automatically refresh apps in the background when connected to the same Wi-Fi as AltForge Server." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -3423,7 +3433,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "启用后台刷新，以便在连接到与 AltServer 相同的 Wi-Fi 时自动在后台刷新应用。"
+            "value" : "启用后台刷新，以便在连接到与 AltForge Server 相同的 Wi-Fi 时自动在后台刷新 App。"
           }
         }
       }
@@ -5199,6 +5209,16 @@
         }
       }
     },
+    "Link a Patreon account only when a source requires a pledge." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅当软件源要求赞助权限时，才需要关联 Patreon 账户。"
+          }
+        }
+      }
+    },
     "Link Patreon account" : {
       "localizations" : {
         "ja" : {
@@ -5331,7 +5351,7 @@
         }
       }
     },
-    "Make sure you're on the same Wi-Fi network as a computer running AltServer, or try connecting this device to your computer via USB." : {
+    "Make sure you're on the same Wi-Fi network as a computer running AltForge Server, or try connecting this device to your computer via USB." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -5348,7 +5368,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "确保您与运行 AltServer 的计算机位于同一 Wi-Fi 网络，或尝试通过 USB 将此设备连接到您的计算机。"
+            "value" : "确保设备与运行 AltForge Server 的电脑位于同一 Wi-Fi 网络，或者尝试通过 USB 连接设备和电脑。"
           }
         }
       }
@@ -6747,7 +6767,7 @@
         }
       }
     },
-    "remote AltServer %@" : {
+    "remote AltForge Server %@" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -6764,7 +6784,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "远程 AltServer %@"
+            "value" : "远程 AltForge Server %@"
           }
         }
       }
@@ -7859,7 +7879,7 @@
         }
       }
     },
-    "The connection to AltServer was dropped." : {
+    "The connection to AltForge Server was dropped." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -7876,7 +7896,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "与 AltServer 的连接已断开。"
+            "value" : "与 AltForge Server 的连接已断开。"
           }
         }
       }
@@ -10276,7 +10296,7 @@
         }
       }
     },
-    "wired AltServer" : {
+    "USB-connected AltForge Server" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -10293,7 +10313,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "有线 AltServer"
+            "value" : "通过 USB 连接的 AltForge Server"
           }
         }
       }
@@ -10864,12 +10884,12 @@
         }
       }
     },
-    "%@ received an invalid request from AltServer." : {
+    "%@ received an invalid request from AltForge Server." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 收到了来自 AltServer 的无效请求。"
+            "value" : "%@ 收到了来自 AltForge Server 的无效请求。"
           }
         }
       }
@@ -10930,122 +10950,122 @@
         }
       }
     },
-    "AltServer could not connect to Mail plug-in." : {
+    "AltForge Server could not connect to the legacy Mail plug-in." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 无法连接到邮件插件。"
+            "value" : "AltForge Server 无法连接到旧版邮件插件。"
           }
         }
       }
     },
-    "AltServer could not establish a connection to AltStore." : {
+    "AltForge Server could not establish a connection to AltForge." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 无法与 AltStore 建立连接。"
+            "value" : "AltForge Server 无法与 AltForge 建立连接。"
           }
         }
       }
     },
-    "AltServer could not establish a secure connection to %@." : {
+    "AltForge Server could not establish a secure connection to %@." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 无法与 %@ 建立安全连接。"
+            "value" : "AltForge Server 无法与 %@ 建立安全连接。"
           }
         }
       }
     },
-    "AltServer could not find this device." : {
+    "AltForge Server could not find this device." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 找不到此设备。"
+            "value" : "AltForge Server 找不到此设备。"
           }
         }
       }
     },
-    "AltServer could not write data to this device." : {
+    "AltForge Server could not write data to this device." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 无法向此设备写入数据。"
+            "value" : "AltForge Server 无法向此设备写入数据。"
           }
         }
       }
     },
-    "AltServer does not support this request." : {
+    "AltForge Server does not support this request." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 不支持此请求。"
+            "value" : "AltForge Server 不支持此请求。"
           }
         }
       }
     },
-    "AltServer received an invalid request." : {
+    "AltForge Server received an invalid request." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 收到了无效请求。"
+            "value" : "AltForge Server 收到了无效请求。"
           }
         }
       }
     },
-    "AltServer received an invalid response from %@." : {
+    "AltForge Server received an invalid response from %@." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 收到了来自 %@ 的无效响应。"
+            "value" : "AltForge Server 收到了来自 %@ 的无效响应。"
           }
         }
       }
     },
-    "AltServer requires additional dependencies to enable JIT on iOS 17." : {
+    "AltForge Server requires additional dependencies to enable JIT on iOS 17." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 需要额外的依赖项才能在 iOS 17 上启用 JIT。"
+            "value" : "AltForge Server 需要额外的依赖项才能在 iOS 17 上启用 JIT。"
           }
         }
       }
     },
-    "AltServer sent an invalid response." : {
+    "AltForge Server sent an invalid response." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 发送了无效响应。"
+            "value" : "AltForge Server 发送了无效响应。"
           }
         }
       }
     },
-    "AltServer's connection to %@ timed out." : {
+    "AltForge Server's connection to %@ timed out." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 与 %@ 的连接超时。"
+            "value" : "AltForge Server 与 %@ 的连接超时。"
           }
         }
       }
     },
-    "AltStore received an unknown response from AltServer." : {
+    "AltForge received an unknown response from AltForge Server." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 收到了来自 AltServer 的未知响应。"
+            "value" : "AltForge 收到了来自 AltForge Server 的未知响应。"
           }
         }
       }
@@ -11190,12 +11210,12 @@
         }
       }
     },
-    "Please follow the instructions on the AltStore FAQ to install all required dependencies, then try again." : {
+    "Please follow the AltForge AltJIT guide to install all required dependencies, then try again." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请按照 AltStore 常见问题中的说明安装所有必需的依赖项，然后重试。"
+            "value" : "请按照 AltForge AltJIT 指南安装所有必需的依赖项，然后重试。"
           }
         }
       }
@@ -11256,12 +11276,12 @@
         }
       }
     },
-    "The connection to AltServer was lost." : {
+    "The connection to AltForge Server was lost." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "与 AltServer 的连接已断开。"
+            "value" : "与 AltForge Server 的连接已断开。"
           }
         }
       }

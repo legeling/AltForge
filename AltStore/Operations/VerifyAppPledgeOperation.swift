@@ -42,6 +42,7 @@ class VerifyAppPledgeOperation: ResultOperation<Void>, @unchecked Sendable
             do
             {
                 guard await self.$storeApp.isPledgeRequired else { return self.finish(.success(())) }
+                guard PatreonAPI.shared.isConfigured else { throw PatreonAPI.shared.notConfiguredError }
                 
                 if let presentingViewController = self.presentingViewController
                 {

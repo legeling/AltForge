@@ -8,6 +8,7 @@ require "tmpdir"
 ROOT = File.expand_path("..", __dir__)
 BRAND_ROOT = File.join(ROOT, "docs/assets/brand")
 APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon.png")
+CORAL_APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon-coral.png")
 TEMPLATE_ICON = File.join(BRAND_ROOT, "altforge-template-icon.png")
 
 def run!(*command)
@@ -55,11 +56,14 @@ def write_ico(source, destination, sizes)
 end
 
 abort("Missing brand source: #{APP_ICON}") unless File.file?(APP_ICON)
+abort("Missing brand source: #{CORAL_APP_ICON}") unless File.file?(CORAL_APP_ICON)
 abort("Missing template source: #{TEMPLATE_ICON}") unless File.file?(TEMPLATE_ICON)
 
 resize_png(APP_ICON, File.join(ROOT, "AltStore/Resources/AppIcon.icon/Assets/AltForge.png"), 1024)
 resize_png(APP_ICON, File.join(ROOT, "AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/AltForgeIcon.png"), 1024)
 resize_png(APP_ICON, File.join(ROOT, "AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/AltForgeIconDark.png"), 1024)
+resize_png(CORAL_APP_ICON, File.join(ROOT, "AltStore/Resources/AppIcon_Coral.icon/Assets/AltForgeCoral.png"), 1024)
+resize_png(CORAL_APP_ICON, File.join(ROOT, "AltStore/Resources/Icons.xcassets/Raw/AppIcon_Coral.imageset/AltForgeCoralIcon.png"), 1024)
 
 mac_icons = {
   "Icon@16.png" => 16,
@@ -81,6 +85,8 @@ end
 resize_png(TEMPLATE_ICON, File.join(ROOT, "AltServer/Assets.xcassets/MenuBarIcon.imageset/MenuBar@19.png"), 19)
 resize_png(TEMPLATE_ICON, File.join(ROOT, "AltServer/Assets.xcassets/MenuBarIcon.imageset/MenuBar@38.png"), 38)
 resize_png(TEMPLATE_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/SmallIcon.imageset/AltForgeSmallIcon.png"), 512)
+resize_png(APP_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/AltForge.imageset/AltForge@2x.png"), 120)
+resize_png(APP_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/AltForge.imageset/AltForge@3x.png"), 180)
 
 write_ico(APP_ICON, File.join(ROOT, "AltServer-Windows/Resources/Icon.ico"), [16, 32, 48, 256])
 write_ico(APP_ICON, File.join(ROOT, "AltServer-Windows/AltServer/MenuBarIcon.ico"), [16, 19, 24, 32, 48])

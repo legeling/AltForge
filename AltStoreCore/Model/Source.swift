@@ -268,10 +268,7 @@ public extension Source
     }
     
     var shareURL: URL? {
-        guard let host = self.sourceURL.host() else { return nil }
-        
-        let shareURL = URL(string: "https://altstore.io/source/\(host)\(self.sourceURL.path())")
-        return shareURL
+        return URL.altForgeSourceDeepLink(for: self.sourceURL)
     }
 }
 
@@ -335,7 +332,7 @@ public extension Source
     class func makeAltStoreSource(in context: NSManagedObjectContext) -> Source
     {
         let source = Source(context: context)
-        source.name = "AltStore"
+        source.name = "AltForge"
         try! source.setSourceURL(Source.altStoreSourceURL)
         
         return source

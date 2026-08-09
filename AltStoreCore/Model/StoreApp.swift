@@ -649,10 +649,8 @@ public extension StoreApp
     }
     
     var shareURL: URL? {
-        guard let sourceURL = self.source?.sourceURL, let host = sourceURL.host() else { return nil }
-        
-        let shareURL = URL(string: "https://altstore.io/source/\(host)\(sourceURL.path())?app=\(self.bundleIdentifier)")
-        return shareURL
+        guard let sourceURL = self.source?.sourceURL else { return nil }
+        return URL.altForgeSourceDeepLink(for: sourceURL)
     }
 }
 
@@ -710,18 +708,18 @@ public extension StoreApp
     class func makeAltStoreApp(version: String, buildVersion: String?, in context: NSManagedObjectContext) -> StoreApp
     {
         let app = StoreApp(context: context)
-        app.name = "AltStore"
+        app.name = "AltForge"
         app.bundleIdentifier = StoreApp.altstoreAppID
-        app.developerName = "Riley Testut"
-        app.localizedDescription = "AltStore is an alternative App Store."
-        app.iconURL = URL(string: "https://user-images.githubusercontent.com/705880/63392210-540c5980-c37b-11e9-968c-8742fc68ab2e.png")!
+        app.developerName = "AltForge Contributors"
+        app.localizedDescription = "AltForge installs, refreshes, and manages sideloaded apps with AltServer."
+        app.iconURL = URL(string: "https://raw.githubusercontent.com/legeling/AltForge/marketplace/AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/AltForgeIcon.png")!
         app.screenshotURLs = []
         app.sourceIdentifier = Source.altStoreIdentifier
         
         let appVersion = AppVersion.makeAppVersion(version: version,
                                                    buildVersion: buildVersion,
                                                    date: Date(),
-                                                   downloadURL: URL(string: "http://rileytestut.com")!,
+                                                   downloadURL: URL(string: "https://github.com/legeling/AltForge/releases/latest/download/AltForge.ipa")!,
                                                    size: 0,
                                                    appBundleID: app.bundleIdentifier,
                                                    sourceID: Source.altStoreIdentifier,

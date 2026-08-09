@@ -50,7 +50,7 @@ private extension ErrorDetailsViewController
     {
         guard let error else { return }
         
-        let baseURL = URL(string: "https://faq.altstore.io/getting-started/error-codes")!
+        let baseURL = URL(string: "https://github.com/legeling/AltForge/issues")!
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
         
         let nsError = error as NSError

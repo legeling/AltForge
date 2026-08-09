@@ -47,9 +47,14 @@ xcodebuild build \
 
 触发：release workflow、metadata script、bundle ID、minimum OS、source URL 变化。
 
-- 在临时 artifact 目录准备最小 IPA/macOS archive。
+- 运行 `ruby Scripts/check_release_version.rb`，确认根版本与三平台产品版本一致。
+- 运行 `ruby Scripts/test_release_metadata.rb` 和 `ruby Scripts/test_repository_contract.rb`。
+- 在临时 artifact 目录准备最小 IPA、macOS DMG 和 Windows ZIP。
 - 运行 metadata script。
-- 解析 `apps.json` 并复算 size/hash。
+- 解析 `apps.json` 与三个远程配置 JSON，复算全部 size/hash，验证历史不超过 20 条。
+- 解析 `developerdisks.json`，校验 version 1 schema、HTTPS 和允许 host；扫描 Classic 控制端点，确认没有回退到上游 CDN、staging bucket 或上游 OAuth callback。
+- 验证遗留 Mail plug-in manager 无网络 URL，默认 Patreon 配置在发起请求前 fail closed，release build settings 未定义 `MARKETPLACE`。
+- 验证 Classic 启动不调度 Fediverse operation、source 刷新不查询上游 CloudKit，交互 UI 固定关闭。
 - 不创建 tag、不发布 Release。
 
 ## Suite E：真实设备
@@ -59,6 +64,29 @@ xcodebuild build \
 - 使用脱敏测试账户与设备。
 - 执行 `TEST-002` 和受影响路径。
 - 不将凭据、UDID 或 profile 保存为 artifact。
+
+## Suite G：macOS DMG
+
+触发：macOS build setting、AltServer bundle、DMG 打包脚本或 release asset 变化。
+
+- 运行 `bash -n Scripts/package_macos_dmg.sh` 与 repository contract。
+- 运行 `bash -n Scripts/verify_apple_release_artifacts.sh`；tag workflow 在 Apple runner 上用实际版本和 build number 执行该脚本。
+- 使用独立 DerivedData 构建 Release AltServer，并通过脚本生成新的输出路径；本地启动验证可添加 `--ad-hoc-sign`，CI Release 不添加。
+- 执行 `hdiutil verify`，只读挂载后检查 `AltForge Server.app`、Applications symlink、bundle identifier、版本和目标架构。
+- CI verifier 同时检查 IPA Payload/identity/version、DMG 的 arm64+x86_64 架构和当前 non-Developer-ID policy；Xcode linker ad-hoc signature 可接受，但出现 Authority/Team ID 时 fail closed。publish job 在创建 Draft 前执行 checksum manifest verification。
+- 验证后推出本次挂载、清理 DerivedData 与 staging；保留 DMG 仅限用户需要试装时。
+- 本地 ad-hoc 签名不得替代 Developer ID、notarization 或另一台 Mac 的 Gatekeeper 验证。
+
+## Suite H：macOS 菜单与设置
+
+触发：AltForge Server 公开名称、About/版权、状态菜单、设备发现、检查更新、图标、设置或 macOS 本地化变化。
+
+- 静态检查 Info.plist、storyboard、string catalogs 和用户可见源码，不允许 About/菜单回退到旧公开名称。
+- 构建 AltServer Release，检查 `CFBundleDisplayName`、版权、19/38 px template 菜单图标和完整 AppIcon slots。
+- 无设备时显示可理解 placeholder；USB、Wi-Fi 与同时连接分别显示正确标签，双连接优先 USB。
+- 切换跟随系统、English、简体中文，退出并重新打开后检查菜单、About、设置和错误文案。
+- 更新检查覆盖更新可用、已最新、404/离线、超时、无效 JSON 与非 GitHub URL；不得自动下载或替换 App。
+- 遗留邮件插件未安装时入口隐藏；存在时只显示明确的清理文案。
 
 ## Suite F：Windows AltServer
 
@@ -75,6 +103,6 @@ xcodebuild build \
 
 ## 命令登记规则
 
-- CI 是命令真相的首选来源，本文件解释触发条件。
+- tag-driven Release workflow 是自动构建命令的真相来源，本文件解释本地预检和触发条件。
 - destination 或 Xcode 版本变化时同时更新 workflow、README 和 reference。
 - 失败结果记录首个根因与未执行的后续 suite，不保存大型完整日志到 `docs/`。

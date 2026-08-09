@@ -15,14 +15,28 @@ import LaunchAtLogin
 
 extension ALTDevice: MenuDisplayable {}
 
+private struct GitHubRelease: Decodable
+{
+    let tagName: String
+    let htmlURL: URL
+
+    private enum CodingKeys: String, CodingKey
+    {
+        case tagName = "tag_name"
+        case htmlURL = "html_url"
+    }
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let pluginManager = PluginManager()
     
     private var statusItem: NSStatusItem?
+    private var settingsWindowController: SettingsWindowController?
     
     private var connectedDevices = [ALTDevice]()
+    private var wiredDeviceIdentifiers = Set<String>()
     
     private weak var authenticationAlert: NSAlert?
     
@@ -62,7 +76,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let item = NSStatusBar.system.statusItem(withLength: -1)
         item.menu = self.appMenu
-        item.button?.image = NSImage(named: "MenuBarIcon") 
+        let menuBarImage = NSImage(named: "MenuBarIcon")
+        menuBarImage?.isTemplate = true
+        item.button?.image = menuBarImage
         self.statusItem = item
         
         self.appMenu.delegate = self
@@ -74,18 +90,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.connectedDevicesMenuController = MenuController<ALTDevice>(menu: self.connectedDevicesMenu, items: [])
         self.connectedDevicesMenuController.placeholder = placeholder
+        self.connectedDevicesMenuController.titleHandler = { [weak self] device in
+            self?.menuTitle(for: device) ?? device.name
+        }
+        self.connectedDevicesMenuController.imageHandler = { [weak self] device in
+            self?.connectionImage(for: device)
+        }
         self.connectedDevicesMenuController.action = { [weak self] device in
             self?.installAltStore(to: device)
         }
         
         self.sideloadIPAConnectedDevicesMenuController = MenuController<ALTDevice>(menu: self.sideloadIPAConnectedDevicesMenu, items: [])
         self.sideloadIPAConnectedDevicesMenuController.placeholder = placeholder
+        self.sideloadIPAConnectedDevicesMenuController.titleHandler = { [weak self] device in
+            self?.menuTitle(for: device) ?? device.name
+        }
+        self.sideloadIPAConnectedDevicesMenuController.imageHandler = { [weak self] device in
+            self?.connectionImage(for: device)
+        }
         self.sideloadIPAConnectedDevicesMenuController.action = { [weak self] device in
             self?.sideloadIPA(to: device)
         }
         
         self.enableJITMenuController = MenuController<ALTDevice>(menu: self.enableJITMenu, items: [])
         self.enableJITMenuController.placeholder = placeholder
+        self.enableJITMenuController.titleHandler = { [weak self] device in
+            self?.menuTitle(for: device) ?? device.name
+        }
+        self.enableJITMenuController.imageHandler = { [weak self] device in
+            self?.connectionImage(for: device)
+        }
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { (success, error) in
             guard success else { return }
@@ -93,8 +127,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if !UserDefaults.standard.didPresentInitialNotification
             {
                 let content = UNMutableNotificationContent()
-                content.title = NSLocalizedString("AltServer Running", comment: "")
-                content.body = NSLocalizedString("AltServer runs in the background as a menu bar app listening for AltForge.", comment: "")
+                content.title = NSLocalizedString("AltForge Server Running", comment: "")
+                content.body = NSLocalizedString("AltForge Server runs in the background as a menu bar app listening for AltForge.", comment: "")
                 
                 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
                 UNUserNotificationCenter.current().add(request)
@@ -104,10 +138,46 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @IBAction func openReleases(_ sender: Any?)
+    @IBAction func showSettings(_ sender: Any?)
     {
-        let releasesURL = URL(string: "https://github.com/legeling/AltForge/releases/latest")!
-        NSWorkspace.shared.open(releasesURL)
+        if self.settingsWindowController == nil
+        {
+            self.settingsWindowController = SettingsWindowController()
+        }
+        self.settingsWindowController?.present()
+    }
+
+    @IBAction func checkForUpdates(_ sender: NSMenuItem)
+    {
+        sender.isEnabled = false
+        sender.title = NSLocalizedString("Checking for Updates…", comment: "")
+
+        var request = URLRequest(url: URL(string: "https://api.github.com/repos/legeling/AltForge/releases/latest")!)
+        request.timeoutInterval = 10
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+        request.setValue("AltForge-Server", forHTTPHeaderField: "User-Agent")
+
+        URLSession.shared.dataTask(with: request) { [weak self, weak sender] data, response, error in
+            DispatchQueue.main.async {
+                sender?.isEnabled = true
+                sender?.title = NSLocalizedString("Check for Updates…", comment: "")
+
+                guard let self else { return }
+                guard error == nil,
+                      let response = response as? HTTPURLResponse,
+                      response.statusCode == 200,
+                      let data,
+                      data.count <= 1_048_576,
+                      let release = try? JSONDecoder().decode(GitHubRelease.self, from: data)
+                else {
+                    self.showUpdateCheckFailure()
+                    return
+                }
+
+                self.showUpdateResult(release)
+            }
+        }.resume()
     }
 
     func applicationWillTerminate(_ aNotification: Notification)
@@ -118,6 +188,83 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 private extension AppDelegate
 {
+    func menuTitle(for device: ALTDevice) -> String
+    {
+        let connection = self.wiredDeviceIdentifiers.contains(device.identifier) ? NSLocalizedString("USB", comment: "") : NSLocalizedString("Wi-Fi", comment: "")
+        return String(format: NSLocalizedString("%@ (%@)", comment: ""), device.name, connection)
+    }
+
+    func connectionImage(for device: ALTDevice) -> NSImage?
+    {
+        let isWired = self.wiredDeviceIdentifiers.contains(device.identifier)
+        let description = isWired ? NSLocalizedString("USB", comment: "") : NSLocalizedString("Wi-Fi", comment: "")
+        return NSImage(systemSymbolName: isWired ? "cable.connector" : "wifi", accessibilityDescription: description)
+    }
+
+    func showUpdateResult(_ release: GitHubRelease)
+    {
+        let currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
+        guard let latestVersion = self.semanticVersion(from: release.tagName) else
+        {
+            self.showUpdateCheckFailure()
+            return
+        }
+        let alert = NSAlert()
+
+        if latestVersion.compare(currentVersion, options: .numeric) == .orderedDescending
+        {
+            alert.messageText = NSLocalizedString("Update Available", comment: "")
+            alert.informativeText = String(format: NSLocalizedString("AltForge Server %@ is available. You are using %@.", comment: ""), latestVersion, currentVersion)
+            alert.addButton(withTitle: NSLocalizedString("Open Release", comment: ""))
+            alert.addButton(withTitle: NSLocalizedString("Later", comment: ""))
+
+            NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+            guard alert.runModal() == .alertFirstButtonReturn else { return }
+            guard release.htmlURL.scheme == "https", release.htmlURL.host == "github.com" else
+            {
+                self.showUpdateCheckFailure()
+                return
+            }
+            NSWorkspace.shared.open(release.htmlURL)
+        }
+        else
+        {
+            alert.messageText = NSLocalizedString("AltForge Server Is Up to Date", comment: "")
+            alert.informativeText = String(format: NSLocalizedString("You are using the latest version (%@).", comment: ""), currentVersion)
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+            NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+            alert.runModal()
+        }
+    }
+
+    func semanticVersion(from tag: String) -> String?
+    {
+        let version = tag.hasPrefix("v") ? String(tag.dropFirst()) : tag
+        let components = version.split(separator: ".", omittingEmptySubsequences: false)
+        guard version.count <= 32,
+              components.count == 3,
+              components.allSatisfy({ !$0.isEmpty && $0.allSatisfy(\.isNumber) })
+        else { return nil }
+        return version
+    }
+
+    func showUpdateCheckFailure()
+    {
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = NSLocalizedString("Unable to Check for Updates", comment: "")
+        alert.informativeText = NSLocalizedString("AltForge Server could not read the latest release from GitHub. You can open the Releases page and check manually.", comment: "")
+        alert.addButton(withTitle: NSLocalizedString("Open Releases", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+
+        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+        if alert.runModal() == .alertFirstButtonReturn,
+           let releasesURL = URL(string: "https://github.com/legeling/AltForge/releases")
+        {
+            NSWorkspace.shared.open(releasesURL)
+        }
+    }
+
     @objc func installAltStore(to device: ALTDevice)
     {
         self.installApplication(at: nil, to: device)
@@ -176,7 +323,7 @@ private extension AppDelegate
                     let response = alert.runModal()
                     if response == .alertFirstButtonReturn
                     {
-                        let faqURL = URL(string: "https://faq.altstore.io/how-to-use-altstore/altjit")!
+                        let faqURL = URL(string: "https://github.com/legeling/AltForge/blob/marketplace/docs/guides/altjit.md")!
                         NSWorkspace.shared.open(faqURL)
                     }
                 }
@@ -330,14 +477,14 @@ private extension AppDelegate
                 case .failure(PluginError.cancelled): break
                 case .failure(let error):
                     let alert = NSAlert()
-                    alert.messageText = NSLocalizedString("Failed to Uninstall Mail Plug-in", comment: "")
+                    alert.messageText = NSLocalizedString("Failed to Remove Legacy Mail Plug-in", comment: "")
                     alert.informativeText = error.localizedDescription
                     alert.runModal()
                     
                 case .success:
                     let alert = NSAlert()
-                    alert.messageText = NSLocalizedString("Mail Plug-in Uninstalled", comment: "")
-                    alert.informativeText = NSLocalizedString("Please restart Mail for changes to take effect.", comment: "")
+                    alert.messageText = NSLocalizedString("Legacy Mail Plug-in Removed", comment: "")
+                    alert.informativeText = NSLocalizedString("The legacy plug-in is no longer used by AltForge Server. Restart Mail to finish removing it.", comment: "")
                     alert.runModal()
                 }
             }
@@ -346,18 +493,16 @@ private extension AppDelegate
     
     @IBAction private func showAboutPanel(_ sender: NSMenuItem)
     {
-        let options: [NSApplication.AboutPanelOptionKey: Any]
+        var options: [NSApplication.AboutPanelOptionKey: Any] = [
+            .applicationName: NSLocalizedString("AltForge Server", comment: "")
+        ]
         
         if #available(macOS 12, *)
         {
-            var credits = try! AttributedString(markdown: "Thanks to [pymobiledevice3](https://github.com/doronz88/pymobiledevice3) for their work on the iOS 17 Developer Disk format.")
+            let creditText = NSLocalizedString("AltForge Server is maintained by the AltForge contributors and builds on the AltStore and pymobiledevice3 communities. AltForge is distributed under the GNU AGPL v3.0 license.", comment: "")
+            var credits = try! AttributedString(markdown: creditText)
             credits.font = .systemFont(ofSize: NSFont.smallSystemFontSize) // YOLO ignore Sendable warning.
-            
-            options = [.credits: NSAttributedString(credits)]
-        }
-        else
-        {
-            options = [:]
+            options[.credits] = NSAttributedString(credits)
         }
                 
         NSApplication.shared.orderFrontStandardAboutPanel(options: options)
@@ -374,6 +519,7 @@ extension AppDelegate: NSMenuDelegate
         // Clear any cached _jitAppListMenuControllers.
         self._jitAppListMenuControllers.removeAll()
 
+        self.wiredDeviceIdentifiers = Set(ALTDeviceManager.shared.connectedDevices.map(\.identifier))
         self.connectedDevices = ALTDeviceManager.shared.availableDevices
         
         self.connectedDevicesMenuController.items = self.connectedDevices

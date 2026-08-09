@@ -694,6 +694,10 @@ extension AppManager
     
     func updateFediverseInteractionsIfNeeded()
     {
+        #if !MARKETPLACE
+        // Avoid loading interaction records when federation is unavailable.
+        return
+        #else
         guard self.operationQueue.operations.allSatisfy({ !($0 is UpdateFediverseInteractionsOperation) }) else {
             // There's already an UpdateFediverseInteractionsOperation running.
             return
@@ -711,6 +715,7 @@ extension AppManager
         }
         
         self.run([operation], context: nil)
+        #endif
     }
     
     func updateRemoteFlagsIfNeeded()

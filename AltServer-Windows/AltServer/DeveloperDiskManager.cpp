@@ -31,11 +31,7 @@ using namespace web::http::client;
 using namespace concurrency::streams;
 
 DeveloperDiskManager::DeveloperDiskManager() :
-#if STAGING
-	_client(U("https://f000.backblazeb2.com"))
-#else
-	_client(U("https://cdn.altstore.io"))
-#endif
+	_client(U("https://github.com"))
 {
 }
 
@@ -167,11 +163,7 @@ void DeveloperDiskManager::SetDeveloperDiskCompatible(bool compatible, std::shar
 
 pplx::task<web::json::value> DeveloperDiskManager::FetchDeveloperDiskURLs()
 {
-#if STAGING
-	auto encodedURI = web::uri::encode_uri(L"/file/altstore-staging/altserver/developerdisks.json");
-#else
-	auto encodedURI = web::uri::encode_uri(L"/file/altstore/altserver/developerdisks.json");
-#endif
+	auto encodedURI = web::uri::encode_uri(L"/legeling/AltForge/releases/latest/download/developerdisks.json");
 	uri_builder builder(encodedURI);
 
 	http_request request(methods::GET);

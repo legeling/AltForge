@@ -6,7 +6,7 @@
 
 ## 问题
 
-Release workflow 以 `CODE_SIGNING_ALLOWED=NO` 构建并压缩 AltServer。用户可能需要通过 Finder context menu 绕过 Gatekeeper 提示，无法提供生产级安装体验。
+Release workflow 以 `CODE_SIGNING_ALLOWED=NO` 构建并压缩 AltServer。Xcode 可能给主 Mach-O 添加无 Team ID/Authority 的 linker ad-hoc signature，但这不是 Developer ID 签名，也没有 notarization。用户可能需要通过 Finder context menu 绕过 Gatekeeper 提示，无法提供生产级安装体验。
 
 ## 风险
 

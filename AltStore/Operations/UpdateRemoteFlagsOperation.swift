@@ -14,19 +14,7 @@ import Roxas
 
 private extension URL
 {
-    #if MARKETPLACE
-    
-    #if STAGING
-    static let flags = URL(string: "https://f000.backblazeb2.com/file/altstore-staging/altstore/marketplace-flags.json")!
-    #else
-    static let flags = URL(string: "https://cdn.altstore.io/file/altstore/altstore/marketplace-flags.json")!
-    #endif
-    
-    #elseif STAGING
-    static let flags = URL(string: "https://f000.backblazeb2.com/file/altstore-staging/altstore/classic-flags.json")!
-    #else
-    static let flags = URL(string: "https://cdn.altstore.io/file/altstore/altstore/classic-flags.json")!
-    #endif
+    static let flags = URL(string: "https://github.com/legeling/AltForge/releases/latest/download/flags.json")!
 }
 
 class UpdateRemoteFlagsOperation: ResultOperation<Void>, @unchecked Sendable

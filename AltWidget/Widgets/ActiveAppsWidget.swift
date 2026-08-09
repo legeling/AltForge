@@ -92,7 +92,7 @@ private struct ActiveAppsWidgetView: View
                         let cornerRadius = rowHeight / 5.0
                         
                         HStack(spacing: 10) {
-                            Image(uiImage: app.icon ?? UIImage(named: "AltStore")!)
+                            Image(uiImage: app.icon ?? UIImage(named: "AltForge")!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .cornerRadius(cornerRadius)

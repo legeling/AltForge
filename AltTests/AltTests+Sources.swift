@@ -19,6 +19,17 @@ extension AltTests
         let sourceID = try Source.sourceID(from: url)
         XCTAssertEqual(sourceID, "github.com/legeling/altforge/releases/latest/download/apps.json")
     }
+
+    func testAltForgeSourceDeepLink()
+    {
+        let sourceURL = URL(string: "https://github.com/legeling/AltForge/releases/latest/download/apps.json")!
+        let deepLink = URL.altForgeSourceDeepLink(for: sourceURL)
+        let components = deepLink.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
+
+        XCTAssertEqual(components?.scheme, "altstore")
+        XCTAssertEqual(components?.host, "source")
+        XCTAssertEqual(components?.queryItems, [URLQueryItem(name: "url", value: sourceURL.absoluteString)])
+    }
     
     @available(iOS 17, *)
     func testSourceIDWithPercentEncoding() throws

@@ -19,6 +19,7 @@ enum PatreonAPIErrorCode: Int, ALTErrorEnum, CaseIterable
     case notAuthenticated
     case invalidAccessToken
     case rateLimitExceeded
+    case notConfigured
     
     var errorFailureReason: String {
         switch self
@@ -27,6 +28,7 @@ enum PatreonAPIErrorCode: Int, ALTErrorEnum, CaseIterable
         case .notAuthenticated: return NSLocalizedString("No connected Patreon account.", bundle: Bundle(for: PatreonAPI.self), comment: "")
         case .invalidAccessToken: return NSLocalizedString("Invalid access token.", bundle: Bundle(for: PatreonAPI.self), comment: "")
         case .rateLimitExceeded: return NSLocalizedString("The Patreon API rate limit has been exceeded.", bundle: Bundle(for: PatreonAPI.self), comment: "")
+        case .notConfigured: return NSLocalizedString("Patreon sign-in is not configured for this build.", bundle: Bundle(for: PatreonAPI.self), comment: "")
         }
     }
 }
@@ -50,6 +52,7 @@ extension PatreonAPI
     {
         var clientID: String
         var clientSecret: String
+        var redirectURI: String
     }
 }
 
@@ -60,6 +63,14 @@ public class PatreonAPI: NSObject
     public var isAuthenticated: Bool {
         return Keychain.shared.patreonAccessToken != nil
     }
+
+    public var isConfigured: Bool {
+        return !self.clientID.isEmpty && !self.clientSecret.isEmpty && self.redirectURL != nil
+    }
+
+    public var notConfiguredError: Swift.Error {
+        return PatreonAPIError(.notConfigured)
+    }
     
     private var authenticationSession: ASWebAuthenticationSession?
     
@@ -68,6 +79,7 @@ public class PatreonAPI: NSObject
     
     private let clientID: String
     private let clientSecret: String
+    private let redirectURL: URL?
     
     private var authHandlers = [(Result<PatreonAccount, Swift.Error>) -> Void]()
     private var authContinuation: CheckedContinuation<URL, Error>?
@@ -80,15 +92,15 @@ public class PatreonAPI: NSObject
         do
         {
             let data = try Data(contentsOf: fileURL)
-            
+
             let tokens = try PropertyListDecoder().decode(Tokens.self, from: data)
             self.clientID = tokens.clientID
             self.clientSecret = tokens.clientSecret
-            
-            if self.clientID.isEmpty || self.clientSecret.isEmpty
-            {
-                Logger.main.error("PatreonAPI.plist is missing clientID and/or clientSecret. Please provide your own API keys to use Patreon functionality.")
+            self.redirectURL = URL(string: tokens.redirectURI).flatMap { url in
+                guard url.scheme?.lowercased() == "https", url.host != nil else { return nil }
+                return url
             }
+
         }
         catch
         {
@@ -96,9 +108,15 @@ public class PatreonAPI: NSObject
             
             self.clientID = ""
             self.clientSecret = ""
+            self.redirectURL = nil
         }
         
         super.init()
+
+        if !self.isConfigured
+        {
+            Logger.main.notice("Patreon sign-in is disabled. Provide your own client ID, client secret, and HTTPS redirect URI to enable it.")
+        }
     }
 }
 
@@ -107,6 +125,11 @@ public extension PatreonAPI
     func authenticate(presentingViewController: UIViewController, completion: @escaping (Result<PatreonAccount, Swift.Error>) -> Void)
     {
         Task<Void, Never>.detached { @MainActor in
+            guard self.isConfigured, let redirectURL = self.redirectURL else {
+                completion(.failure(PatreonAPIError(.notConfigured)))
+                return
+            }
+
             guard self.authHandlers.isEmpty else {
                 self.authHandlers.append(completion)
                 return
@@ -119,7 +142,7 @@ public extension PatreonAPI
                 var components = URLComponents(string: "/oauth2/authorize")!
                 components.queryItems = [URLQueryItem(name: "response_type", value: "code"),
                                          URLQueryItem(name: "client_id", value: self.clientID),
-                                         URLQueryItem(name: "redirect_uri", value: "https://rileytestut.com/patreon/altstore"),
+                                         URLQueryItem(name: "redirect_uri", value: redirectURL.absoluteString),
                                          URLQueryItem(name: "scope", value: "identity identity[email] identity.memberships campaigns.posts")]
                 
                 let requestURL = components.url(relativeTo: self.baseURL)
@@ -344,7 +367,7 @@ public extension PatreonAPI
     
     func refreshPatreonAccount()
     {
-        guard PatreonAPI.shared.isAuthenticated else { return }
+        guard PatreonAPI.shared.isConfigured, PatreonAPI.shared.isAuthenticated else { return }
         
         PatreonAPI.shared.fetchAccount { (result: Result<PatreonAccount, Swift.Error>) in
             do
@@ -418,7 +441,12 @@ private extension PatreonAPI
 {
     func fetchAccessToken(oauthCode: String, completion: @escaping (Result<(String, String), Swift.Error>) -> Void)
     {
-        let encodedRedirectURI = ("https://rileytestut.com/patreon/altstore" as NSString).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+        guard let redirectURL = self.redirectURL else {
+            completion(.failure(PatreonAPIError(.notConfigured)))
+            return
+        }
+
+        let encodedRedirectURI = (redirectURL.absoluteString as NSString).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
         let encodedOauthCode = (oauthCode as NSString).addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
         
         let body = "code=\(encodedOauthCode)&grant_type=authorization_code&client_id=\(self.clientID)&client_secret=\(self.clientSecret)&redirect_uri=\(encodedRedirectURI)"
@@ -447,6 +475,7 @@ private extension PatreonAPI
     
     func refreshAccessToken(completion: @escaping (Result<Void, Swift.Error>) -> Void)
     {
+        guard self.isConfigured else { return completion(.failure(PatreonAPIError(.notConfigured))) }
         guard let refreshToken = Keychain.shared.patreonRefreshToken else { return }
         
         var components = URLComponents(string: "/api/oauth2/token")!

@@ -10,11 +10,20 @@ import Foundation
 
 public extension URL
 {
-#if STAGING
-static let marketplaceDomain = "https://dev.altstore.io"
-#else
-static let marketplaceDomain = "https://api.altstore.io"
-#endif
+    #if STAGING
+    static let marketplaceDomain = "https://dev.altstore.io"
+    #else
+    static let marketplaceDomain = "https://api.altstore.io"
+    #endif
+
+    static func altForgeSourceDeepLink(for sourceURL: URL) -> URL?
+    {
+        var components = URLComponents()
+        components.scheme = "altstore"
+        components.host = "source"
+        components.queryItems = [URLQueryItem(name: "url", value: sourceURL.absoluteString)]
+        return components.url
+    }
     
     func normalizedForInstallURL() -> String
     {

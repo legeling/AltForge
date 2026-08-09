@@ -13,7 +13,15 @@
 | JIT | `FR-012` | `DES-003` | `TEST-014` | Unknown | `T-009` |
 | Build | `FR-014` | `DES-009` | `TEST-011`, `TEST-012` | Apple CI defined | `T-002` |
 | Release | `FR-015`, `FR-016` | `DES-010` | `TEST-013` | Ruby fixture covers metadata, hashes, Windows artifact and invalid input | `T-007` |
+| Release versioning | `FR-020` | `DES-010` | `TEST-020` | Local contract automated; first tag-driven three-platform run pending | `T-013` |
 | Windows AltServer | `FR-018`, `FR-019` | `DES-011` | `TEST-018`, `TEST-019` | Source/workflow present; hosted build and device E2E pending | `T-012` |
+| Release review gate | `FR-021` | `DES-012` | `TEST-021` | Static policy automated; real Draft pending | `T-014` |
+| Release source history | `FR-022` | `DES-012` | `TEST-022` | Metadata fixture covers pinned URL, merge, de-duplication and 20-version bound | `T-014` |
+| Remote configuration | `FR-023` | `DES-012` | `TEST-023` | Safe JSON defaults and Classic repository endpoints automated | `T-014` |
+| Update and user identity | `FR-016`, `FR-024` | `DES-012` | `TEST-024` | Static contract, iOS targeted tests/build and macOS arm64 Release build pass; manual navigation and Windows build pending | `T-014` |
+| macOS DMG | `FR-025` | `DES-013` | `TEST-025` | Shared packager/static contract and local Universal image/mount/bundle checks pass; CI artifact/checksum gates defined; Finder launch, real tag run and Developer ID/notarization pending | `T-015` |
+| macOS desktop identity/settings | `FR-026`, `FR-027` | `DES-014` | `TEST-026` | Static contract, macOS Universal Release, iOS Simulator build and preview DMG checks pass; manual USB/Wi-Fi/language/update UI matrix pending | `T-016` |
+| Network ownership | `FR-028` | `DES-015` | `TEST-027` | Repository contract、JSON/plist validation、iOS/macOS builds pass; Windows static coverage only | `T-017` |
 
 ## 风险排序
 

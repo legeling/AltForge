@@ -9,7 +9,6 @@
 import UIKit
 import SwiftUI
 
-import AltSign
 import AltStoreCore
 import Roxas
 
@@ -44,22 +43,9 @@ extension AltAppIconsViewController
     private enum Section: String, CaseIterable, Decodable, CodingKeyRepresentable
     {
         case glass
-        case modern
-        case gradient
-        case recessed
-        case classic
-        case promo
         
         var localizedName: String {
-            switch self
-            {
-            case .glass: return NSLocalizedString("Liquid Glass", comment: "")
-            case .modern: return NSLocalizedString("Modern", comment: "")
-            case .gradient: return NSLocalizedString("Gradient", comment: "")
-            case .recessed: return NSLocalizedString("Recessed", comment: "")
-            case .classic: return NSLocalizedString("Classic", comment: "")
-            case .promo: return NSLocalizedString("Promo", comment: "")
-            }
+            NSLocalizedString("AltForge", comment: "")
         }
     }
 }
@@ -103,12 +89,6 @@ class AltAppIconsViewController: UICollectionViewController
             let data = try Data(contentsOf: fileURL)
             
             var icons = try PropertyListDecoder().decode([Section: [AltIcon]].self, from: data)
-            
-            if Keychain.shared.stripeEmailAddress == nil
-            {
-                // Remove all promo icons unless user has linked Stripe account with PAL subscription
-                icons[.promo] = []
-            }
             
             self.iconsBySection = icons
         }

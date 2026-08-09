@@ -19,6 +19,7 @@
 #include <sstream>
 #include <iomanip>
 #include <codecvt>
+#include <unordered_set>
 
 #include <combaseapi.h>
 
@@ -418,6 +419,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			_installedAppsLock.unlock();
 
 			auto devices = DeviceManager::instance()->availableDevices();
+			auto wiredDevices = DeviceManager::instance()->connectedDevices();
+			std::unordered_set<std::string> wiredDeviceIdentifiers;
+			for (const auto& device : wiredDevices)
+			{
+				wiredDeviceIdentifiers.insert(device->identifier());
+			}
 			_connectedDevices = devices;
 
 			if (devices.size() == 0)
@@ -431,6 +438,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				{
 					auto device = devices[i];
 					auto name = WideStringFromString(device->name());
+					name += wiredDeviceIdentifiers.count(device->identifier()) > 0 ? L" (USB)" : L" (Wi-Fi)";
 
 					AppendMenu(installMenu, MF_STRING, FIRST_DEVICE + i, name.c_str());
 

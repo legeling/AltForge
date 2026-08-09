@@ -94,7 +94,7 @@ try {
     }
 
     $notice = @"
-AltForge AltServer for Windows
+AltForge Server for Windows
 
 Run AltServer.exe from this extracted directory. Apple website versions of
 iTunes and iCloud are required. Source and license information:

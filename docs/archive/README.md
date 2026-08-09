@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Archive Index
 
 当前没有归档文档。

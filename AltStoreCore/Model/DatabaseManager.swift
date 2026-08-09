@@ -308,18 +308,7 @@ private extension DatabaseManager
             // Make sure to always update source URL to be current.
             try! altStoreSource.setSourceURL(Source.altStoreSourceURL)
             
-            #if MARKETPLACE
-            
             let storeBuildVersion = localApp.buildVersion
-            
-            #else
-            
-            //TODO: Support build versions.
-            // For backwards compatibility reasons, we cannot use localApp's buildVersion as storeBuildVersion,
-            // or else the latest update will _always_ be considered new because we don't use buildVersions in our source (yet).
-            let storeBuildVersion: String? = nil
-            
-            #endif
             
             let storeApp: StoreApp
             

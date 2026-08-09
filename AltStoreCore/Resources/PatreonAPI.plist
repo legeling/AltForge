@@ -6,5 +6,7 @@
 	<string></string>
 	<key>clientSecret</key>
 	<string></string>
+	<key>redirectURI</key>
+	<string></string>
 </dict>
 </plist>

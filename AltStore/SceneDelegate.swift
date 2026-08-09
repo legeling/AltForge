@@ -107,6 +107,7 @@ private extension SceneDelegate
             switch host
             {
             case "patreon":
+                guard PatreonAPI.shared.isConfigured else { return }
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: AppDelegate.openPatreonSettingsDeepLinkNotification, object: nil)
                 }
@@ -188,7 +189,7 @@ private extension SceneDelegate
     {
         guard shortcutItem.type == "io.altstore.FAQAction" else { return }
         
-        let faqURL = URL(string: "https://faq.altstore.io")!
+        let faqURL = URL(string: "https://github.com/legeling/AltForge/blob/marketplace/docs/guides/troubleshooting.md")!
         UIApplication.shared.open(faqURL)
     }
 

@@ -82,7 +82,7 @@ public:
 			break;
 
 		case ConnectionErrorCode::InvalidRequest:
-			ss << deviceName << " received an invalid request from AltServer.";
+			ss << deviceName << " received an invalid request from AltForge Server.";
 			break;
 
 		case ConnectionErrorCode::InvalidResponse:

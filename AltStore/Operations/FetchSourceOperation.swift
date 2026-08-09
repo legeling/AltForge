@@ -364,6 +364,10 @@ private extension FetchSourceOperation
 {
     func updateFediverseMetadata(@AsyncManaged for source: Source, completion: @escaping (Result<Void, Error>) -> Void)
     {
+        #if !MARKETPLACE
+        // AltForge Classic does not use upstream federation control services.
+        completion(.success(()))
+        #else
         let startTime = CFAbsoluteTimeGetCurrent()
         
         Task<Void, Never> {
@@ -444,5 +448,6 @@ private extension FetchSourceOperation
                 completion(.failure(error))
             }
         }
+        #endif
     }
 }

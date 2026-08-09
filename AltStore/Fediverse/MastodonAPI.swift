@@ -482,6 +482,10 @@ private extension MastodonAPI
     
     func send<ResponseType: Decodable>(_ request: URLRequest, authorizationType: AuthorizationType) async throws -> ResponseType
     {
+        #if !MARKETPLACE
+        // AltForge Classic does not use upstream federation control services.
+        throw URLError(.unsupportedURL)
+        #else
         var request = request
         
         switch authorizationType
@@ -557,6 +561,7 @@ private extension MastodonAPI
                 throw response
             }
         }
+        #endif
     }
 }
 

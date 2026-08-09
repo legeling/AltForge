@@ -6,13 +6,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "AltStore uses the local network to find and communicate with AltServer."
+            "value" : "AltForge uses the local network to find and communicate with AltServer."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 使用本地网络来查找 AltServer 并与其通信。"
+            "value" : "AltForge 使用本地网络来查找 AltServer 并与其通信。"
           }
         }
       }

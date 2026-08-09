@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Engineering Rules
 
 本目录定义 AltForge 项目级默认规则。它补充但不降低用户或全局 `AGENTS.md` 中的安全、性能、资源和 Git 要求。

@@ -14,7 +14,7 @@ AltForge 需要由同一仓库维护 iOS 客户端、macOS AltServer 和 Windows
 - 将官方 source、bundle identifier 和用户可见安装名称切换为 AltForge。
 - 用有界、可重复的 PowerShell 脚本获取上游原本使用的两个 gitlink 依赖、三个 libimobiledevice 源码树及 Apple mDNSResponder，并用 vcpkg 提供 cpprestsdk、OpenSSL、PCRE2 与 zlib。
 - 不导入禁止再分发的 Apple corecrypto Windows binary/header；以 OpenSSL 和带 ISC 归属的 SRP-6a 实现替代。
-- 提供 Windows Release ZIP 打包脚本，将 Windows 构建加入 CI 和 tag-driven Release。
+- 提供 Windows Release ZIP 打包脚本，将 Windows 构建加入 tag-driven Release。
 - 对账号会话、anisette、设备标识、证书和本地路径相关调试输出做脱敏，避免凭据或个人数据进入日志。
 - 更新中英 README、需求、设计、验证、任务和原 Windows 范围 Issue。
 
@@ -52,5 +52,5 @@ AltForge 需要由同一仓库维护 iOS 客户端、macOS AltServer 和 Windows
 
 - `AppleSRP.cpp` 以 C++17、OpenSSL 3.6 headers 和 warnings-as-errors 完成语法检查，并与独立 Ruby 大数/SHA-256 reference vector 对比 `A`、`M1`、session key 和 `M2`。
 - vcpkg JSON、MSBuild XML、workflow YAML、Ruby release metadata syntax 与本地 project file references 均通过静态验证。
-- `actionlint 1.7.7` 已检查 CI/Release workflows；五项 Release 产物 metadata/checksum fixture 通过。
+- `actionlint 1.7.7` 已检查初始 CI/Release workflows；五项 Release 产物 metadata/checksum fixture 通过。首次 hosted Windows run 因 runner 系统 vcpkg 无法解析固定 baseline 而失败，现已改为 workspace 内固定 checkout，等待下一标签复验。
 - 本机没有 PowerShell、MSBuild、Windows SDK 或设备环境，因此 PowerShell AST parser、完整 Windows link/package 与真实设备安装保留给 hosted runner/人工门禁。

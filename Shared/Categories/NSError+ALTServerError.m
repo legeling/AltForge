@@ -120,7 +120,7 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
 #if TARGET_OS_OSX
                 return NSLocalizedString(@"There was an error connecting to the device.", @"");
 #else
-                return NSLocalizedString(@"AltServer could not establish a connection to AltStore.", @"");
+                return NSLocalizedString(@"AltForge Server could not establish a connection to AltForge.", @"");
 #endif
             }
             
@@ -170,18 +170,18 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
 #if TARGET_OS_OSX
             return NSLocalizedString(@"There was an error connecting to the device.", @"");
 #else
-            return NSLocalizedString(@"AltServer could not establish a connection to AltStore.", @"");
+            return NSLocalizedString(@"AltForge Server could not establish a connection to AltForge.", @"");
 #endif
         }
             
         case ALTServerErrorLostConnection:
-            return NSLocalizedString(@"The connection to AltServer was lost.", @"");
+            return NSLocalizedString(@"The connection to AltForge Server was lost.", @"");
             
         case ALTServerErrorDeviceNotFound:
-            return NSLocalizedString(@"AltServer could not find this device.", @"");
+            return NSLocalizedString(@"AltForge Server could not find this device.", @"");
             
         case ALTServerErrorDeviceWriteFailed:
-            return NSLocalizedString(@"AltServer could not write data to this device.", @"");
+            return NSLocalizedString(@"AltForge Server could not write data to this device.", @"");
             
         case ALTServerErrorInvalidRequest:
         {
@@ -191,7 +191,7 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
                 return underlyingError.localizedFailureReason;
             }
             
-            return NSLocalizedString(@"AltServer received an invalid request.", @"");
+            return NSLocalizedString(@"AltForge Server received an invalid request.", @"");
         }
             
         case ALTServerErrorInvalidResponse:
@@ -202,7 +202,7 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
                 return underlyingError.localizedFailureReason;
             }
             
-            return NSLocalizedString(@"AltServer sent an invalid response.", @"");
+            return NSLocalizedString(@"AltForge Server sent an invalid response.", @"");
         }
             
         case ALTServerErrorInvalidApp:
@@ -236,16 +236,16 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
         }
             
         case ALTServerErrorUnknownRequest:
-            return NSLocalizedString(@"AltServer does not support this request.", @"");
+            return NSLocalizedString(@"AltForge Server does not support this request.", @"");
             
         case ALTServerErrorUnknownResponse:
-            return NSLocalizedString(@"AltStore received an unknown response from AltServer.", @"");
+            return NSLocalizedString(@"AltForge received an unknown response from AltForge Server.", @"");
             
         case ALTServerErrorInvalidAnisetteData:
             return NSLocalizedString(@"The provided anisette data is invalid.", @"");
             
         case ALTServerErrorPluginNotFound:
-            return NSLocalizedString(@"AltServer could not connect to Mail plug-in.", @"");
+            return NSLocalizedString(@"AltForge Server could not connect to the legacy Mail plug-in.", @"");
             
         case ALTServerErrorProfileNotFound:
             return [self profileErrorLocalizedDescriptionWithBaseDescription:NSLocalizedString(@"Could not find profile", "")];
@@ -409,13 +409,13 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
         case ALTServerConnectionErrorInvalidRequest:
         {
             NSString *deviceName = self.userInfo[ALTDeviceNameErrorKey] ?: NSLocalizedString(@"The device", @"");
-            return [NSString stringWithFormat:NSLocalizedString(@"%@ received an invalid request from AltServer.", @""), deviceName];
+            return [NSString stringWithFormat:NSLocalizedString(@"%@ received an invalid request from AltForge Server.", @""), deviceName];
         }
             
         case ALTServerConnectionErrorInvalidResponse:
         {
             NSString *deviceName = self.userInfo[ALTDeviceNameErrorKey] ?: NSLocalizedString(@"the device", @"");
-            return [NSString stringWithFormat:NSLocalizedString(@"AltServer received an invalid response from %@.", @""), deviceName];
+            return [NSString stringWithFormat:NSLocalizedString(@"AltForge Server received an invalid response from %@.", @""), deviceName];
         }
             
         case ALTServerConnectionErrorUsbmuxd:
@@ -426,13 +426,13 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
         case ALTServerConnectionErrorSSL:
         {
             NSString *deviceName = self.userInfo[ALTDeviceNameErrorKey] ?: NSLocalizedString(@"the device", @"");
-            return [NSString stringWithFormat:NSLocalizedString(@"AltServer could not establish a secure connection to %@.", @""), deviceName];
+            return [NSString stringWithFormat:NSLocalizedString(@"AltForge Server could not establish a secure connection to %@.", @""), deviceName];
         }
             
         case ALTServerConnectionErrorTimedOut:
         {
             NSString *deviceName = self.userInfo[ALTDeviceNameErrorKey] ?: NSLocalizedString(@"the device", @"");
-            return [NSString stringWithFormat:NSLocalizedString(@"AltServer's connection to %@ timed out.", @""), deviceName];
+            return [NSString stringWithFormat:NSLocalizedString(@"AltForge Server's connection to %@ timed out.", @""), deviceName];
         }
     }
     

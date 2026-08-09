@@ -18,14 +18,18 @@ extension PatreonViewController
     private enum Section: Int, CaseIterable
     {
         case about
+        #if MARKETPLACE
         case patrons
+        #endif
     }
 }
 
 class PatreonViewController: UICollectionViewController
 {
     private lazy var dataSource = self.makeDataSource()
+    #if MARKETPLACE
     private lazy var patronsDataSource = self.makePatronsDataSource()
+    #endif
     
     private var prototypeAboutHeader: AboutPatreonHeaderView!
     
@@ -43,10 +47,12 @@ class PatreonViewController: UICollectionViewController
         self.collectionView.dataSource = self.dataSource
         
         self.collectionView.register(aboutHeaderNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "AboutHeader")
+        #if MARKETPLACE
         self.collectionView.register(PatronsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "PatronsHeader")
         self.collectionView.register(PatronsFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "PatronsFooter")
         
         NotificationCenter.default.addObserver(self, selector: #selector(PatreonViewController.didUpdatePatrons(_:)), name: AppManager.didUpdatePatronsNotification, object: nil)
+        #endif
         
         if #available(iOS 26, *)
         {
@@ -69,7 +75,9 @@ class PatreonViewController: UICollectionViewController
     {
         super.viewWillAppear(animated)
         
+        #if MARKETPLACE
         self.fetchPatrons()
+        #endif
         
         self.update()
     }
@@ -95,11 +103,16 @@ private extension PatreonViewController
         aboutDataSource.numberOfSectionsHandler = { 1 }
         aboutDataSource.numberOfItemsHandler = { _ in 0 }
         
+        #if MARKETPLACE
         let dataSource = RSTCompositeCollectionViewDataSource<ManagedPatron>(dataSources: [aboutDataSource, self.patronsDataSource])
+        #else
+        let dataSource = RSTCompositeCollectionViewDataSource<ManagedPatron>(dataSources: [aboutDataSource])
+        #endif
         dataSource.proxy = self
         return dataSource
     }
     
+    #if MARKETPLACE
     func makePatronsDataSource() -> RSTFetchedResultsCollectionViewDataSource<ManagedPatron>
     {
         let fetchRequest: NSFetchRequest<ManagedPatron> = ManagedPatron.fetchRequest()
@@ -113,6 +126,7 @@ private extension PatreonViewController
         
         return patronsDataSource
     }
+    #endif
     
     func update()
     {
@@ -122,7 +136,8 @@ private extension PatreonViewController
     func prepare(_ headerView: AboutPatreonHeaderView)
     {
         headerView.layoutMargins = self.view.layoutMargins
-        
+
+        #if MARKETPLACE
         headerView.supportButton.addTarget(self, action: #selector(PatreonViewController.openPatreonURL(_:)), for: .primaryActionTriggered)
         headerView.accountButton.removeTarget(self, action: nil, for: .primaryActionTriggered)
         
@@ -198,11 +213,31 @@ private extension PatreonViewController
             
             headerView.textView.text = defaultText
         }
+        #else
+        headerView.supportButton.removeTarget(self, action: nil, for: .primaryActionTriggered)
+        headerView.supportButton.isHidden = true
+        headerView.accountButton.removeTarget(self, action: nil, for: .primaryActionTriggered)
+
+        let accountText = NSLocalizedString("AltForge does not operate a Patreon campaign. Link an account only to access apps from compatible sources that require a pledge.", comment: "")
+        headerView.textView.text = accountText
+
+        if let account = DatabaseManager.shared.patreonAccount(), PatreonAPI.shared.isAuthenticated
+        {
+            headerView.accountButton.addTarget(self, action: #selector(PatreonViewController.signOut(_:)), for: .primaryActionTriggered)
+            headerView.accountButton.setTitle(String(format: NSLocalizedString("Unlink %@", comment: ""), account.name), for: .normal)
+        }
+        else
+        {
+            headerView.accountButton.addTarget(self, action: #selector(PatreonViewController.authenticate(_:)), for: .primaryActionTriggered)
+            headerView.accountButton.setTitle(NSLocalizedString("Link Patreon account", comment: ""), for: .normal)
+        }
+        #endif
     }
 }
 
 private extension PatreonViewController
 {
+    #if MARKETPLACE
     @objc func fetchPatrons()
     {
         // User explicitly navigated to this screen, so allow fetching friend zone patrons.
@@ -220,6 +255,7 @@ private extension PatreonViewController
         safariViewController.preferredControlTintColor = self.view.tintColor
         self.present(safariViewController, animated: true, completion: nil)
     }
+    #endif
     
     @IBAction func authenticate(_ sender: UIBarButtonItem)
     {
@@ -299,6 +335,7 @@ private extension PatreonViewController
         self.present(alertController, animated: true, completion: nil)
     }
     
+    #if MARKETPLACE
     @objc func didUpdatePatrons(_ notification: Notification)
     {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -306,6 +343,7 @@ private extension PatreonViewController
             self.collectionView.reloadData()
         }
     }
+    #endif
 }
 
 extension PatreonViewController
@@ -319,7 +357,8 @@ extension PatreonViewController
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "AboutHeader", for: indexPath) as! AboutPatreonHeaderView
             self.prepare(headerView)
             return headerView
-            
+
+        #if MARKETPLACE
         case .patrons:
             if kind == UICollectionView.elementKindSectionHeader
             {
@@ -360,6 +399,7 @@ extension PatreonViewController
                 
                 return footerView
             }
+        #endif
         }
     }
 }
@@ -380,9 +420,11 @@ extension PatreonViewController: UICollectionViewDelegateFlowLayout
             
             let size = self.prototypeAboutHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
             return size
-            
+
+        #if MARKETPLACE
         case .patrons:
             return CGSize(width: 320, height: 20)
+        #endif
         }
     }
     
@@ -392,7 +434,9 @@ extension PatreonViewController: UICollectionViewDelegateFlowLayout
         switch section
         {
         case .about: return .zero
+        #if MARKETPLACE
         case .patrons: return CGSize(width: 320, height: 44)
+        #endif
         }
     }
 }

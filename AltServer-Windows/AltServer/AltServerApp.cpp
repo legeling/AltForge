@@ -321,7 +321,7 @@ VOID CALLBACK DetailedErrorMessageBoxCallback(LPHELPINFO lpHelpInfo)
 		return;
 	}
 
-	std::string url("https://faq.altstore.io/getting-started/error-codes?q=");
+	std::string url("https://github.com/legeling/AltForge/issues?q=");
 	url += helpError->domain() + "+" + std::to_string(helpError->displayCode());
 
 	ShellExecute(NULL, L"open", WideStringFromString(url).c_str(), NULL, NULL, SW_SHOWNORMAL);
@@ -338,7 +338,7 @@ VOID CALLBACK ErrorMessageBoxCallback(LPHELPINFO lpHelpInfo)
 	std::string localizedErrorCode = helpError->localizedErrorCode();
 
 	auto wideTitle = WideStringFromString(localizedErrorCode);
-	auto wideMessage = WideStringFromString(helpError->formattedDetailedDescription() + "\n\n" + "Press 'Help' to search the upstream AltStore FAQ.");
+	auto wideMessage = WideStringFromString(helpError->formattedDetailedDescription() + "\n\n" + "Press 'Help' to open the AltForge documentation.");
 
 	MSGBOXPARAMSW parameters = {};
 	parameters.cbSize = sizeof(parameters);
@@ -456,16 +456,16 @@ void AltServerApp::Start(HWND windowHandle, HINSTANCE instanceHandle)
 	}
 	catch (Error& error)
 	{
-		this->ShowAlert("Failed to Start AltForge AltServer", error.localizedDescription());
+		this->ShowAlert("Failed to Start AltForge Server", error.localizedDescription());
 	}
 	catch (std::exception& exception)
 	{
-		this->ShowAlert("Failed to Start AltForge AltServer", exception.what());
+		this->ShowAlert("Failed to Start AltForge Server", exception.what());
 	}
 
 	if (!this->presentedRunningNotification())
 	{
-		this->ShowNotification("AltForge AltServer Running", "AltForge AltServer will continue to run in the background listening for AltForge.");
+		this->ShowNotification("AltForge Server Running", "AltForge Server will continue to run in the background listening for AltForge.");
 		this->setPresentedRunningNotification(true);
 	}
 	else
@@ -1084,8 +1084,8 @@ pplx::task<std::shared_ptr<Certificate>> AltServerApp::FetchCertificate(std::sha
 				// Machine name starts with AltStore.
 
 				auto alertResult = MessageBox(NULL,
-					L"Please use the same AltServer you previously used with this Apple ID, or else apps installed with other AltServers will stop working.\n\nAre you sure you want to continue?",
-					L"Installing AltForge with Multiple AltServers Not Supported",
+					L"Please use the same AltForge Server you previously used with this Apple ID, or apps installed with another server may stop working.\n\nAre you sure you want to continue?",
+					L"Multiple AltForge Servers Not Supported",
 					MB_OKCANCEL);
 
 				if (alertResult == IDCANCEL)
@@ -1860,7 +1860,7 @@ void AltServerApp::HandleAnisetteError(AnisetteError& error)
 		case AnisetteErrorCode::iTunesNotInstalled:
 		{
 			title = (wchar_t *)L"iTunes Not Found";
-			message = (wchar_t*)LR"(Download the latest version of iTunes from apple.com (not the Microsoft Store) in order to continue using AltServer.
+			message = (wchar_t*)LR"(Download the latest version of iTunes from apple.com (not the Microsoft Store) in order to continue using AltForge Server.
 
 If you already have iTunes installed, please locate the "Apple" folder that was installed with iTunes. This can normally be found at:
 
@@ -1907,7 +1907,7 @@ If you already have iTunes installed, please locate the "Apple" folder that was 
 
 		case AnisetteErrorCode::iCloudNotInstalled:
 			title = (wchar_t*)L"iCloud Not Found";
-			message = (wchar_t*)LR"(Download the latest version of iCloud from apple.com (not the Microsoft Store) in order to continue using AltServer.
+			message = (wchar_t*)LR"(Download the latest version of iCloud from apple.com (not the Microsoft Store) in order to continue using AltForge Server.
 
 If you already have iCloud installed, please locate the "Apple" folder that was installed with iCloud. This can normally be found at:
 
@@ -1947,7 +1947,7 @@ If you already have iCloud installed, please locate the "Apple" folder that was 
 	case AnisetteErrorCode::MissingFoundation:
 	case AnisetteErrorCode::MissingObjc:
 	{
-		std::wstring message = L"Please locate the 'Apple' folder installed with iTunes to continue using AltServer.\n\nThis can normally be found at:\n";
+		std::wstring message = L"Please locate the 'Apple' folder installed with iTunes to continue using AltForge Server.\n\nThis can normally be found at:\n";
 		message += WideStringFromString(this->defaultAppleFolderPath());
 
 		int result = MessageBoxW(NULL, message.c_str(), WideStringFromString(error.localizedDescription()).c_str(), MB_OKCANCEL);
@@ -2026,10 +2026,12 @@ void AltServerApp::setAutomaticallyLaunchAtLogin(bool launch)
 		GetModuleFileNameA(NULL, executablePath, MAX_PATH + 1);
 
 		int length = strlen((const char*)executablePath);
-		result = RegSetValueExA(hKey, "AltForge AltServer", 0, REG_SZ, (const BYTE*)executablePath, length + 1); // Must include NULL-character in size.
+		result = RegSetValueExA(hKey, "AltForge Server", 0, REG_SZ, (const BYTE*)executablePath, length + 1); // Must include NULL-character in size.
+		RegDeleteValueA(hKey, "AltForge AltServer");
 	}
 	else
 	{
+		RegDeleteValueA(hKey, "AltForge Server");
 		RegDeleteValueA(hKey, "AltForge AltServer");
 	}
 

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Issue Register
 
 本目录跟踪项目风险、阻塞项、技术债及其解决状态。GitHub Issue 用于公开协作，本目录保存会影响设计、验证和交付的稳定摘要与已解决决策。

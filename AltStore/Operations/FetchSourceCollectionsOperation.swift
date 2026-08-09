@@ -12,11 +12,7 @@ import AltStoreCore
 
 private extension URL
 {
-    #if STAGING
-    static let sources = URL(string: "https://f000.backblazeb2.com/file/altstore-staging/altstore/recommended-sources.json")!
-    #else
-    static let sources = URL(string: "https://cdn.altstore.io/file/altstore/altstore/recommended-sources.json")!
-    #endif
+    static let sources = URL(string: "https://github.com/legeling/AltForge/releases/latest/download/recommended-sources.json")!
 }
 
 class SourceCollection: NSObject, Decodable

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "trusted": [
+    {
+      "identifier": "github.com/legeling/altforge/releases/latest/download/apps.json",
+      "sourceURL": "https://github.com/legeling/AltForge/releases/latest/download/apps.json",
+      "bundleIDs": [
+        "com.legeling.AltForge"
+      ]
+    }
+  ],
+  "blocked": []
+}

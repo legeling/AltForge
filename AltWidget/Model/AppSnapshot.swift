@@ -55,7 +55,7 @@ extension AppSnapshot
                                    expirationDate: shortExpirationDate,
                                    refreshedDate: shortRefreshedDate,
                                    tintColor: .altPrimary,
-                                   icon: UIImage(named: "AltStore"))
+                                   icon: UIImage(named: "AltForge"))
         
         let delta = AppSnapshot(name: "Delta",
                                 bundleIdentifier: "com.rileytestut.Delta",

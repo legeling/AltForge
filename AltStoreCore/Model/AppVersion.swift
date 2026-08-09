@@ -186,10 +186,8 @@ public extension AppVersion
     }
         
     var shareURL: URL? {
-        guard let sourceURL = self.app?.source?.sourceURL, let host = sourceURL.host() else { return nil }
-        
-        let shareURL = URL(string: "https://altstore.io/source/\(host)\(sourceURL.path())?app=\(self.appBundleID)&version=\(self.version)")
-        return shareURL
+        guard let sourceURL = self.app?.source?.sourceURL else { return nil }
+        return URL.altForgeSourceDeepLink(for: sourceURL)
     }
 }
 

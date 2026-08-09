@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Requirements
 
 ## 用户角色
@@ -40,10 +44,19 @@
 ### 构建与发布
 
 - `FR-014` 维护者必须能从递归 submodule、CocoaPods lockfile 和 Swift package resolution 构建 iOS 与 macOS 目标。
-- `FR-015` 版本标签必须生成 `AltForge.ipa`、`AltForge-AltServer-macOS.zip`、`AltForge-AltServer-Windows.zip`、`apps.json` 和 `SHA256SUMS.txt`。
+- `FR-015` 版本标签必须生成 `AltForge.ipa`、`AltForge-AltServer-macOS.dmg`、`AltForge-AltServer-Windows.zip`、`apps.json`、`flags.json`、`sources.json`、`recommended-sources.json`、`developerdisks.json` 和 `SHA256SUMS.txt`。
 - `FR-016` 发布 source 的版本、build、最低系统、下载 URL、大小和 SHA-256 必须与实际 IPA 一致。
 - `FR-018` 维护者必须能从同一仓库内的固定上游源码和固定依赖构建 Windows AltServer；Windows 服务必须从本仓库官方 source 下载 `com.legeling.AltForge`。
 - `FR-019` Windows Release ZIP 必须包含可执行文件及其运行时 DLL，且不得包含 Apple ID、证书、anisette data、设备标识或 Apple 软件安装包。
+- `FR-020` 自动构建和 Draft Release 创建只能由与根目录 `VERSION` 一致的纯数字 `vX.Y.Z` 标签触发；iOS、macOS 与 Windows 必须使用同一产品版本，CI build number 独立管理。
+- `FR-021` 标签流水线只能创建 Draft Release；公开发布必须由维护者在核对产物、checksum、版本和已知风险后人工完成。
+- `FR-022` AltForge 官方 source 必须保留仍受支持的历史版本，并为每个版本使用不可随 latest release 漂移的 tag 固定下载 URL。
+- `FR-023` 能改变 feature flags、可信/封禁 source 或官方推荐内容的远程配置必须由本仓库发布；上游服务只能作为明确披露且不可替代的兼容性依赖。
+- `FR-024` 用户可见的支持、隐私、GitHub、FAQ 和桌面发布入口必须指向 AltForge 自有仓库内容；没有自有账号的社交或赞助入口不得冒充上游账号。
+- `FR-025` macOS Release 必须使用可挂载 DMG，包含公开命名的 `AltForge Server.app` 和 `/Applications` 快捷方式；本地验证可对 staging 副本做 ad-hoc 签名，但不得冒充 Developer ID 签名或 notarization。
+- `FR-026` macOS 桌面端的 About、菜单、通知和错误必须使用 AltForge Server 公开身份，保留 AltForge contributors、上游项目/版权、第三方社区与许可证归属；内部兼容标识无需批量改名。
+- `FR-027` macOS 菜单必须显示设备的 USB/Wi-Fi 连接方式，提供可恢复的检查更新和遗留邮件插件清理文案，并通过设置窗口支持跟随系统、English、简体中文和登录时启动。
+- `FR-028` AltForge 自有的更新、远程配置、Developer Disk 索引和用户入口必须由 `legeling/AltForge` 发布；第三方依赖、Apple 服务、Patreon 和 Developer Disk 文件来源必须按真实所有者保留并显式披露。Classic 不得访问上游 Marketplace、Fediverse 或 OAuth 控制面，禁止把外部服务伪装成本仓库服务。
 
 ## 非功能需求
 
@@ -62,11 +75,19 @@
 - `AC-003` 给定不可解析或路径穿越 ZIP entry，系统拒绝安装并释放 archive/file handle。覆盖 `FR-003`、`NFR-002`。
 - `AC-004` 官方 source URL 的 source ID 为 `github.com/legeling/altforge/releases/latest/download/apps.json`。覆盖 `FR-009`、`FR-010`。
 - `AC-005` CI 在无代码签名条件下完成 iOS Simulator 与 macOS AltServer 构建，并运行 source identity 测试。覆盖 `FR-014`。
-- `AC-006` 语义版本标签生成五类预期产物，校验和与文件内容一致。覆盖 `FR-015`、`FR-016`、`FR-019`。
+- `AC-006` 语义版本标签生成 `FR-015` 列出的全部预期产物，校验和与文件内容一致。覆盖 `FR-015`、`FR-016`、`FR-019`。
 - `AC-007` 错误经过 client/server 序列化后仍保留语义字段且不包含不可安全传输的对象。覆盖 `FR-011`。
 - `AC-008` 新增简体中文文本在系统语言和 per-app language 切换后可正确显示。覆盖 `FR-006`、`FR-007`。
 - `AC-009` 给定仅有组织团队的 Apple Developer 账户，客户端和 AltServer 均选择该团队；客户端有已保存团队时仍优先复用。覆盖 `FR-017`。
 - `AC-010` Windows CI 在 60 分钟上限内恢复六个固定源码仓库和固定 vcpkg manifest，完成 Win32 Release build，并生成通过必需 DLL 检查的 ZIP。覆盖 `FR-018`、`FR-019`。
+- `AC-011` 普通 push/PR 不触发 GitHub Actions；标签与 `VERSION` 或任一平台产品版本不一致时，Release 在构建前失败。覆盖 `FR-020`。
+- `AC-012` 标签构建成功后只存在 Draft Release，人工发布前 `releases/latest` 不发生变化。覆盖 `FR-021`。
+- `AC-013` 给定上一版 source，新 source 首项为当前版本、旧版本保持顺序、每个 IPA URL 固定到各自 tag，重复当前版本不会出现两次。覆盖 `FR-022`。
+- `AC-014` Classic 启动读取的 flags、known sources 与 recommended collections 均来自本仓库 Release；空配置不得引入上游远程行为。覆盖 `FR-023`。
+- `AC-015` 首次启动时本地 build number 与官方 source build number 一致，不显示伪更新；离线 fallback 显示 AltForge identity。覆盖 `FR-016`、`FR-024`。
+- `AC-016` macOS 打包脚本拒绝无效输入和覆盖已有文件，生成可通过 `hdiutil verify` 的 DMG；挂载后 App、Applications 快捷方式、bundle identifier 与产品版本均正确。覆盖 `FR-025`。
+- `AC-017` About/菜单/设置没有旧版公开名称；设备项显示 USB 或 Wi-Fi；语言偏好重启后生效；更新检查在 10 秒内成功或给出手工入口，且只打开合法 GitHub HTTPS Release URL。覆盖 `FR-026`、`FR-027`。
+- `AC-018` repository contract 能区分自有控制面与允许的外部依赖：macOS/Windows Developer Disk 索引、Classic flags/source/recommended 配置均来自本仓库 Release，Classic source 刷新和交互更新不会访问上游 Fediverse/CloudKit，遗留 Mail plug-in 不再访问上游更新服务，未配置自有 OAuth 回调时 Patreon 入口 fail closed。覆盖 `FR-028`。
 
 ## 范围外
 
@@ -90,3 +111,8 @@
 | `FR-014` | `DES-009` | `TEST-011`, `TEST-012` | `T-002` |
 | `FR-015`, `FR-016` | `DES-010` | `TEST-013` | `T-007` |
 | `FR-018`, `FR-019` | `DES-011` | `TEST-018`, `TEST-019` | `T-012` |
+| `FR-020` | `DES-010` | `TEST-020` | `T-013` |
+| `FR-021`-`FR-024` | `DES-012` | `TEST-021`-`TEST-024` | `T-014` |
+| `FR-025` | `DES-013` | `TEST-025` | `T-015` |
+| `FR-026`, `FR-027` | `DES-014` | `TEST-026` | `T-016` |
+| `FR-028` | `DES-015` | `TEST-027` | `T-017` |

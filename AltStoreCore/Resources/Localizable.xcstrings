@@ -1213,6 +1213,16 @@
         }
       }
     },
+    "Patreon sign-in is not configured for this build." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此版本未配置 Patreon 登录。"
+          }
+        }
+      }
+    },
     "No connected Patreon account." : {
       "localizations" : {
         "ja" : {

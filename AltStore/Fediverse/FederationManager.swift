@@ -326,6 +326,10 @@ extension FederationManager
 {
     func updateInteractions(for federatedItems: some Collection<FederatedItem>, in context: NSManagedObjectContext = DatabaseManager.shared.persistentContainer.newBackgroundContext()) async throws
     {
+        #if !MARKETPLACE
+        // AltForge Classic does not use upstream federation control services.
+        return
+        #else
         // TODO: Clean this up 😬
         
         var allItems = [(NSManagedObjectID, String)]()
@@ -510,6 +514,7 @@ extension FederationManager
         try await context.perform {
             try context.save()
         }
+        #endif
     }
 }
 

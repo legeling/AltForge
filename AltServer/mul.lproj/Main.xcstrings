@@ -8,13 +8,31 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "AltServer"
+            "value" : "AltForge Server"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer"
+            "value" : "AltForge Server"
+          }
+        }
+      }
+    },
+    "Afg-1A-Set.title" : {
+      "comment" : "Localized from AltServer/Main.storyboard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置…"
           }
         }
       }
@@ -62,13 +80,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Uninstall Mail Plug-in…"
+            "value" : "Remove Legacy Mail Plug-in…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "卸载邮件插件…"
+            "value" : "移除旧版邮件插件…"
           }
         }
       }
@@ -152,13 +170,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Quit AltServer"
+            "value" : "Quit AltForge Server"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "退出 AltServer"
+            "value" : "退出 AltForge Server"
           }
         }
       }
@@ -188,13 +206,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "About AltServer"
+            "value" : "About AltForge Server"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "关于 AltServer"
+            "value" : "关于 AltForge Server"
           }
         }
       }
@@ -368,13 +386,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "AltServer Help"
+            "value" : "AltForge Help"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 帮助"
+            "value" : "AltForge 帮助"
           }
         }
       }
@@ -620,13 +638,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "View Releases..."
+            "value" : "Check for Updates…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "查看发布版本…"
+            "value" : "检查更新…"
           }
         }
       }
@@ -638,13 +656,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Enable JIT"
+            "value" : "Enable JIT for App…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "启用 JIT"
+            "value" : "为 App 启用 JIT…"
           }
         }
       }
@@ -944,13 +962,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Enable JIT"
+            "value" : "Enable JIT for App…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "启用 JIT"
+            "value" : "为 App 启用 JIT…"
           }
         }
       }
@@ -1070,13 +1088,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "AltServer"
+            "value" : "AltForge Server"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer"
+            "value" : "AltForge Server"
           }
         }
       }

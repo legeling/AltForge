@@ -35,7 +35,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 <table>
   <tr>
     <td width="50%"><strong>保留原名的 Unicode 安装</strong><br>安装显示名或资源路径包含中文及其他 Unicode 字符的 IPA，同时保留设备上的原始名称。</td>
-    <td width="50%"><strong>English + 简体中文</strong><br>使用英文或简体中文界面，并支持 iOS 单 App 语言切换。</td>
+    <td width="50%"><strong>English + 简体中文</strong><br>通过 iOS 单 App 语言选择和 AltForge Server 设置窗口使用英文或简体中文界面。</td>
   </tr>
   <tr>
     <td width="50%"><strong>专注 Classic 维护</strong><br>保留熟悉的 Apple ID 与 AltServer 流程，不在不知情的情况下改变分发模型。</td>
@@ -52,7 +52,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 | **Apple App ID 兼容** | 只把 Apple App ID description 转为安全 ASCII，不修改应用的 Unicode 显示名。 |
 | **开发团队** | 客户端和 AltServer 安装链路均支持个人、组织和免费开发团队 fallback。 |
 | **维护修复** | 防止已过期应用显示负数天数；macOS 错误详情保留富文本格式并支持选择复制。 |
-| **构建与文档** | 提供有边界的 iOS、macOS、Windows CI/release workflow，并在 [`docs/`](docs/README.md) 中维护完整 spec、验证、Issue 和变更历史。 |
+| **构建与文档** | 使用同一套由 tag 驱动的 workflow 完成有边界的 iOS、macOS、Windows 验证、打包与发布，并在 [`docs/`](docs/README.md) 中维护完整 spec 和变更历史。 |
 
 通用兼容性修复会尽量与品牌改动分离，以便在合适时回馈给上游项目。
 
@@ -78,12 +78,20 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 | 产物 | 用途 |
 |---|---|
 | `AltForge.ipa` | 未签名的 Classic 安装包，由 AltServer 针对所选 Apple ID、开发团队和设备完成签名。 |
-| `AltForge-AltServer-macOS.zip` | Universal macOS AltServer 应用。 |
+| `AltForge-AltServer-macOS.dmg` | 带 Applications 快捷方式的 Universal macOS AltServer 磁盘映像。 |
 | `AltForge-AltServer-Windows.zip` | 便携式 Win32 AltServer 应用及所需运行时 DLL。 |
 | `apps.json` | AltForge 官方 source metadata。 |
+| `flags.json` | 由本仓库维护的 Classic feature flags，默认为空。 |
+| `sources.json` | 由本仓库维护的可信与封禁 source 策略。 |
+| `recommended-sources.json` | 可选推荐 source 集合，默认为空。 |
+| `developerdisks.json` | 供两个桌面端共用、经审核的 Developer Disk URL 索引；实际 disk 文件仍来自外部。 |
 | `SHA256SUMS.txt` | 发布产物的 SHA-256 校验和。 |
 
-不能通过在 iPhone 或 iPad 上直接点击 IPA 完成安装。当前 macOS 压缩包尚未使用 Developer ID 签名或 notarization，Windows ZIP 同样尚未签名。Windows 用户必须从 Apple 官网安装桌面版 iTunes 和 iCloud，不能使用 Microsoft Store 版本。请完整解压 ZIP，让全部 DLL 与 `AltServer.exe` 保持在同一目录，并在安装前核对 checksum。
+只有与根版本一致的 `vX.Y.Z` 标签会启动 Release workflow。GitHub 托管的 macOS 与 Windows runner 负责构建和打包全部平台产物，检查 IPA/DMG 结构、产品身份、版本、Universal 架构和运行库文件，复核最终 checksum manifest，然后创建供人工审核的 Draft Release。
+
+AltForge 自有的更新和配置 metadata 只由本仓库发布。Apple 服务、Patreon、第三方 source、构建依赖和 Developer Disk 文件保留其真实外部所有者；AltForge 只发布经审核的 disk URL 索引。Classic 构建不会访问上游 Marketplace 或 Fediverse 控制服务。除非构建者配置自己的 OAuth 凭据和 HTTPS redirect URI，否则 Patreon 登录默认关闭。
+
+不能通过在 iPhone 或 iPad 上直接点击 IPA 完成安装。当前 macOS DMG 尚未使用 Developer ID 签名或 notarization，Windows ZIP 同样尚未签名。挂载 DMG 后把 `AltForge Server.app` 拖入 Applications；从源码构建和首次启动步骤见[本地 macOS 验证指南](docs/guides/local-macos-validation.md)。Windows 用户必须从 Apple 官网安装桌面版 iTunes 和 iCloud，不能使用 Microsoft Store 版本。请完整解压 ZIP，让全部 DLL 与 `AltServer.exe` 保持在同一目录，并在安装前核对 checksum。
 
 ## 环境要求
 
@@ -134,15 +142,18 @@ Windows 工具链和可重复执行的 PowerShell 构建记录在 [`AltServer-Wi
 <details>
 <summary><strong>发布维护者流程</strong></summary>
 
-语义化版本标签会触发 release workflow：
+AltForge 从 `2.4.0` 开始使用独立发布编号。上游 AltStore 与 AltServer 版本只记录为源码来源，不决定 AltForge 的版本。只有纯数字 `vX.Y.Z` 标签会触发自动构建和 Draft Release 创建。根目录 `VERSION` 是 AltForge、macOS AltServer 和 Windows AltServer 共用的产品版本唯一来源；普通 push 和 pull request 不会启动 GitHub Actions 构建。
 
 ```sh
-VERSION=2.3.4
-git tag "v${VERSION}"
-git push origin "v${VERSION}"
+version="$(tr -d '[:space:]' < VERSION)"
+ruby Scripts/check_release_version.rb
+ruby Scripts/test_release_metadata.rb
+ruby Scripts/test_repository_contract.rb
+git tag "v${version}"
+git push origin "v${version}"
 ```
 
-该流程会构建未签名 IPA、universal macOS AltServer 和便携式 Win32 AltServer，生成 `apps.json` 与 checksum，然后把产物附加到 GitHub Release。只有完成文档中的质量门禁后才能发布。
+流程会拒绝与 `VERSION` 不一致的 tag，然后构建未签名 IPA、Universal macOS AltServer DMG 和便携式 Win32 AltServer，生成 source/远程配置 metadata 与 checksum，并创建 **Draft GitHub Release**。CI build number 使用 GitHub run number，与统一的产品版本分开管理。维护者必须先下载并核验 Draft，再人工公开发布；未发布的 Draft 不会改变 `releases/latest`。
 
 </details>
 
@@ -176,7 +187,7 @@ git push origin "v${VERSION}"
 
 - Windows 源码和 CI 已进入仓库，但首个 hosted build 与脱敏 Windows 真机 smoke test 仍需完成，之后才能把对应产物视为已验证。
 - 当前导入的 Windows 通知区域界面仍沿用上游英文；英文/简体中文语言切换已在 iOS 客户端实现。
-- macOS 发布包尚未使用 Developer ID 签名或 notarization。
+- macOS Release DMG 尚未使用 Developer ID 签名或 notarization；在签名与公证方案落地前，对外分发必须明确提示 Gatekeeper 限制。
 - Unicode archive 处理已经通过实现级验证，但持久化 AltSign fixture 和更广泛的真实设备覆盖仍在补充。
 
 ## 上游与许可证

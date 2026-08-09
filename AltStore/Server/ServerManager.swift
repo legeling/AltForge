@@ -177,15 +177,15 @@ private extension ServerManager
         let serverName: String
         if let localizedName = server.localizedName
         {
-            serverName = String(format: NSLocalizedString("remote AltServer %@", comment: ""), localizedName)
+            serverName = String(format: NSLocalizedString("remote AltForge Server %@", comment: ""), localizedName)
         }
         else if server.connectionType == .wired
         {
-            serverName = NSLocalizedString("wired AltServer", comment: "")
+            serverName = NSLocalizedString("USB-connected AltForge Server", comment: "")
         }
         else
         {
-            serverName = NSLocalizedString("AltServer", comment: "")
+            serverName = NSLocalizedString("AltForge Server", comment: "")
         }
         
         connection.stateUpdateHandler = { [unowned connection] (state) in

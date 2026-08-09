@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Key Behaviors
 
 ## 安装 AltForge
@@ -62,6 +66,15 @@
 3. iOS `.app` 以 `Payload/AltStore.app` 结构打包为 `AltForge.ipa`。
 4. Ruby 脚本读取实际文件大小和 hash，生成 `apps.json` 与 `SHA256SUMS.txt`。
 5. 只有全部步骤成功后创建 GitHub Release。
+
+## 远程配置与外部服务
+
+- Classic 启动只从最新已公开的 AltForge Release 获取 flags、known sources 和 recommended collections；请求失败时保留本地值或安全默认值，不回退到上游配置。
+- macOS 与 Windows AltForge Server 从同一 Release 获取 `developerdisks.json`，再按索引访问经过审核的第三方 disk 文件。索引属于 AltForge，disk 文件仍属于各自提供方。
+- 遗留 Mail plug-in 仅可检测和卸载；不会检查、下载或安装上游 plug-in。
+- Classic 固定关闭 Fediverse 交互：启动不调度交互更新，source 刷新不查询上游 CloudKit metadata，界面不暴露点赞入口。
+- Patreon 默认未配置并隐藏。只有构建者提供自己的 client ID、client secret 和 HTTPS redirect URI 后才允许认证；缺少任一项时必须在网络请求前失败。
+- 依赖下载与 Apple 服务保留真实外部地址。仓库归属收敛不等于伪造外部服务的所有权。
 
 ## 状态与清理
 

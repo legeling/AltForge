@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
+    [string]$Version,
     [switch]$SkipBootstrap
 )
 
@@ -8,6 +9,17 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
 $root = Split-Path -Parent $PSScriptRoot
+$repositoryRoot = Split-Path -Parent $root
+$declaredVersion = (Get-Content -LiteralPath (Join-Path $repositoryRoot "VERSION") -Raw).Trim()
+if (-not $Version) {
+    $Version = $declaredVersion
+}
+if ($Version -notmatch '^\d+\.\d+\.\d+$') {
+    throw "Version must use numeric X.Y.Z form."
+}
+if ($Version -ne $declaredVersion) {
+    throw "Requested version $Version does not match VERSION ($declaredVersion)."
+}
 
 function Invoke-Checked {
     param(

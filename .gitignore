@@ -30,6 +30,7 @@ xcuserdata
 *.hmap
 
 # AltServer for Windows
+.vcpkg/
 AltServer-Windows/.vs/
 AltServer-Windows/Debug/
 AltServer-Windows/Release/

@@ -20,16 +20,21 @@ jobs:
       version: ${{ steps.version.outputs.version }}
 
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
       - name: Validate release tag
         id: version
         shell: bash
         run: |
-          version="${GITHUB_REF_NAME#v}"
-          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
-            echo "Expected a semantic version tag such as v2.3.3 or v2.3.3-beta.1" >&2
-            exit 1
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          ruby Scripts/check_release_version.rb --tag "$GITHUB_REF_NAME"
+          echo "version=$(tr -d '[:space:]' < VERSION)" >> "$GITHUB_OUTPUT"
+
+      - name: Validate release metadata contract
+        run: ruby Scripts/test_release_metadata.rb
+
+      - name: Validate repository release policy
+        run: ruby Scripts/test_repository_contract.rb
 
   apple:
     needs: prepare
@@ -47,7 +52,9 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_26.6.app
 
       - name: Install CocoaPods dependencies
-        run: pod install --deployment
+        run: |
+          sudo gem install cocoapods -v 1.16.2 --no-document
+          pod _1.16.2_ install --deployment
 
       - name: Resolve Swift packages
         run: >-
@@ -55,6 +62,19 @@ jobs:
           -workspace AltStore.xcworkspace
           -scheme AltStore
           -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
+
+      - name: Test repository source identity
+        run: >-
+          xcodebuild test
+          -workspace AltStore.xcworkspace
+          -scheme AltStore
+          -configuration Debug
+          -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=latest"
+          -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
+          -derivedDataPath "$RUNNER_TEMP/DerivedData-Tests"
+          CODE_SIGNING_ALLOWED=NO
+          -only-testing:AltTests/AltTests/testSourceID
+          -only-testing:AltTests/AltTests/testAltForgeSourceDeepLink
 
       - name: Build unsigned iOS application
         env:
@@ -103,8 +123,18 @@ jobs:
         run: |
           app="$RUNNER_TEMP/DerivedData-macOS/Build/Products/Release/AltServer.app"
           test -d "$app"
-          ditto -c -k --sequesterRsrc --keepParent \
-            "$app" "$RUNNER_TEMP/Artifacts/AltForge-AltServer-macOS.zip"
+          Scripts/package_macos_dmg.sh \
+            --app "$app" \
+            --output "$RUNNER_TEMP/Artifacts/AltForge-AltServer-macOS.dmg"
+
+      - name: Verify Apple release artifacts
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: >-
+          Scripts/verify_apple_release_artifacts.sh
+          --artifacts "$RUNNER_TEMP/Artifacts"
+          --version "$VERSION"
+          --build "$GITHUB_RUN_NUMBER"
 
       - name: Upload Apple artifacts
         uses: actions/upload-artifact@v4
@@ -112,7 +142,7 @@ jobs:
           name: release-apple
           path: |
             ${{ runner.temp }}/Artifacts/AltForge.ipa
-            ${{ runner.temp }}/Artifacts/AltForge-AltServer-macOS.zip
+            ${{ runner.temp }}/Artifacts/AltForge-AltServer-macOS.dmg
           if-no-files-found: error
           retention-days: 3
 
@@ -127,11 +157,28 @@ jobs:
         with:
           submodules: false
 
+      - name: Check out pinned vcpkg
+        uses: actions/checkout@v6
+        with:
+          repository: microsoft/vcpkg
+          ref: ea1a7396b05637a53bf23c078647ecc0edee4b80
+          path: .vcpkg
+
+      - name: Bootstrap vcpkg
+        shell: pwsh
+        env:
+          VCPKG_DISABLE_METRICS: "1"
+        run: ./.vcpkg/bootstrap-vcpkg.bat -disableMetrics
+
       - name: Build and package Windows AltServer
         shell: pwsh
+        env:
+          VCPKG_ROOT: ${{ github.workspace }}\.vcpkg
+          VCPKG_DISABLE_METRICS: "1"
         run: >-
           ./AltServer-Windows/Scripts/build-release.ps1
           -OutputDirectory "$env:RUNNER_TEMP/Artifacts"
+          -Version "${{ needs.prepare.outputs.version }}"
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
@@ -159,24 +206,43 @@ jobs:
 
       - name: Generate source and checksums
         env:
+          GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.prepare.outputs.version }}
-        run: >-
-          ruby Scripts/generate_release_metadata.rb
-          --artifacts "$RUNNER_TEMP/Artifacts"
-          --version "$VERSION"
-          --build "$GITHUB_RUN_NUMBER"
-          --date "$(date -u +%Y-%m-%d)"
+        shell: bash
+        run: |
+          previous_args=()
+          if gh release view --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            mkdir -p "$RUNNER_TEMP/PreviousSource"
+            gh release download --repo "$GITHUB_REPOSITORY" \
+              --pattern apps.json \
+              --dir "$RUNNER_TEMP/PreviousSource"
+            previous_args=(--previous-source "$RUNNER_TEMP/PreviousSource/apps.json")
+          fi
 
-      - name: Publish GitHub Release
+          ruby Scripts/generate_release_metadata.rb \
+            --artifacts "$RUNNER_TEMP/Artifacts" \
+            --version "$VERSION" \
+            --build "$GITHUB_RUN_NUMBER" \
+            --date "$(date -u +%Y-%m-%d)" \
+            "${previous_args[@]}"
+
+      - name: Create draft GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >-
-          gh release create "$GITHUB_REF_NAME"
-          "$RUNNER_TEMP/Artifacts/AltForge.ipa"
-          "$RUNNER_TEMP/Artifacts/AltForge-AltServer-macOS.zip"
-          "$RUNNER_TEMP/Artifacts/AltForge-AltServer-Windows.zip"
-          "$RUNNER_TEMP/Artifacts/apps.json"
-          "$RUNNER_TEMP/Artifacts/SHA256SUMS.txt"
-          --verify-tag
-          --generate-notes
-          --title "AltForge $GITHUB_REF_NAME"
+        run: |
+          cd "$RUNNER_TEMP/Artifacts"
+          sha256sum --check SHA256SUMS.txt
+          gh release create "$GITHUB_REF_NAME" \
+            AltForge.ipa \
+            AltForge-AltServer-macOS.dmg \
+            AltForge-AltServer-Windows.zip \
+            apps.json \
+            flags.json \
+            sources.json \
+            recommended-sources.json \
+            developerdisks.json \
+            SHA256SUMS.txt \
+            --verify-tag \
+            --generate-notes \
+            --draft \
+            --title "AltForge $GITHUB_REF_NAME"

@@ -141,32 +141,32 @@
         }
       }
     },
-    "AltWidget (Text)" : {
+    "AltForge (Text)" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltWidget（文字）"
+            "value" : "AltForge（文字）"
           }
         }
       }
     },
-    "AltWidget (Icon)" : {
+    "AltForge (Icon)" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltWidget（图标）"
+            "value" : "AltForge（图标）"
           }
         }
       }
     },
-    "View remaining days until AltStore expires." : {
+    "View remaining days until AltForge expires." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "查看 AltStore 距离过期的剩余天数。"
+            "value" : "查看 AltForge 距离过期的剩余天数。"
           }
         }
       }

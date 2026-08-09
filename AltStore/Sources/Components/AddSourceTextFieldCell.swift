@@ -20,7 +20,7 @@ class AddSourceTextFieldCell: UICollectionViewCell
         #if MARKETPLACE
         let placeholder = "marketplace.altstore.io"
         #else
-        let placeholder = "apps.altstore.io"
+        let placeholder = "example.com/apps.json"
         #endif
         
         self.textField = UITextField(frame: frame)

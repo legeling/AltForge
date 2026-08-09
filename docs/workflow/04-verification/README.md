@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Verification Plan
 
 ## 验证目标
@@ -27,6 +31,14 @@
 | `TEST-017` 过期应用天数不为负数、错误详情可选中复制 | `FR-008`, `FR-011` | Build/Manual UI | 双目标构建通过；手工 UI 待执行 |
 | `TEST-018` Windows AltServer 固定依赖、Release build 和 ZIP contract | `FR-018`, `FR-019` | CI Build/Packaging | CI 已定义；当前 macOS 开发机未执行 |
 | `TEST-019` Windows USB/Wi-Fi 安装与刷新 | `FR-018`, `FR-019` | Manual E2E | 待执行 |
+| `TEST-020` 标签、根版本与三平台产品版本 contract | `FR-020` | Script/Workflow | 本地自动化通过；标签触发行为待下次 Release 验证 |
+| `TEST-021` tag-only 与 Draft-only release policy | `FR-021` | Script/Workflow | 静态 contract 自动化通过；真实 Draft 待授权标签验证 |
+| `TEST-022` source 固定 URL、历史继承、去重与上限 | `FR-022` | Script/Packaging | fixture 自动化覆盖，最多保留 20 个版本 |
+| `TEST-023` AltForge 自有远程配置与安全默认值 | `FR-023` | Script/Static | JSON schema 与 Classic endpoint contract 自动化覆盖 |
+| `TEST-024` update/离线 identity 与用户入口 | `FR-016`, `FR-024` | Static/Build/Manual | repository contract、iOS 定向测试/构建与 macOS arm64 Release build 通过；手工入口点击和 Windows build 待执行 |
+| `TEST-025` macOS DMG contract 与本地安装 | `FR-025` | Script/Packaging/Manual | 本机 Universal DMG 创建、image verify、挂载、symlink、bundle/version/signature 检查通过；CI IPA/DMG verifier 与 publish checksum gate 已定义，Finder 首次启动和真实 tag run 待执行 |
+| `TEST-026` AltForge Server 身份、菜单与设置 | `FR-026`, `FR-027` | Static/Build/Manual | repository contract、macOS Universal Release、iOS Simulator build 和 preview DMG mount/signature 检查通过；设置/菜单 UI、语言重启和 USB/Wi-Fi 实机状态待手工验证 |
+| `TEST-027` 网络所有权、Developer Disk 索引、Classic Fediverse 与可选 OAuth fail-closed | `FR-028` | Script/Static/Build | repository/release contract、JSON/plist 与 iOS/macOS build 通过；Windows build 未执行 |
 
 ## 首批高价值失败测试
 
@@ -39,7 +51,7 @@
 
 ## 实际命令
 
-CI build/test 命令登记在 [回归套件](05-regression-suite.md)。本地不能访问依赖或没有 simulator 时，必须报告未执行项，不能以 syntax check 代替完整构建。
+Release build/test 命令登记在 [回归套件](05-regression-suite.md)。普通 push/PR 不触发自动构建，因此打标签前必须先执行本地版本、metadata 与 repository policy preflight。本地不能访问依赖或没有 simulator 时，必须报告未执行项，不能以 syntax check 代替完整构建。
 
 ## 手工真实设备验证
 
@@ -56,5 +68,8 @@ CI build/test 命令登记在 [回归套件](05-regression-suite.md)。本地不
 - 无标志 legacy ZIP encoding 存在先天歧义，自动检测不能保证所有地区包零误判。
 - 当前测试 target 与签名 host app 耦合，独立验证 AltSign 的成本较高。
 - release 尚未 Developer ID 签名与 notarize。
+- ad-hoc 本地 DMG 只能验证本机安装路径，不能代表其他 Mac 上的 Gatekeeper 或 notarization 体验。
+- 首次正式 Release 前，自有 `releases/latest` source/config endpoint 仍会返回 404；真实 Draft 与人工发布流程尚未验证。
 - Windows ZIP 尚未执行 hosted runner 和真实设备验证，见 `ISSUE-20260809-001`。
+- Windows Developer Disk endpoint 已由静态 contract 覆盖，但本机没有执行 MSBuild；历史 Marketplace/Fediverse 实现只在 Classic 中 fail closed，未来启用仍需自有兼容后端和独立验证。
 - 简体中文 simulator 上完整错误测试仍有 12 项因 Foundation 本地化描述的空格规则失败，见 `ISSUE-20260808-007`。

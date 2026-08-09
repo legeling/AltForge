@@ -6,7 +6,7 @@
 |---|---|---|
 | Unit | URL normalization、encoding、metadata、错误映射 | 所有纯逻辑变化 |
 | Integration | Operation graph、Core Data、client/server Codable contract、archive round trip | 跨模块契约变化 |
-| Build | iOS Simulator、macOS app、extension embedding、localization catalog | 每个 PR 与 `marketplace` push |
+| Build | iOS Simulator、macOS app、extension embedding、localization catalog | 本地预检与版本标签 |
 | Packaging | IPA layout、source JSON、checksums、universal archive | release workflow 或发布脚本变化 |
 | Manual E2E | Apple auth、provisioning、device install、refresh、JIT | signing/device/OS compatibility 变化 |
 
@@ -25,7 +25,7 @@
 - `AltStoreCore` model 变化必须验证 migration 或说明无 schema 变化。
 - `Dependencies/AltSign` 变化必须在 nested repo 验证并更新 superproject gitlink。
 - 用户可见字符串变化必须通过 string catalog 构建并检查英文/简体中文 fallback。
-- release workflow 变化必须使用临时 artifact 进行 dry run，不得用真实 tag 作为第一次测试。
+- release workflow 变化必须先完成本地语法、版本、metadata contract 和 repository policy contract 检查；平台构建首次验证仍须在明确授权的版本标签上完成，成功时也只能创建 Draft，失败时不得 publish 不完整 Release。
 
 ## 准出标准
 

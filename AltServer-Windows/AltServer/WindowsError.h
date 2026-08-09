@@ -21,7 +21,7 @@ public:
         switch ((WindowsErrorCode)this->code())
         {
         case WindowsErrorCode::WindowsDefenderBlockedCommunication:
-            return "Windows Defender blocked AltForge from communicating with AltForge AltServer.";
+            return "Windows Defender blocked AltForge from communicating with AltForge Server.";
         }
 
         return std::nullopt;

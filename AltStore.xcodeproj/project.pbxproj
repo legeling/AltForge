@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D6AF00010000000000000001 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF00010000000000000002 /* SettingsWindowController.swift */; };
 		A17F00000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000011 /* Localizable.xcstrings */; };
 		A17F00000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000012 /* Localizable.xcstrings */; };
 		A17F00000000000000000003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000013 /* Localizable.xcstrings */; };
@@ -14,7 +15,7 @@
 		A17F00000000000000000005 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000016 /* InfoPlist.xcstrings */; };
 		820059C32F36BBAA00C22365 /* SafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820059C22F36BBAA00C22365 /* SafariActivity.swift */; };
 		825DAD9E2F0C329C00E0EDF1 /* FediverseLikesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825DAD9D2F0C329C00E0EDF1 /* FediverseLikesView.swift */; };
-		82BBB9342F185B33005A472E /* AppIcon_Japan.icon in Resources */ = {isa = PBXBuildFile; fileRef = 82BBB9332F185B33005A472E /* AppIcon_Japan.icon */; };
+		82BBB9342F185B33005A472E /* AppIcon_Coral.icon in Resources */ = {isa = PBXBuildFile; fileRef = 82BBB9332F185B33005A472E /* AppIcon_Coral.icon */; };
 		82CB1FB32EBABB0100C8E822 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 82CB1FB22EBABB0100C8E822 /* AppIcon.icon */; };
 		82D6ED882EE9E62D009DC668 /* SourceCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D6ED872EE9E62D009DC668 /* SourceCollectionViewController.swift */; };
 		82D6ED8A2EEA137A009DC668 /* TaskGroup+Collated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D6ED892EEA137A009DC668 /* TaskGroup+Collated.swift */; };
@@ -512,7 +513,6 @@
 		D5DB81642B0410BC003F5F8B /* AppSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DB81632B0410BC003F5F8B /* AppSorting.swift */; };
 		D5E1E7C128077DE90016FC96 /* UpdateKnownSourcesOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E1E7C028077DE90016FC96 /* UpdateKnownSourcesOperation.swift */; };
 		D5E3FB9828FDFAD90034B72C /* NSError+AltStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6C336124197D700034FD24 /* NSError+AltStore.swift */; };
-		D5EA079B2FD217D0008A5321 /* AppIcon_Brazil.icon in Resources */ = {isa = PBXBuildFile; fileRef = D5EA079A2FD217D0008A5321 /* AppIcon_Brazil.icon */; };
 		D5F2F6A92720B7C20081CCF5 /* PatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F2F6A82720B7C20081CCF5 /* PatchViewController.swift */; };
 		D5F48B4829CCF21B002B52A4 /* AltStore+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F48B4729CCF21B002B52A4 /* AltStore+Async.swift */; };
 		D5F48B4C29CD0C48002B52A4 /* AsyncManaged.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F48B4929CD0B67002B52A4 /* AsyncManaged.swift */; };
@@ -701,6 +701,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D6AF00010000000000000002 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		A17F00000000000000000011 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000013 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
@@ -711,7 +712,7 @@
 		589BA531D903B28F292063E5 /* Pods-AltServer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AltServer.release.xcconfig"; path = "Target Support Files/Pods-AltServer/Pods-AltServer.release.xcconfig"; sourceTree = "<group>"; };
 		820059C22F36BBAA00C22365 /* SafariActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariActivity.swift; sourceTree = "<group>"; };
 		825DAD9D2F0C329C00E0EDF1 /* FediverseLikesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FediverseLikesView.swift; sourceTree = "<group>"; };
-		82BBB9332F185B33005A472E /* AppIcon_Japan.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Japan.icon; sourceTree = "<group>"; };
+		82BBB9332F185B33005A472E /* AppIcon_Coral.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Coral.icon; sourceTree = "<group>"; };
 		82CB1FB22EBABB0100C8E822 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		82D6ED872EE9E62D009DC668 /* SourceCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceCollectionViewController.swift; sourceTree = "<group>"; };
 		82D6ED892EEA137A009DC668 /* TaskGroup+Collated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskGroup+Collated.swift"; sourceTree = "<group>"; };
@@ -1215,7 +1216,6 @@
 		D5DB145828F9DC1000A8F606 /* ALTLocalizedError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALTLocalizedError.swift; sourceTree = "<group>"; };
 		D5DB81632B0410BC003F5F8B /* AppSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSorting.swift; sourceTree = "<group>"; };
 		D5E1E7C028077DE90016FC96 /* UpdateKnownSourcesOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateKnownSourcesOperation.swift; sourceTree = "<group>"; };
-		D5EA079A2FD217D0008A5321 /* AppIcon_Brazil.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Brazil.icon; sourceTree = "<group>"; };
 		D5F2F6A82720B7C20081CCF5 /* PatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatchViewController.swift; sourceTree = "<group>"; };
 		D5F48B4729CCF21B002B52A4 /* AltStore+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AltStore+Async.swift"; sourceTree = "<group>"; };
 		D5F48B4929CD0B67002B52A4 /* AsyncManaged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncManaged.swift; sourceTree = "<group>"; };
@@ -1451,6 +1451,7 @@
 			isa = PBXGroup;
 			children = (
 				BF45868F229872EA00BD7491 /* AppDelegate.swift */,
+				D6AF00010000000000000002 /* SettingsWindowController.swift */,
 				BF458695229872EA00BD7491 /* Main.storyboard */,
 				BFAD67A225E0854500D4C4D1 /* DeveloperDiskManager.swift */,
 				BFF0394A25F0551600BE607D /* MenuController.swift */,
@@ -2125,8 +2126,7 @@
 				D5784E3E2CC2E67B00DAC00E /* AltMarketplace.cer */,
 				82CB1FB22EBABB0100C8E822 /* AppIcon.icon */,
 				D5B15D422ECE664000F8E797 /* Localizable.xcstrings */,
-				82BBB9332F185B33005A472E /* AppIcon_Japan.icon */,
-				D5EA079A2FD217D0008A5321 /* AppIcon_Brazil.icon */,
+				82BBB9332F185B33005A472E /* AppIcon_Coral.icon */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -3054,11 +3054,10 @@
 				BFB4323F22DE852000B7F8BC /* UpdateCollectionViewCell.xib in Resources */,
 				D59162AD29BA616A005CBF47 /* SourceHeaderView.xib in Resources */,
 				D56091892EEA2DD60090FEDF /* Settings.storyboard in Resources */,
-				82BBB9342F185B33005A472E /* AppIcon_Japan.icon in Resources */,
+				82BBB9342F185B33005A472E /* AppIcon_Coral.icon in Resources */,
 				D5144BA82B8684EF00738A5C /* Icons.xcassets in Resources */,
 				82CB1FB32EBABB0100C8E822 /* AppIcon.icon in Resources */,
 				D57DF638271E32F000677701 /* PatchApp.storyboard in Resources */,
-				D5EA079B2FD217D0008A5321 /* AppIcon_Brazil.icon in Resources */,
 				D5399FB02BE56B120038DDEF /* JoinPatreonViewController.xib in Resources */,
 				BFD2477A2284B9A700981D42 /* LaunchScreen.storyboard in Resources */,
 				BF44EEF3246B3A17002A52F2 /* AltBackup.ipa in Resources */,
@@ -3194,6 +3193,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6AF00010000000000000001 /* SettingsWindowController.swift in Sources */,
 				BFF767C82489A74E0097E58C /* WirelessConnectionHandler.swift in Sources */,
 				BFF0394B25F0551600BE607D /* MenuController.swift in Sources */,
 				BFECAC8024FD950B0077C41F /* ConnectionManager.swift in Sources */,
@@ -3869,7 +3869,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 84;
+				CURRENT_PROJECT_VERSION = 88;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6XVY5G3U44;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -3902,7 +3902,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.2b;
+				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -3922,7 +3922,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 84;
+				CURRENT_PROJECT_VERSION = 88;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6XVY5G3U44;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -3955,7 +3955,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.7.2b;
+				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -4303,7 +4303,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 87;
+				CURRENT_PROJECT_VERSION = 88;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -4323,7 +4323,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.3.12;
+				MARKETING_VERSION = 2.4.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -4373,7 +4373,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 87;
+				CURRENT_PROJECT_VERSION = 88;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4387,7 +4387,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.3.12;
+				MARKETING_VERSION = 2.4.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_CPLUSPLUSFLAGS = (

@@ -205,7 +205,7 @@ public:
 			return "AltServer does not support this request.";
 
 		case ServerErrorCode::UnknownResponse:
-			return "AltForge received an unknown response from AltServer.";
+			return "AltForge received an unknown response from AltForge Server.";
 
 		case ServerErrorCode::InvalidAnisetteData:
 			return "The provided anisette data is invalid.";

@@ -581,6 +581,10 @@ private extension BlueskyAPI
 {
     func send<ResponseType: Decodable>(_ request: URLRequest, authorizationType: AuthorizationType) async throws -> ResponseType
     {
+        #if !MARKETPLACE
+        // AltForge Classic does not use upstream federation control services.
+        throw URLError(.unsupportedURL)
+        #else
         let decoder = Foundation.JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
@@ -667,6 +671,7 @@ private extension BlueskyAPI
                 throw response
             }
         }
+        #endif
     }
 }
 
@@ -683,4 +688,3 @@ private extension BlueskyAPI
         }
     }
 }
-

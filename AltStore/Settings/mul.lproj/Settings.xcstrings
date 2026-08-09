@@ -840,31 +840,31 @@
       }
     },
     "nPX-FV-0xW.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Contact Us\"; ObjectID = \"nPX-FV-0xW\";",
+      "comment" : "Class = \"UILabel\"; text = \"Report an Issue\"; ObjectID = \"nPX-FV-0xW\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Contact Us"
+            "value" : "Report an Issue"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "お問い合わせ"
+            "value" : "問題を報告"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fale conosco"
+            "value" : "Relatar um problema"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "联系我们"
+            "value" : "报告问题"
           }
         }
       }

@@ -8,7 +8,6 @@
 
 import UIKit
 import SafariServices
-import MessageUI
 import Intents
 import IntentsUI
 
@@ -168,6 +167,8 @@ class SettingsViewController: UITableViewController
         }
         
         self.tableView.contentInset.bottom = 20
+
+        [self.mastodonButton, self.threadsButton, self.blueskyButton, self.twitterButton].forEach { $0?.isHidden = true }
         
         self.update()
         
@@ -305,7 +306,7 @@ private extension SettingsViewController
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Receive access to beta versions of AltStore, Delta, and more by becoming a patron.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Link a Patreon account only when a source requires a pledge.", comment: "")
             }
             
         case .account:
@@ -326,7 +327,7 @@ private extension SettingsViewController
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Enable Background Refresh to automatically refresh apps in the background when connected to the same Wi-Fi as AltServer.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Enable Background Refresh to automatically refresh apps in the background when connected to the same Wi-Fi as AltForge Server.", comment: "")
             }
             
         case .display:
@@ -400,6 +401,7 @@ private extension SettingsViewController
         
         switch section
         {
+        case .patreon: return !PatreonAPI.shared.isConfigured
         case .macDirtyCow:
             let isHidden = !(UserDefaults.standard.isCowExploitSupported && UserDefaults.standard.isDebugModeEnabled)
             return isHidden
@@ -639,28 +641,27 @@ private extension SettingsViewController
     
     @IBAction func followAltStoreMastodon()
     {
-        self.openMastodon(username: "@altstore@fosstodon.org")
+        self.followAltStoreGitHub()
     }
     
     @IBAction func followAltStoreThreads()
     {
-        self.openThreads(username: "altstoreio")
+        self.followAltStoreGitHub()
     }
     
     @IBAction func followAltStoreBluesky()
     {
-        let url = URL(string: "https://bsky.app/profile/altstore.io")!
-        UIApplication.shared.open(url, options: [:])
+        self.followAltStoreGitHub()
     }
     
     @IBAction func followAltStoreTwitter()
     {
-        self.openTwitter(username: "altstoreio")
+        self.followAltStoreGitHub()
     }
     
     @IBAction func followAltStoreGitHub()
     {
-        let safariURL = URL(string: "https://github.com/altstoreio")!
+        let safariURL = URL(string: "https://github.com/legeling/AltForge")!
         UIApplication.shared.open(safariURL, options: [:])
     }
 }
@@ -924,31 +925,11 @@ extension SettingsViewController
             switch row
             {
             case .contactUs:
-                if MFMailComposeViewController.canSendMail()
-                {
-                    let mailViewController = MFMailComposeViewController()
-                    mailViewController.mailComposeDelegate = self
-                    mailViewController.setToRecipients(["support@altstore.io"])
-                    
-                    if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-                    {
-                        mailViewController.setSubject("AltStore \(version) Feedback")
-                    }
-                    else
-                    {
-                        mailViewController.setSubject("AltStore Feedback")
-                    }
-                    
-                    self.present(mailViewController, animated: true, completion: nil)
-                }
-                else
-                {
-                    let toastView = ToastView(text: NSLocalizedString("Cannot Send Mail", comment: ""), detailText: nil)
-                    toastView.show(in: self)
-                }
+                let issuesURL = URL(string: "https://github.com/legeling/AltForge/issues/new/choose")!
+                UIApplication.shared.open(issuesURL, options: [:])
                 
             case .privacyPolicy:
-                let safariURL = URL(string: "https://altstore.io/privacy")!
+                let safariURL = URL(string: "https://github.com/legeling/AltForge/blob/marketplace/PRIVACY.md")!
                 UIApplication.shared.open(safariURL, options: [:])
             }
             
@@ -957,48 +938,14 @@ extension SettingsViewController
             switch row
             {
             case .sendFeedback:
-                if MFMailComposeViewController.canSendMail()
-                {
-                    let mailViewController = MFMailComposeViewController()
-                    mailViewController.mailComposeDelegate = self
-                    mailViewController.setToRecipients(["support@altstore.io"])
-                    
-                    if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-                    {
-                        mailViewController.setSubject("AltStore Beta \(version) Feedback")
-                    }
-                    else
-                    {
-                        mailViewController.setSubject("AltStore Beta Feedback")
-                    }
-                    
-                    self.present(mailViewController, animated: true, completion: nil)
-                }
-                else
-                {
-                    let toastView = ToastView(text: NSLocalizedString("Cannot Send Mail", comment: ""), detailText: nil)
-                    toastView.show(in: self)
-                }
+                let issuesURL = URL(string: "https://github.com/legeling/AltForge/issues/new/choose")!
+                UIApplication.shared.open(issuesURL, options: [:])
                 
             case .refreshAttempts, .responseCaching, .manageInstalledApps: break
             }
             
         case .account, .patreon, .instructions, .macDirtyCow: break
         }
-    }
-}
-
-extension SettingsViewController: MFMailComposeViewControllerDelegate
-{
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?)
-    {
-        if let error = error
-        {
-            let toastView = ToastView(error: error)
-            toastView.show(in: self)
-        }
-        
-        controller.dismiss(animated: true, completion: nil)
     }
 }
 

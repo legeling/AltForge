@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Architecture Decision Records
 
 | ID | 决策 | 状态 | 日期 |

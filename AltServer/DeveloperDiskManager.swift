@@ -29,11 +29,7 @@ enum DeveloperDiskErrorCode: Int, ALTErrorEnum
 
 private extension URL
 {
-    #if STAGING
-    static let developerDiskDownloadURLs = URL(string: "https://f000.backblazeb2.com/file/altstore-staging/altserver/developerdisks.json")!
-    #else
-    static let developerDiskDownloadURLs = URL(string: "https://cdn.altstore.io/file/altstore/altserver/developerdisks.json")!
-    #endif
+    static let developerDiskDownloadURLs = URL(string: "https://github.com/legeling/AltForge/releases/latest/download/developerdisks.json")!
 }
 
 private extension DeveloperDiskManager

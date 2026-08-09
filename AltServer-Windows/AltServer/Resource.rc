@@ -139,7 +139,7 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,84,73,50,14
     PUSHBUTTON      "Choose Folder...",ID_FOLDER,141,73,64,14
     DEFPUSHBUTTON   "Download",IDOK,211,73,50,14
-    LTEXT           "Download the latest version of iCloud from apple.com (not the Microsoft Store) in order to continue using AltServer.\n\nIf you already have iCloud installed, please locate the ""Apple"" folder that was installed along with iCloud. This can normally be found a",IDC_DESCRIPTION,7,7,254,60
+    LTEXT           "Download the latest version of iCloud from apple.com (not the Microsoft Store) in order to continue using AltForge Server.\n\nIf you already have iCloud installed, please locate the ""Apple"" folder that was installed along with iCloud. This can normally be found a",IDC_DESCRIPTION,7,7,254,60
 END
 
 ID_ICLOUD_MISSING_32 DIALOGEX 0, 0, 268, 99
@@ -149,7 +149,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,85,77,50,14
     PUSHBUTTON      "Download",IDOK,211,77,50,14
-    LTEXT           "Download the latest version of iCloud from apple.com (not the Microsoft Store) in order to continue using AltServer.\n\nIf you already have iCloud installed, please locate the ""Apple"" folder that was installed along with iCloud. This can normally be found a",IDC_DESCRIPTION,7,7,254,60
+    LTEXT           "Download the latest version of iCloud from apple.com (not the Microsoft Store) in order to continue using AltForge Server.\n\nIf you already have iCloud installed, please locate the ""Apple"" folder that was installed along with iCloud. This can normally be found a",IDC_DESCRIPTION,7,7,254,60
     PUSHBUTTON      "Choose Folder...",ID_FOLDER,141,77,64,14
 END
 
@@ -160,7 +160,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,85,77,50,14
     PUSHBUTTON      "Download",IDOK,211,77,50,14
-    LTEXT           "Download the latest version of iTunes from apple.com (not the Microsoft Store) in order to continue using AltServer.\n\nIf you already have iTunes installed, please locate the ""Apple"" folder that was installed along with iTunes. This can normally be found a",IDC_DESCRIPTION,7,7,254,60
+    LTEXT           "Download the latest version of iTunes from apple.com (not the Microsoft Store) in order to continue using AltForge Server.\n\nIf you already have iTunes installed, please locate the ""Apple"" folder that was installed along with iTunes. This can normally be found a",IDC_DESCRIPTION,7,7,254,60
     PUSHBUTTON      "Choose Folder...",ID_FOLDER,141,77,64,14
 END
 
@@ -171,7 +171,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,85,77,50,14
     PUSHBUTTON      "Download",IDOK,211,77,50,14
-    LTEXT           "Download the latest version of iTunes from apple.com (not the Microsoft Store) in order to continue using AltServer.\n\nIf you already have iTunes installed, please locate the ""Apple"" folder that was installed along with iTunes. This can normally be found a",IDC_DESCRIPTION,7,7,254,60
+    LTEXT           "Download the latest version of iTunes from apple.com (not the Microsoft Store) in order to continue using AltForge Server.\n\nIf you already have iTunes installed, please locate the ""Apple"" folder that was installed along with iTunes. This can normally be found a",IDC_DESCRIPTION,7,7,254,60
     PUSHBUTTON      "Choose Folder...",ID_FOLDER,141,77,64,14
 END
 
@@ -230,8 +230,8 @@ IMG_MENUBAR             ICON                    "MenuBarIcon.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,7,4,0
- PRODUCTVERSION 1,7,4,0
+ FILEVERSION 2,4,0,0
+ PRODUCTVERSION 2,4,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -247,13 +247,13 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "CompanyName", "AltForge Contributors"
-            VALUE "FileDescription", "AltForge AltServer"
-            VALUE "FileVersion", "1.7.4.0"
+            VALUE "FileDescription", "AltForge Server"
+            VALUE "FileVersion", "2.4.0.0"
             VALUE "InternalName", "AltServer.exe"
-            VALUE "LegalCopyright", "Copyright AltForge Contributors (C) 2026"
+            VALUE "LegalCopyright", "Copyright (C) 2026 AltForge contributors; AltStore and AltServer (C) Riley Testut and contributors"
             VALUE "OriginalFilename", "AltServer.exe"
-            VALUE "ProductName", "AltForge AltServer"
-            VALUE "ProductVersion", "1.7.4.0"
+            VALUE "ProductName", "AltForge Server"
+            VALUE "ProductVersion", "2.4.0.0"
         END
     END
     BLOCK "VarFileInfo"

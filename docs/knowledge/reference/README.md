@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Reference Index
 
 ## 构建入口
@@ -38,10 +42,27 @@ xcodebuild build -workspace AltStore.xcworkspace -scheme AltServer -configuratio
 
 ## 发布参考
 
-- CI：`.github/workflows/ci.yml`
 - Release：`.github/workflows/release.yml`
 - Metadata：`Scripts/generate_release_metadata.rb`
-- 预期产物：`AltForge.ipa`、`AltForge-AltServer-macOS.zip`、`apps.json`、`SHA256SUMS.txt`
+- macOS DMG：`Scripts/package_macos_dmg.sh`
+- 本地 macOS 验证：`docs/guides/local-macos-validation.md`
+- 预期产物：`AltForge.ipa`、`AltForge-AltServer-macOS.dmg`、`AltForge-AltServer-Windows.zip`、`apps.json`、`flags.json`、`sources.json`、`recommended-sources.json`、`developerdisks.json`、`SHA256SUMS.txt`
+
+## 网络端点所有权
+
+| 能力 | 所有者/入口 | 仓库策略 |
+|---|---|---|
+| 官方 source、远程配置、Developer Disk 索引 | `https://github.com/legeling/AltForge/releases/latest/download/` | 必须由本仓库 Release 发布并进入 checksum |
+| macOS 更新检查 | `https://api.github.com/repos/legeling/AltForge/releases/latest` | 仅检查版本，失败时提供仓库 Releases 手工入口 |
+| 支持、隐私、FAQ、Issue | `https://github.com/legeling/AltForge` | 必须指向本仓库内容 |
+| Developer Disk 文件 | 索引中经审核的第三方 HTTPS URL | 外部兼容依赖；AltForge 不镜像、不声称所有权 |
+| Apple Developer/device 服务 | Apple | 核心外部依赖，不可改写 |
+| Patreon API | Patreon | 可选；仅在配置自有 OAuth 凭据和 HTTPS callback 后启用 |
+| Marketplace/Fediverse 服务 | 未配置 | Classic 固定关闭；历史实现不属于发布运行时依赖 |
+| CocoaPods、SwiftPM、submodule | 各依赖项目 | 保留真实来源和许可证；已有 fork 才切换 |
+| AltStore/AltSign 上游文档与版权 | 上游仓库 | provenance，不属于运行时控制端点 |
+
+Classic 发布不得访问 `cdn.altstore.io`、AltStore staging bucket、上游 Marketplace/Fediverse/CloudKit 控制面或 Riley Testut 的 OAuth callback。Marketplace 专用 API 源码当前不进入 Classic 发布契约，不能据此宣称 Marketplace 服务可用；未来启用前必须建立自有兼容服务并重新验证。
 
 ## Fixture 约定
 

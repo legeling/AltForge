@@ -167,9 +167,9 @@ struct OperationError: ALTLocalizedError
             let appName = self.appName ?? NSLocalizedString("the app", comment: "")
             return String(format: NSLocalizedString("AltStore was denied permission to launch %@.", comment: ""), appName)
 
-        case .serverNotFound: return NSLocalizedString("AltServer could not be found.", comment: "")
-        case .connectionFailed: return NSLocalizedString("A connection to AltServer could not be established.", comment: "")
-        case .connectionDropped: return NSLocalizedString("The connection to AltServer was dropped.", comment: "")
+        case .serverNotFound: return NSLocalizedString("AltForge Server could not be found.", comment: "")
+        case .connectionFailed: return NSLocalizedString("A connection to AltForge Server could not be established.", comment: "")
+        case .connectionDropped: return NSLocalizedString("The connection to AltForge Server was dropped.", comment: "")
             
         case .pledgeRequired:
             let appName = self.appName ?? NSLocalizedString("This app", comment: "")
@@ -189,7 +189,7 @@ struct OperationError: ALTLocalizedError
     var recoverySuggestion: String? {
         switch self.code
         {
-        case .serverNotFound: return NSLocalizedString("Make sure you're on the same Wi-Fi network as a computer running AltServer, or try connecting this device to your computer via USB.", comment: "")
+        case .serverNotFound: return NSLocalizedString("Make sure you're on the same Wi-Fi network as a computer running AltForge Server, or try connecting this device to your computer via USB.", comment: "")
         case .maximumAppIDLimitReached:
             let baseMessage = NSLocalizedString("Delete sideloaded apps to free up App ID slots.", comment: "")
             guard let appName = self.appName, let requiredAppIDs = self.requiredAppIDs, let availableAppIDs = self.availableAppIDs, let date = self.expirationDate else { return baseMessage }

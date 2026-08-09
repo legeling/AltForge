@@ -23,8 +23,8 @@ extension JITError
     }
     
     static func dependencyNotFound(_ dependency: String?, file: StaticString = #file, line: Int = #line) -> JITError {
-        let errorFailure = NSLocalizedString("AltServer requires additional dependencies to enable JIT on iOS 17.", comment: "")
-        return JITError(code: .dependencyNotFound, errorFailure: errorFailure, dependency: dependency, faq: "https://faq.altstore.io/how-to-use-altstore/altjit", sourceFile: file, sourceLine: UInt(line))
+        let errorFailure = NSLocalizedString("AltForge Server requires additional dependencies to enable JIT on iOS 17.", comment: "")
+        return JITError(code: .dependencyNotFound, errorFailure: errorFailure, dependency: dependency, faq: "https://github.com/legeling/AltForge/blob/marketplace/docs/guides/altjit.md", sourceFile: file, sourceLine: UInt(line))
     }
 }
 
@@ -60,7 +60,7 @@ struct JITError: ALTLocalizedError
         switch self.code
         {
         case .processNotRunning: return NSLocalizedString("Make sure the app is running in the foreground on your device then try again.", comment: "")
-        case .dependencyNotFound: return NSLocalizedString("Please follow the instructions on the AltStore FAQ to install all required dependencies, then try again.", comment: "")
+        case .dependencyNotFound: return NSLocalizedString("Please follow the AltForge AltJIT guide to install all required dependencies, then try again.", comment: "")
         }
     }
 }

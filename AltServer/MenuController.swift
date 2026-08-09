@@ -32,6 +32,8 @@ class MenuController<T: MenuDisplayable & Hashable>: NSObject, NSMenuDelegate
     }
     
     var action: ((T) -> Void)?
+    var titleHandler: ((T) -> String)?
+    var imageHandler: ((T) -> NSImage?)?
     
     var submenuHandler: ((T) -> NSMenu)?
     private var submenus = [T: NSMenu]()
@@ -68,6 +70,7 @@ class MenuController<T: MenuDisplayable & Hashable>: NSObject, NSMenuDelegate
         if let text = self.placeholder, self.items.isEmpty
         {
             menuItem.title = text
+            menuItem.image = nil
             menuItem.isEnabled = false
             menuItem.target = nil
             menuItem.action = nil
@@ -76,7 +79,9 @@ class MenuController<T: MenuDisplayable & Hashable>: NSObject, NSMenuDelegate
         {
             let item = self.items[index]
             
-            menuItem.title = item.name
+            menuItem.title = self.titleHandler?(item) ?? item.name
+            menuItem.image = self.imageHandler?(item)
+            menuItem.image?.isTemplate = true
             menuItem.isEnabled = true
             menuItem.target = self
             menuItem.action = #selector(MenuController.performAction(_:))

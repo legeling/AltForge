@@ -42,10 +42,10 @@ struct AnisetteError: ALTLocalizedError
     var errorFailureReason: String {
         switch self.code
         {
-        case .aosKitFailure: return NSLocalizedString("AltServer could not retrieve anisette data from AOSKit.", comment: "")
+        case .aosKitFailure: return NSLocalizedString("AltForge Server could not retrieve anisette data from AOSKit.", comment: "")
         case .missingValue:
             let valueName = self.value.map { "anisette data value “\($0)”" } ?? NSLocalizedString("anisette data values.", comment: "")
-            return String(format: NSLocalizedString("AltServer could not retrieve %@.", comment: ""), valueName)
+            return String(format: NSLocalizedString("AltForge Server could not retrieve %@.", comment: ""), valueName)
         }
     }
 }

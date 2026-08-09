@@ -24,8 +24,8 @@ struct TextLockScreenWidget: Widget
                 ComplicationView(entry: entry, style: .text)
             }
             .supportedFamilies([.accessoryCircular])
-            .configurationDisplayName("AltWidget (Text)")
-            .description("View remaining days until AltStore expires.")
+            .configurationDisplayName("AltForge (Text)")
+            .description("View remaining days until AltForge expires.")
         }
         else
         {
@@ -47,8 +47,8 @@ struct IconLockScreenWidget: Widget
                 ComplicationView(entry: entry, style: .icon)
             }
             .supportedFamilies([.accessoryCircular])
-            .configurationDisplayName("AltWidget (Icon)")
-            .description("View remaining days until AltStore expires.")
+            .configurationDisplayName("AltForge (Icon)")
+            .description("View remaining days until AltForge expires.")
         }
         else
         {

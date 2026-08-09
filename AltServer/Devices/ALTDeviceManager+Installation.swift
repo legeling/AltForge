@@ -195,7 +195,7 @@ extension ALTDeviceManager
                                                                             }
                                                                             catch
                                                                             {
-                                                                                finish(.failure(error), failure: NSLocalizedString("AltServer could not fetch new provisioning profiles.", comment: ""))
+                                                                                finish(.failure(error), failure: NSLocalizedString("AltForge Server could not fetch new provisioning profiles.", comment: ""))
                                                                             }
                                                                         }
                                                                     }
@@ -234,7 +234,7 @@ extension ALTDeviceManager
                     }
                     catch
                     {
-                        finish(.failure(error), failure: NSLocalizedString("AltServer could not sign in with your Apple ID.", comment: ""))
+                        finish(.failure(error), failure: NSLocalizedString("AltForge Server could not sign in with your Apple ID.", comment: ""))
                     }
                 }
             }
@@ -500,8 +500,8 @@ private extension ALTDeviceManager
                                         
                     DispatchQueue.main.sync {
                         let alert = NSAlert()
-                        alert.messageText = NSLocalizedString("Multiple AltServers Not Supported", comment: "")
-                        alert.informativeText = NSLocalizedString("Please use the same AltServer you previously used with this Apple ID, or else apps installed with other AltServers will stop working.\n\nAre you sure you want to continue?", comment: "")
+                        alert.messageText = NSLocalizedString("Multiple AltForge Servers Not Supported", comment: "")
+                        alert.informativeText = NSLocalizedString("Please use the same AltForge Server you previously used with this Apple ID, or apps installed with another server may stop working.\n\nAre you sure you want to continue?", comment: "")
                         
                         alert.addButton(withTitle: NSLocalizedString("Continue", comment: ""))
                         alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))

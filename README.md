@@ -35,7 +35,7 @@ AltForge is an independent derivative of [AltStore](https://github.com/altstorei
 <table>
   <tr>
     <td width="50%"><strong>Unicode without renaming</strong><br>Install IPA files with Chinese and other Unicode display names or resource paths while keeping the original on-device name.</td>
-    <td width="50%"><strong>English + 简体中文</strong><br>Use the existing interface in English or Simplified Chinese, including iOS per-app language selection.</td>
+    <td width="50%"><strong>English + 简体中文</strong><br>Use English or Simplified Chinese through iOS per-app language selection and the AltForge Server settings window.</td>
   </tr>
   <tr>
     <td width="50%"><strong>Classic-first maintenance</strong><br>Keep the familiar Apple ID and AltServer workflow without silently changing the distribution model.</td>
@@ -52,7 +52,7 @@ AltForge is an independent derivative of [AltStore](https://github.com/altstorei
 | **Apple App ID compatibility** | Converts only the Apple App ID description to safe ASCII without changing the app's Unicode display name. |
 | **Developer teams** | Supports individual, organization, and free developer-team fallback in both client and AltServer installation paths. |
 | **Maintenance fixes** | Prevents negative expiration-day displays and makes macOS error details selectable without discarding attributed formatting. |
-| **Build and documentation** | Defines bounded iOS, macOS, and Windows CI/release workflows and maintains a complete spec, verification, issue, and change history under [`docs/`](docs/README.md). |
+| **Build and documentation** | Uses one tag-driven workflow for bounded iOS, macOS, and Windows validation, packaging, and release, with a complete spec and change history under [`docs/`](docs/README.md). |
 
 General compatibility fixes remain separate from branding where practical so they can be contributed upstream.
 
@@ -78,12 +78,20 @@ A tagged release is expected to provide:
 | Artifact | Purpose |
 |---|---|
 | `AltForge.ipa` | Unsigned Classic package that AltServer signs for the selected Apple ID, team, and device. |
-| `AltForge-AltServer-macOS.zip` | Universal macOS AltServer application. |
+| `AltForge-AltServer-macOS.dmg` | Universal macOS AltServer disk image with an Applications shortcut. |
 | `AltForge-AltServer-Windows.zip` | Portable Win32 AltServer application and required runtime DLLs. |
 | `apps.json` | Official AltForge source metadata. |
+| `flags.json` | Classic feature flags owned by this repository; empty by default. |
+| `sources.json` | Trusted and blocked source policy owned by this repository. |
+| `recommended-sources.json` | Optional recommended source collections; empty by default. |
+| `developerdisks.json` | Reviewed Developer Disk URL index used by both desktop servers; referenced disk files remain external. |
 | `SHA256SUMS.txt` | SHA-256 checksums for release artifacts. |
 
-The IPA cannot be installed by tapping it on an iPhone or iPad. The current macOS archive is not Developer ID signed or notarized, and the Windows ZIP is also unsigned. Windows users must install the desktop versions of iTunes and iCloud from Apple's website, not the Microsoft Store. Extract the complete ZIP so every DLL remains beside `AltServer.exe`, and verify the published checksum before installation.
+Only a matching `vX.Y.Z` tag starts the Release workflow. Hosted macOS and Windows runners build and package all platform artifacts, validate the IPA/DMG structure, product identity, version, Universal architectures and runtime files, verify the final checksum manifest, then create a Draft Release for manual review.
+
+AltForge-owned update and configuration metadata is published only from this repository. Apple services, Patreon, third-party sources, build dependencies, and Developer Disk files retain their real external owners; AltForge publishes only the reviewed disk URL index. Classic builds do not contact the upstream Marketplace or Fediverse control services. Patreon sign-in is disabled unless a builder supplies their own OAuth credentials and HTTPS redirect URI.
+
+The IPA cannot be installed by tapping it on an iPhone or iPad. The current macOS DMG is not Developer ID signed or notarized, and the Windows ZIP is also unsigned. Mount the DMG and drag `AltForge Server.app` to Applications; see the [local macOS validation guide](docs/guides/local-macos-validation.md) for a source build and first-launch procedure. Windows users must install the desktop versions of iTunes and iCloud from Apple's website, not the Microsoft Store. Extract the complete ZIP so every DLL remains beside `AltServer.exe`, and verify the published checksum before installation.
 
 ## Requirements
 
@@ -134,15 +142,18 @@ The Windows toolchain and repeatable PowerShell build are documented in [`AltSer
 <details>
 <summary><strong>Release maintainer workflow</strong></summary>
 
-Semantic version tags trigger the release workflow:
+AltForge starts its independent release sequence at `2.4.0`. Upstream AltStore and AltServer versions are recorded only as source provenance and do not control AltForge's version. Only a numeric `vX.Y.Z` tag triggers automated builds and Draft Release creation. The root `VERSION` file is the product-version source of truth for AltForge, macOS AltServer, and Windows AltServer; ordinary pushes and pull requests do not start a GitHub Actions build.
 
 ```sh
-VERSION=2.3.4
-git tag "v${VERSION}"
-git push origin "v${VERSION}"
+version="$(tr -d '[:space:]' < VERSION)"
+ruby Scripts/check_release_version.rb
+ruby Scripts/test_release_metadata.rb
+ruby Scripts/test_repository_contract.rb
+git tag "v${version}"
+git push origin "v${version}"
 ```
 
-The workflow builds an unsigned IPA, a universal macOS AltServer archive, and a portable Win32 AltServer archive, generates `apps.json` and checksums, and attaches them to a GitHub Release. Only publish after completing the documented quality gates.
+The workflow rejects a tag that differs from `VERSION`, then builds an unsigned IPA, a universal macOS AltServer DMG, and a portable Win32 AltServer archive, generates the source/configuration metadata and checksums, and creates a **draft** GitHub Release. CI build numbers use the GitHub run number and remain distinct from the shared product version. A maintainer must download and verify the draft before publishing it; an unpublished draft does not change `releases/latest`.
 
 </details>
 
@@ -176,7 +187,7 @@ Start with the [documentation index](docs/README.md) and [project rules](AGENTS.
 
 - Windows source and CI are included, but the first hosted build and sanitized Windows device smoke test remain required before treating its release artifact as verified.
 - The imported Windows notification-area interface currently remains in English; the English/Simplified Chinese language switch is implemented in the iOS client.
-- The macOS release archive is not yet Developer ID signed or notarized.
+- The macOS release DMG is not yet Developer ID signed or notarized, so public distribution still requires an explicit Gatekeeper warning until a signing/notarization plan is implemented.
 - Unicode archive handling has implementation-level validation, but persistent AltSign fixtures and broader real-device coverage are still being expanded.
 
 ## Upstream And License

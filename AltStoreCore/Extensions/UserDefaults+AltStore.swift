@@ -160,7 +160,11 @@ public extension UserDefaults
 public extension UserDefaults
 {
     // Remote flags
-    
+
+    #if MARKETPLACE
     @NSManaged var fediverseInteractionsDisabled: Bool
+    #else
+    var fediverseInteractionsDisabled: Bool { true }
+    #endif
     @NSManaged var epicGamesExcludedRegions: [String]?
 }

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../assets/brand/altforge-wordmark.png" width="420" alt="AltForge">
+</p>
+
 # Implementation Plan
 
 ## 当前阶段
@@ -16,12 +20,14 @@ AltForge 已有完整产品代码，不采用重写策略。当前实施重点�
 
 ### M1：构建与发布收敛
 
-- 验证 CI 的 iOS Simulator、AltTests 和 macOS AltServer 构建。
+- 验证 tag-driven Release 的 iOS Simulator、AltTests 和 macOS AltServer 构建。
 - 验证 release metadata 脚本的输入校验、JSON 内容和 SHA-256。
+- 用 repository policy contract 锁定 tag-only 触发、Draft gate、自有远程配置、历史 source 上限与用户入口。
+- 使用 CI/本地共用脚本生成带 Applications 快捷方式且经过 image verify 的 macOS DMG，并保留本机试装指南。
 - 在 GitHub Windows runner 验证 AltServer Win32 build、runtime DLL contract 和 Release ZIP。
 - 保持 Xcode 26 / Swift 5.0 language mode 文档与构建配置一致；未来 Swift 6 migration 使用独立 change。
 
-完成标准：干净 checkout 能使用锁定依赖完成 CI；失败不遗留不完整发布。
+完成标准：干净 checkout 能使用锁定依赖完成标签流水线；失败不遗留不完整发布；成功只产生待人工审核的 Draft。
 
 ### M2：Unicode 与安装回归自动化
 
@@ -46,7 +52,7 @@ AltForge 已有完整产品代码，不采用重写策略。当前实施重点�
 
 ## 容量与资源
 
-- Apple CI job 上限为 45 分钟；Windows CI 与各 release build job 上限为 60 分钟，并启用 concurrency cancellation。
+- Apple 与 Windows release build job 上限为 60 分钟；同一标签只保留一套发布流水线，禁止无界并发。
 - Swift package 与 CocoaPods 下载属于主要网络成本，应复用 runner cache 时评估一致性，不得使用无限缓存。
 - IPA 处理成本与 archive entries 和总字节线性相关；测试 fixture 保持小型但覆盖格式边界。
 - 真实设备、Apple ID、证书和 App ID quota 是稀缺资源，验证应有明确步骤和清理计划。
@@ -54,5 +60,5 @@ AltForge 已有完整产品代码，不采用重写策略。当前实施重点�
 ## 回滚
 
 - 通用兼容修复回滚：恢复 AltSign gitlink 到上一已知提交，并同步 `.gitmodules`/ADR/change 记录。
-- CI/release 回滚：撤回 workflow 变更，不删除已发布 tag；错误 release 通过 GitHub Release 标记或新 patch release 纠正。
+- Release workflow 回滚：撤回 workflow 变更，不删除已发布 tag；错误 release 通过 GitHub Release 标记或新 patch release 纠正。
 - 数据模型变化必须提供 Core Data migration；当前文档初始化不涉及数据迁移。
