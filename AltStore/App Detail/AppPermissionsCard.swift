@@ -37,8 +37,8 @@ extension AppPermissionsCard
 @available(iOS 16, *)
 struct AppPermissionsCard<Permission: AppPermissionProtocol>: View
 {
-    let title: LocalizedStringKey
-    let description: LocalizedStringKey
+    let title: String
+    let description: String
     let tintColor: Color
     
     let permissions: [Permission]
@@ -63,7 +63,7 @@ struct AppPermissionsCard<Permission: AppPermissionProtocol>: View
     }
     
     var body: some View {
-        let title = Text(title)
+        let title = Text(verbatim: title)
             .font(.title3)
             .bold()
             .minimumScaleFactor(0.1) // Avoid clipping during matchedGeometryEffect animation.
@@ -85,7 +85,7 @@ struct AppPermissionsCard<Permission: AppPermissionProtocol>: View
                 }
                 
                 VStack(spacing: 20) {
-                    Text(description)
+                    Text(verbatim: description)
                         .font(.subheadline)
                         .fixedSize(horizontal: false, vertical: true)
                     
@@ -204,12 +204,12 @@ struct AppPermissionsCard<Permission: AppPermissionProtocol>: View
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    init(title: LocalizedStringKey, description: LocalizedStringKey, tintColor: Color, permissions: [Permission])
+    init(title: String, description: String, tintColor: Color, permissions: [Permission])
     {
         self.init(title: title, description: description, tintColor: tintColor, permissions: permissions, selectedPermission: nil)
     }
     
-    fileprivate init(title: LocalizedStringKey, description: LocalizedStringKey, tintColor: Color, permissions: [Permission], selectedPermission: Permission? = nil)
+    fileprivate init(title: String, description: String, tintColor: Color, permissions: [Permission], selectedPermission: Permission? = nil)
     {
         self.title = title
         self.description = description

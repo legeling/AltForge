@@ -4,6 +4,8 @@
 
 ## 当前变更
 
-- [`CHG-20260808-003`](CHG-20260808-003-upstream-maintenance-fixes/README.md)：上游维护修复筛选与移植，状态为 In progress。
+| ID | 标题 | 状态 |
+|---|---|---|
+| [`CHG-20260809-002`](CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 
 已完成工作不得继续留在这里；完成 converge 后移动到 `completed/YYYY/MM/`，被放弃或替代时移动到 `legacy/YYYY/MM/`。

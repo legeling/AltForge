@@ -9,10 +9,11 @@
 | Localization | `FR-006`, `FR-007` | `DES-006` | `TEST-008` | Build resources present, UI matrix missing | `T-004` |
 | Refresh | `FR-008` | `DES-001`-`DES-003` | `TEST-015`, `TEST-017` | Expiration display guard present; failure coverage low | `T-008`, `T-010` |
 | Source identity | `FR-009`, `FR-010` | `DES-007` | `TEST-009` | Automated | maintenance |
-| Error transport | `FR-011` | `DES-008` | `TEST-010`, `TEST-017` | Serialization automated; macOS selection UI pending | `T-010` |
+| Error transport | `FR-011` | `DES-008` | `TEST-010`, `TEST-017` | Serialization partial; zh-Hans spacing assertions and macOS selection UI pending | `T-006`, `T-010` |
 | JIT | `FR-012` | `DES-003` | `TEST-014` | Unknown | `T-009` |
-| Build | `FR-014` | `DES-009` | `TEST-011`, `TEST-012` | CI defined | `T-002` |
-| Release | `FR-015`, `FR-016` | `DES-010` | `TEST-013` | Workflow/script present, contract test missing | `T-007` |
+| Build | `FR-014` | `DES-009` | `TEST-011`, `TEST-012` | Apple CI defined | `T-002` |
+| Release | `FR-015`, `FR-016` | `DES-010` | `TEST-013` | Ruby fixture covers metadata, hashes, Windows artifact and invalid input | `T-007` |
+| Windows AltServer | `FR-018`, `FR-019` | `DES-011` | `TEST-018`, `TEST-019` | Source/workflow present; hosted build and device E2E pending | `T-012` |
 
 ## 风险排序
 

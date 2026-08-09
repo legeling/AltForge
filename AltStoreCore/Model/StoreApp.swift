@@ -30,13 +30,7 @@ public extension StoreApp
     
     #else
     
-    #if ALPHA
-    static let altstoreAppID = "com.rileytestut.AltStore.Alpha"
-    #elseif BETA
-    static let altstoreAppID = "com.rileytestut.AltStore.Beta"
-    #else
-    static let altstoreAppID = "com.rileytestut.AltStore"
-    #endif
+    static let altstoreAppID = "com.legeling.AltForge"
     
     #endif
     

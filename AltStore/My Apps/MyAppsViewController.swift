@@ -404,7 +404,7 @@ private extension MyAppsViewController
             
             let currentDate = Date()
             
-            let numberOfDays = installedApp.expirationDate.numberOfCalendarDays(since: currentDate)
+            let numberOfDays = max(installedApp.expirationDate.numberOfCalendarDays(since: currentDate), 0)
             let numberOfDaysText: String
             
             if numberOfDays == 1
@@ -1695,8 +1695,10 @@ private extension MyAppsViewController
                             try context.save()
                         }
                         
+                        #if MARKETPLACE
                         // Also update installed apps as fallback.
                         await AppMarketplace.shared.update()
+                        #endif
                     }
                     catch let error as AppManager.FetchSourcesError
                     {

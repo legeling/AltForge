@@ -32,7 +32,7 @@
 - 构建入口：`AltStore.xcworkspace`。
 - 工具链：Xcode 26；项目当前 `SWIFT_VERSION` 为 5.0，两份根 README 均已明确区分工具链版本和 Swift language mode。未来迁移 Swift 6 language mode 需要独立 change 与验证。
 - 最低系统：iOS 17.4、macOS 11；`AltJIT` 最低 macOS 13。
-- 发布产物：未签名 IPA、未公证的 macOS AltServer、`apps.json` 与校验和。
+- 发布产物：未签名 IPA、未公证的 macOS AltServer、未签名的 Windows AltServer ZIP、`apps.json` 与校验和。
 - 已知重点：Unicode IPA 兼容、简体中文、本地构建可复现性、签名安装链路测试。
 
 ## 维护规则

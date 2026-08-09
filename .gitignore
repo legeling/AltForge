@@ -28,3 +28,18 @@ xcuserdata
 
 ## Obj-C/Swift specific
 *.hmap
+
+# AltServer for Windows
+AltServer-Windows/.vs/
+AltServer-Windows/Debug/
+AltServer-Windows/Release/
+AltServer-Windows/Win32/
+AltServer-Windows/x64/
+AltServer-Windows/x86/
+AltServer-Windows/obj/
+AltServer-Windows/vcpkg_installed/
+AltServer-Windows/Dependencies/dirent/
+AltServer-Windows/Dependencies/libimobiledevice-vs/
+AltServer-Windows/Dependencies/mDNSResponder/
+AltServer-Windows/**/*.user
+AltServer-Windows/**/*.suo

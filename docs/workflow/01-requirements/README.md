@@ -17,7 +17,7 @@
 - `FR-002` 用户必须能在 AltForge 中选择或下载 IPA，并通过可用 AltServer 完成认证、App ID 注册、provisioning、重签和设备安装。
 - `FR-003` 安装链路必须保留应用 bundle identifier、权限、extension 和版本约束所需的信息，并对不兼容或无效包返回明确错误。
 - `FR-004` App ID 注册名称必须满足 Apple 服务的 ASCII 限制，但不得因此修改设备桌面上的 Unicode 显示名。
-- `FR-017` 认证返回多个开发团队时，必须优先复用已保存团队；否则按个人、组织、免费团队的顺序选择，不能因只有组织团队而中止安装。
+- `FR-017` 认证返回多个开发团队时，有已保存团队信息的客户端流程必须优先复用；其余情况按个人、组织、免费团队的顺序选择，不能因只有组织团队而中止安装。
 
 ### Unicode 与本地化
 
@@ -40,14 +40,16 @@
 ### 构建与发布
 
 - `FR-014` 维护者必须能从递归 submodule、CocoaPods lockfile 和 Swift package resolution 构建 iOS 与 macOS 目标。
-- `FR-015` 版本标签必须生成 `AltForge.ipa`、`AltForge-AltServer-macOS.zip`、`apps.json` 和 `SHA256SUMS.txt`。
+- `FR-015` 版本标签必须生成 `AltForge.ipa`、`AltForge-AltServer-macOS.zip`、`AltForge-AltServer-Windows.zip`、`apps.json` 和 `SHA256SUMS.txt`。
 - `FR-016` 发布 source 的版本、build、最低系统、下载 URL、大小和 SHA-256 必须与实际 IPA 一致。
+- `FR-018` 维护者必须能从同一仓库内的固定上游源码和固定依赖构建 Windows AltServer；Windows 服务必须从本仓库官方 source 下载 `com.legeling.AltForge`。
+- `FR-019` Windows Release ZIP 必须包含可执行文件及其运行时 DLL，且不得包含 Apple ID、证书、anisette data、设备标识或 Apple 软件安装包。
 
 ## 非功能需求
 
 - `NFR-001 Correctness`：兼容性修复不得破坏签名内容、entitlement、provisioning profile 或安装原子性。
 - `NFR-002 Security`：Apple ID、密码、证书、private key、anisette data、Cookie、设备 UDID 和生产凭据不得写入仓库、普通日志或发布产物。
-- `NFR-003 Compatibility`：当前基线为 iOS 17.4、macOS 11；AltJIT 为 macOS 13。目标变化必须同步 README、build settings、source metadata 和验证矩阵。
+- `NFR-003 Compatibility`：当前基线为 iOS 17.4、macOS 11、Windows 10；AltJIT 为 macOS 13。目标变化必须同步 README、build settings、source metadata 和验证矩阵。
 - `NFR-004 Performance`：IPA 解压与重建的时间复杂度应为 `O(entries + bytes)`；文件名解码使用单 entry 有界缓冲，不保留整个 archive 的文件名列表。
 - `NFR-005 Resource control`：网络请求、CI job、设备操作和并发任务必须有超时或上限；临时下载、解压目录和构建产物必须清理。
 - `NFR-006 Maintainability`：优先复用现有 Operation、AltStoreCore model、Shared protocol、AltSign 和 libimobiledevice，不建立重复体系。
@@ -60,14 +62,15 @@
 - `AC-003` 给定不可解析或路径穿越 ZIP entry，系统拒绝安装并释放 archive/file handle。覆盖 `FR-003`、`NFR-002`。
 - `AC-004` 官方 source URL 的 source ID 为 `github.com/legeling/altforge/releases/latest/download/apps.json`。覆盖 `FR-009`、`FR-010`。
 - `AC-005` CI 在无代码签名条件下完成 iOS Simulator 与 macOS AltServer 构建，并运行 source identity 测试。覆盖 `FR-014`。
-- `AC-006` 语义版本标签生成四类预期产物，校验和与文件内容一致。覆盖 `FR-015`、`FR-016`。
+- `AC-006` 语义版本标签生成五类预期产物，校验和与文件内容一致。覆盖 `FR-015`、`FR-016`、`FR-019`。
 - `AC-007` 错误经过 client/server 序列化后仍保留语义字段且不包含不可安全传输的对象。覆盖 `FR-011`。
 - `AC-008` 新增简体中文文本在系统语言和 per-app language 切换后可正确显示。覆盖 `FR-006`、`FR-007`。
-- `AC-009` 给定仅有组织团队的 Apple Developer 账户，客户端和 AltServer 均选择该团队；有已保存团队时仍优先复用。覆盖 `FR-017`。
+- `AC-009` 给定仅有组织团队的 Apple Developer 账户，客户端和 AltServer 均选择该团队；客户端有已保存团队时仍优先复用。覆盖 `FR-017`。
+- `AC-010` Windows CI 在 60 分钟上限内恢复六个固定源码仓库和固定 vcpkg manifest，完成 Win32 Release build，并生成通过必需 DLL 检查的 ZIP。覆盖 `FR-018`、`FR-019`。
 
 ## 范围外
 
-- Windows 安装器和 Windows AltServer。
+- 已签名的 Windows MSI/MSIX、自动更新 feed 和 Apple 软件再分发。
 - 绕过 Apple 的账号限制或长期签名机制。
 - 在没有凭据方案前承诺 macOS 公证和自动更新渠道。
 - 对所有历史编码进行无歧义猜测；旧式无编码标志 ZIP 只能提供受控兼容 fallback。
@@ -86,3 +89,4 @@
 | `FR-013` | `DES-004`, `DES-009` | `TEST-011`, `TEST-012` | `T-002` |
 | `FR-014` | `DES-009` | `TEST-011`, `TEST-012` | `T-002` |
 | `FR-015`, `FR-016` | `DES-010` | `TEST-013` | `T-007` |
+| `FR-018`, `FR-019` | `DES-011` | `TEST-018`, `TEST-019` | `T-012` |

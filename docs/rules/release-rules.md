@@ -9,7 +9,7 @@
 
 ## 产物
 
-- 当前仓库预期产物为 `AltForge.ipa`、macOS AltServer archive、`apps.json` 和 `SHA256SUMS.txt`；实际 workflow 变化时同步 README、verification 和本文件。
+- 当前仓库预期产物为 `AltForge.ipa`、macOS AltServer archive、Windows AltServer archive、`apps.json` 和 `SHA256SUMS.txt`；实际 workflow 变化时同步 README、verification 和本文件。
 - 产物应来自同一 tag/commit，记录构建环境与 checksum，不手工替换 release 中的同名文件而不更新记录。
 - 未签名 IPA、未 Developer ID 签名或未公证 macOS app 必须准确标注，不能暗示可直接生产分发。
 - Artifact 不得包含开发凭据、profile、证书、DerivedData、调试日志或第三方私有测试包。

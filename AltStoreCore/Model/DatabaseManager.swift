@@ -13,7 +13,7 @@ import Roxas
 
 extension CFNotificationName
 {
-    fileprivate static let willMigrateDatabase = CFNotificationName("com.rileytestut.AltStore.WillMigrateDatabase" as CFString)
+    fileprivate static let willMigrateDatabase = CFNotificationName("com.legeling.AltForge.WillMigrateDatabase" as CFString)
 }
 
 private let ReceivedWillMigrateDatabaseNotification: @convention(c) (CFNotificationCenter?, UnsafeMutableRawPointer?, CFNotificationName?, UnsafeRawPointer?, CFDictionary?) -> Void = { (center, observer, name, object, userInfo) in

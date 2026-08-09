@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/GlassIconDark.png">
-    <img src="AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/GlassIcon.png" width="132" alt="AltForge 应用图标">
-  </picture>
+  <img src="docs/assets/brand/altforge-app-icon.png" width="132" alt="AltForge 应用图标">
 </p>
 
 <h1 align="center">AltForge</h1>
@@ -18,6 +15,7 @@
   <a href="https://swift.org/"><img alt="Swift 5.0 语言模式" src="https://img.shields.io/badge/Swift_language_mode-5.0-f05138?style=flat-square"></a>
   <img alt="iOS 17.4 及以上" src="https://img.shields.io/badge/iOS-17.4%2B-111111?style=flat-square">
   <img alt="macOS 11 及以上" src="https://img.shields.io/badge/macOS-11%2B-6e7781?style=flat-square">
+  <img alt="Windows 10 及以上" src="https://img.shields.io/badge/Windows-10%2B-0078d4?style=flat-square">
   <a href="LICENSE"><img alt="AGPL 第三版" src="https://img.shields.io/badge/license-AGPL_v3-c52a42?style=flat-square"></a>
 </p>
 
@@ -56,7 +54,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 | **Apple App ID 兼容** | 只把 Apple App ID description 转为安全 ASCII，不修改应用的 Unicode 显示名。 |
 | **开发团队** | 客户端和 AltServer 安装链路均支持个人、组织和免费开发团队 fallback。 |
 | **维护修复** | 防止已过期应用显示负数天数；macOS 错误详情保留富文本格式并支持选择复制。 |
-| **构建与文档** | 提供有边界的 CI/release workflow，并在 [`docs/`](docs/README.md) 中维护完整 spec、验证、Issue 和变更历史。 |
+| **构建与文档** | 提供有边界的 iOS、macOS、Windows CI/release workflow，并在 [`docs/`](docs/README.md) 中维护完整 spec、验证、Issue 和变更历史。 |
 
 通用兼容性修复会尽量与品牌改动分离，以便在合适时回馈给上游项目。
 
@@ -66,7 +64,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
   <tr>
     <td width="50%" valign="top">
       <strong>安装发布版本</strong><br><br>
-      下载 macOS AltServer，连接并信任设备，然后在 AltServer 菜单中选择 <strong>Install AltForge</strong>。<br><br>
+      下载 macOS 或 Windows AltServer，连接并信任设备，然后在 AltServer 菜单中选择 <strong>Install AltForge</strong>。<br><br>
       <a href="https://github.com/legeling/AltForge/releases"><strong>打开 GitHub Releases →</strong></a>
     </td>
     <td width="50%" valign="top">
@@ -83,19 +81,21 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 |---|---|
 | `AltForge.ipa` | 未签名的 Classic 安装包，由 AltServer 针对所选 Apple ID、开发团队和设备完成签名。 |
 | `AltForge-AltServer-macOS.zip` | Universal macOS AltServer 应用。 |
+| `AltForge-AltServer-Windows.zip` | 便携式 Win32 AltServer 应用及所需运行时 DLL。 |
 | `apps.json` | AltForge 官方 source metadata。 |
 | `SHA256SUMS.txt` | 发布产物的 SHA-256 校验和。 |
 
-不能通过在 iPhone 或 iPad 上直接点击 IPA 完成安装。当前 macOS 压缩包尚未使用 Developer ID 签名或 notarization，因此 macOS 可能要求通过 Finder 右键菜单打开 AltServer。安装前请核对发布页提供的 checksum。
+不能通过在 iPhone 或 iPad 上直接点击 IPA 完成安装。当前 macOS 压缩包尚未使用 Developer ID 签名或 notarization，Windows ZIP 同样尚未签名。Windows 用户必须从 Apple 官网安装桌面版 iTunes 和 iCloud，不能使用 Microsoft Store 版本。请完整解压 ZIP，让全部 DLL 与 `AltServer.exe` 保持在同一目录，并在安装前核对 checksum。
 
 ## 环境要求
 
 | 组件 | 最低要求 |
 |---|---|
 | AltForge | iOS 或 iPadOS 17.4 |
-| AltServer | macOS 11 |
+| AltServer | macOS 11 或 Windows 10 |
 | AltJIT | macOS 13 |
-| 构建环境 | 安装 Xcode 26、CocoaPods、Git 并支持递归 submodule 的 macOS |
+| Apple 构建环境 | 安装 Xcode 26、CocoaPods、Git 并支持递归 submodule 的 macOS |
+| Windows 构建环境 | 安装 Visual Studio 2022 C++、PowerShell、Git 和 vcpkg 的 Windows |
 | Swift | Xcode 26 工具链下的 Swift 5.0 language mode |
 
 Apple 的签名流程需要一个 Apple ID 和可用的 Apple 开发团队。AltForge 尚未迁移到 Swift 6 language mode。
@@ -105,7 +105,7 @@ Apple 的签名流程需要一个 Apple ID 和可用的 Apple 开发团队。Alt
 ```mermaid
 flowchart LR
     Package["GitHub Release 或本地 IPA"] --> Client["AltForge<br/>iOS / iPadOS"]
-    Client <-->|"发现 · 发送 · 刷新"| Server["AltServer<br/>macOS"]
+    Client <-->|"发现 · 发送 · 刷新"| Server["AltServer<br/>macOS / Windows"]
     Server -->|"签名 · 安装"| Device["iPhone / iPad"]
     Server <-->|"证书 · Profiles"| Apple["Apple Developer Services"]
 ```
@@ -131,6 +131,8 @@ open AltStore.xcworkspace
 
 可重复使用的命令行检查记录在[验证文档](docs/workflow/04-verification/README.md)中。签名、provisioning、安装和 JIT 相关改动仍需要脱敏的真实设备验证计划。
 
+Windows 工具链和可重复执行的 PowerShell 构建记录在 [`AltServer-Windows/README.md`](AltServer-Windows/README.md)。
+
 <details>
 <summary><strong>发布维护者流程</strong></summary>
 
@@ -142,7 +144,7 @@ git tag "v${VERSION}"
 git push origin "v${VERSION}"
 ```
 
-该流程会构建未签名 IPA 和 universal macOS AltServer，生成 `apps.json` 与 checksum，然后把产物附加到 GitHub Release。只有完成文档中的质量门禁后才能发布。
+该流程会构建未签名 IPA、universal macOS AltServer 和便携式 Win32 AltServer，生成 `apps.json` 与 checksum，然后把产物附加到 GitHub Release。只有完成文档中的质量门禁后才能发布。
 
 </details>
 
@@ -152,6 +154,7 @@ git push origin "v${VERSION}"
 |---|---|
 | `AltStore/` | iOS 用户界面和应用管理流程 |
 | `AltServer/` | macOS 认证、签名准备和设备安装 |
+| `AltServer-Windows/` | Windows 认证、签名准备、设备安装和打包 |
 | `AltStoreCore/` | 共享领域模型、持久化、source 和工具 |
 | `Shared/` | 客户端/服务端协议和共享应用行为 |
 | `Dependencies/AltSign/` | Apple Developer API、签名、应用模型和 IPA/ZIP 处理 |
@@ -173,7 +176,8 @@ git push origin "v${VERSION}"
 
 ## 已知限制
 
-- 当前没有 Windows AltServer build target。
+- Windows 源码和 CI 已进入仓库，但首个 hosted build 与脱敏 Windows 真机 smoke test 仍需完成，之后才能把对应产物视为已验证。
+- 当前导入的 Windows 通知区域界面仍沿用上游英文；英文/简体中文语言切换已在 iOS 客户端实现。
 - macOS 发布包尚未使用 Developer ID 签名或 notarization。
 - Unicode archive 处理已经通过实现级验证，但持久化 AltSign fixture 和更广泛的真实设备覆盖仍在补充。
 

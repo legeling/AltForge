@@ -17,7 +17,7 @@ GitHub Release / third-party source
         |  AppManager + Operations
         |  Network.framework / server protocol
         v
-       AltServer macOS
+       AltServer macOS / Windows
         |  AltSign + Apple Developer services
         |  libimobiledevice / device services
         v
@@ -49,7 +49,7 @@ IPA 是大对象，传输和落盘应避免重复复制；协议变更必须保�
 5. 使用 AltSign 重签并通过设备服务安装。
 6. 把结构化错误返回客户端或 macOS UI。
 
-团队选择在客户端认证和 AltServer 安装两条路径中保持一致：先匹配已保存的 team identifier；没有匹配时依次选择个人、组织、免费团队。团队列表规模很小，现有实现最多进行三次线性扫描，时间复杂度仍为 `O(n)`，不引入额外缓存或跨账户状态。
+团队选择在客户端认证和 AltServer 安装两条路径中使用相同 fallback：依次选择个人、组织、免费团队；客户端还会在 fallback 前匹配本地已保存的 team identifier。团队列表规模很小，现有实现最多进行三次线性扫描，时间复杂度仍为 `O(n)`，不引入额外缓存或跨账户状态。
 
 外部调用必须有失败出口；下载文件、解压目录、证书和连接必须按单次任务生命周期释放。
 
@@ -95,7 +95,17 @@ Classic 版本必须使用未定义 `MARKETPLACE` 且包含 Apple 认证所需 c
 
 ### `DES-010` 发布流水线
 
-`v*` 标签触发 release workflow：校验语义版本、构建 unsigned iOS app、打包 IPA、构建 universal macOS app、生成 source/checksum、发布 GitHub Release。产物先写入 runner 临时目录，不回写仓库。
+`v*` 标签触发 release workflow：校验语义版本，并行构建 unsigned iOS app、universal macOS app 和 Win32 Windows AltServer，再汇总 source/checksum 并发布 GitHub Release。任一平台失败时 publish job 不运行。产物先写入 runner 临时目录，不回写仓库。
+
+### `DES-011` Windows AltServer
+
+`AltServer-Windows/` 是官方 Windows 1.7.4 源码的单仓库快照，保留 C++ AltSign、libimobiledevice 和设备服务分层。产品 source 固定指向本仓库 `apps.json`，安装 bundle identifier 为 `com.legeling.AltForge`；内部历史类型和协议 error domain 不批量改名，以降低协议回归风险。
+
+上游两个 gitlink、libimobiledevice 构建所需的三个源码树与 Apple 开源 mDNSResponder 由 PowerShell 按 commit 恢复，存在不同 revision 时直接失败，不静默覆盖。cpprestsdk、OpenSSL、PCRE2 和 zlib 由固定 vcpkg baseline 提供；仓库级 MSBuild targets 只把 manifest include/library 路径注入 Win32 项目，并为 imobiledevice/AltServer 补齐 OpenSSL 与 zlib 链接契约。每个源码仓库最多三次 fetch，CI job 总时限 60 分钟；不存在无界并发。Windows Release 使用 Win32 ZIP，以兼容 32/64 位 Windows，并在压缩前检查 executable、device libraries、DNS-SD、HTTP、OpenSSL、PCRE2、zlib 和 VC runtime DLL。
+
+官方 Windows 树中的 Apple corecrypto 预编译库及 headers 受限于禁止再分发的 Internal Use License，因此不进入 AltForge。Windows 认证改用 vcpkg OpenSSL 实现 SHA-256、PBKDF2、HMAC、AES 和大数运算，并按固定 `js-srp-gsa` commit 的 ISC-licensed GSA/SRP-6a 计算规则实现交换；Release 同步携带 ISC 与 OpenSSL license notice。
+
+Windows 自动更新不使用上游 WinSparkle feed，菜单改为打开本仓库 Releases，避免把 AltForge 服务替换成官方二进制。用户仍须自行安装 Apple 官网版 iTunes/iCloud；仓库和 Release 不再分发 Apple 运行时。
 
 ## 可选目标与边界
 
@@ -114,6 +124,7 @@ Classic 版本必须使用未定义 `MARKETPLACE` 且包含 Apple 认证所需 c
 - Archive 解码或路径校验失败：关闭 archive/file handle，删除临时输出，返回 file error。
 - 设备断连：终止当前请求，保留可用于诊断的结构化错误，不无界重试。
 - Release 任一步失败：不创建不完整 GitHub Release；校验和只基于已存在产物生成。
+- Windows 依赖 revision 不匹配或 runtime DLL 缺失：立即停止构建/打包，清理本次 staging directory，不覆盖现有依赖 checkout。
 
 ## 方案取舍
 

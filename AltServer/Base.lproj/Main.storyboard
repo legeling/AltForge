@@ -70,7 +70,6 @@
                         <outlet property="sideloadIPAConnectedDevicesMenu" destination="IuI-bV-fTY" id="QQw-St-HfG"/>
                     </connections>
                 </customObject>
-                <customObject id="Arf-IC-5eb" customClass="SUUpdater"/>
                 <application id="hnw-xV-0zn" sceneMemberID="viewController">
                     <menu key="mainMenu" title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
                         <items>
@@ -85,9 +84,9 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
-                                        <menuItem title="Install AltStore…" id="MJ8-Lt-SSV">
+                                        <menuItem title="Install AltForge…" id="MJ8-Lt-SSV">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Install AltStore…" systemMenu="recentDocuments" id="KJ9-WY-pW1">
+                                            <menu key="submenu" title="Install AltForge…" systemMenu="recentDocuments" id="KJ9-WY-pW1">
                                                 <items>
                                                     <menuItem title="No Connected Devices" id="N5N-3K-XuR">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
@@ -132,10 +131,10 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="mVM-Nm-Zi9"/>
-                                        <menuItem title="Check for Updates..." id="Tnq-gD-Eic" userLabel="Check for Updates">
+                                        <menuItem title="View Releases..." id="Tnq-gD-Eic" userLabel="View Releases">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="checkForUpdates:" target="Arf-IC-5eb" id="7JG-du-nr4"/>
+                                                <action selector="openReleases:" target="Voe-Tx-rLC" id="7JG-du-nr4"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="hmG-xg-qgm"/>

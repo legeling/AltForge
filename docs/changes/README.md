@@ -6,7 +6,7 @@
 
 | ID | 标题 | 状态 |
 |---|---|---|
-| [`CHG-20260808-003`](active/CHG-20260808-003-upstream-maintenance-fixes/README.md) | 上游维护修复筛选与移植 | In progress |
+| [`CHG-20260809-002`](active/CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 
 ## Completed
 
@@ -14,6 +14,7 @@
 |---|---|---|
 | [`CHG-20260808-001`](completed/2026/08/CHG-20260808-001-spec-baseline/README.md) | 建立 Spec Init 文档基线 | 2026-08-08 |
 | [`CHG-20260808-002`](completed/2026/08/CHG-20260808-002-unicode-ipa-compatibility/README.md) | Unicode IPA 安装兼容 | 2026-08-08 |
+| [`CHG-20260808-003`](completed/2026/08/CHG-20260808-003-upstream-maintenance-fixes/README.md) | 上游维护修复筛选与移植 | 2026-08-08 |
 | [`CHG-20260808-004`](completed/2026/08/CHG-20260808-004-project-governance/README.md) | 补齐项目工程治理与提交规则 | 2026-08-08 |
 | [`CHG-20260809-001`](completed/2026/08/CHG-20260809-001-bilingual-readme/README.md) | 建立中英双语 README 与项目改动说明 | 2026-08-09 |
 

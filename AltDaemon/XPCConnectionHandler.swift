@@ -77,7 +77,7 @@ extension XPCConnectionHandler: NSXPCListenerDelegate
         guard
             let codeSigningInfo = signingInfo as? [String: Any],
             let bundleIdentifier = codeSigningInfo["identifier"] as? String,
-            bundleIdentifier.contains("com.rileytestut.AltStore")
+            bundleIdentifier.contains("com.legeling.AltForge")
         else { return false }
         
         let connection = XPCConnection(newConnection)

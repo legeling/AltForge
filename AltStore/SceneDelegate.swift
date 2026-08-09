@@ -171,11 +171,13 @@ private extension SceneDelegate
                     NotificationCenter.default.post(name: AppDelegate.viewAppDeepLinkNotification, object: nil, userInfo: [AppDelegate.viewAppDeepLinkStoreAppKey: storeApp])
                 }
                 
+            #if MARKETPLACE
             case "pal-promo":
                 let queryItems = components.queryItems?.reduce(into: [String: String]()) { $0[$1.name.lowercased()] = $1.value } ?? [:]
                 guard let session = queryItems["session"], let emailAddress = queryItems["email"] else { return }
                 
                 self.redeemPALPromo(session: session, emailAddress: emailAddress)
+            #endif
                 
             default: break
             }
@@ -190,6 +192,7 @@ private extension SceneDelegate
         UIApplication.shared.open(faqURL)
     }
 
+    #if MARKETPLACE
     func redeemPALPromo(session: String, emailAddress: String)
     {
         Task<Void, Never> {
@@ -231,8 +234,10 @@ private extension SceneDelegate
             }
         }
     }
+    #endif
 }
 
+#if MARKETPLACE
 extension SceneDelegate: MarketplaceSceneDelegate
 {
     func scene(_ scene: UIWindowScene, askedToDisplay option: MarketplaceDisplayOption) 
@@ -255,3 +260,4 @@ extension SceneDelegate: MarketplaceSceneDelegate
         }
     }
 }
+#endif

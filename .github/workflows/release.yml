@@ -1,0 +1,182 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Validate release tag
+        id: version
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Expected a semantic version tag such as v2.3.3 or v2.3.3-beta.1" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  apple:
+    needs: prepare
+    runs-on: macos-26
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Select Xcode
+        run: sudo xcode-select --switch /Applications/Xcode_26.6.app
+
+      - name: Install CocoaPods dependencies
+        run: pod install --deployment
+
+      - name: Resolve Swift packages
+        run: >-
+          xcodebuild -resolvePackageDependencies
+          -workspace AltStore.xcworkspace
+          -scheme AltStore
+          -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
+
+      - name: Build unsigned iOS application
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: >-
+          xcodebuild build
+          -workspace AltStore.xcworkspace
+          -scheme AltStore
+          -configuration Release
+          -sdk iphoneos
+          -destination "generic/platform=iOS"
+          -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
+          -derivedDataPath "$RUNNER_TEMP/DerivedData-iOS"
+          MARKETING_VERSION="$VERSION"
+          CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER"
+          CODE_SIGNING_ALLOWED=NO
+
+      - name: Package IPA
+        run: |
+          app="$RUNNER_TEMP/DerivedData-iOS/Build/Products/Release-iphoneos/AltStore.app"
+          test -d "$app"
+          mkdir -p "$RUNNER_TEMP/Artifacts/Payload"
+          ditto "$app" "$RUNNER_TEMP/Artifacts/Payload/AltStore.app"
+          cd "$RUNNER_TEMP/Artifacts"
+          ditto -c -k --sequesterRsrc --keepParent Payload AltForge.ipa
+          find Payload -depth -delete
+
+      - name: Build macOS application
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: >-
+          xcodebuild build
+          -workspace AltStore.xcworkspace
+          -scheme AltServer
+          -configuration Release
+          -destination "generic/platform=macOS"
+          -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
+          -derivedDataPath "$RUNNER_TEMP/DerivedData-macOS"
+          ARCHS="arm64 x86_64"
+          ONLY_ACTIVE_ARCH=NO
+          MARKETING_VERSION="$VERSION"
+          CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER"
+          CODE_SIGNING_ALLOWED=NO
+
+      - name: Package macOS application
+        run: |
+          app="$RUNNER_TEMP/DerivedData-macOS/Build/Products/Release/AltServer.app"
+          test -d "$app"
+          ditto -c -k --sequesterRsrc --keepParent \
+            "$app" "$RUNNER_TEMP/Artifacts/AltForge-AltServer-macOS.zip"
+
+      - name: Upload Apple artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apple
+          path: |
+            ${{ runner.temp }}/Artifacts/AltForge.ipa
+            ${{ runner.temp }}/Artifacts/AltForge-AltServer-macOS.zip
+          if-no-files-found: error
+          retention-days: 3
+
+  windows:
+    needs: prepare
+    runs-on: windows-2025
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+
+      - name: Build and package Windows AltServer
+        shell: pwsh
+        run: >-
+          ./AltServer-Windows/Scripts/build-release.ps1
+          -OutputDirectory "$env:RUNNER_TEMP/Artifacts"
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows
+          path: ${{ runner.temp }}/Artifacts/AltForge-AltServer-Windows.zip
+          if-no-files-found: error
+          retention-days: 3
+
+  publish:
+    needs: [prepare, apple, windows]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out release scripts
+        uses: actions/checkout@v6
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          path: ${{ runner.temp }}/Artifacts
+          merge-multiple: true
+
+      - name: Generate source and checksums
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: >-
+          ruby Scripts/generate_release_metadata.rb
+          --artifacts "$RUNNER_TEMP/Artifacts"
+          --version "$VERSION"
+          --build "$GITHUB_RUN_NUMBER"
+          --date "$(date -u +%Y-%m-%d)"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "$GITHUB_REF_NAME"
+          "$RUNNER_TEMP/Artifacts/AltForge.ipa"
+          "$RUNNER_TEMP/Artifacts/AltForge-AltServer-macOS.zip"
+          "$RUNNER_TEMP/Artifacts/AltForge-AltServer-Windows.zip"
+          "$RUNNER_TEMP/Artifacts/apps.json"
+          "$RUNNER_TEMP/Artifacts/SHA256SUMS.txt"
+          --verify-tag
+          --generate-notes
+          --title "AltForge $GITHUB_REF_NAME"

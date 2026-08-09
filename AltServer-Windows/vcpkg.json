@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "altforge-altserver-windows",
+  "version-string": "1.7.4-altforge",
+  "builtin-baseline": "ea1a7396b05637a53bf23c078647ecc0edee4b80",
+  "dependencies": [
+    "cpprestsdk",
+    "openssl",
+    "pcre2",
+    "zlib"
+  ]
+}

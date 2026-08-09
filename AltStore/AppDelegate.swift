@@ -21,13 +21,13 @@ extension UIApplication: LegacyBackgroundFetching {}
 
 extension AppDelegate
 {
-    static let openPatreonSettingsDeepLinkNotification = Notification.Name("com.rileytestut.AltStore.OpenPatreonSettingsDeepLinkNotification")
-    static let importAppDeepLinkNotification = Notification.Name("com.rileytestut.AltStore.ImportAppDeepLinkNotification")
-    static let addSourceDeepLinkNotification = Notification.Name("com.rileytestut.AltStore.AddSourceDeepLinkNotification")
-    static let viewAppDeepLinkNotification = Notification.Name("com.rileytestut.AltStore.ViewAppDeepLinkNotification")
-    static let searchDeepLinkNotification = Notification.Name("com.rileytestut.AltStore.SearchDeepLinkNotification")
+    static let openPatreonSettingsDeepLinkNotification = Notification.Name("com.legeling.AltForge.OpenPatreonSettingsDeepLinkNotification")
+    static let importAppDeepLinkNotification = Notification.Name("com.legeling.AltForge.ImportAppDeepLinkNotification")
+    static let addSourceDeepLinkNotification = Notification.Name("com.legeling.AltForge.AddSourceDeepLinkNotification")
+    static let viewAppDeepLinkNotification = Notification.Name("com.legeling.AltForge.ViewAppDeepLinkNotification")
+    static let searchDeepLinkNotification = Notification.Name("com.legeling.AltForge.SearchDeepLinkNotification")
     
-    static let appBackupDidFinish = Notification.Name("com.rileytestut.AltStore.AppBackupDidFinish")
+    static let appBackupDidFinish = Notification.Name("com.legeling.AltForge.AppBackupDidFinish")
     
     static let importAppDeepLinkURLKey = "fileURL"
     static let appBackupResultKey = "result"

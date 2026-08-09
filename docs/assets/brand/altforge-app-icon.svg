@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title description">
+  <title id="title">AltForge app icon</title>
+  <desc id="description">A flat folded capital A with coral, mint, and light graphite facets around a black diamond.</desc>
+
+  <rect width="1024" height="1024" fill="#0d0f12"/>
+
+  <path fill="#f4f3ef" d="M440 170h159l-78 155-101 162-42 41 84 105L101 815z"/>
+  <path fill="#f4f3ef" d="m599 170 333 650-395-187 143-117-88-124 58-134z"/>
+
+  <path fill="#858b91" d="m101 815 361-182-103 179z"/>
+  <path fill="#858b91" d="m537 633 395 187-360-203z"/>
+
+  <path fill="#62cdb3" d="m420 487-42 41 84 105-103 179h33l110-179z"/>
+  <path fill="#f2554c" d="m599 170 51 88-58 134 88 124-143 117 98-121-114-187z"/>
+
+  <path fill="#0d0f12" d="m521 325 114 187-98 121-117-146z"/>
+</svg>

@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/GlassIconDark.png">
-    <img src="AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/GlassIcon.png" width="132" alt="AltForge app icon">
-  </picture>
+  <img src="docs/assets/brand/altforge-app-icon.png" width="132" alt="AltForge app icon">
 </p>
 
 <h1 align="center">AltForge</h1>
@@ -18,6 +15,7 @@
   <a href="https://swift.org/"><img alt="Swift 5.0 language mode" src="https://img.shields.io/badge/Swift_language_mode-5.0-f05138?style=flat-square"></a>
   <img alt="iOS 17.4 or later" src="https://img.shields.io/badge/iOS-17.4%2B-111111?style=flat-square">
   <img alt="macOS 11 or later" src="https://img.shields.io/badge/macOS-11%2B-6e7781?style=flat-square">
+  <img alt="Windows 10 or later" src="https://img.shields.io/badge/Windows-10%2B-0078d4?style=flat-square">
   <a href="LICENSE"><img alt="AGPL version 3" src="https://img.shields.io/badge/license-AGPL_v3-c52a42?style=flat-square"></a>
 </p>
 
@@ -56,7 +54,7 @@ AltForge is an independent derivative of [AltStore](https://github.com/altstorei
 | **Apple App ID compatibility** | Converts only the Apple App ID description to safe ASCII without changing the app's Unicode display name. |
 | **Developer teams** | Supports individual, organization, and free developer-team fallback in both client and AltServer installation paths. |
 | **Maintenance fixes** | Prevents negative expiration-day displays and makes macOS error details selectable without discarding attributed formatting. |
-| **Build and documentation** | Defines bounded CI/release workflows and maintains a complete spec, verification, issue, and change history under [`docs/`](docs/README.md). |
+| **Build and documentation** | Defines bounded iOS, macOS, and Windows CI/release workflows and maintains a complete spec, verification, issue, and change history under [`docs/`](docs/README.md). |
 
 General compatibility fixes remain separate from branding where practical so they can be contributed upstream.
 
@@ -66,7 +64,7 @@ General compatibility fixes remain separate from branding where practical so the
   <tr>
     <td width="50%" valign="top">
       <strong>Install a release</strong><br><br>
-      Download AltServer for macOS, connect and trust the device, then choose <strong>Install AltForge</strong> from the AltServer menu.<br><br>
+      Download AltServer for macOS or Windows, connect and trust the device, then choose <strong>Install AltForge</strong> from the AltServer menu.<br><br>
       <a href="https://github.com/legeling/AltForge/releases"><strong>Open GitHub Releases →</strong></a>
     </td>
     <td width="50%" valign="top">
@@ -83,19 +81,21 @@ A tagged release is expected to provide:
 |---|---|
 | `AltForge.ipa` | Unsigned Classic package that AltServer signs for the selected Apple ID, team, and device. |
 | `AltForge-AltServer-macOS.zip` | Universal macOS AltServer application. |
+| `AltForge-AltServer-Windows.zip` | Portable Win32 AltServer application and required runtime DLLs. |
 | `apps.json` | Official AltForge source metadata. |
 | `SHA256SUMS.txt` | SHA-256 checksums for release artifacts. |
 
-The IPA cannot be installed by tapping it on an iPhone or iPad. The current macOS archive is not Developer ID signed or notarized, so macOS may require opening AltServer from Finder's context menu. Verify the published checksum before installation.
+The IPA cannot be installed by tapping it on an iPhone or iPad. The current macOS archive is not Developer ID signed or notarized, and the Windows ZIP is also unsigned. Windows users must install the desktop versions of iTunes and iCloud from Apple's website, not the Microsoft Store. Extract the complete ZIP so every DLL remains beside `AltServer.exe`, and verify the published checksum before installation.
 
 ## Requirements
 
 | Component | Minimum |
 |---|---|
 | AltForge | iOS or iPadOS 17.4 |
-| AltServer | macOS 11 |
+| AltServer | macOS 11 or Windows 10 |
 | AltJIT | macOS 13 |
-| Build host | macOS with Xcode 26, CocoaPods, Git, and recursive submodules |
+| Apple build host | macOS with Xcode 26, CocoaPods, Git, and recursive submodules |
+| Windows build host | Windows with Visual Studio 2022 C++, PowerShell, Git, and vcpkg |
 | Swift | Swift 5.0 language mode under the Xcode 26 toolchain |
 
 An Apple ID and a compatible Apple developer team are required by Apple's signing flow. AltForge has not been migrated to Swift 6 language mode.
@@ -105,7 +105,7 @@ An Apple ID and a compatible Apple developer team are required by Apple's signin
 ```mermaid
 flowchart LR
     Package["GitHub Release or local IPA"] --> Client["AltForge<br/>iOS / iPadOS"]
-    Client <-->|"discover · send · refresh"| Server["AltServer<br/>macOS"]
+    Client <-->|"discover · send · refresh"| Server["AltServer<br/>macOS / Windows"]
     Server -->|"sign · install"| Device["iPhone / iPad"]
     Server <-->|"certificates · profiles"| Apple["Apple Developer Services"]
 ```
@@ -131,6 +131,8 @@ In Xcode:
 
 Repeatable command-line checks live in the [verification guide](docs/workflow/04-verification/README.md). Signing, provisioning, installation, and JIT changes still require a sanitized real-device validation plan.
 
+The Windows toolchain and repeatable PowerShell build are documented in [`AltServer-Windows/README.md`](AltServer-Windows/README.md).
+
 <details>
 <summary><strong>Release maintainer workflow</strong></summary>
 
@@ -142,7 +144,7 @@ git tag "v${VERSION}"
 git push origin "v${VERSION}"
 ```
 
-The workflow builds an unsigned IPA and a universal macOS AltServer archive, generates `apps.json` and checksums, and attaches them to a GitHub Release. Only publish after completing the documented quality gates.
+The workflow builds an unsigned IPA, a universal macOS AltServer archive, and a portable Win32 AltServer archive, generates `apps.json` and checksums, and attaches them to a GitHub Release. Only publish after completing the documented quality gates.
 
 </details>
 
@@ -152,6 +154,7 @@ The workflow builds an unsigned IPA and a universal macOS AltServer archive, gen
 |---|---|
 | `AltStore/` | iOS user interface and app-management workflow |
 | `AltServer/` | macOS authentication, signing preparation, and device installation |
+| `AltServer-Windows/` | Windows authentication, signing preparation, device installation, and packaging |
 | `AltStoreCore/` | Shared domain models, persistence, sources, and utilities |
 | `Shared/` | Client/server protocol and shared application behavior |
 | `Dependencies/AltSign/` | Apple Developer API, signing, application models, and IPA/ZIP handling |
@@ -173,7 +176,8 @@ Start with the [documentation index](docs/README.md) and [project rules](AGENTS.
 
 ## Known Limitations
 
-- No Windows AltServer build target is currently included.
+- Windows source and CI are included, but the first hosted build and sanitized Windows device smoke test remain required before treating its release artifact as verified.
+- The imported Windows notification-area interface currently remains in English; the English/Simplified Chinese language switch is implemented in the iOS client.
 - The macOS release archive is not yet Developer ID signed or notarized.
 - Unicode archive handling has implementation-level validation, but persistent AltSign fixtures and broader real-device coverage are still being expanded.
 

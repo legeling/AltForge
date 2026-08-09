@@ -73,13 +73,16 @@ extension VerificationError
         return VerificationError.Code.allCases.compactMap { code -> VerificationError? in
             switch code
             {
-            case .mismatchedBundleIdentifiers: return VerificationError.mismatchedBundleIdentifiers(sourceBundleID: "com.rileytestut.App", app: app)
+            case .mismatchedBundleID: return VerificationError.mismatchedBundleID("com.example.App", expectedBundleID: "com.legeling.AltForge", app: app)
+            case .mismatchedMarketplaceID: return VerificationError.mismatchedMarketplaceID("example-marketplace", expectedMarketplaceID: "altforge", app: app)
             case .iOSVersionNotSupported: return VerificationError.iOSVersionNotSupported(app: app, requiredOSVersion: OperatingSystemVersion(majorVersion: 21, minorVersion: 1, patchVersion: 0))
+            case .unsupportedRegion: return VerificationError.unsupportedRegion("US", app: app)
             case .mismatchedHash: return VerificationError.mismatchedHash("12345", expectedHash: "67890", app: app)
             case .mismatchedVersion: return VerificationError.mismatchedVersion("1.0", expectedVersion: "1.1", app: app)
             case .mismatchedBuildVersion: return VerificationError.mismatchedBuildVersion("1", expectedVersion: "28", app: app)
             case .undeclaredPermissions: return VerificationError.undeclaredPermissions([ALTEntitlement.appGroups, ALTAppPrivacyPermission.bluetooth], app: app)
             case .addedPermissions: return nil //VerificationError.addedPermissions([ALTAppPrivacyPermission.appleMusic, ALTEntitlement.interAppAudio], appVersion: app)
+            case .incorrectSource: return VerificationError.incorrectSource(sourceURL: URL(string: "https://example.com/apps.json")!, expectedSourceURL: URL(string: "https://github.com/legeling/AltForge/releases/latest/download/apps.json")!, app: app)
             }
         }
     }
@@ -218,7 +221,7 @@ extension ALTAppleAPIError
 extension OperationError
 {
     static var testErrors: [OperationError] {
-        OperationError.Code.allCases.map { code -> OperationError in
+        OperationError.Code.allCases.compactMap { code -> OperationError? in
             switch code
             {
             case .unknown: return .unknown()
@@ -237,8 +240,10 @@ extension OperationError
             case .connectionFailed: return .connectionFailed
             case .connectionDropped: return .connectionDropped
             case .forbidden: return .forbidden()
+            case .sourceNotAdded: return nil
             case .pledgeRequired: return .pledgeRequired(appName: "Delta")
             case .pledgeInactive: return .pledgeInactive(appName: "Delta")
+            case .unknownMarketplaceID: return .unknownMarketplaceID(appName: "Delta")
             }
         }
     }

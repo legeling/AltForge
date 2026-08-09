@@ -55,6 +55,7 @@ class TabBarController: UITabBarController
         let sourcesNavigationController = self.viewControllers![Tab.sources.rawValue] as! UINavigationController
         self.sourcesViewController = sourcesNavigationController.viewControllers.first as? SourcesViewController
         
+        #if MARKETPLACE
         if #available(iOS 18, *)
         {
             let hostingController = UIHostingController(rootView: AppTrackerView(tracker: AppMarketplace.shared.tracker))
@@ -65,6 +66,7 @@ class TabBarController: UITabBarController
             self.view.insertSubview(hostingController.view, at: 0)
             hostingController.didMove(toParent: self)
         }
+        #endif
     }
     
     override func viewDidAppear(_ animated: Bool)

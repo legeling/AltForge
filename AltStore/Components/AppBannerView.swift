@@ -315,6 +315,7 @@ extension AppBannerView
                     }
                     else if let amount = storeApp.pledgeAmount, let currencyCode = storeApp.pledgeCurrency, !storeApp.prefersCustomPledge, #available(iOS 15, *)
                     {
+                        #if MARKETPLACE
                         let countryCode: String
                         if currencyCode.uppercased() == "USD" && AppMarketplace.shared.catalogRegion?.uppercased() == "BR"
                         {
@@ -326,6 +327,9 @@ extension AppBannerView
                             // Hide country code for other regions (for now)
                             countryCode = ""
                         }
+                        #else
+                        let countryCode = ""
+                        #endif
                         
                         let price = countryCode + amount.formatted(.currency(code: currencyCode).presentation(.narrow).precision(.fractionLength(0...2)))
                         

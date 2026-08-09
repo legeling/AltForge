@@ -14,27 +14,7 @@ public extension Source
     static let altStoreIdentifier = try! Source.sourceID(from: Source.altStoreSourceURL)
     static let epicGamesSourceID = "content-download-egs.distro.on.epicgames.com/ios/altstore/source.json"
     
-    #if STAGING
-    
-    #if MARKETPLACE
-    static let altStoreSourceURL = URL(string: "https://f000.backblazeb2.com/file/altstore-staging/marketplace-staging.json")!
-    #elseif ALPHA
-    static let altStoreSourceURL = URL(string: "https://f000.backblazeb2.com/file/altstore-staging/sources/alpha/apps-alpha-staging.json")!
-    #else
-    static let altStoreSourceURL = URL(string: "https://f000.backblazeb2.com/file/altstore-staging/apps-staging.json")!
-    #endif
-    
-    #else
-    
-    #if MARKETPLACE
-    static let altStoreSourceURL = URL(string: "https://marketplace.altstore.io")!
-    #elseif ALPHA
-    static let altStoreSourceURL = URL(string: "https://alpha.altstore.io/")!
-    #else
-    static let altStoreSourceURL = URL(string: "https://apps.altstore.io/")!
-    #endif
-    
-    #endif
+    static let altStoreSourceURL = URL(string: "https://github.com/legeling/AltForge/releases/latest/download/apps.json")!
 }
 
 public extension Source

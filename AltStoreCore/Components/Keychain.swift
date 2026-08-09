@@ -62,7 +62,7 @@ public class Keychain
     #if MARKETPLACE
     fileprivate let keychain = KeychainAccess.Keychain(service: "io.altstore.AltStore").accessibility(.afterFirstUnlock).synchronizable(true)
     #else
-    fileprivate let keychain = KeychainAccess.Keychain(service: "com.rileytestut.AltStore").accessibility(.afterFirstUnlock).synchronizable(true)
+    fileprivate let keychain = KeychainAccess.Keychain(service: "com.legeling.AltForge").accessibility(.afterFirstUnlock).synchronizable(true)
     #endif
     
     @KeychainItem(key: "appleIDEmailAddress")

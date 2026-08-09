@@ -14,7 +14,7 @@
 - iOS 主应用在 `AltStore/`，macOS 安装服务在 `AltServer/`，domain/persistence 在 `AltStoreCore/`，跨进程契约在 `Shared/`。
 - 签名、Apple API、application archive 属于 `Dependencies/AltSign`。不要在 UI 层重复修复底层问题。
 - 当前发布是 Classic 形态；`marketplace` 是历史 branch 名，不代表 release 嵌入 Marketplace extension。
-- 当前没有 Windows build target，不得把 Windows 支持写成已交付能力。
+- Windows 服务源码位于 `AltServer-Windows/`；本机或 CI 未实际完成 MSBuild/设备验证时，不得把对应验证写成已通过。
 - 对外品牌使用 AltForge；无必要不要批量重命名历史 `AltStore`/`ALT` 类型，以降低上游同步冲突。
 
 ## 构建与验证

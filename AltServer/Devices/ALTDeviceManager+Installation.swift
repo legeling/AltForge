@@ -10,17 +10,8 @@ import Cocoa
 import UserNotifications
 import ObjectiveC
 
-#if STAGING
-let altstoreSourceURL = URL(string: "https://f000.backblazeb2.com/file/altstore-staging/apps-staging.json")!
-#else
-let altstoreSourceURL = URL(string: "https://apps.altstore.io")!
-#endif
-
-#if BETA
-let altstoreBundleID = "com.rileytestut.AltStore.Beta"
-#else
-let altstoreBundleID = "com.rileytestut.AltStore"
-#endif
+let altstoreSourceURL = URL(string: "https://github.com/legeling/AltForge/releases/latest/download/apps.json")!
+let altstoreBundleID = "com.legeling.AltForge"
 
 private let appGroupsSemaphore = DispatchSemaphore(value: 1)
 private let developerDiskManager = DeveloperDiskManager()
@@ -105,7 +96,7 @@ extension ALTDeviceManager
     {
         let destinationDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         
-        var appName = ipaFileURL?.deletingPathExtension().lastPathComponent ?? NSLocalizedString("AltStore", comment: "")
+        var appName = ipaFileURL?.deletingPathExtension().lastPathComponent ?? NSLocalizedString("AltForge", comment: "")
         
         func finish(_ result: Result<ALTApplication, Error>, failure: String? = nil)
         {
@@ -157,7 +148,7 @@ extension ALTDeviceManager
                                                 if ipaFileURL == nil
                                                 {
                                                     // Show alert before downloading remote .ipa.
-                                                    self.showInstallationAlert(appName: NSLocalizedString("AltStore", comment: ""), deviceName: altDevice.name)
+                                                    self.showInstallationAlert(appName: NSLocalizedString("AltForge", comment: ""), deviceName: altDevice.name)
                                                 }
                                                 
                                                 self.prepare(device) { (result) in
@@ -349,7 +340,7 @@ private extension ALTDeviceManager
                     }
                     
                     return true
-                }) else { throw ALTServerError(.unsupportediOSVersion, userInfo: [ALTAppNameErrorKey: "AltStore",
+                }) else { throw ALTServerError(.unsupportediOSVersion, userInfo: [ALTAppNameErrorKey: "AltForge",
                                                                       ALTOperatingSystemNameErrorKey: osName,
                                                                    ALTOperatingSystemVersionErrorKey: minOSVersionString]) }
                 
@@ -359,7 +350,7 @@ private extension ALTDeviceManager
                 }
                 
                 DispatchQueue.main.async {
-                    var message = String(format: NSLocalizedString("%@ is running %@ %@, but AltStore requires %@ %@ or later.", comment: ""), device.name, osName, device.osVersion.stringValue, osName, minOSVersionString)
+                    var message = String(format: NSLocalizedString("%@ is running %@ %@, but AltForge requires %@ %@ or later.", comment: ""), device.name, osName, device.osVersion.stringValue, osName, minOSVersionString)
                     message += "\n\n"
                     message += NSLocalizedString("Would you like to download the last version compatible with your device instead?", comment: "")
                     
@@ -455,6 +446,10 @@ private extension ALTDeviceManager
                 let teams = try Result(teams, error).get()
                 
                 if let team = teams.first(where: { $0.type == .individual })
+                {
+                    return completionHandler(.success(team))
+                }
+                else if let team = teams.first(where: { $0.type == .organization })
                 {
                     return completionHandler(.success(team))
                 }
@@ -1017,7 +1012,7 @@ private extension ALTDeviceManager
             }
             catch
             {
-                print("Failed to install AltStore", error)
+                print("Failed to install AltForge", error)
                 completionHandler(.failure(error))
             }
         }

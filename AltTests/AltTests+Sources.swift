@@ -17,7 +17,7 @@ extension AltTests
         let url = Source.altStoreSourceURL
         
         let sourceID = try Source.sourceID(from: url)
-        XCTAssertEqual(sourceID, "apps.altstore.io")
+        XCTAssertEqual(sourceID, "github.com/legeling/altforge/releases/latest/download/apps.json")
     }
     
     @available(iOS 17, *)

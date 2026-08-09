@@ -57,7 +57,7 @@ public extension Bundle
     #if MARKETPLACE
     static var baseAltStoreAppGroupID = "group.io.altstore.AltStore"
     #else
-    static var baseAltStoreAppGroupID = "group.com.rileytestut.AltStore"
+    static var baseAltStoreAppGroupID = "group.com.legeling.AltForge"
     #endif
     
     var appGroups: [String] {

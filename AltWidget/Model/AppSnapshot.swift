@@ -50,8 +50,8 @@ extension AppSnapshot
         let longRefreshedDate = Calendar.current.date(byAdding: .day, value: -100, to: Date()) ?? Date()
         let longExpirationDate = Calendar.current.date(byAdding: .day, value: 365, to: longRefreshedDate) ?? Date()
         
-        let altstore = AppSnapshot(name: "AltStore",
-                                   bundleIdentifier: "com.rileytestut.AltStore",
+        let altstore = AppSnapshot(name: "AltForge",
+                                   bundleIdentifier: "com.legeling.AltForge",
                                    expirationDate: shortExpirationDate,
                                    refreshedDate: shortRefreshedDate,
                                    tintColor: .altPrimary,

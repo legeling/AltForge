@@ -494,13 +494,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Install AltStore…"
+            "value" : "Install AltForge…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "安装 AltStore…"
+            "value" : "安装 AltForge…"
           }
         }
       }
@@ -512,13 +512,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Install AltStore…"
+            "value" : "Install AltForge…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "安装 AltStore…"
+            "value" : "安装 AltForge…"
           }
         }
       }
@@ -620,13 +620,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Check for Updates..."
+            "value" : "View Releases..."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "检查更新…"
+            "value" : "查看发布版本…"
           }
         }
       }

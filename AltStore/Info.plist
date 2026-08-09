@@ -4,7 +4,7 @@
 <dict>
 	<key>ALTAppGroups</key>
 	<array>
-		<string>group.io.altstore.AltStore</string>
+		<string>group.com.legeling.AltForge</string>
 	</array>
 	<key>ALTDeviceID</key>
 	<string>00008120-001270DA119B401E</string>
@@ -14,6 +14,8 @@
 	<string>2.3.3</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>AltForge</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -195,10 +197,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>AltStore PAL</string>
+			<string>AltForge Classic</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>altstore-pal</string>
+				<string>altstore-classic</string>
 			</array>
 		</dict>
 		<dict>
@@ -208,7 +210,7 @@
 			<string>AltStore Backup</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>altstore-com.rileytestut.AltStore</string>
+				<string>altstore-com.legeling.AltForge</string>
 			</array>
 		</dict>
 	</array>
@@ -221,6 +223,7 @@
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>altstore-com.legeling.AltForge</string>
 		<string>altstore-com.rileytestut.AltStore</string>
 		<string>altstore-com.rileytestut.AltStore.Beta</string>
 		<string>altstore-com.rileytestut.Delta</string>
@@ -236,8 +239,6 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<false/>
-	<key>MKSellsDigitalGoods</key>
-	<true/>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_altserver._tcp</string>
@@ -251,7 +252,7 @@
 	</array>
 	<key>OSLogPreferences</key>
 	<dict>
-		<key>com.rileytestut.AltStore</key>
+		<key>com.legeling.AltForge</key>
 		<dict>
 			<key>AltJIT</key>
 			<dict>

@@ -387,6 +387,8 @@
 		D52DD35E2AAA89A600A7F2B6 /* AltSign-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = D52DD35D2AAA89A600A7F2B6 /* AltSign-Dynamic */; };
 		D52EF2BE2A0594550096C377 /* AppDetailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52EF2BD2A0594550096C377 /* AppDetailCollectionViewController.swift */; };
 		D533E8B72727841800A9B5DD /* libAppleArchive.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D533E8B62727841800A9B5DD /* libAppleArchive.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
+		D533E8BC2727BBEE00A9B5DD /* libfragmentzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D533E8BB2727BBEE00A9B5DD /* libfragmentzip.a */; platformFilters = (ios, ); };
+		D533E8BE2727BBF800A9B5DD /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D533E8BD2727BBF800A9B5DD /* libcurl.a */; platformFilters = (ios, ); };
 		D53447932F11C7B800808D88 /* FetchSourceCollectionsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53447922F11C7B800808D88 /* FetchSourceCollectionsOperation.swift */; };
 		D535CEE82BE95D4C00F96119 /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = D535CEE72BE95D4C00F96119 /* TelemetryClient */; };
 		D537C8592AA94D94009A1E08 /* altjit in Embed AltJIT */ = {isa = PBXBuildFile; fileRef = D5FB7A132AA284BE00EF863D /* altjit */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -478,7 +480,6 @@
 		D5A645252AF5BC7F0047D980 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A645242AF5BC7F0047D980 /* UserAccount.swift */; };
 		D5ACE84528E3B8450021CAB9 /* ClearAppCacheOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ACE84428E3B8450021CAB9 /* ClearAppCacheOperation.swift */; };
 		D5AD66932ECFE08800964E26 /* iCloudAPI+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54D13C52E5CEF2200FEC355 /* iCloudAPI+Types.swift */; };
-		D5AE997B2B64791E0068B366 /* AppMarketplace.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AE997A2B64791E0068B366 /* AppMarketplace.swift */; };
 		D5B15D432ECE664000F8E797 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D5B15D422ECE664000F8E797 /* Localizable.xcstrings */; };
 		D5B15D4B2ECE8ED800F8E797 /* FediverseInteractionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B15D4A2ECE8ED000F8E797 /* FediverseInteractionsView.swift */; };
 		D5B1E6442F3680EE00146B46 /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B1E6432F3680EE00146B46 /* Like.swift */; };
@@ -486,7 +487,6 @@
 		D5B6F6AB2AD76541007EED5A /* PreviewAppScreenshotsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B6F6AA2AD76541007EED5A /* PreviewAppScreenshotsViewController.swift */; };
 		D5BA9E9B2A9FE1E8007C0661 /* JITManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BA9E9A2A9FE1E8007C0661 /* JITManager.swift */; };
 		D5BD17D32B6474FF00BAE633 /* AltMarketplace.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BD17D22B6474FF00BAE633 /* AltMarketplace.swift */; };
-		D5BD17D72B6474FF00BAE633 /* AltMarketplace.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = D5BD17D02B6474FF00BAE633 /* AltMarketplace.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D5BD46572F0DC48000D26AB5 /* SocialWebAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BD46562F0DC48000D26AB5 /* SocialWebAccount.swift */; };
 		D5BE12392B89372E009C026C /* InstallAppRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BE12382B89372E009C026C /* InstallAppRequest.swift */; };
 		D5BE123D2B893ABF009C026C /* HTTPHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BE123C2B893ABF009C026C /* HTTPHeader.swift */; };
@@ -501,7 +501,6 @@
 		D5CD805D29CA2C1E00E591B0 /* HeaderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CD805C29CA2C1E00E591B0 /* HeaderContentViewController.swift */; };
 		D5CD805F29CA755E00E591B0 /* SourceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CD805E29CA755E00E591B0 /* SourceDetailViewController.swift */; };
 		D5CE309C2B4C946300DB8151 /* AltStore15ToAltStore16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = D5CE309B2B4C946300DB8151 /* AltStore15ToAltStore16.xcmappingmodel */; };
-		D5CF17262B96DD27002EC4C7 /* InstallMarketplaceAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CF17252B96DD27002EC4C7 /* InstallMarketplaceAppViewController.swift */; };
 		D5CF568C2A0D8EEC006D93E2 /* VerificationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CF56812A0D83F9006D93E2 /* VerificationError.swift */; };
 		D5D097132F15B3FA00CC917D /* FederatedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D097122F15B3FA00CC917D /* FederatedItem.swift */; };
 		D5D3BFB22D4D87A5000FFFAF /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D3BFB12D4D87A5000FFFAF /* Media.swift */; };
@@ -599,13 +598,6 @@
 			remoteGlobalIDString = BFD247692284B9A500981D42;
 			remoteInfo = AltStore;
 		};
-		D5BD17D52B6474FF00BAE633 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFD247622284B9A500981D42 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D5BD17CF2B6474FF00BAE633;
-			remoteInfo = AltMarketplace;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -695,17 +687,6 @@
 				D561B2ED28EF5A4F006752E4 /* AltSign-Dynamic in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D5BD17D82B6474FF00BAE633 /* Embed ExtensionKit Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
-			dstSubfolderSpec = 16;
-			files = (
-				D5BD17D72B6474FF00BAE633 /* AltMarketplace.appex in Embed ExtensionKit Extensions */,
-			);
-			name = "Embed ExtensionKit Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D5FB7A112AA284BE00EF863D /* CopyFiles */ = {
@@ -1327,6 +1308,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D533E8B72727841800A9B5DD /* libAppleArchive.tbd in Frameworks */,
+				D533E8BC2727BBEE00A9B5DD /* libfragmentzip.a in Frameworks */,
+				D533E8BE2727BBF800A9B5DD /* libcurl.a in Frameworks */,
 				D51F17472F3BAA4E0016D08B /* NukeExtensions in Frameworks */,
 				D535CEE82BE95D4C00F96119 /* TelemetryClient in Frameworks */,
 				D51F17452F3BAA4E0016D08B /* Nuke in Frameworks */,
@@ -2804,14 +2787,12 @@
 				BFD247682284B9A500981D42 /* Resources */,
 				BF088D2B2501A087008082D9 /* Embed Frameworks */,
 				BF98917B250AABF4002ACF50 /* Embed Foundation Extensions */,
-				D5BD17D82B6474FF00BAE633 /* Embed ExtensionKit Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				BF66EE842501AE50007EE018 /* PBXTargetDependency */,
 				BF989176250AABF4002ACF50 /* PBXTargetDependency */,
-				D5BD17D62B6474FF00BAE633 /* PBXTargetDependency */,
 			);
 			name = AltStore;
 			packageProductDependencies = (
@@ -3605,7 +3586,6 @@
 				BFB3645A2325985F00CD0EB1 /* FindServerOperation.swift in Sources */,
 				82D6ED882EE9E62D009DC668 /* SourceCollectionViewController.swift in Sources */,
 				D52EF2BE2A0594550096C377 /* AppDetailCollectionViewController.swift in Sources */,
-				D5CF17262B96DD27002EC4C7 /* InstallMarketplaceAppViewController.swift in Sources */,
 				D569A5042AF9BC5F00A4CB8B /* ReviewPermissionsViewController.swift in Sources */,
 				BF3BEFBF2408673400DE7D55 /* FetchProvisioningProfilesOperation.swift in Sources */,
 				D5A645212AF591980047D980 /* UTType+AltStore.swift in Sources */,
@@ -3614,7 +3594,6 @@
 				BFBE0004250ACFFB0080826E /* ViewApp.intentdefinition in Sources */,
 				BF770E5622BC3C03002A40FE /* Server.swift in Sources */,
 				BFA8172923C56042001B5953 /* ServerConnection.swift in Sources */,
-				D5AE997B2B64791E0068B366 /* AppMarketplace.swift in Sources */,
 				D52C8F012AFC144C00CA0BDD /* FeaturedViewController.swift in Sources */,
 				BF56D2AF23DF9E310006506D /* AppIDsViewController.swift in Sources */,
 				D59B43DB2B97546200619B71 /* UIViewController+OpenApp.swift in Sources */,
@@ -3720,11 +3699,6 @@
 			isa = PBXTargetDependency;
 			target = BFD247692284B9A500981D42 /* AltStore */;
 			targetProxy = D586D39C28EF58B0000E101F /* PBXContainerItemProxy */;
-		};
-		D5BD17D62B6474FF00BAE633 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D5BD17CF2B6474FF00BAE633 /* AltMarketplace */;
-			targetProxy = D5BD17D52B6474FF00BAE633 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3929,7 +3903,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.7.2b;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltServer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "AltServer/AltServer-Bridging-Header.h";
@@ -3982,7 +3956,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.7.2b;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltServer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "AltServer/AltServer-Bridging-Header.h";
@@ -4083,7 +4057,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltBackup;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltBackup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4102,7 +4076,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltBackup;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltBackup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4130,7 +4104,7 @@
 					"/Users/Riley/Library/Developer/Xcode/DerivedData/AltStore-bhqnkrahfutztzeudtxhcxccgtlo/Build/Products/Debug",
 				);
 				MARKETING_VERSION = 1.12;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltPlugin;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltPlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
@@ -4161,7 +4135,7 @@
 					"/Users/Riley/Library/Developer/Xcode/DerivedData/AltStore-bhqnkrahfutztzeudtxhcxccgtlo/Build/Products/Debug",
 				);
 				MARKETING_VERSION = 1.12;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltPlugin;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltPlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
@@ -4191,7 +4165,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltStoreCore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForgeCore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -4222,7 +4196,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltStoreCore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForgeCore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -4253,7 +4227,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.altstore.AltStore.AltWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4284,7 +4258,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.altstore.AltStore.AltWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4359,7 +4333,7 @@
 				);
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG MARKETPLACE";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/Dependencies/AltSign/Dependencies\"";
 			};
@@ -4422,7 +4396,6 @@
 				);
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = MARKETPLACE;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/Dependencies/AltSign/Dependencies\"";
@@ -4442,6 +4415,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6P6G44MPGD;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_SOURCE_FILE_NAMES[sdk=iphonesimulator*]" = "libfragmentzip.a libcurl.a";
 				INFOPLIST_FILE = AltStore/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4452,7 +4426,12 @@
 					"$(PROJECT_DIR)/Dependencies/fragmentzip",
 					"$(PROJECT_DIR)/Dependencies/libcurl",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.altstore.AltStore;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ld_classic",
+					"-lz",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4477,6 +4456,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6P6G44MPGD;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_SOURCE_FILE_NAMES[sdk=iphonesimulator*]" = "libfragmentzip.a libcurl.a";
 				INFOPLIST_FILE = AltStore/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4487,7 +4467,12 @@
 					"$(PROJECT_DIR)/Dependencies/fragmentzip",
 					"$(PROJECT_DIR)/Dependencies/libcurl",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.altstore.AltStore;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ld_classic",
+					"-lz",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4521,7 +4506,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltXPC;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltXPC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -4552,7 +4537,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltXPC;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltXPC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -4575,7 +4560,7 @@
 				DEVELOPMENT_TEAM = 6XVY5G3U44;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForgeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -4600,7 +4585,7 @@
 				DEVELOPMENT_TEAM = 6XVY5G3U44;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForgeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -4635,7 +4620,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.altstore.AltStore.AltMarketplace;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltMarketplace;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4669,7 +4654,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.altstore.AltStore.AltMarketplace;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltMarketplace;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -4713,7 +4698,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0.1;
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltJIT;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltJIT;
 				PRODUCT_NAME = altjit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -4755,7 +4740,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0.1;
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileytestut.AltJIT;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltJIT;
 				PRODUCT_NAME = altjit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;

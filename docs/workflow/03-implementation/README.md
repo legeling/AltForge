@@ -18,6 +18,7 @@ AltForge 已有完整产品代码，不采用重写策略。当前实施重点�
 
 - 验证 CI 的 iOS Simulator、AltTests 和 macOS AltServer 构建。
 - 验证 release metadata 脚本的输入校验、JSON 内容和 SHA-256。
+- 在 GitHub Windows runner 验证 AltServer Win32 build、runtime DLL contract 和 Release ZIP。
 - 保持 Xcode 26 / Swift 5.0 language mode 文档与构建配置一致；未来 Swift 6 migration 使用独立 change。
 
 完成标准：干净 checkout 能使用锁定依赖完成 CI；失败不遗留不完整发布。
@@ -34,7 +35,7 @@ AltForge 已有完整产品代码，不采用重写策略。当前实施重点�
 
 - 建立定期上游同步与冲突审查流程。
 - 提升 signing/install/refresh 的失败路径覆盖。
-- 决定 notarization、Windows 与 Marketplace 目标的中期范围。
+- 决定 notarization、Windows 签名安装器与 Marketplace 目标的中期范围。
 
 ## 顺序与依赖
 
@@ -45,7 +46,7 @@ AltForge 已有完整产品代码，不采用重写策略。当前实施重点�
 
 ## 容量与资源
 
-- CI job 当前上限为 45 分钟，release job 为 60 分钟，并启用 concurrency cancellation。
+- Apple CI job 上限为 45 分钟；Windows CI 与各 release build job 上限为 60 分钟，并启用 concurrency cancellation。
 - Swift package 与 CocoaPods 下载属于主要网络成本，应复用 runner cache 时评估一致性，不得使用无限缓存。
 - IPA 处理成本与 archive entries 和总字节线性相关；测试 fixture 保持小型但覆盖格式边界。
 - 真实设备、Apple ID、证书和 App ID quota 是稀缺资源，验证应有明确步骤和清理计划。

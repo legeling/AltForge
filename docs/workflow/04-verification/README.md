@@ -17,14 +17,16 @@
 | `TEST-007` ZIP path traversal、超长 filename、资源释放 | `FR-005`, `NFR-002`, `NFR-005` | Security/Unit | 缺失 |
 | `TEST-008` 简体中文与 per-app language 切换 | `FR-006`, `FR-007` | Build/Manual UI | 待执行 |
 | `TEST-009` Source ID normalization | `FR-009`, `FR-010` | XCTest | 已有 |
-| `TEST-010` Error bridge/serialization | `FR-011` | XCTest | 已有 |
-| `TEST-011` AltStore iOS Simulator build | `FR-014` | Build | CI 已定义，待完整运行确认 |
-| `TEST-012` AltServer macOS build | `FR-014` | Build | CI 已定义，待完整运行确认 |
-| `TEST-013` Release metadata/artifact contract | `FR-015`, `FR-016` | Script/Packaging | 缺失自动化 fixture |
+| `TEST-010` Error bridge/serialization | `FR-011` | XCTest | 部分通过；简体中文空格断言失败 |
+| `TEST-011` AltStore iOS Simulator build | `FR-014` | Build | 本地构建及 source identity 定向测试通过 |
+| `TEST-012` AltServer macOS build | `FR-014` | Build | 本地通过 |
+| `TEST-013` Release metadata/artifact contract | `FR-015`, `FR-016` | Script/Packaging | 自动化 fixture 已加入 CI |
 | `TEST-014` AltJIT 系统/设备前置条件矩阵 | `FR-012` | Unit/Manual | 缺失 |
 | `TEST-015` Refresh cancellation 与部分失败 | `FR-008` | Integration | 缺失 |
-| `TEST-016` 开发团队选择优先级与组织账户 fallback | `FR-017` | Unit/Manual E2E | 代码审查通过；真实账户待执行 |
-| `TEST-017` 过期应用天数不为负数、错误详情可选中复制 | `FR-008`, `FR-011` | Build/Manual UI | 构建待执行 |
+| `TEST-016` 开发团队选择优先级与组织账户 fallback | `FR-017` | Unit/Manual E2E | 双路径构建通过；真实账户待执行 |
+| `TEST-017` 过期应用天数不为负数、错误详情可选中复制 | `FR-008`, `FR-011` | Build/Manual UI | 双目标构建通过；手工 UI 待执行 |
+| `TEST-018` Windows AltServer 固定依赖、Release build 和 ZIP contract | `FR-018`, `FR-019` | CI Build/Packaging | CI 已定义；当前 macOS 开发机未执行 |
+| `TEST-019` Windows USB/Wi-Fi 安装与刷新 | `FR-018`, `FR-019` | Manual E2E | 待执行 |
 
 ## 首批高价值失败测试
 
@@ -54,3 +56,5 @@ CI build/test 命令登记在 [回归套件](05-regression-suite.md)。本地不
 - 无标志 legacy ZIP encoding 存在先天歧义，自动检测不能保证所有地区包零误判。
 - 当前测试 target 与签名 host app 耦合，独立验证 AltSign 的成本较高。
 - release 尚未 Developer ID 签名与 notarize。
+- Windows ZIP 尚未执行 hosted runner 和真实设备验证，见 `ISSUE-20260809-001`。
+- 简体中文 simulator 上完整错误测试仍有 12 项因 Foundation 本地化描述的空格规则失败，见 `ISSUE-20260808-007`。

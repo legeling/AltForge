@@ -60,6 +60,19 @@ xcodebuild build \
 - 执行 `TEST-002` 和受影响路径。
 - 不将凭据、UDID 或 profile 保存为 artifact。
 
+## Suite F：Windows AltServer
+
+触发：`AltServer-Windows/`、Windows dependency pin、CI/release workflow 或 Windows artifact contract 变化。
+
+```powershell
+.\AltServer-Windows\Scripts\build-release.ps1 -OutputDirectory "$env:TEMP\AltForge-Windows"
+```
+
+- 使用固定 revision 恢复依赖，存在不同 checkout 时必须失败而不是覆盖。
+- 构建 Win32 Release，并验证 ZIP 至少包含 AltServer、ldid、libimobiledevice、usbmuxd、plist、DNS-SD、cpprestsdk 和 VC runtime。
+- 使用 Apple 官网版 iTunes/iCloud 做 `TEST-019`；不得把 Apple 安装包或敏感数据加入 artifact。
+- macOS/Linux 上的 XML/YAML/parser 检查不等同于 MSBuild 通过。
+
 ## 命令登记规则
 
 - CI 是命令真相的首选来源，本文件解释触发条件。
