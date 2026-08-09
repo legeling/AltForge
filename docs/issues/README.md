@@ -1,11 +1,11 @@
 # Issue Register
 
-本目录跟踪尚未解决的项目风险、阻塞项和技术债。GitHub Issue 用于公开协作，本目录保存会影响设计、验证和交付的稳定摘要。
+本目录跟踪项目风险、阻塞项、技术债及其解决状态。GitHub Issue 用于公开协作，本目录保存会影响设计、验证和交付的稳定摘要与已解决决策。
 
 | ID | 标题 | 优先级 | 状态 | 关联 |
 |---|---|---:|---|---|
 | [`ISSUE-20260808-001`](ISSUE-20260808-001-unicode-regression-tests.md) | Unicode IPA 修复缺少持久自动化测试 | P1 | Open | `FR-004`, `FR-005`, `T-001` |
-| [`ISSUE-20260808-002`](ISSUE-20260808-002-swift-version-baseline.md) | Swift 6 文档口径与 Swift 5 build setting 不一致 | P2 | Open / 待确认 | `NFR-003`, `T-002` |
+| [`ISSUE-20260808-002`](ISSUE-20260808-002-swift-version-baseline.md) | Swift 6 文档口径与 Swift 5 build setting 不一致 | P2 | Resolved | `NFR-003`, `CHG-20260809-001` |
 | [`ISSUE-20260808-003`](ISSUE-20260808-003-macos-distribution-signing.md) | macOS release 未签名且未 notarize | P1 | Open / 待确认 | `DES-010` |
 | [`ISSUE-20260808-004`](ISSUE-20260808-004-windows-scope.md) | Windows AltServer 不在当前仓库目标中 | P2 | Open / 待确认 | Intake non-goal |
 | [`ISSUE-20260808-005`](ISSUE-20260808-005-clean-build-reproducibility.md) | 干净 checkout 的本地完整构建尚未验证 | P1 | Open | `FR-014`, `T-002` |

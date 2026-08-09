@@ -21,7 +21,7 @@
 - 高优先级安装与 Unicode 需求已有 design/test/task 映射。
 - `FR-013` 可选 targets 尚无完整测试映射，但不阻塞当前 Classic 核心链路。
 - 阻塞自动化的主要缺口是 AltSign 没有独立 test target，以及本地依赖构建尚未完全验证。
-- Swift 6 language mode、notarization、Windows 路线属于非阻塞 `[待确认]`，已进入 issues。
+- 当前明确使用 Swift 5.0 language mode；未来 Swift 6 migration 需要独立 change。Notarization 与 Windows 路线仍是非阻塞 `[待确认]`，并在 issues 中跟踪。
 
 ## 执行规则
 

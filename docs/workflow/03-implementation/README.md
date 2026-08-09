@@ -18,7 +18,7 @@ AltForge 已有完整产品代码，不采用重写策略。当前实施重点�
 
 - 验证 CI 的 iOS Simulator、AltTests 和 macOS AltServer 构建。
 - 验证 release metadata 脚本的输入校验、JSON 内容和 SHA-256。
-- 明确 Xcode/Swift language mode 口径。
+- 保持 Xcode 26 / Swift 5.0 language mode 文档与构建配置一致；未来 Swift 6 migration 使用独立 change。
 
 完成标准：干净 checkout 能使用锁定依赖完成 CI；失败不遗留不完整发布。
 

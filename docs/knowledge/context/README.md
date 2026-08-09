@@ -47,6 +47,7 @@ AltForge 是 `altstoreio/AltStore` 的 AGPL-3.0 派生项目，当前主线是 A
 ## 品牌与兼容约定
 
 - 对外文案使用 `AltForge`。
+- 根目录 `README.md` 为英文入口，`README.zh-CN.md` 为简体中文入口；两份文档互相提供语言切换，并同步维护相同的项目事实、限制和操作流程。
 - 代码类型和历史文件名在没有必要时保留 `AltStore`/`ALT`，避免大规模上游冲突。
 - 官方 bundle identifier 使用 `com.legeling.AltForge` 系列。
 - 官方 source URL 使用 `https://github.com/legeling/AltForge/releases/latest/download/apps.json`。

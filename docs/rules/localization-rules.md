@@ -7,6 +7,13 @@
 - 格式化内容使用可本地化占位符和 locale-aware API，不通过字符串拼接固定语序。
 - 按钮、错误、通知和权限说明保持术语一致；品牌名 `AltForge`、协议字段和代码标识不随意翻译。
 
+## 仓库入口文档
+
+- `README.md` 作为英文入口，`README.zh-CN.md` 作为简体中文入口；两份文档顶部必须互相链接并标记当前语言。
+- 项目能力、系统要求、下载、安装、构建、发布、已知限制和许可证等事实变化时，两份 README 必须在同一 change 中同步。
+- 两种语言应保持相同信息层级和链接目标，可以按语言习惯改写表达，但不能让其中一份承诺另一份没有的能力。
+- 路径、命令、artifact 名称、bundle identifier、版本号和外部 URL 保持一致，不翻译代码标识。
+
 ## Unicode 与文件处理
 
 - App name、bundle display name、source metadata、archive entry 和资源文件名按 Unicode 处理，不假设 ASCII。

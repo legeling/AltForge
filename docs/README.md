@@ -2,6 +2,8 @@
 
 本目录是 AltForge 的长期文档源。文档采用分层结构，避免把项目目标、当前设计、单次变更和历史记录混在一起。
 
+仓库简介：[English](../README.md) | [简体中文](../README.zh-CN.md)
+
 ## 阅读顺序
 
 1. [项目背景与边界](workflow/00-intake/README.md)
@@ -28,7 +30,7 @@
 - 产品形态：AltStore Classic 派生项目，由 iOS 端 AltForge 与 macOS 端 AltServer 协作完成侧载。
 - 主分支：`marketplace`，但当前发布配置明确构建 Classic 版本，不嵌入 Marketplace extension。
 - 构建入口：`AltStore.xcworkspace`。
-- 工具链：Xcode 26；项目当前 `SWIFT_VERSION` 为 5.0，README 中的 “Swift 6” 表述指 Xcode 26 工具链而非 Swift 6 language mode，最终口径仍需确认。
+- 工具链：Xcode 26；项目当前 `SWIFT_VERSION` 为 5.0，两份根 README 均已明确区分工具链版本和 Swift language mode。未来迁移 Swift 6 language mode 需要独立 change 与验证。
 - 最低系统：iOS 17.4、macOS 11；`AltJIT` 最低 macOS 13。
 - 发布产物：未签名 IPA、未公证的 macOS AltServer、`apps.json` 与校验和。
 - 已知重点：Unicode IPA 兼容、简体中文、本地构建可复现性、签名安装链路测试。

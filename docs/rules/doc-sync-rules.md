@@ -9,6 +9,7 @@
 | install/refresh/source 状态规则变化 | knowledge/behavior、verification、coverage map |
 | target、依赖、最低系统变化 | README、design、reference、CI、verification |
 | 用户可见文本/localization 变化 | requirements（若行为变）、test matrix、README（若能力变） |
+| README 中的项目事实、安装或发布说明变化 | `README.md`、`README.zh-CN.md`、change、相关 workflow/knowledge |
 | bugfix | completed change、对应 issue、回归 test、coverage map |
 | release | releases、README、issues/known risks |
 | submodule commit/remote 变化 | design、knowledge/structure、ADR/change |

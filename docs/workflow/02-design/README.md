@@ -125,6 +125,6 @@ Classic 版本必须使用未定义 `MARKETPLACE` 且包含 Apple 认证所需 c
 
 ## 待确认
 
-- `[待确认]` 是否将整个项目迁移到 Swift 6 language mode；当前 build setting 仍为 Swift 5.0。
+- `[待确认]` 未来是否将整个项目迁移到 Swift 6 language mode；当前已确认并对外说明的 build setting 为 Swift 5.0。
 - `[待确认]` 是否为 release 增加 Developer ID 签名、notarization 和 Sparkle feed。
 - `[待确认]` 是否为 installation protocol 建立独立版本兼容矩阵。

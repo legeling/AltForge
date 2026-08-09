@@ -55,6 +55,7 @@ AltForge 是 AltStore Classic 的维护型派生项目。上游代码提供成�
 
 ## 待确认
 
-- `[待确认]` README 中 “Swift 6” 是指编译器工具链，还是计划切换到 Swift 6 language mode。
 - `[待确认]` macOS Developer ID 签名与 notarization 的目标版本和凭据管理方案。
 - `[待确认]` Windows AltServer 是否进入 AltForge 中期路线，或继续明确排除。
+
+当前工具链口径已确认：使用 Xcode 26，项目保持 Swift 5.0 language mode；未来迁移 Swift 6 language mode 时另建 change。
