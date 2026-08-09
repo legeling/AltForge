@@ -52,5 +52,5 @@ AltForge 需要由同一仓库维护 iOS 客户端、macOS AltServer 和 Windows
 
 - `AppleSRP.cpp` 以 C++17、OpenSSL 3.6 headers 和 warnings-as-errors 完成语法检查，并与独立 Ruby 大数/SHA-256 reference vector 对比 `A`、`M1`、session key 和 `M2`。
 - vcpkg JSON、MSBuild XML、workflow YAML、Ruby release metadata syntax 与本地 project file references 均通过静态验证。
-- `actionlint 1.7.7` 已检查初始 CI/Release workflows；五项 Release 产物 metadata/checksum fixture 通过。四次 hosted Windows run 依次暴露 runner vcpkg 漂移、`cpprestsdk` 被 deindex、Apple mDNSResponder Windows stub 未定义 `LOG_ERR`，以及完整 solution 缺少 `dirent` include、OpenSSL compatibility opt-in 和 `NOMINMAX`。固定依赖和 compiler workarounds 已最小化并恢复原环境，等待下一标签复验。
+- `actionlint 1.7.7` 已检查初始 CI/Release workflows；五项 Release 产物 metadata/checksum fixture 通过。五次 hosted Windows run 依次暴露 runner vcpkg 漂移、`cpprestsdk` 被 deindex、Apple mDNSResponder Windows stub 未定义 `LOG_ERR`、完整 solution compiler/include compatibility，以及两处依赖 Windows `min` macro 的调用。固定依赖和 compiler workarounds 已最小化，两处调用已改用 `std::min`，等待下一标签复验。
 - 本机没有 PowerShell、MSBuild、Windows SDK 或设备环境，因此 PowerShell AST parser、完整 Windows link/package 与真实设备安装保留给 hosted runner/人工门禁。

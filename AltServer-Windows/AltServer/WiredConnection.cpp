@@ -1,6 +1,7 @@
 #include "WiredConnection.h"
 #include "ServerError.hpp"
 
+#include <algorithm>
 #include <libimobiledevice/common/socket.h>
 
 // Must come after other #include's
@@ -140,7 +141,7 @@ pplx::task<std::vector<unsigned char>> WiredConnection::ReceiveData(int expected
 
 		while (receivedData.size() < expectedSize)
 		{
-			uint32_t size = min((uint32_t)4096, (uint32_t)expectedSize - (uint32_t)receivedData.size());
+				uint32_t size = std::min((uint32_t)4096, (uint32_t)expectedSize - (uint32_t)receivedData.size());
 
 			uint32_t receivedBytes = 0;
 			idevice_error_t result = idevice_connection_receive_timeout(this->connection(), bytes, size, &receivedBytes, 10000);

@@ -1,5 +1,6 @@
 #include "WirelessConnection.h"
 
+#include <algorithm>
 #include <WinSock2.h>
 #include <cpprest/json.h>
 
@@ -118,7 +119,7 @@ pplx::task<std::vector<unsigned char>> WirelessConnection::ReceiveData(int size)
 			}
 			else
 			{
-				ssize_t readBytes = recv(this->socket(), buffer, min((ssize_t)4096, (ssize_t)(size - data.size())), 0);
+					ssize_t readBytes = recv(this->socket(), buffer, std::min((ssize_t)4096, (ssize_t)(size - data.size())), 0);
 				if (readBytes == 0)
 				{
 					throw ServerError(ServerErrorCode::ConnectionFailed);

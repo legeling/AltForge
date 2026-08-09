@@ -39,6 +39,12 @@ assert(windows_build.include?("SetEnvironmentVariable(\"CL\", $previousSolutionC
 windows_targets = read(root, "AltServer-Windows/Directory.Build.targets")
 assert(windows_targets.include?("Dependencies\\dirent\\include"), "Windows projects must receive the pinned dirent include path")
 
+%w[WiredConnection.cpp WirelessConnection.cpp].each do |name|
+  connection = read(root, "AltServer-Windows/AltServer/#{name}")
+  assert(connection.include?("#include <algorithm>"), "#{name} must include the standard min implementation")
+  assert(connection.include?("std::min("), "#{name} must not depend on the Windows min macro")
+end
+
 release_assets = %w[
   AltForge.ipa
   AltForge-AltServer-macOS.dmg
