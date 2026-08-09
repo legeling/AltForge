@@ -18,6 +18,7 @@ jobs:
     timeout-minutes: 5
     outputs:
       version: ${{ steps.version.outputs.version }}
+      vcpkg_baseline: ${{ steps.version.outputs.vcpkg_baseline }}
 
     steps:
       - name: Check out repository
@@ -29,6 +30,7 @@ jobs:
         run: |
           ruby Scripts/check_release_version.rb --tag "$GITHUB_REF_NAME"
           echo "version=$(tr -d '[:space:]' < VERSION)" >> "$GITHUB_OUTPUT"
+          echo "vcpkg_baseline=$(ruby -rjson -e 'puts JSON.parse(File.read("AltServer-Windows/vcpkg.json")).fetch("builtin-baseline")')" >> "$GITHUB_OUTPUT"
 
       - name: Validate release metadata contract
         run: ruby Scripts/test_release_metadata.rb
@@ -161,7 +163,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: microsoft/vcpkg
-          ref: ea1a7396b05637a53bf23c078647ecc0edee4b80
+          ref: ${{ needs.prepare.outputs.vcpkg_baseline }}
           path: .vcpkg
 
       - name: Bootstrap vcpkg

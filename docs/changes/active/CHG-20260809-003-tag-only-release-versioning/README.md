@@ -15,7 +15,7 @@
 - 删除 branch/PR CI workflow，只允许匹配 `v*` 的 Release workflow 自动构建；preflight 要求 tag 严格等于 `v${VERSION}`。
 - 用脚本检查 Xcode、Windows resource 与 vcpkg manifest 的产品版本 contract；CI build number 继续使用 GitHub run number。
 - 把原 CI 的 source identity test 和 metadata contract 纳入标签流水线，避免取消普通 CI 后丢失关键发布门禁。
-- 固定 CocoaPods 1.16.2，并在 Windows workspace 检出固定 vcpkg commit，修复首次 hosted run 暴露的 runner 工具漂移。
+- 固定 CocoaPods 1.16.2，并在 Windows workspace 检出 `vcpkg.json` 声明的固定 commit，修复 hosted run 暴露的 runner 工具漂移和已 deindex port 问题。
 
 ## 追踪
 

@@ -27,6 +27,8 @@ assert(workflow.include?("tags:\n      - \"v*\""), "release workflow must remain
 assert(!workflow.match?(/^\s*pull_request:/), "release workflow must not run for pull requests")
 assert(!workflow.match?(/^\s*branches:/), "release workflow must not run for branch pushes")
 assert(workflow.include?("--draft"), "release workflow must create a draft release")
+assert(workflow.include?("vcpkg_baseline: ${{ steps.version.outputs.vcpkg_baseline }}"), "prepare must expose the manifest vcpkg baseline")
+assert(workflow.include?("ref: ${{ needs.prepare.outputs.vcpkg_baseline }}"), "Windows must check out the manifest vcpkg baseline")
 
 release_assets = %w[
   AltForge.ipa

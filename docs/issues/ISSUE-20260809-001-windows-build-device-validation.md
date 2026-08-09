@@ -8,7 +8,7 @@
 
 Windows AltServer 已进入源码、CI 和 Release contract，但当前开发机为 macOS，不能本地执行 MSBuild，也未在 Windows 10/11 + Apple 官网版 iTunes/iCloud 环境完成真实设备安装、刷新和 Wi-Fi discovery smoke test。
 
-首次 hosted Windows build 已运行，但 runner 系统 vcpkg checkout 无法解析 manifest 固定 baseline，构建在依赖恢复阶段失败。Release workflow 现改为在 workspace 检出并 bootstrap 完全相同的 vcpkg commit，尚待下一版本标签复验。
+前两次 hosted Windows build 均在依赖恢复阶段失败：第一次使用 runner 系统 vcpkg，无法解析固定 baseline；`v2.4.0` 第一次标签构建虽改为 workspace 固定 checkout，但当时选用的 2026-08 vcpkg revision 已移除 `cpprestsdk`。现已将 manifest 固定到该 port 被 deindex 前的 `d015e31e90838a4c9dfa3eed45979bc70d9357fc`，并由 prepare job 从 manifest 输出 checkout revision，避免 workflow 与 manifest 再次漂移，尚待标签构建复验。
 
 ## 完成条件
 
