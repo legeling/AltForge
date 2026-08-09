@@ -8,7 +8,7 @@
 
 Windows AltServer 已进入源码、CI 和 Release contract，但当前开发机为 macOS，不能本地执行 MSBuild，也未在 Windows 10/11 + Apple 官网版 iTunes/iCloud 环境完成真实设备安装、刷新和 Wi-Fi discovery smoke test。
 
-六次 hosted Windows build 暴露并逐步收敛了可复现性问题：第一次使用 runner 系统 vcpkg；`v2.4.0` 前五次标签构建依次发现所选 vcpkg revision 已移除 `cpprestsdk`、Apple `mDNSResponder-2881.0.25` Windows stub 未定义 `LOG_ERR`、完整 solution 缺少 `dirent` include/OpenSSL compatibility opt-in/`NOMINMAX`、两处连接代码仍直接依赖 Windows `min` macro，以及 vcpkg 中 zlib 1.3.2 已将 Windows import/runtime 名改为 `z.lib`/`z.dll`。manifest、compiler workarounds 和 zlib 产物契约已最小化修正，尚待标签构建复验。
+七次 hosted Windows build 暴露并逐步收敛了可复现性问题：第一次使用 runner 系统 vcpkg；`v2.4.0` 前六次标签构建依次发现所选 vcpkg revision 已移除 `cpprestsdk`、Apple `mDNSResponder-2881.0.25` Windows stub 未定义 `LOG_ERR`、完整 solution 缺少 `dirent` include/OpenSSL compatibility opt-in/`NOMINMAX`、两处连接代码仍直接依赖 Windows `min` macro、vcpkg 中 zlib 1.3.2 已将 Windows import/runtime 名改为 `z.lib`/`z.dll`，以及自定义 install root 下 MSBuild 不会自动链接 `cpprest_2_10.lib`。manifest、compiler workarounds 和 vcpkg 产物契约已最小化修正，尚待标签构建复验。
 
 ## 完成条件
 

@@ -38,7 +38,7 @@ assert(windows_build.include?("SetEnvironmentVariable(\"CL\", $previousSolutionC
 
 windows_targets = read(root, "AltServer-Windows/Directory.Build.targets")
 assert(windows_targets.include?("Dependencies\\dirent\\include"), "Windows projects must receive the pinned dirent include path")
-assert(windows_targets.include?("libcrypto.lib;z.lib;"), "Windows AltServer must link the zlib 1.3.2 import library")
+assert(windows_targets.include?("cpprest_2_10.lib;libssl.lib;libcrypto.lib;z.lib;"), "Windows AltServer must link its vcpkg runtime import libraries")
 
 windows_packager = read(root, "AltServer-Windows/Scripts/package-release.ps1")
 assert(windows_packager.include?('"z.dll"'), "Windows package must require the zlib 1.3.2 runtime DLL")
