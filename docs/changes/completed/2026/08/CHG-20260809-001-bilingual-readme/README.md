@@ -13,6 +13,7 @@
 - 重写 `README.md`，明确 AltForge 相对上游的品牌、Unicode IPA、App ID、简体中文、开发团队、维护修复、CI/release 和文档治理变化。
 - 新增 `README.zh-CN.md`，与英文版保持相同结构、能力边界、命令、下载方式和已知限制。
 - 在两份 README 顶部提供 English/简体中文切换入口。
+- 使用仓库现有 App 图标、居中品牌区、平台徽章、快捷导航、重点能力矩阵、安装入口和 Mermaid 架构图优化 GitHub 首屏与阅读层级。
 - 澄清 Xcode 26 是工具链版本，项目当前仍使用 Swift 5.0 language mode。
 - 在 context、localization rule、doc sync rule 和文档入口中固化双语 README 的长期维护方式。
 - 采用 Xcode 26 / Swift 5.0 language mode 的当前口径并解决 `ISSUE-20260808-002`；未来 Swift 6 migration 保留为独立决策。

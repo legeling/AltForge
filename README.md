@@ -1,72 +1,116 @@
-# AltForge
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/GlassIconDark.png">
+    <img src="AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/GlassIcon.png" width="132" alt="AltForge app icon">
+  </picture>
+</p>
 
-**English** | [简体中文](README.zh-CN.md)
+<h1 align="center">AltForge</h1>
 
-> A maintained AltStore Classic derivative focused on reliable sideloading, Unicode compatibility, localization, and practical fixes.
+<p align="center"><strong>AltStore Classic, maintained for Unicode apps, international users, and modern Apple platforms.</strong></p>
 
-[![Swift Language Mode](https://img.shields.io/badge/Swift_language_mode-5.0-orange.svg)](https://swift.org/)
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/legeling/AltForge/pulls)
+<p align="center">
+  <strong>English</strong> · <a href="README.zh-CN.md">简体中文</a>
+</p>
 
-## About
+<p align="center">
+  <a href="https://github.com/legeling/AltForge/releases"><img alt="AltStore Classic" src="https://img.shields.io/badge/distribution-AltStore_Classic-2f6feb?style=flat-square"></a>
+  <a href="https://swift.org/"><img alt="Swift 5.0 language mode" src="https://img.shields.io/badge/Swift_language_mode-5.0-f05138?style=flat-square"></a>
+  <img alt="iOS 17.4 or later" src="https://img.shields.io/badge/iOS-17.4%2B-111111?style=flat-square">
+  <img alt="macOS 11 or later" src="https://img.shields.io/badge/macOS-11%2B-6e7781?style=flat-square">
+  <a href="LICENSE"><img alt="AGPL version 3" src="https://img.shields.io/badge/license-AGPL_v3-c52a42?style=flat-square"></a>
+</p>
 
-AltForge is an independent derivative of [AltStore](https://github.com/altstoreio/AltStore). It keeps the familiar AltStore/AltServer architecture while maintaining compatibility fixes and user-facing improvements that are not yet available, or are no longer maintained, in the upstream Classic line.
+<p align="center">
+  <a href="https://github.com/legeling/AltForge/releases"><strong>Releases</strong></a> ·
+  <a href="#what-altforge-changes"><strong>Changes</strong></a> ·
+  <a href="#build-from-source"><strong>Build</strong></a> ·
+  <a href="docs/README.md"><strong>Documentation</strong></a> ·
+  <a href="https://github.com/legeling/AltForge/issues"><strong>Issues</strong></a>
+</p>
 
-AltForge is currently built as an **AltStore Classic** application. The `marketplace` branch name is historical and does not mean the release embeds the Marketplace extension or entitlement.
+AltForge is an independent derivative of [AltStore](https://github.com/altstoreio/AltStore). It preserves the proven AltStore/AltServer architecture while maintaining compatibility fixes and practical improvements for the Classic sideloading workflow.
+
+> [!IMPORTANT]
+> AltForge is built as an **AltStore Classic** application. The `marketplace` branch name is historical; releases do not embed the Marketplace extension or entitlement.
+
+## At A Glance
+
+<table>
+  <tr>
+    <td width="50%"><strong>Unicode without renaming</strong><br>Install IPA files with Chinese and other Unicode display names or resource paths while keeping the original on-device name.</td>
+    <td width="50%"><strong>English + 简体中文</strong><br>Use the existing interface in English or Simplified Chinese, including iOS per-app language selection.</td>
+  </tr>
+  <tr>
+    <td width="50%"><strong>Classic-first maintenance</strong><br>Keep the familiar Apple ID and AltServer workflow without silently changing the distribution model.</td>
+    <td width="50%"><strong>Traceable engineering</strong><br>Track requirements, architecture, verification, known issues, and changes directly in the repository.</td>
+  </tr>
+</table>
 
 ## What AltForge Changes
 
-| Area | AltForge change |
+| Area | AltForge behavior |
 |---|---|
-| Product identity | Uses the AltForge brand, `com.legeling.AltForge` bundle identifier family, and the repository's official GitHub Release source. |
-| Unicode IPA installation | Preserves Unicode display names and resource paths, supports UTF-8 and Info-ZIP Unicode Path metadata, and provides bounded fallbacks for common legacy East Asian ZIP filename encodings. |
-| Apple App ID compatibility | Converts only the Apple App ID description to a safe ASCII value without changing the app's on-device Unicode display name. |
-| Simplified Chinese | Includes Simplified Chinese resources and supports iOS per-app language selection while retaining English fallback behavior. |
-| Developer teams | Supports individual, organization, and free developer-team fallback in the client and AltServer installation paths. |
-| Maintenance fixes | Prevents negative expiration-day displays and makes macOS error details selectable while preserving attributed formatting. |
-| Build and release | Defines bounded CI builds and tag-driven release packaging for the IPA, macOS AltServer, source metadata, and checksums. |
-| Project documentation | Maintains requirements, architecture, verification, issues, change records, and contributor rules under [`docs/`](docs/README.md). |
+| **Identity and source** | Uses the AltForge brand, `com.legeling.AltForge` identifier family, and this repository's GitHub Release source. |
+| **Unicode IPA support** | Reads UTF-8 and Info-ZIP Unicode Path metadata, includes bounded fallbacks for common legacy East Asian filename encodings, and writes UTF-8 ZIP paths. |
+| **Apple App ID compatibility** | Converts only the Apple App ID description to safe ASCII without changing the app's Unicode display name. |
+| **Developer teams** | Supports individual, organization, and free developer-team fallback in both client and AltServer installation paths. |
+| **Maintenance fixes** | Prevents negative expiration-day displays and makes macOS error details selectable without discarding attributed formatting. |
+| **Build and documentation** | Defines bounded CI/release workflows and maintains a complete spec, verification, issue, and change history under [`docs/`](docs/README.md). |
 
-General fixes remain separated from AltForge branding where practical so they can be contributed back to upstream projects.
+General compatibility fixes remain separate from branding where practical so they can be contributed upstream.
 
-## Features
+## Get AltForge
 
-- Install, refresh, and update sideloaded applications through AltServer over Wi-Fi or a connected device.
-- Sign applications with an individual, organization, or free Apple developer team.
-- Install IPA files containing Chinese or other Unicode app names and resource filenames.
-- Use the interface in English or Simplified Chinese, including iOS per-app language switching.
-- Add and update compatible AltStore sources with stable source identity handling.
-- Preserve structured client/server error information for more useful diagnostics.
-- Use the existing optional Widget, Backup, and JIT components where their platform requirements are met.
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>Install a release</strong><br><br>
+      Download AltServer for macOS, connect and trust the device, then choose <strong>Install AltForge</strong> from the AltServer menu.<br><br>
+      <a href="https://github.com/legeling/AltForge/releases"><strong>Open GitHub Releases →</strong></a>
+    </td>
+    <td width="50%" valign="top">
+      <strong>Build the project</strong><br><br>
+      Clone recursively, install the locked CocoaPods dependencies, and open <code>AltStore.xcworkspace</code> with Xcode 26.<br><br>
+      <a href="#build-from-source"><strong>Read build instructions →</strong></a>
+    </td>
+  </tr>
+</table>
+
+A tagged release is expected to provide:
+
+| Artifact | Purpose |
+|---|---|
+| `AltForge.ipa` | Unsigned Classic package that AltServer signs for the selected Apple ID, team, and device. |
+| `AltForge-AltServer-macOS.zip` | Universal macOS AltServer application. |
+| `apps.json` | Official AltForge source metadata. |
+| `SHA256SUMS.txt` | SHA-256 checksums for release artifacts. |
+
+The IPA cannot be installed by tapping it on an iPhone or iPad. The current macOS archive is not Developer ID signed or notarized, so macOS may require opening AltServer from Finder's context menu. Verify the published checksum before installation.
 
 ## Requirements
 
-### Using AltForge
+| Component | Minimum |
+|---|---|
+| AltForge | iOS or iPadOS 17.4 |
+| AltServer | macOS 11 |
+| AltJIT | macOS 13 |
+| Build host | macOS with Xcode 26, CocoaPods, Git, and recursive submodules |
+| Swift | Swift 5.0 language mode under the Xcode 26 toolchain |
 
-- iOS or iPadOS 17.4 or later.
-- macOS 11 or later for AltServer.
-- macOS 13 or later for the optional AltJIT target.
-- An Apple ID and a compatible Apple developer team.
+An Apple ID and a compatible Apple developer team are required by Apple's signing flow. AltForge has not been migrated to Swift 6 language mode.
 
-### Building AltForge
+## How It Works
 
-- macOS with Xcode 26.
-- CocoaPods.
-- Git with recursive submodule support.
-- The project currently uses Swift language mode 5.0 under the Xcode 26 toolchain. It has not been migrated to Swift 6 language mode.
+```mermaid
+flowchart LR
+    Package["GitHub Release or local IPA"] --> Client["AltForge<br/>iOS / iPadOS"]
+    Client <-->|"discover · send · refresh"| Server["AltServer<br/>macOS"]
+    Server -->|"sign · install"| Device["iPhone / iPad"]
+    Server <-->|"certificates · profiles"| Apple["Apple Developer Services"]
+```
 
-## Downloads And Installation
-
-Published builds are available from this repository's [GitHub Releases](https://github.com/legeling/AltForge/releases). A tagged release is expected to contain:
-
-- `AltForge.ipa`: an unsigned AltStore Classic package that AltServer signs for the selected Apple ID, team, and device.
-- `AltForge-AltServer-macOS.zip`: the macOS AltServer application.
-- `apps.json`: the official AltForge source metadata.
-- `SHA256SUMS.txt`: SHA-256 checksums for the release artifacts.
-
-The IPA cannot be installed by tapping it on an iPhone or iPad. Install the macOS AltServer package, connect and trust the device, then choose **Install AltForge** from AltServer. AltServer will request the Apple account information required by Apple's signing flow.
-
-The current macOS archive is not Developer ID signed or notarized. macOS may require opening AltServer from Finder's context menu. Verify release checksums before installation.
+AltForge manages sources, downloads, installed-app state, and user workflows. AltServer performs desktop-side authentication, signing preparation, and device installation. AltSign owns the Apple Developer API, application model, signing, and IPA/ZIP handling.
 
 ## Build From Source
 
@@ -82,14 +126,15 @@ In Xcode:
 
 1. Select your development team for the AltStore, AltWidgetExtension, and AltBackup targets.
 2. When running AltForge directly from Xcode, set `ALTDeviceID` in the AltStore Info.plist to the target device UDID.
-3. Optionally set `ALTServerID` to the Bonjour `serverID` advertised by your AltServer. Without it, AltForge can still fall back to another available server.
+3. Optionally set `ALTServerID` to the Bonjour `serverID` advertised by AltServer. AltForge can fall back to another available server when it is omitted.
 4. Select the AltStore or AltServer scheme and build the required target.
 
-Repeatable command-line build and test commands are documented in the [verification guide](docs/workflow/04-verification/README.md). Signing, provisioning, device installation, and JIT changes still require an appropriately sanitized real-device validation plan.
+Repeatable command-line checks live in the [verification guide](docs/workflow/04-verification/README.md). Signing, provisioning, installation, and JIT changes still require a sanitized real-device validation plan.
 
-## Release Process
+<details>
+<summary><strong>Release maintainer workflow</strong></summary>
 
-Pull requests and pushes to `marketplace` use the repository CI workflow. Semantic version tags trigger the release workflow:
+Semantic version tags trigger the release workflow:
 
 ```sh
 VERSION=2.3.4
@@ -97,41 +142,43 @@ git tag "v${VERSION}"
 git push origin "v${VERSION}"
 ```
 
-The workflow builds an unsigned IPA and a universal macOS AltServer archive, generates `apps.json` and checksums, and attaches the artifacts to a GitHub Release. Tag creation and publishing should only be performed by a release maintainer after the documented quality gates have been checked.
+The workflow builds an unsigned IPA and a universal macOS AltServer archive, generates `apps.json` and checksums, and attaches them to a GitHub Release. Only publish after completing the documented quality gates.
 
-## Project Structure
+</details>
+
+## Repository Map
 
 | Path | Responsibility |
 |---|---|
-| `AltStore/` | iOS user interface and app-management workflow. |
-| `AltServer/` | macOS authentication, signing preparation, and device installation. |
-| `AltStoreCore/` | Shared domain models, persistence, sources, and utilities. |
-| `Shared/` | Client/server protocol and shared application behavior. |
-| `Dependencies/AltSign/` | Apple Developer API, signing, application models, and IPA/ZIP handling. |
-| `AltTests/` | XCTest coverage for shared and application behavior. |
-| `docs/` | Requirements, design, verification, issues, changes, ADRs, releases, and rules. |
+| `AltStore/` | iOS user interface and app-management workflow |
+| `AltServer/` | macOS authentication, signing preparation, and device installation |
+| `AltStoreCore/` | Shared domain models, persistence, sources, and utilities |
+| `Shared/` | Client/server protocol and shared application behavior |
+| `Dependencies/AltSign/` | Apple Developer API, signing, application models, and IPA/ZIP handling |
+| `AltTests/` | XCTest coverage for shared and application behavior |
+| `docs/` | Requirements, design, verification, issues, changes, ADRs, releases, and rules |
 
-The repository keeps historical `AltStore`, `AltServer`, and `ALT*` code identifiers where renaming would create unnecessary upstream conflicts. Public product text and official source identity use AltForge.
+Historical `AltStore`, `AltServer`, and `ALT*` code identifiers remain where renaming would create unnecessary upstream conflicts. Public product text and official source identity use AltForge.
 
 ## Documentation And Contributing
 
-Start with the [documentation index](docs/README.md) and the project-level [agent/contributor rules](AGENTS.md). Commit conventions and engineering gates are defined in [`docs/rules/`](docs/rules/README.md).
+Start with the [documentation index](docs/README.md) and [project rules](AGENTS.md). Commit conventions and quality gates live in [`docs/rules/`](docs/rules/README.md).
 
-The current roadmap, test gaps, and known risks are tracked in:
-
-- [Current tasks](docs/workflow/05-tasks/README.md)
-- [Verification and coverage](docs/workflow/04-verification/README.md)
-- [Issue register](docs/issues/README.md)
-- [Change records](docs/changes/README.md)
+| Need | Start here |
+|---|---|
+| Current roadmap | [Tasks](docs/workflow/05-tasks/README.md) |
+| Test status and gaps | [Verification](docs/workflow/04-verification/README.md) |
+| Known risks | [Issue register](docs/issues/README.md) |
+| Implementation history | [Change records](docs/changes/README.md) |
 
 ## Known Limitations
 
-- This repository does not currently contain a Windows AltServer build target.
+- No Windows AltServer build target is currently included.
 - The macOS release archive is not yet Developer ID signed or notarized.
-- Unicode archive compatibility has implementation-level validation, but persistent automated AltSign fixtures and broader real-device coverage are still being expanded.
+- Unicode archive handling has implementation-level validation, but persistent AltSign fixtures and broader real-device coverage are still being expanded.
 
 ## Upstream And License
 
-AltForge is derived from [altstoreio/AltStore](https://github.com/altstoreio/AltStore). The upstream repository remains configured as a separate Git remote so compatible fixes can move in either direction. AltSign-specific compatibility work is maintained in the [AltForge AltSign fork](https://github.com/legeling/AltSign) while remaining traceable to [AltSign upstream](https://github.com/rileytestut/AltSign).
+AltForge is derived from [altstoreio/AltStore](https://github.com/altstoreio/AltStore). The upstream repository remains configured as a separate Git remote so compatible fixes can move in either direction. AltSign compatibility work is maintained in the [AltForge AltSign fork](https://github.com/legeling/AltSign) while remaining traceable to [AltSign upstream](https://github.com/rileytestut/AltSign).
 
 AltForge is distributed under the [GNU Affero General Public License v3.0](LICENSE). Third-party dependencies remain under their respective licenses.
