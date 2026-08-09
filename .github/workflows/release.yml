@@ -244,6 +244,7 @@ jobs:
             recommended-sources.json \
             developerdisks.json \
             SHA256SUMS.txt \
+            --repo "$GITHUB_REPOSITORY" \
             --verify-tag \
             --generate-notes \
             --draft \

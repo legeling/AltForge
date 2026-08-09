@@ -67,6 +67,7 @@ end
 assert(workflow.include?("Scripts/package_macos_dmg.sh"), "release workflow must use the reviewed DMG packager")
 assert(workflow.include?("Scripts/verify_apple_release_artifacts.sh"), "release workflow must verify packaged Apple artifacts")
 assert(workflow.include?("sha256sum --check SHA256SUMS.txt"), "release workflow must verify generated checksums before creating the Draft")
+assert(workflow.match?(/gh release create "\$GITHUB_REF_NAME".*?--repo "\$GITHUB_REPOSITORY"/m), "Draft creation must identify the repository after entering the artifact directory")
 
 dmg_packager = read(root, "Scripts/package_macos_dmg.sh")
 assert(dmg_packager.include?("hdiutil create"), "DMG packager must use the macOS disk image utility")

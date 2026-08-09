@@ -43,7 +43,7 @@ AltForge 需要由同一仓库维护 iOS 客户端、macOS AltServer 和 Windows
 
 - [x] Windows 源码、固定依赖、许可证和品牌/source identity 完成静态检查。
 - [x] PowerShell bootstrap/build/package 脚本完成 delimiter smoke；OpenSSL SRP-6a 通过独立 reference vector。
-- [ ] GitHub Windows runner 完成 Release build 和 ZIP 打包。
+- [x] GitHub Windows runner 完成 Release build 和 ZIP 打包。
 - [x] release metadata dry run 覆盖 Windows ZIP checksum。
 - [x] README、workflow、verification、tasks 和 issue 状态同步。
 - [x] 无遗留进程或任务临时目录；既有工作区改动保持不变。
@@ -52,5 +52,5 @@ AltForge 需要由同一仓库维护 iOS 客户端、macOS AltServer 和 Windows
 
 - `AppleSRP.cpp` 以 C++17、OpenSSL 3.6 headers 和 warnings-as-errors 完成语法检查，并与独立 Ruby 大数/SHA-256 reference vector 对比 `A`、`M1`、session key 和 `M2`。
 - vcpkg JSON、MSBuild XML、workflow YAML、Ruby release metadata syntax 与本地 project file references 均通过静态验证。
-- `actionlint 1.7.7` 已检查初始 CI/Release workflows；五项 Release 产物 metadata/checksum fixture 通过。七次 hosted Windows run 依次暴露 runner vcpkg 漂移、`cpprestsdk` 被 deindex、Apple mDNSResponder Windows stub 未定义 `LOG_ERR`、完整 solution compiler/include compatibility、两处依赖 Windows `min` macro 的调用、zlib 1.3.2 的 Windows library/runtime 重命名，以及自定义 install root 下缺少 cpprestsdk 显式链接。固定依赖、compiler workarounds 和 `cpprest_2_10.lib`/`z.lib`/`z.dll` 产物契约已最小化，等待下一标签复验。
+- `actionlint 1.7.7` 已检查初始 CI/Release workflows；五项 Release 产物 metadata/checksum fixture 通过。七次 hosted Windows run 依次暴露 runner vcpkg 漂移、`cpprestsdk` 被 deindex、Apple mDNSResponder Windows stub 未定义 `LOG_ERR`、完整 solution compiler/include compatibility、两处依赖 Windows `min` macro 的调用、zlib 1.3.2 的 Windows library/runtime 重命名，以及自定义 install root 下缺少 cpprestsdk 显式链接。第七次 `windows-2025` job 已以固定依赖和最小 compiler workarounds 完成 Win32 Release build 及 ZIP 打包。
 - 本机没有 PowerShell、MSBuild、Windows SDK 或设备环境，因此 PowerShell AST parser、完整 Windows link/package 与真实设备安装保留给 hosted runner/人工门禁。

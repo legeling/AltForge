@@ -59,4 +59,4 @@ source 合并只解析上一正式 `apps.json`，时间和内存均为 `O(versio
 - iPhone 17 Pro Simulator 上运行 `testSourceID` 与 `testAltForgeSourceDeepLink`，2 项通过
 - `AltServer` macOS arm64 Release build 通过；产物 Info.plist 为 `2.4.0 (88)`
 
-未创建 tag，未触发真实 universal Apple/Windows job，因此新的 CI artifact verifier 尚未在 hosted runner 执行；GitHub Draft 页面、Windows 构建、入口点击或真实设备安装仍待验证。本地 DerivedData 已清理。
+`v2.4.0` 标签构建已在 hosted runner 完成 Apple artifact verifier、Universal DMG/unsigned IPA 和 Windows ZIP；首次 publish job 在 artifact 目录运行 `gh release create --verify-tag` 时因未显式指定 repository 而拒绝创建 Draft。workflow 已增加 `--repo "$GITHUB_REPOSITORY"`，尚待下一次标签复验 Draft 与人工公开门禁。真实设备安装仍待验证。
