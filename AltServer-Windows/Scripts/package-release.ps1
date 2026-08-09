@@ -85,7 +85,7 @@ try {
         "libssl-*.dll",
         "pcre2-8.dll",
         "pcre2-posix.dll",
-        "zlib1.dll"
+        "z.dll"
     )
     foreach ($requiredPattern in $requiredPatterns) {
         if (-not (Get-ChildItem -LiteralPath $stagingDirectory -Filter $requiredPattern -File)) {

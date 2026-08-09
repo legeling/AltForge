@@ -38,6 +38,11 @@ assert(windows_build.include?("SetEnvironmentVariable(\"CL\", $previousSolutionC
 
 windows_targets = read(root, "AltServer-Windows/Directory.Build.targets")
 assert(windows_targets.include?("Dependencies\\dirent\\include"), "Windows projects must receive the pinned dirent include path")
+assert(windows_targets.include?("libcrypto.lib;z.lib;"), "Windows AltServer must link the zlib 1.3.2 import library")
+
+windows_packager = read(root, "AltServer-Windows/Scripts/package-release.ps1")
+assert(windows_packager.include?('"z.dll"'), "Windows package must require the zlib 1.3.2 runtime DLL")
+assert(!windows_packager.include?('"zlib1.dll"'), "Windows package must not require the legacy zlib runtime name")
 
 %w[WiredConnection.cpp WirelessConnection.cpp].each do |name|
   connection = read(root, "AltServer-Windows/AltServer/#{name}")
