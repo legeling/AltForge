@@ -33,6 +33,11 @@ assert(workflow.include?("ref: ${{ needs.prepare.outputs.vcpkg_baseline }}"), "W
 windows_build = read(root, "AltServer-Windows/Scripts/build-release.ps1")
 assert(windows_build.include?("/DLOG_ERR=kDebugLevelError"), "Windows mDNSResponder build must define the missing LOG_ERR priority")
 assert(windows_build.include?("SetEnvironmentVariable(\"CL\", $previousCompilerOptions"), "Windows mDNSResponder compiler options must be restored")
+assert(windows_build.include?("/DNOMINMAX /DOPENSSL_SUPPRESS_DEPRECATED"), "Windows solution build must isolate Windows macros and permit reviewed OpenSSL compatibility APIs")
+assert(windows_build.include?("SetEnvironmentVariable(\"CL\", $previousSolutionCompilerOptions"), "Windows solution compiler options must be restored")
+
+windows_targets = read(root, "AltServer-Windows/Directory.Build.targets")
+assert(windows_targets.include?("Dependencies\\dirent\\include"), "Windows projects must receive the pinned dirent include path")
 
 release_assets = %w[
   AltForge.ipa

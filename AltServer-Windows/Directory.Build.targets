@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Platform)' == 'Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(VcpkgInstalledDir)x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)Dependencies\dirent\include;$(VcpkgInstalledDir)x86-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(VcpkgInstalledDir)x86-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

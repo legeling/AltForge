@@ -110,15 +110,27 @@ finally {
 }
 
 $solution = Join-Path $root "AltServer.sln"
-Invoke-Checked -Command $msbuild -Arguments @(
-    $solution,
-    "/m",
-    "/t:AltServer",
-    "/p:Configuration=Release",
-    "/p:Platform=x86",
-    "/p:PlatformToolset=v143",
-    "/p:VcpkgInstalledDir=$installedDirectory\",
-    "/p:MDNSResponderDir=$mdnsRoot\"
-)
+$previousSolutionCompilerOptions = [Environment]::GetEnvironmentVariable("CL", [EnvironmentVariableTarget]::Process)
+$solutionCompilerOptions = "/DNOMINMAX /DOPENSSL_SUPPRESS_DEPRECATED"
+if ($previousSolutionCompilerOptions) {
+    $solutionCompilerOptions = "$previousSolutionCompilerOptions $solutionCompilerOptions"
+}
+
+try {
+    [Environment]::SetEnvironmentVariable("CL", $solutionCompilerOptions, [EnvironmentVariableTarget]::Process)
+    Invoke-Checked -Command $msbuild -Arguments @(
+        $solution,
+        "/m",
+        "/t:AltServer",
+        "/p:Configuration=Release",
+        "/p:Platform=x86",
+        "/p:PlatformToolset=v143",
+        "/p:VcpkgInstalledDir=$installedDirectory\",
+        "/p:MDNSResponderDir=$mdnsRoot\"
+    )
+}
+finally {
+    [Environment]::SetEnvironmentVariable("CL", $previousSolutionCompilerOptions, [EnvironmentVariableTarget]::Process)
+}
 
 & (Join-Path $PSScriptRoot "package-release.ps1") -OutputDirectory $OutputDirectory
