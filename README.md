@@ -35,7 +35,7 @@ AltForge is an independent derivative of [AltStore](https://github.com/altstorei
 <table>
   <tr>
     <td width="50%"><strong>Unicode without renaming</strong><br>Install IPA files with Chinese and other Unicode display names or resource paths while keeping the original on-device name.</td>
-    <td width="50%"><strong>English + 简体中文</strong><br>Use English or Simplified Chinese through iOS per-app language selection and the AltForge Server settings window.</td>
+    <td width="50%"><strong>English + 简体中文</strong><br>Use English or Simplified Chinese through iOS per-app language selection and the AltForge Server status-menu settings.</td>
   </tr>
   <tr>
     <td width="50%"><strong>Classic-first maintenance</strong><br>Keep the familiar Apple ID and AltServer workflow without silently changing the distribution model.</td>
@@ -91,7 +91,7 @@ Only a matching `vX.Y.Z` tag starts the Release workflow. Hosted macOS and Windo
 
 AltForge-owned update and configuration metadata is published only from this repository. Apple services, Patreon, third-party sources, build dependencies, and Developer Disk files retain their real external owners; AltForge publishes only the reviewed disk URL index. Classic builds do not contact the upstream Marketplace or Fediverse control services. Patreon sign-in is disabled unless a builder supplies their own OAuth credentials and HTTPS redirect URI.
 
-The IPA cannot be installed by tapping it on an iPhone or iPad. The current macOS DMG is not Developer ID signed or notarized, and the Windows ZIP is also unsigned. Mount the DMG and drag `AltForge Server.app` to Applications; see the [local macOS validation guide](docs/guides/local-macos-validation.md) for a source build and first-launch procedure. Windows users must install the desktop versions of iTunes and iCloud from Apple's website, not the Microsoft Store. Extract the complete ZIP so every DLL remains beside `AltServer.exe`, and verify the published checksum before installation.
+The IPA cannot be installed by tapping it on an iPhone or iPad. The macOS app bundle is sealed with an ad-hoc integrity signature so its login item can be registered, but the DMG is not Developer ID signed or notarized; the Windows ZIP is also unsigned. Mount the DMG and drag `AltForge Server.app` to Applications; see the [local macOS validation guide](docs/guides/local-macos-validation.md) for a source build and first-launch procedure. Windows users must install the desktop versions of iTunes and iCloud from Apple's website, not the Microsoft Store. Extract the complete ZIP so every DLL remains beside `AltServer.exe`, and verify the published checksum before installation.
 
 ## Requirements
 
@@ -104,7 +104,7 @@ The IPA cannot be installed by tapping it on an iPhone or iPad. The current macO
 | Windows build host | Windows with Visual Studio 2022 C++, PowerShell, Git, and vcpkg |
 | Swift | Swift 5.0 language mode under the Xcode 26 toolchain |
 
-An Apple ID and a compatible Apple developer team are required by Apple's signing flow. AltForge has not been migrated to Swift 6 language mode.
+An Apple ID and a compatible Apple developer team are required by Apple's signing flow. On macOS, AltForge Server remembers successfully authenticated accounts and can optionally store their passwords in this Mac's Keychain; passwords are never written to UserDefaults or ordinary logs. AltForge has not been migrated to Swift 6 language mode.
 
 ## How It Works
 
@@ -187,7 +187,7 @@ Start with the [documentation index](docs/README.md) and [project rules](AGENTS.
 
 - Windows source and CI are included, but the first hosted build and sanitized Windows device smoke test remain required before treating its release artifact as verified.
 - The imported Windows notification-area interface currently remains in English; the English/Simplified Chinese language switch is implemented in the iOS client.
-- The macOS release DMG is not yet Developer ID signed or notarized, so public distribution still requires an explicit Gatekeeper warning until a signing/notarization plan is implemented.
+- The macOS app bundle currently uses a deep ad-hoc integrity signature, not a Developer ID identity, and the DMG is not notarized. Public distribution still requires an explicit Gatekeeper warning until a signing/notarization plan is implemented.
 - Unicode archive handling has implementation-level validation, but persistent AltSign fixtures and broader real-device coverage are still being expanded.
 
 ## Upstream And License

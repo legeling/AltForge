@@ -127,7 +127,7 @@ AltForge 没有自有官网或社交账号时，以仓库 README、Issues、隐�
 
 `Scripts/package_macos_dmg.sh` 是 CI 与本地共用的唯一 DMG 打包入口。脚本把输入 App 复制到任务专属临时 staging，加入 `/Applications` 快捷方式，以 `hdiutil` 生成压缩 DMG 并立即执行 image verify；成功、失败或中断都会清理 staging。处理时间与 I/O 为 `O(app bytes)`，除一个 App 副本和压缩映像外不常驻额外大型数据。
 
-Release workflow 不对 App 做临时签名，避免把 ad-hoc 签名误认为可分发身份。本地验证允许仅对 staging 副本执行 `--ad-hoc-sign`，不会修改 Xcode build 输出；Developer ID 签名、hardened runtime 和 notarization 必须在获得正式凭据后通过独立 change 设计。脚本拒绝覆盖已有输出，防止静默替换人工审核中的 artifact。
+Release workflow 与本地验证都只对 staging 副本执行 `--ad-hoc-sign`，密封完整 App bundle，使 `SMAppService` 能验证登录项来源，并由 artifact verifier 执行 `codesign --verify --deep --strict`。该签名没有 Team ID、证书身份或 notarization，不得描述为可信发行身份；Developer ID、hardened runtime 和 notarization 必须在获得正式凭据后通过独立 change 设计。脚本不会修改 Xcode build 输出，并拒绝覆盖已有输出，防止静默替换人工审核中的 artifact。
 
 ### `DES-014` AltForge Server 菜单与设置
 
@@ -135,7 +135,7 @@ Release workflow 不对 App 做临时签名，避免把 ad-hoc 签名误认为�
 
 打开状态菜单时，只调用一次 `availableDevices` 和一次 USB-only `connectedDevices`，将 USB identifier 组成有界集合；三个设备子菜单复用该集合生成 `设备名（USB）` 或 `设备名（Wi-Fi）`，同时使用 template SF Symbols。USB/Wi-Fi 同时可用时优先 USB。菜单栏图标继续使用 19/38 px alpha template asset，并在运行时显式设置 template 渲染。
 
-设置窗口使用 AppKit 原生 checkbox 与 pop-up button，不引入新 UI 框架。语言选择保存到 App 自有 preference，并为下一次启动设置 `AppleLanguages`；选择“跟随系统”时移除覆盖。Storyboard/string catalog 仍是唯一文本源，当前进程不尝试热切换已加载资源。
+`Settings` 是状态菜单内的子菜单，不创建独立窗口；其中直接包含 `Launch at Login` 开关和语言子菜单。登录启动菜单项使用标准 `NSMenuItem.state`，并以本地化标题补充 `On/Off/Requires Approval`；macOS 13+ 使用 `SMAppService.mainApp` 的真实状态、可抛错 register/unregister 和登录项系统设置入口，macOS 11/12 才使用 `LaunchAtLogin` fallback。语言选择使用单选勾选状态，保存到 App 自有 preference，并为下一次启动设置 `AppleLanguages`；选择“跟随系统”时移除覆盖。偏好在重启前显式写盘，随后明确提供“立即重启/稍后”；立即重启只创建一个 0.5 秒延迟的短生命周期 relauncher，避免选择丢失和新旧服务实例长期并存。Storyboard/string catalog 仍是唯一文本源，不尝试在当前进程热替换已加载资源。设备子菜单不得声明为 `recentDocuments` 系统菜单，避免 macOS 注入与安装无关的时钟图标；安装、设置和检查更新入口分别使用安装、齿轮和刷新 template SF Symbol，安装图标另提供兼容 fallback。
 
 “检查更新”对固定 GitHub API 发出单次 GET，请求超时 10 秒且不重试。解析只接受 200 JSON；打开 Release 前必须验证 `https` 和 `github.com` host。它只比较当前 `CFBundleShortVersionString` 与 latest tag，不承担下载、签名或安装职责；首次 Release 尚未发布、离线、限流或格式错误均返回明确的手工 Releases 入口。
 
@@ -150,6 +150,16 @@ Release workflow 不对 App 做临时签名，避免把 ad-hoc 签名误认为�
 `Release/developerdisks.json` 只托管版本到下载位置的有界索引，不复制 Apple 或社区提供的 disk image。索引采用 version 1 schema，每个条目只能包含 `archive`，或同时包含 `disk` 与 `signature`；全部 URL 必须是 HTTPS 且 host 在显式允许列表中。macOS 和 Windows 使用同一个 latest Release 索引，避免平台策略漂移。索引规模与受支持系统版本数线性增长，解析和校验复杂度为 `O(entries + bytes)`；列表由发布审查控制，不接受运行时用户输入。
 
 Classic 的三个远程配置端点不再保留上游 Marketplace 分支。当前 Release build 不定义 `MARKETPLACE`；仓库中的 Marketplace/Fediverse API 实现属于未发布的历史代码，不能作为 Classic 运行时依赖。Classic 固定隐藏 Fediverse 交互，启动不调度交互 operation，source 刷新不查询上游 CloudKit metadata；未来启用 Marketplace 前必须另行设计 AltForge 自有的兼容后端和迁移策略。遗留 Mail plug-in 只支持检测和卸载，不再查询或下载上游 plug-in。Patreon 是可选第三方集成：默认 plist 不含凭据和回调，客户端隐藏入口并在任何认证请求前 fail closed；维护者必须配置自己的 OAuth application 与 HTTPS redirect URI 才能启用。
+
+### `DES-016` macOS Apple ID 账号与凭据管理
+
+认证 UI 使用独立原生 AppKit window controller，替代狭窄的 `NSAlert` accessory view。账号输入采用普通可编辑文本框与自定义 transient popover，按最近顺序列出成功认证的账号；账号框和密码框保持相同宽度，账号选择、忘记账号和密码显隐使用独立图标按钮。密码区同时维护 secure/plain 两个互斥文本框，并在 modal 生命周期内用一个 local flags-change monitor 更新 Caps Lock 提醒。窗口按可见内容动态收缩或扩展，关闭时必须移除 monitor，不启动后台线程或常驻观察者。
+
+Apple verification handler 使用匹配的独立 window controller 替代验证码 `NSAlert`。验证码字段过滤为最多六位 ASCII 数字，兼容粘贴；验证码只经当前 callback 返回给 AltSign，窗口退出后释放，不进入 Keychain、UserDefaults 或日志。
+
+AltServer 复用仓库已经固定的 KeychainAccess package，新建仅属于桌面端的 `afterFirstUnlockThisDeviceOnly` service。账号与可选密码编码为 versioned 单项 archive，使账号顺序和密码选择通过一次 Keychain update 原子替换；最多八个账号、64 KiB archive、账号 320 字符和密码 1024 字符。读取、选择、更新和忘记账号均为有界 `O(accounts + bytes)`，账号数上限使 UI 更新为常量级；不得使用 UserDefaults、明文文件、日志或同步型 iCloud Keychain fallback。
+
+只有 `ALTAppleAPI.authenticate` 返回 account/session 后才触发 credential callback。勾选“记住密码”时保存密码，未勾选时仍保留账号但清除该账号的旧密码；损坏或不可访问的 archive fail closed，窗口显示无敏感详情的内联提示并继续允许手工登录。Keychain 更新失败不改变认证/安装结果，仅发送不含账号的本地通知。
 
 ## 可选目标与边界
 

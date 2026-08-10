@@ -27,7 +27,8 @@
 | `TEST-023` | Remote configuration | P0 | Script/Static | 自有 flags/source/recommended 配置与安全默认值 | Automated |
 | `TEST-024` | Identity/update | P1 | Static/Build/Manual | buildVersion、离线身份、支持/隐私/FAQ/桌面入口 | Partial |
 | `TEST-025` | macOS packaging | P1 | Script/Packaging/Manual | DMG 结构、Applications link、image verify、bundle/version、首次启动 | Partial |
-| `TEST-026` | macOS desktop UX | P1 | Static/Build/Manual | AltForge Server identity、About、USB/Wi-Fi、图标、更新检查、设置与语言重启 | Partial |
+| `TEST-026` | macOS desktop UX | P1 | Static/Build/Manual | AltForge Server identity、About、USB/Wi-Fi、图标、更新检查、登录项三态/失败恢复、设置与语言重启 | Partial |
 | `TEST-027` | Network ownership | P0 | Script/Static/Build | 自有控制面、Developer Disk schema/host、Classic Fediverse fail-closed、遗留 plug-in 无网络、OAuth fail-closed | Partial |
+| `TEST-028` | macOS authentication | P1 | Static/Build/Manual Security UI | saved account selection、Keychain-only password consent、reveal、Caps Lock、forget、six-digit 2FA input/paste、corrupt archive | Partial |
 
 状态只能使用：`Automated`、`CI defined`、`Partial`、`Planned`、`Manual pending`、`Manual harness only`、`Blocked`。状态变化必须同步 coverage map。

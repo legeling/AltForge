@@ -53,10 +53,11 @@
 - `FR-022` AltForge 官方 source 必须保留仍受支持的历史版本，并为每个版本使用不可随 latest release 漂移的 tag 固定下载 URL。
 - `FR-023` 能改变 feature flags、可信/封禁 source 或官方推荐内容的远程配置必须由本仓库发布；上游服务只能作为明确披露且不可替代的兼容性依赖。
 - `FR-024` 用户可见的支持、隐私、GitHub、FAQ 和桌面发布入口必须指向 AltForge 自有仓库内容；没有自有账号的社交或赞助入口不得冒充上游账号。
-- `FR-025` macOS Release 必须使用可挂载 DMG，包含公开命名的 `AltForge Server.app` 和 `/Applications` 快捷方式；本地验证可对 staging 副本做 ad-hoc 签名，但不得冒充 Developer ID 签名或 notarization。
+- `FR-025` macOS Release 必须使用可挂载 DMG，包含公开命名的 `AltForge Server.app` 和 `/Applications` 快捷方式；在 Developer ID 路径落地前，CI 与本地验证必须对 staging App 做 deep ad-hoc 完整性签名，以支持 ServiceManagement 并拒绝不完整的 linker-only signature，但不得冒充 Developer ID 身份或 notarization。
 - `FR-026` macOS 桌面端的 About、菜单、通知和错误必须使用 AltForge Server 公开身份，保留 AltForge contributors、上游项目/版权、第三方社区与许可证归属；内部兼容标识无需批量改名。
-- `FR-027` macOS 菜单必须显示设备的 USB/Wi-Fi 连接方式，提供可恢复的检查更新和遗留邮件插件清理文案，并通过设置窗口支持跟随系统、English、简体中文和登录时启动。
+- `FR-027` macOS 菜单必须显示设备的 USB/Wi-Fi 连接方式，提供可恢复的检查更新和遗留邮件插件清理文案，并在状态菜单的设置子菜单中直接提供登录时启动、跟随系统、English 和简体中文选项，不额外打开设置窗口；登录启动必须通过系统勾选和“已开启/已关闭/需要批准”文本反馈真实状态，注册失败不得静默；语言变化必须明确提示重启并允许用户立即重启。
 - `FR-028` AltForge 自有的更新、远程配置、Developer Disk 索引和用户入口必须由 `legeling/AltForge` 发布；第三方依赖、Apple 服务、Patreon 和 Developer Disk 文件来源必须按真实所有者保留并显式披露。Classic 不得访问上游 Marketplace、Fediverse 或 OAuth 控制面，禁止把外部服务伪装成本仓库服务。
+- `FR-029` macOS Apple ID 认证窗口必须支持选择成功认证过的账号、用户明确选择是否记住密码、密码显隐和 Caps Lock 提醒；账号与可选密码只在认证成功后写入本机 Keychain，不得进入 UserDefaults、日志或错误详情，并提供忘记账号的操作。双重认证必须使用匹配的独立窗口，仅接受六位数字且不得持久化验证码。
 
 ## 非功能需求
 
@@ -88,6 +89,7 @@
 - `AC-016` macOS 打包脚本拒绝无效输入和覆盖已有文件，生成可通过 `hdiutil verify` 的 DMG；挂载后 App、Applications 快捷方式、bundle identifier 与产品版本均正确。覆盖 `FR-025`。
 - `AC-017` About/菜单/设置没有旧版公开名称；设备项显示 USB 或 Wi-Fi；语言偏好重启后生效；更新检查在 10 秒内成功或给出手工入口，且只打开合法 GitHub HTTPS Release URL。覆盖 `FR-026`、`FR-027`。
 - `AC-018` repository contract 能区分自有控制面与允许的外部依赖：macOS/Windows Developer Disk 索引、Classic flags/source/recommended 配置均来自本仓库 Release，Classic source 刷新和交互更新不会访问上游 Fediverse/CloudKit，遗留 Mail plug-in 不再访问上游更新服务，未配置自有 OAuth 回调时 Patreon 入口 fail closed。覆盖 `FR-028`。
+- `AC-019` 给定无历史账号、新账号、八个历史账号、损坏 Keychain archive、Caps Lock 开启、密码显隐切换和 2FA challenge，认证窗口保持可操作；只有 Apple 认证成功后才以最近使用顺序更新最多八个账号，未勾选记住密码时不保存密码，验证码只接受六位 ASCII 数字且不持久化。覆盖 `FR-029`。
 
 ## 范围外
 
@@ -116,3 +118,4 @@
 | `FR-025` | `DES-013` | `TEST-025` | `T-015` |
 | `FR-026`, `FR-027` | `DES-014` | `TEST-026` | `T-016` |
 | `FR-028` | `DES-015` | `TEST-027` | `T-017` |
+| `FR-029` | `DES-016` | `TEST-028` | `T-018` |

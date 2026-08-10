@@ -65,6 +65,7 @@ release_assets.each do |asset|
   assert(workflow.include?(asset), "release workflow does not publish #{asset}")
 end
 assert(workflow.include?("Scripts/package_macos_dmg.sh"), "release workflow must use the reviewed DMG packager")
+assert(workflow.match?(/package_macos_dmg\.sh.*?--ad-hoc-sign/m), "release workflow must seal the full app bundle for ServiceManagement login items")
 assert(workflow.include?("Scripts/verify_apple_release_artifacts.sh"), "release workflow must verify packaged Apple artifacts")
 assert(workflow.include?("sha256sum --check SHA256SUMS.txt"), "release workflow must verify generated checksums before creating the Draft")
 assert(workflow.match?(/gh release create "\$GITHUB_REF_NAME".*?--repo "\$GITHUB_REPOSITORY"/m), "Draft creation must identify the repository after entering the artifact directory")
@@ -79,9 +80,10 @@ apple_artifact_verifier = read(root, "Scripts/verify_apple_release_artifacts.sh"
 assert(apple_artifact_verifier.include?('Payload/AltStore.app/Info.plist'), "Apple artifact verifier must inspect the IPA payload")
 assert(apple_artifact_verifier.include?('AltForge Server.app'), "Apple artifact verifier must inspect the public macOS bundle")
 assert(apple_artifact_verifier.include?('lipo -archs'), "Apple artifact verifier must enforce the Universal macOS architecture contract")
+assert(apple_artifact_verifier.include?('codesign --verify --deep --strict'), "Apple artifact verifier must reject an incomplete linker-only app signature")
 assert(apple_artifact_verifier.include?('Signature=adhoc'), "Apple artifact verifier must recognize Xcode linker ad-hoc signatures")
 assert(apple_artifact_verifier.include?('TeamIdentifier=not set'), "Apple artifact verifier must reject an unexpected signing team")
-assert(apple_artifact_verifier.include?('outside the reviewed ad-hoc/unsigned signing policy'), "Apple artifact verifier must enforce the current non-Developer-ID release policy")
+assert(apple_artifact_verifier.include?('outside the reviewed ad-hoc signing policy'), "Apple artifact verifier must enforce the current non-Developer-ID release policy")
 
 info_plist = read(root, "AltServer/Info.plist")
 assert(info_plist.include?("<key>CFBundleDisplayName</key>\n\t<string>AltForge Server</string>"), "macOS public application name must be AltForge Server")
@@ -89,11 +91,12 @@ assert(info_plist.include?("Copyright © 2026 AltForge contributors."), "AltForg
 assert(info_plist.include?("AltStore and AltServer © Riley Testut and contributors."), "upstream copyright attribution is missing")
 
 storyboard = read(root, "AltServer/Base.lproj/Main.storyboard")
-%w[About\ AltForge\ Server Quit\ AltForge\ Server Settings… Check\ for\ Updates… Remove\ Legacy\ Mail\ Plug-in…].each do |title|
+%w[About\ AltForge\ Server Quit\ AltForge\ Server Settings Language System\ Default English Simplified\ Chinese Check\ for\ Updates… Remove\ Legacy\ Mail\ Plug-in…].each do |title|
   assert(storyboard.include?("title=\"#{title.gsub('\\ ', ' ')}\""), "macOS menu is missing #{title.gsub('\\ ', ' ')}")
 end
 assert(!storyboard.include?('title="About AltServer"'), "macOS About menu still uses the upstream public name")
 assert(!storyboard.include?('title="Quit AltServer"'), "macOS Quit menu still uses the upstream public name")
+assert(!storyboard.include?('systemMenu="recentDocuments"'), "device submenus must not use the Recent Documents clock icon")
 
 app_delegate = read(root, "AltServer/AppDelegate.swift")
 assert(app_delegate.include?('NSLocalizedString("%@ (%@)"'), "device menu must include a connection label")
@@ -101,7 +104,48 @@ assert(app_delegate.include?("ALTDeviceManager.shared.connectedDevices"), "devic
 assert(app_delegate.include?('request.timeoutInterval = 10'), "update request must have a finite timeout")
 assert(app_delegate.include?('data.count <= 1_048_576'), "update response must have a size bound")
 assert(app_delegate.include?('release.htmlURL.host == "github.com"'), "update release URL must validate the GitHub host")
-assert(app_delegate.include?("SettingsWindowController"), "macOS settings entry is missing")
+assert(app_delegate.include?('systemSymbolName: "arrow.down.app"'), "Install AltForge must use an install icon")
+assert(app_delegate.include?('case simplifiedChinese'), "macOS settings menu must expose Simplified Chinese")
+assert(app_delegate.include?('UserDefaults.standard.set([identifier], forKey: "AppleLanguages")'), "macOS language preference is not persisted")
+assert(app_delegate.include?("LaunchAtLogin.isEnabled"), "macOS settings menu must expose launch at login")
+assert(app_delegate.include?("SMAppService.mainApp"), "macOS 13+ launch-at-login must use the current ServiceManagement API")
+assert(app_delegate.include?("case .requiresApproval"), "launch-at-login must expose system approval state")
+assert(app_delegate.include?("try service.register()") && app_delegate.include?("try service.unregister()"), "launch-at-login must report registration failures instead of silently toggling")
+assert(app_delegate.include?("Restart AltForge Server to apply the selected language."), "language selection must explain that a restart is required")
+assert(app_delegate.include?("ALT_FORGE_RELAUNCH_PATH"), "language selection must offer an immediate bounded relaunch")
+assert(app_delegate.include?("UserDefaults.standard.synchronize()"), "language preference must reach disk before the immediate relaunch terminates the process")
+assert(!File.exist?(File.join(root, "AltServer/SettingsWindowController.swift")), "macOS settings must remain in the status menu instead of a separate window")
+assert(app_delegate.include?('(self.settingsMenuItem, "gearshape")'), "macOS Settings must have a leading gear icon")
+assert(app_delegate.include?('(self.checkForUpdatesMenuItem, "arrow.clockwise")'), "macOS Check for Updates must have a leading refresh icon")
+
+authentication_ui = read(root, "AltServer/AppleIDAuthenticationWindowController.swift")
+assert(authentication_ui.include?("NSPopover"), "Apple ID authentication must expose a dedicated saved-account picker")
+assert(authentication_ui.include?('NSLocalizedString("Saved Accounts"'), "saved account selection must have a localized heading")
+assert(authentication_ui.include?('checkboxWithTitle: NSLocalizedString("Remember password"'), "Apple ID authentication must expose password persistence consent")
+assert(authentication_ui.include?('systemSymbolName: symbolName'), "Apple ID authentication must provide password visibility controls")
+assert(authentication_ui.include?("NSEvent.addLocalMonitorForEvents(matching: .flagsChanged)"), "Apple ID authentication must monitor Caps Lock")
+assert(authentication_ui.include?('NSLocalizedString("Caps Lock is on."'), "Apple ID authentication must warn when Caps Lock is enabled")
+
+verification_ui = read(root, "AltServer/AppleIDVerificationWindowController.swift")
+assert(verification_ui.include?("verificationCodeLength = 6"), "Apple ID verification must require a six-digit code")
+assert(verification_ui.include?('filter { "0123456789".contains($0) }'), "Apple ID verification must reject non-ASCII digits")
+assert(verification_ui.include?("String(digits.prefix(Self.verificationCodeLength))"), "Apple ID verification input must remain bounded")
+assert(!verification_ui.include?("Keychain") && !verification_ui.include?("UserDefaults"), "Apple ID verification codes must not be persisted")
+
+credential_store = read(root, "AltServer/AppleIDCredentialStore.swift")
+assert(credential_store.include?("import KeychainAccess"), "Apple ID credentials must use the existing Keychain wrapper")
+assert(credential_store.include?(".afterFirstUnlockThisDeviceOnly"), "Apple ID credentials must remain local to this Mac")
+assert(credential_store.include?("maximumAccounts = 8"), "saved Apple ID history must remain bounded")
+assert(credential_store.include?("maximumArchiveSize = 64 * 1024"), "saved credential archive must have a size bound")
+assert(!credential_store.include?("UserDefaults"), "Apple ID credentials must not fall back to UserDefaults")
+assert(app_delegate.include?("recordSuccessfulAuthentication"), "credentials must only be recorded after authentication succeeds")
+
+installation_manager = read(root, "AltServer/Devices/ALTDeviceManager+Installation.swift")
+authentication_result = installation_manager.index("let (account, session) = try result.get()")
+credential_callback = installation_manager.index("authenticationCompletion()")
+assert(authentication_result && credential_callback && credential_callback > authentication_result, "credential persistence must run only after successful Apple authentication")
+assert(installation_manager.include?("AppleIDVerificationWindowController()"), "Apple ID two-factor authentication must use the dedicated verification window")
+assert(!installation_manager.include?("securityCodeTextField"), "Apple ID verification must not retain the obsolete shared security-code field")
 
 plugin_manager = read(root, "AltServer/Plugin/PluginManager.swift")
 assert(plugin_manager.include?('NSLocalizedString("Remove Legacy Mail Plug-in"'), "legacy Mail plug-in action needs a clear title")
@@ -109,15 +153,13 @@ assert(plugin_manager.include?('NSLocalizedString("Remove Plug-in"'), "legacy Ma
 assert(!plugin_manager.match?(%r{https?://}), "legacy Mail plug-in manager must not access an update or download service")
 assert(!plugin_manager.include?("URLSession"), "legacy Mail plug-in manager must remain uninstall-only")
 
-settings = read(root, "AltServer/SettingsWindowController.swift")
-assert(settings.include?('case simplifiedChinese'), "macOS settings must expose Simplified Chinese")
-assert(settings.include?('UserDefaults.standard.set([identifier], forKey: "AppleLanguages")'), "macOS language preference is not persisted")
-assert(settings.include?("LaunchAtLogin.isEnabled"), "macOS settings must expose launch at login")
-
 menu_icon_catalog = JSON.parse(read(root, "AltServer/Assets.xcassets/MenuBarIcon.imageset/Contents.json"))
 assert(menu_icon_catalog.dig("properties", "template-rendering-intent") == "template", "menu bar icon must use template rendering")
 assert(png_dimensions(root, "AltServer/Assets.xcassets/MenuBarIcon.imageset/MenuBar@19.png") == [19, 19], "1x menu bar icon dimensions are incorrect")
 assert(png_dimensions(root, "AltServer/Assets.xcassets/MenuBarIcon.imageset/MenuBar@38.png") == [38, 38], "2x menu bar icon dimensions are incorrect")
+brand_generator = read(root, "Scripts/generate_brand_assets.rb")
+assert(brand_generator.include?("MENU_BAR_CROP_SIZE = 780"), "menu bar icon must remove the template master's display padding")
+assert(brand_generator.scan("resize_cropped_png(TEMPLATE_ICON").length == 2, "both menu bar scales must use the cropped template output")
 
 app_icon_catalog = JSON.parse(read(root, "AltServer/Assets.xcassets/AppIcon.appiconset/Contents.json"))
 app_icon_catalog.fetch("images").each do |entry|
@@ -131,9 +173,16 @@ app_icon_catalog.fetch("images").each do |entry|
 end
 
 desktop_strings = JSON.parse(read(root, "AltServer/Resources/Localizable.xcstrings")).fetch("strings")
-%w[AltForge\ Server AltForge\ Server\ Settings Check\ for\ Updates… Remove\ Plug-in USB Wi-Fi].each do |key|
+%w[AltForge\ Server Account Account\ Could\ Not\ Be\ Saved Apple\ ID\ Account Caps\ Lock\ is\ on. Forget\ Account Hide\ Password Remember\ password Saved\ accounts\ are\ unavailable.\ You\ can\ still\ sign\ in. Saved\ passwords\ are\ stored\ in\ this\ Mac's\ Keychain. Show\ Password Sign\ in\ with\ Apple\ ID Check\ for\ Updates… Remove\ Plug-in USB Wi-Fi].each do |key|
   localized_key = key.gsub('\\ ', ' ')
   assert(desktop_strings.dig(localized_key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese desktop string: #{localized_key}")
+end
+["Launch at Login (On)", "Launch at Login (Off)", "Launch at Login (Requires Approval)", "Unable to Change Launch at Login", "Restart Required", "Restart Now"].each do |key|
+  assert(desktop_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese launch-at-login state: #{key}")
+end
+desktop_menu_strings = JSON.parse(read(root, "AltServer/mul.lproj/Main.xcstrings")).fetch("strings")
+%w[Afg-1A-Set.title IyR-FQ-upe.title Afg-1D-Lng.title Afg-1F-Sys.title Afg-1G-Eng.title Afg-1H-Zhs.title].each do |key|
+  assert(desktop_menu_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese desktop menu string: #{key}")
 end
 %w[AltServer\ Running Uninstall\ Mail\ Plug-in Uninstall\ Plug-in].each do |key|
   stale_key = key.gsub('\\ ', ' ')

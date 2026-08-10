@@ -58,6 +58,7 @@
 - App 图标各槽位尺寸、菜单栏 19/38 px template 图标、USB/Wi-Fi 标签、设置入口和更新 URL 防护已由 repository contract 覆盖。
 - Windows 静态 contract 确认产品名为 `AltForge Server`、保留上游版权、更新菜单使用 `Check for Updates...`，并在设备名后标注 USB/Wi-Fi；Windows hosted build 仍由下一次 Draft Release 验证。
 - 未启动 preview App，避免与用户当前运行的同 bundle identifier 旧版冲突；真实菜单、语言重启和设备连接状态保留为手工 smoke test。
+- 该 change 最初交付的独立设置窗口已根据实际使用反馈由 `CHG-20260810-001` 改为状态菜单内联设置；本记录保留原始实现事实。
 
 ## 残余风险
 

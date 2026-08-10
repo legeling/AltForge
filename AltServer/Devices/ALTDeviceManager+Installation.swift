@@ -8,7 +8,6 @@
 
 import Cocoa
 import UserNotifications
-import ObjectiveC
 
 let altstoreSourceURL = URL(string: "https://github.com/legeling/AltForge/releases/latest/download/apps.json")!
 let altstoreBundleID = "com.legeling.AltForge"
@@ -92,7 +91,7 @@ private extension ALTDeviceManager
 
 extension ALTDeviceManager
 {
-    func installApplication(at ipaFileURL: URL?, to altDevice: ALTDevice, appleID: String, password: String, completion: @escaping (Result<ALTApplication, Error>) -> Void)
+    func installApplication(at ipaFileURL: URL?, to altDevice: ALTDevice, appleID: String, password: String, authenticationCompletion: @escaping () -> Void, completion: @escaping (Result<ALTApplication, Error>) -> Void)
     {
         let destinationDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         
@@ -128,6 +127,7 @@ extension ALTDeviceManager
                     do
                     {
                         let (account, session) = try result.get()
+                        authenticationCompletion()
                         
                         self.fetchTeam(for: account, session: session) { (result) in
                             do
@@ -393,36 +393,8 @@ private extension ALTDeviceManager
         func handleVerificationCode(_ completionHandler: @escaping (String?) -> Void)
         {
             DispatchQueue.main.async {
-                let alert = NSAlert()
-                alert.messageText = NSLocalizedString("Two-Factor Authentication Enabled", comment: "")
-                alert.informativeText = NSLocalizedString("Please enter the 6-digit verification code that was sent to your Apple devices.", comment: "")
-                
-                let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 22))
-                textField.delegate = self
-                textField.translatesAutoresizingMaskIntoConstraints = false
-                textField.placeholderString = NSLocalizedString("123456", comment: "")
-                alert.accessoryView = textField
-                alert.window.initialFirstResponder = textField
-                
-                alert.addButton(withTitle: NSLocalizedString("Continue", comment: ""))
-                alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
-                
-                self.securityCodeAlert = alert
-                self.securityCodeTextField = textField
-                self.validate()
-                
-                NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-                
-                let response = alert.runModal()
-                if response == .alertFirstButtonReturn
-                {
-                    let code = textField.stringValue
-                    completionHandler(code)
-                }
-                else
-                {
-                    completionHandler(nil)
-                }
+                let verificationController = AppleIDVerificationWindowController()
+                completionHandler(verificationController.runModal())
             }
         }
         
@@ -1026,47 +998,5 @@ private extension ALTDeviceManager
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
-    }
-}
-
-private var securityCodeAlertKey = 0
-private var securityCodeTextFieldKey = 0
-
-extension ALTDeviceManager: NSTextFieldDelegate
-{
-    var securityCodeAlert: NSAlert? {
-        get { return objc_getAssociatedObject(self, &securityCodeAlertKey) as? NSAlert }
-        set { objc_setAssociatedObject(self, &securityCodeAlertKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-    
-    var securityCodeTextField: NSTextField? {
-        get { return objc_getAssociatedObject(self, &securityCodeTextFieldKey) as? NSTextField }
-        set { objc_setAssociatedObject(self, &securityCodeTextFieldKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-    
-    public func controlTextDidChange(_ obj: Notification)
-    {
-        self.validate()
-    }
-    
-    public func controlTextDidEndEditing(_ obj: Notification)
-    {
-        self.validate()
-    }
-    
-    private func validate()
-    {
-        guard let code = self.securityCodeTextField?.stringValue.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
-        
-        if code.count == 6
-        {
-            self.securityCodeAlert?.buttons.first?.isEnabled = true
-        }
-        else
-        {
-            self.securityCodeAlert?.buttons.first?.isEnabled = false
-        }
-        
-        self.securityCodeAlert?.layout()
     }
 }

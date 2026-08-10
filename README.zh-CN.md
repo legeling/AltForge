@@ -35,7 +35,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 <table>
   <tr>
     <td width="50%"><strong>保留原名的 Unicode 安装</strong><br>安装显示名或资源路径包含中文及其他 Unicode 字符的 IPA，同时保留设备上的原始名称。</td>
-    <td width="50%"><strong>English + 简体中文</strong><br>通过 iOS 单 App 语言选择和 AltForge Server 设置窗口使用英文或简体中文界面。</td>
+    <td width="50%"><strong>English + 简体中文</strong><br>通过 iOS 单 App 语言选择和 AltForge Server 状态菜单中的设置使用英文或简体中文界面。</td>
   </tr>
   <tr>
     <td width="50%"><strong>专注 Classic 维护</strong><br>保留熟悉的 Apple ID 与 AltServer 流程，不在不知情的情况下改变分发模型。</td>
@@ -91,7 +91,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 
 AltForge 自有的更新和配置 metadata 只由本仓库发布。Apple 服务、Patreon、第三方 source、构建依赖和 Developer Disk 文件保留其真实外部所有者；AltForge 只发布经审核的 disk URL 索引。Classic 构建不会访问上游 Marketplace 或 Fediverse 控制服务。除非构建者配置自己的 OAuth 凭据和 HTTPS redirect URI，否则 Patreon 登录默认关闭。
 
-不能通过在 iPhone 或 iPad 上直接点击 IPA 完成安装。当前 macOS DMG 尚未使用 Developer ID 签名或 notarization，Windows ZIP 同样尚未签名。挂载 DMG 后把 `AltForge Server.app` 拖入 Applications；从源码构建和首次启动步骤见[本地 macOS 验证指南](docs/guides/local-macos-validation.md)。Windows 用户必须从 Apple 官网安装桌面版 iTunes 和 iCloud，不能使用 Microsoft Store 版本。请完整解压 ZIP，让全部 DLL 与 `AltServer.exe` 保持在同一目录，并在安装前核对 checksum。
+不能通过在 iPhone 或 iPad 上直接点击 IPA 完成安装。macOS App bundle 会使用 ad-hoc 完整性签名，以便注册登录项，但 DMG 尚未使用 Developer ID 身份签名或 notarization；Windows ZIP 同样尚未签名。挂载 DMG 后把 `AltForge Server.app` 拖入 Applications；从源码构建和首次启动步骤见[本地 macOS 验证指南](docs/guides/local-macos-validation.md)。Windows 用户必须从 Apple 官网安装桌面版 iTunes 和 iCloud，不能使用 Microsoft Store 版本。请完整解压 ZIP，让全部 DLL 与 `AltServer.exe` 保持在同一目录，并在安装前核对 checksum。
 
 ## 环境要求
 
@@ -104,7 +104,7 @@ AltForge 自有的更新和配置 metadata 只由本仓库发布。Apple 服务�
 | Windows 构建环境 | 安装 Visual Studio 2022 C++、PowerShell、Git 和 vcpkg 的 Windows |
 | Swift | Xcode 26 工具链下的 Swift 5.0 language mode |
 
-Apple 的签名流程需要一个 Apple ID 和可用的 Apple 开发团队。AltForge 尚未迁移到 Swift 6 language mode。
+Apple 的签名流程需要一个 Apple ID 和可用的 Apple 开发团队。在 macOS 上，AltForge Server 会记录成功认证过的账号，并可按用户选择把密码保存在这台 Mac 的钥匙串中；密码不会写入 UserDefaults 或普通日志。AltForge 尚未迁移到 Swift 6 language mode。
 
 ## 工作原理
 
@@ -187,7 +187,7 @@ git push origin "v${version}"
 
 - Windows 源码和 CI 已进入仓库，但首个 hosted build 与脱敏 Windows 真机 smoke test 仍需完成，之后才能把对应产物视为已验证。
 - 当前导入的 Windows 通知区域界面仍沿用上游英文；英文/简体中文语言切换已在 iOS 客户端实现。
-- macOS Release DMG 尚未使用 Developer ID 签名或 notarization；在签名与公证方案落地前，对外分发必须明确提示 Gatekeeper 限制。
+- macOS App bundle 当前使用 deep ad-hoc 完整性签名，而非 Developer ID 身份，DMG 也尚未 notarization；在正式签名与公证方案落地前，对外分发必须明确提示 Gatekeeper 限制。
 - Unicode archive 处理已经通过实现级验证，但持久化 AltSign fixture 和更广泛的真实设备覆盖仍在补充。
 
 ## 上游与许可证

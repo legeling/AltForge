@@ -20,8 +20,9 @@
 | Remote configuration | `FR-023` | `DES-012` | `TEST-023` | Safe JSON defaults and Classic repository endpoints automated | `T-014` |
 | Update and user identity | `FR-016`, `FR-024` | `DES-012` | `TEST-024` | Static contract, iOS targeted tests/build and macOS arm64 Release build pass; manual navigation and Windows build pending | `T-014` |
 | macOS DMG | `FR-025` | `DES-013` | `TEST-025` | Shared packager/static contract and local Universal image/mount/bundle checks pass; CI artifact/checksum gates defined; Finder launch, real tag run and Developer ID/notarization pending | `T-015` |
-| macOS desktop identity/settings | `FR-026`, `FR-027` | `DES-014` | `TEST-026` | Static contract, macOS Universal Release, iOS Simulator build and preview DMG checks pass; manual USB/Wi-Fi/language/update UI matrix pending | `T-016` |
+| macOS desktop identity/settings | `FR-026`, `FR-027` | `DES-014` | `TEST-026` | Inline settings/install-icon/SMAppService/restart static contract and ad-hoc Debug launch plus prior Universal Release, iOS Simulator and preview DMG checks pass; Developer ID login registration and full USB/Wi-Fi/language/update UI matrix pending | `T-016` |
 | Network ownership | `FR-028` | `DES-015` | `TEST-027` | Repository contract、JSON/plist validation、iOS/macOS builds pass; Windows static coverage only | `T-017` |
+| macOS Apple ID credentials | `FR-029` | `DES-016` | `TEST-028` | Static contract, macOS build, and sanitized mock account/2FA window visual checks passed; real authentication/device matrix pending | `T-018` |
 
 ## 风险排序
 

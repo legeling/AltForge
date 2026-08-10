@@ -7,7 +7,7 @@ usage() {
 Usage: Scripts/package_macos_dmg.sh --app PATH --output PATH [--ad-hoc-sign]
 
 Packages AltServer.app in a compressed DMG with an Applications shortcut.
-Use --ad-hoc-sign only for local validation; release artifacts stay unsigned.
+Use --ad-hoc-sign to seal the complete app bundle without claiming a Developer ID identity.
 EOF
 }
 

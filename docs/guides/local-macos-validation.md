@@ -34,7 +34,7 @@ Scripts/package_macos_dmg.sh \
   --ad-hoc-sign
 ```
 
-`--ad-hoc-sign` 只修改 DMG 内的临时副本，方便当前 Mac 本地启动；它不是 Developer ID 签名，禁止把这个本地产物当作正式发行版。打包脚本的时间和磁盘成本均与 App bundle 总字节数近似线性，临时 staging 在结束或失败时自动清理。
+`--ad-hoc-sign` 只修改 DMG 内的临时副本并密封完整 App bundle，方便当前 Mac 启动和验证登录项；它不提供 Developer ID 身份或 notarization。打包脚本的时间和磁盘成本均与 App bundle 总字节数近似线性，临时 staging 在结束或失败时自动清理。
 
 验证结束后删除本次创建的 DerivedData；不要按进程名称终止其他构建：
 
@@ -61,6 +61,6 @@ find "${TMPDIR:-/tmp}/AltForge-LocalDMG-DerivedData" -depth -delete
 
 ## 发布前仍需验证
 
-本地构建默认只生成当前 Mac 架构，并使用 ad-hoc 签名；tag workflow 会生成 `arm64 + x86_64` Universal DMG，且当前仍未签名、未公证。发布 Draft 前还必须验证 Universal 架构、`SHA256SUMS.txt`、Windows ZIP、IPA metadata 和一台脱敏真实设备。只有 Draft 人工审核通过后才能公开 Release。
+本地构建默认只生成当前 Mac 架构；本地与 tag workflow 都会对 DMG 内的 App bundle 做 deep ad-hoc 完整性签名。tag workflow 生成 `arm64 + x86_64` Universal DMG，但仍没有 Developer ID 身份和 notarization。发布 Draft 前还必须验证 Universal 架构、完整签名密封、`SHA256SUMS.txt`、Windows ZIP、IPA metadata 和一台脱敏真实设备。只有 Draft 人工审核通过后才能公开 Release。
 
 卸载时先从菜单栏退出 AltForge Server，再由 Finder 删除 `/Applications/AltForge Server.app`。如果 DMG 仍已挂载，请在 Finder 中推出，不要强制终止无关磁盘或用户进程。

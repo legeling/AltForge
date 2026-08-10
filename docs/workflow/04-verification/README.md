@@ -37,8 +37,9 @@
 | `TEST-023` AltForge 自有远程配置与安全默认值 | `FR-023` | Script/Static | JSON schema 与 Classic endpoint contract 自动化覆盖 |
 | `TEST-024` update/离线 identity 与用户入口 | `FR-016`, `FR-024` | Static/Build/Manual | repository contract、iOS 定向测试/构建与 macOS arm64 Release build 通过；手工入口点击和 Windows build 待执行 |
 | `TEST-025` macOS DMG contract 与本地安装 | `FR-025` | Script/Packaging/Manual | 本机 Universal DMG 创建、image verify、挂载、symlink、bundle/version/signature 检查通过；CI IPA/DMG verifier 与 publish checksum gate 已定义，Finder 首次启动和真实 tag run 待执行 |
-| `TEST-026` AltForge Server 身份、菜单与设置 | `FR-026`, `FR-027` | Static/Build/Manual | repository contract、macOS Universal Release、iOS Simulator build 和 preview DMG mount/signature 检查通过；设置/菜单 UI、语言重启和 USB/Wi-Fi 实机状态待手工验证 |
+| `TEST-026` AltForge Server 身份、菜单与设置 | `FR-026`, `FR-027` | Static/Build/Manual | repository contract、菜单内联设置/安装图标 macOS Debug build、macOS Universal Release、iOS Simulator build 和 preview DMG mount/signature 检查通过；菜单 UI、语言重启和 USB/Wi-Fi 实机状态待手工验证 |
 | `TEST-027` 网络所有权、Developer Disk 索引、Classic Fediverse 与可选 OAuth fail-closed | `FR-028` | Script/Static/Build | repository/release contract、JSON/plist 与 iOS/macOS build 通过；Windows build 未执行 |
+| `TEST-028` macOS Apple ID 账号与凭据管理 | `FR-029` | Static/Build/Manual Security UI | repository contract、macOS build 与脱敏 mock 账号/验证码窗口视觉检查通过；真实 Apple 认证、2FA、Keychain 系统交互和设备安装矩阵待执行 |
 
 ## 首批高价值失败测试
 

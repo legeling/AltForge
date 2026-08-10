@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import ServiceManagement
 import UserNotifications
 
 import AltSign
@@ -27,18 +28,44 @@ private struct GitHubRelease: Decodable
     }
 }
 
+private enum PreferredLanguage: String, CaseIterable
+{
+    case system
+    case english
+    case simplifiedChinese
+
+    var localeIdentifier: String?
+    {
+        switch self
+        {
+        case .system: return nil
+        case .english: return "en"
+        case .simplifiedChinese: return "zh-Hans"
+        }
+    }
+
+    var menuItemTag: Int
+    {
+        switch self
+        {
+        case .system: return 0
+        case .english: return 1
+        case .simplifiedChinese: return 2
+        }
+    }
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let pluginManager = PluginManager()
+    private let appleIDCredentialStore = AppleIDCredentialStore()
+    private static let languagePreferenceKey = "AltForgePreferredLanguage"
     
     private var statusItem: NSStatusItem?
-    private var settingsWindowController: SettingsWindowController?
     
     private var connectedDevices = [ALTDevice]()
     private var wiredDeviceIdentifiers = Set<String>()
-    
-    private weak var authenticationAlert: NSAlert?
     
     @IBOutlet private var appMenu: NSMenu!
     @IBOutlet private var connectedDevicesMenu: NSMenu!
@@ -49,9 +76,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet private var installMailPluginMenuItem: NSMenuItem!
     @IBOutlet private var installAltStoreMenuItem: NSMenuItem!
     @IBOutlet private var sideloadAppMenuItem: NSMenuItem!
-    
-    private weak var authenticationAppleIDTextField: NSTextField?
-    private weak var authenticationPasswordTextField: NSSecureTextField?
+    @IBOutlet private var settingsMenuItem: NSMenuItem!
+    @IBOutlet private var checkForUpdatesMenuItem: NSMenuItem!
+    @IBOutlet private var systemLanguageMenuItem: NSMenuItem!
+    @IBOutlet private var englishLanguageMenuItem: NSMenuItem!
+    @IBOutlet private var simplifiedChineseLanguageMenuItem: NSMenuItem!
     
     private var connectedDevicesMenuController: MenuController<ALTDevice>!
     private var sideloadIPAConnectedDevicesMenuController: MenuController<ALTDevice>!
@@ -85,6 +114,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.sideloadAppMenuItem.keyEquivalentModifierMask = .option
         self.sideloadAppMenuItem.isAlternate = true
+
+        let installImage = NSImage(systemSymbolName: "arrow.down.app", accessibilityDescription: self.installAltStoreMenuItem.title)
+            ?? NSImage(systemSymbolName: "square.and.arrow.down", accessibilityDescription: self.installAltStoreMenuItem.title)
+        installImage?.isTemplate = true
+        self.installAltStoreMenuItem.image = installImage
+
+        let menuIcons: [(menuItem: NSMenuItem, symbolName: String)] = [
+            (self.settingsMenuItem, "gearshape"),
+            (self.checkForUpdatesMenuItem, "arrow.clockwise")
+        ]
+        for (menuItem, symbolName) in menuIcons
+        {
+            let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: menuItem.title)
+            image?.isTemplate = true
+            menuItem.image = image
+        }
         
         let placeholder = NSLocalizedString("No Connected Devices", comment: "")
         
@@ -138,15 +183,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @IBAction func showSettings(_ sender: Any?)
-    {
-        if self.settingsWindowController == nil
-        {
-            self.settingsWindowController = SettingsWindowController()
-        }
-        self.settingsWindowController?.present()
-    }
-
     @IBAction func checkForUpdates(_ sender: NSMenuItem)
     {
         sender.isEnabled = false
@@ -188,6 +224,119 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 private extension AppDelegate
 {
+    var preferredLanguage: PreferredLanguage
+    {
+        guard let value = UserDefaults.standard.string(forKey: Self.languagePreferenceKey) else { return .system }
+        return PreferredLanguage(rawValue: value) ?? .system
+    }
+
+    func refreshPreferredLanguageMenuItems()
+    {
+        let selectedLanguage = self.preferredLanguage
+        let menuItems = [
+            (PreferredLanguage.system, self.systemLanguageMenuItem),
+            (PreferredLanguage.english, self.englishLanguageMenuItem),
+            (PreferredLanguage.simplifiedChinese, self.simplifiedChineseLanguageMenuItem)
+        ]
+
+        for (language, menuItem) in menuItems
+        {
+            menuItem?.state = language == selectedLanguage ? .on : .off
+        }
+    }
+
+    func refreshLaunchAtLoginMenuItem(legacyRequestedState: Bool? = nil)
+    {
+        if #available(macOS 13, *)
+        {
+            switch SMAppService.mainApp.status
+            {
+            case .enabled:
+                self.launchAtLoginMenuItem.state = .on
+                self.launchAtLoginMenuItem.title = NSLocalizedString("Launch at Login (On)", comment: "")
+
+            case .requiresApproval:
+                self.launchAtLoginMenuItem.state = .mixed
+                self.launchAtLoginMenuItem.title = NSLocalizedString("Launch at Login (Requires Approval)", comment: "")
+
+            case .notRegistered, .notFound:
+                self.launchAtLoginMenuItem.state = .off
+                self.launchAtLoginMenuItem.title = NSLocalizedString("Launch at Login (Off)", comment: "")
+
+            @unknown default:
+                self.launchAtLoginMenuItem.state = .off
+                self.launchAtLoginMenuItem.title = NSLocalizedString("Launch at Login (Off)", comment: "")
+            }
+        }
+        else
+        {
+            let isEnabled = legacyRequestedState ?? LaunchAtLogin.isEnabled
+            self.launchAtLoginMenuItem.state = isEnabled ? .on : .off
+            self.launchAtLoginMenuItem.title = isEnabled
+                ? NSLocalizedString("Launch at Login (On)", comment: "")
+                : NSLocalizedString("Launch at Login (Off)", comment: "")
+        }
+    }
+
+    @available(macOS 13, *)
+    func showLaunchAtLoginApproval()
+    {
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = NSLocalizedString("Login Item Approval Required", comment: "")
+        alert.informativeText = NSLocalizedString("Allow AltForge Server in System Settings > General > Login Items to finish enabling launch at login.", comment: "")
+        alert.addButton(withTitle: NSLocalizedString("Open Login Items", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("Later", comment: ""))
+
+        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+        if alert.runModal() == .alertFirstButtonReturn
+        {
+            SMAppService.openSystemSettingsLoginItems()
+        }
+    }
+
+    func showLaunchAtLoginFailure(_ error: Error)
+    {
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = NSLocalizedString("Unable to Change Launch at Login", comment: "")
+        alert.informativeText = NSLocalizedString("AltForge Server could not update its login item. Install the app in Applications and try again.", comment: "") + "\n\n" + error.localizedDescription
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+
+        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+        alert.runModal()
+    }
+
+    func promptToRestartForLanguageChange()
+    {
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = NSLocalizedString("Restart Required", comment: "")
+        alert.informativeText = NSLocalizedString("Restart AltForge Server to apply the selected language.", comment: "")
+        alert.addButton(withTitle: NSLocalizedString("Restart Now", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("Later", comment: ""))
+
+        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+
+        let relauncher = Process()
+        relauncher.executableURL = URL(fileURLWithPath: "/bin/sh")
+        relauncher.arguments = ["-c", "sleep 0.5; exec /usr/bin/open -n \"$ALT_FORGE_RELAUNCH_PATH\""]
+        var environment = ProcessInfo.processInfo.environment
+        environment["ALT_FORGE_RELAUNCH_PATH"] = Bundle.main.bundlePath
+        relauncher.environment = environment
+
+        do
+        {
+            try relauncher.run()
+            NSApplication.shared.terminate(nil)
+        }
+        catch
+        {
+            self.showErrorAlert(error: error)
+        }
+    }
+
     func menuTitle(for device: ALTDevice) -> String
     {
         let connection = self.wiredDeviceIdentifiers.contains(device.identifier) ? NSLocalizedString("USB", comment: "") : NSLocalizedString("Wi-Fi", comment: "")
@@ -340,50 +489,35 @@ private extension AppDelegate
     
     func installApplication(at fileURL: URL?, to device: ALTDevice)
     {
-        let alert = NSAlert()
-        alert.messageText = NSLocalizedString("Please enter your Apple ID and password.", comment: "")
-        alert.informativeText = NSLocalizedString("Your Apple ID and password are not saved and are only sent to Apple for authentication.", comment: "")
-        
-        let textFieldSize = NSSize(width: 300, height: 22)
-        
-        let appleIDTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: textFieldSize.width, height: textFieldSize.height))
-        appleIDTextField.delegate = self
-        appleIDTextField.translatesAutoresizingMaskIntoConstraints = false
-        appleIDTextField.placeholderString = NSLocalizedString("Apple ID", comment: "")
-        alert.window.initialFirstResponder = appleIDTextField
-        self.authenticationAppleIDTextField = appleIDTextField
-        
-        let passwordTextField = NSSecureTextField(frame: NSRect(x: 0, y: 0, width: textFieldSize.width, height: textFieldSize.height))
-        passwordTextField.delegate = self
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.placeholderString = NSLocalizedString("Password", comment: "")
-        self.authenticationPasswordTextField = passwordTextField
-        
-        appleIDTextField.nextKeyView = passwordTextField
-        
-        let stackView = NSStackView(frame: NSRect(x: 0, y: 0, width: textFieldSize.width, height: textFieldSize.height * 2))
-        stackView.orientation = .vertical
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 0
-        stackView.addArrangedSubview(appleIDTextField)
-        stackView.addArrangedSubview(passwordTextField)
-        alert.accessoryView = stackView
-        
-        alert.addButton(withTitle: NSLocalizedString("Install", comment: ""))
-        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
-        
-        self.authenticationAlert = alert
-        self.validate()
-        
-        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-                
-        let response = alert.runModal()
-        guard response == .alertFirstButtonReturn else { return }
-        
-        let username = appleIDTextField.stringValue
-        let password = passwordTextField.stringValue
-        
-        ALTDeviceManager.shared.installApplication(at: fileURL, to: device, appleID: username, password: password) { (result) in
+        let authenticationController = AppleIDAuthenticationWindowController(credentialStore: self.appleIDCredentialStore)
+        guard let submission = authenticationController.runModal() else { return }
+
+        ALTDeviceManager.shared.installApplication(
+            at: fileURL,
+            to: device,
+            appleID: submission.account,
+            password: submission.password,
+            authenticationCompletion: { [weak self] in
+                guard let self else { return }
+
+                do
+                {
+                    try self.appleIDCredentialStore.recordSuccessfulAuthentication(
+                        account: submission.account,
+                        password: submission.password,
+                        rememberPassword: submission.rememberPassword
+                    )
+                }
+                catch
+                {
+                    let content = UNMutableNotificationContent()
+                    content.title = NSLocalizedString("Account Could Not Be Saved", comment: "")
+                    content.body = NSLocalizedString("The login succeeded, but AltForge Server could not update saved accounts in this Mac's Keychain.", comment: "")
+                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                    UNUserNotificationCenter.current().add(request)
+                }
+            }
+        ) { (result) in
             switch result
             {
             case .success(let application):
@@ -465,7 +599,66 @@ private extension AppDelegate
     
     @objc func toggleLaunchAtLogin(_ item: NSMenuItem)
     {
-        LaunchAtLogin.isEnabled.toggle()
+        if #available(macOS 13, *)
+        {
+            let service = SMAppService.mainApp
+
+            do
+            {
+                switch service.status
+                {
+                case .enabled:
+                    try service.unregister()
+
+                case .requiresApproval:
+                    self.showLaunchAtLoginApproval()
+                    return
+
+                case .notRegistered, .notFound:
+                    try service.register()
+
+                @unknown default:
+                    try service.register()
+                }
+
+                self.refreshLaunchAtLoginMenuItem()
+                if service.status == .requiresApproval
+                {
+                    self.showLaunchAtLoginApproval()
+                }
+            }
+            catch
+            {
+                self.refreshLaunchAtLoginMenuItem()
+                self.showLaunchAtLoginFailure(error)
+            }
+        }
+        else
+        {
+            let isEnabled = !LaunchAtLogin.isEnabled
+            LaunchAtLogin.isEnabled = isEnabled
+            self.refreshLaunchAtLoginMenuItem(legacyRequestedState: isEnabled)
+        }
+    }
+
+    @IBAction func selectPreferredLanguage(_ item: NSMenuItem)
+    {
+        guard let language = PreferredLanguage.allCases.first(where: { $0.menuItemTag == item.tag }) else { return }
+
+        if let identifier = language.localeIdentifier
+        {
+            UserDefaults.standard.set(language.rawValue, forKey: Self.languagePreferenceKey)
+            UserDefaults.standard.set([identifier], forKey: "AppleLanguages")
+        }
+        else
+        {
+            UserDefaults.standard.removeObject(forKey: Self.languagePreferenceKey)
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+        }
+
+        UserDefaults.standard.synchronize()
+        self.refreshPreferredLanguageMenuItems()
+        self.promptToRestartForLanguageChange()
     }
     
     @IBAction private func uninstallMailPlugin(_ sender: NSMenuItem)
@@ -528,7 +721,8 @@ extension AppDelegate: NSMenuDelegate
 
         self.launchAtLoginMenuItem.target = self
         self.launchAtLoginMenuItem.action = #selector(AppDelegate.toggleLaunchAtLogin(_:))
-        self.launchAtLoginMenuItem.state = LaunchAtLogin.isEnabled ? .on : .off
+        self.refreshLaunchAtLoginMenuItem()
+        self.refreshPreferredLanguageMenuItems()
 
         if !self.pluginManager.isMailPluginInstalled
         {
@@ -617,38 +811,6 @@ extension AppDelegate: NSMenuDelegate
         let submenu = previousItem.submenu
         previousItem.submenu = nil
         previousItem.submenu = submenu
-    }
-}
-
-extension AppDelegate: NSTextFieldDelegate
-{
-    func controlTextDidChange(_ obj: Notification)
-    {
-        self.validate()
-    }
-    
-    func controlTextDidEndEditing(_ obj: Notification)
-    {
-        self.validate()
-    }
-    
-    private func validate()
-    {
-        guard
-            let appleID = self.authenticationAppleIDTextField?.stringValue.trimmingCharacters(in: .whitespacesAndNewlines),
-            let password = self.authenticationPasswordTextField?.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        else { return }
-        
-        if appleID.isEmpty || password.isEmpty
-        {
-            self.authenticationAlert?.buttons.first?.isEnabled = false
-        }
-        else
-        {
-            self.authenticationAlert?.buttons.first?.isEnabled = true
-        }
-        
-        self.authenticationAlert?.layout()
     }
 }
 

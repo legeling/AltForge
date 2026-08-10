@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D6AF00010000000000000001 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF00010000000000000002 /* SettingsWindowController.swift */; };
+		A18F00010000000000000001 /* AppleIDAuthenticationWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000011 /* AppleIDAuthenticationWindowController.swift */; };
+		A18F00010000000000000002 /* AppleIDCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000012 /* AppleIDCredentialStore.swift */; };
+		A18F00010000000000000003 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = D56435E52E2ACC89007D1935 /* KeychainAccess */; };
+		A18F00010000000000000004 /* AppleIDVerificationWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */; };
 		A17F00000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000011 /* Localizable.xcstrings */; };
 		A17F00000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000012 /* Localizable.xcstrings */; };
 		A17F00000000000000000003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000013 /* Localizable.xcstrings */; };
@@ -701,7 +704,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D6AF00010000000000000002 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
+		A18F00010000000000000011 /* AppleIDAuthenticationWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIDAuthenticationWindowController.swift; sourceTree = "<group>"; };
+		A18F00010000000000000012 /* AppleIDCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIDCredentialStore.swift; sourceTree = "<group>"; };
+		A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIDVerificationWindowController.swift; sourceTree = "<group>"; };
 		A17F00000000000000000011 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000013 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
@@ -1261,6 +1266,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A18F00010000000000000003 /* KeychainAccess in Frameworks */,
 				D58D5F2E26DFE68E00E55E38 /* LaunchAtLogin in Frameworks */,
 				BF088D382501A833008082D9 /* OpenSSL.xcframework in Frameworks */,
 				BF4588882298DD3F00BD7491 /* libxml2.tbd in Frameworks */,
@@ -1451,7 +1457,9 @@
 			isa = PBXGroup;
 			children = (
 				BF45868F229872EA00BD7491 /* AppDelegate.swift */,
-				D6AF00010000000000000002 /* SettingsWindowController.swift */,
+				A18F00010000000000000011 /* AppleIDAuthenticationWindowController.swift */,
+				A18F00010000000000000012 /* AppleIDCredentialStore.swift */,
+				A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */,
 				BF458695229872EA00BD7491 /* Main.storyboard */,
 				BFAD67A225E0854500D4C4D1 /* DeveloperDiskManager.swift */,
 				BFF0394A25F0551600BE607D /* MenuController.swift */,
@@ -2680,6 +2688,7 @@
 			name = AltServer;
 			packageProductDependencies = (
 				BF088D352501A821008082D9 /* AltSign-Dynamic */,
+				D56435E52E2ACC89007D1935 /* KeychainAccess */,
 				D58D5F2D26DFE68E00E55E38 /* LaunchAtLogin */,
 			);
 			productName = AltServer;
@@ -3193,7 +3202,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6AF00010000000000000001 /* SettingsWindowController.swift in Sources */,
+				A18F00010000000000000001 /* AppleIDAuthenticationWindowController.swift in Sources */,
+				A18F00010000000000000002 /* AppleIDCredentialStore.swift in Sources */,
+				A18F00010000000000000004 /* AppleIDVerificationWindowController.swift in Sources */,
 				BFF767C82489A74E0097E58C /* WirelessConnectionHandler.swift in Sources */,
 				BFF0394B25F0551600BE607D /* MenuController.swift in Sources */,
 				BFECAC8024FD950B0077C41F /* ConnectionManager.swift in Sources */,

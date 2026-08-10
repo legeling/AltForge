@@ -12,6 +12,9 @@
 |---|---|---|
 | [`CHG-20260809-002`](active/CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 | [`CHG-20260809-007`](active/CHG-20260809-007-macos-server-identity-settings/README.md) | macOS Server 身份、菜单与设置 | In progress |
+| [`CHG-20260810-002`](active/CHG-20260810-002-macos-menu-icon-scale/README.md) | 放大 macOS 菜单栏图标 | Implemented / menu bar smoke pending |
+| [`CHG-20260810-001`](active/CHG-20260810-001-macos-inline-settings-menu/README.md) | macOS 菜单内联设置与安装图标修复 | In progress / live settings smoke |
+| [`CHG-20260810-003`](active/CHG-20260810-003-macos-apple-id-account-manager/README.md) | macOS Apple ID 账号管理 | In progress |
 
 ## Completed
 

@@ -93,16 +93,6 @@
         }
       }
     },
-    "AltForge Server Settings" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AltForge Server 设置"
-          }
-        }
-      }
-    },
     "Check for Updates…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -123,52 +113,12 @@
         }
       }
     },
-    "English" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        }
-      }
-    },
     "Failed to Remove Legacy Mail Plug-in" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法移除旧版邮件插件"
-          }
-        }
-      }
-    },
-    "General" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通用"
-          }
-        }
-      }
-    },
-    "Language" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "语言"
-          }
-        }
-      }
-    },
-    "Language changes take effect after you quit and reopen AltForge Server." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "退出并重新打开 AltForge Server 后，语言更改才会生效。"
           }
         }
       }
@@ -183,22 +133,122 @@
         }
       }
     },
-    "Launch at Login" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "登录时启动"
-          }
-        }
-      }
-    },
     "Legacy Mail Plug-in Removed" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "已移除旧版邮件插件"
+          }
+        }
+      }
+    },
+    "Launch at Login (Off)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录时启动（已关闭）"
+          }
+        }
+      }
+    },
+    "Launch at Login (On)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录时启动（已开启）"
+          }
+        }
+      }
+    },
+    "Launch at Login (Requires Approval)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录时启动（需要批准）"
+          }
+        }
+      }
+    },
+    "Login Item Approval Required" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录项需要批准"
+          }
+        }
+      }
+    },
+    "Open Login Items" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开登录项设置"
+          }
+        }
+      }
+    },
+    "Restart AltForge Server to apply the selected language." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新启动 AltForge Server 以应用所选语言。"
+          }
+        }
+      }
+    },
+    "Restart Now" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即重启"
+          }
+        }
+      }
+    },
+    "Restart Required" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要重新启动"
+          }
+        }
+      }
+    },
+    "Unable to Change Launch at Login" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法更改登录时启动"
+          }
+        }
+      }
+    },
+    "AltForge Server could not update its login item. Install the app in Applications and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 无法更新登录项。请将 App 安装到“应用程序”文件夹后重试。"
+          }
+        }
+      }
+    },
+    "Allow AltForge Server in System Settings > General > Login Items to finish enabling launch at login." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在“系统设置”>“通用”>“登录项”中允许 AltForge Server，以完成登录时启动设置。"
           }
         }
       }
@@ -223,42 +273,12 @@
         }
       }
     },
-    "Quit to Apply" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "退出并应用"
-          }
-        }
-      }
-    },
     "Remove Legacy Mail Plug-in" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "移除旧版邮件插件"
-          }
-        }
-      }
-    },
-    "Simplified Chinese" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "简体中文"
-          }
-        }
-      }
-    },
-    "System Default" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "跟随系统"
           }
         }
       }
@@ -487,6 +507,166 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple ID"
+          }
+        }
+      }
+    },
+    "Account" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账号"
+          }
+        }
+      }
+    },
+    "Account Could Not Be Saved" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法保存账号"
+          }
+        }
+      }
+    },
+    "Apple ID Verification" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID 验证"
+          }
+        }
+      }
+    },
+    "AltForge Server uses your Apple ID to sign and install apps through Apple Developer services." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 使用你的 Apple ID，通过 Apple 开发者服务为 App 签名并安装。"
+          }
+        }
+      }
+    },
+    "Apple ID Account" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID 账号"
+          }
+        }
+      }
+    },
+    "Caps Lock is on." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大写锁定已开启。"
+          }
+        }
+      }
+    },
+    "Choose Saved Account" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择已保存账号"
+          }
+        }
+      }
+    },
+    "Forget Account" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "忘记此账号"
+          }
+        }
+      }
+    },
+    "Hide Password" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐藏密码"
+          }
+        }
+      }
+    },
+    "Remember password" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "记住密码"
+          }
+        }
+      }
+    },
+    "Saved accounts are unavailable. You can still sign in." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取已保存的账号，但你仍可继续登录。"
+          }
+        }
+      }
+    },
+    "Saved Accounts" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已保存账号"
+          }
+        }
+      }
+    },
+    "Saved passwords are stored in this Mac's Keychain." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已保存的密码会存储在这台 Mac 的钥匙串中。"
+          }
+        }
+      }
+    },
+    "Show Password" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示密码"
+          }
+        }
+      }
+    },
+    "Sign in with Apple ID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录 Apple ID"
+          }
+        }
+      }
+    },
+    "The login succeeded, but AltForge Server could not update saved accounts in this Mac's Keychain." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录已成功，但 AltForge Server 无法更新这台 Mac 钥匙串中的已保存账号。"
           }
         }
       }
@@ -729,16 +909,6 @@
         }
       }
     },
-    "Please enter your Apple ID and password." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请输入你的 Apple ID 和密码。"
-          }
-        }
-      }
-    },
     "Please restart Mail for changes to take effect." : {
       "localizations" : {
         "zh-Hans" : {
@@ -909,6 +1079,16 @@
         }
       }
     },
+    "Two-Factor Authentication" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双重认证"
+          }
+        }
+      }
+    },
     "Remove Plug-in" : {
       "localizations" : {
         "zh-Hans" : {
@@ -925,6 +1105,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不支持的 %@ 版本"
+          }
+        }
+      }
+    },
+    "Verification Code" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证码"
           }
         }
       }
@@ -965,16 +1155,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你不是任何开发者团队的成员。"
-          }
-        }
-      }
-    },
-    "Your Apple ID and password are not saved and are only sent to Apple for authentication." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你的 Apple ID 和密码不会被保存，只会发送给 Apple 进行身份验证。"
           }
         }
       }

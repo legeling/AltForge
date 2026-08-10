@@ -127,7 +127,8 @@ jobs:
           test -d "$app"
           Scripts/package_macos_dmg.sh \
             --app "$app" \
-            --output "$RUNNER_TEMP/Artifacts/AltForge-AltServer-macOS.dmg"
+            --output "$RUNNER_TEMP/Artifacts/AltForge-AltServer-macOS.dmg" \
+            --ad-hoc-sign
 
       - name: Verify Apple release artifacts
         env:

@@ -10,57 +10,11 @@
         <scene sceneID="JPo-4y-FX3">
             <objects>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
-                <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" id="urc-xw-Dhc">
-                    <rect key="frame" x="0.0" y="0.0" width="300" height="46"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <subviews>
-                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zLd-d8-ghZ">
-                            <rect key="frame" x="0.0" y="25" width="300" height="21"/>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Apple ID" drawsBackground="YES" id="BXa-Re-rs3">
-                                <font key="font" metaFont="system"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                            </textFieldCell>
-                            <connections>
-                                <outlet property="delegate" destination="Voe-Tx-rLC" id="QtW-r2-Vuh"/>
-                                <outlet property="nextKeyView" destination="9rp-Vx-rvB" id="bQY-qj-Sej"/>
-                            </connections>
-                        </textField>
-                        <secureTextField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9rp-Vx-rvB">
-                            <rect key="frame" x="0.0" y="0.0" width="300" height="21"/>
-                            <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Password" drawsBackground="YES" usesSingleLineMode="YES" id="xqJ-wt-DlP">
-                                <font key="font" metaFont="system"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                <allowedInputSourceLocales>
-                                    <string>NSAllRomanInputSourcesLocaleIdentifier</string>
-                                </allowedInputSourceLocales>
-                            </secureTextFieldCell>
-                            <connections>
-                                <outlet property="delegate" destination="Voe-Tx-rLC" id="qav-xj-izy"/>
-                            </connections>
-                        </secureTextField>
-                    </subviews>
-                    <constraints>
-                        <constraint firstItem="9rp-Vx-rvB" firstAttribute="width" secondItem="urc-xw-Dhc" secondAttribute="width" id="Eht-pU-Gyh"/>
-                        <constraint firstItem="zLd-d8-ghZ" firstAttribute="width" secondItem="urc-xw-Dhc" secondAttribute="width" id="mg7-Kq-abL"/>
-                        <constraint firstAttribute="width" constant="300" id="zqf-x6-BET"/>
-                    </constraints>
-                    <visibilityPriorities>
-                        <integer value="1000"/>
-                        <integer value="1000"/>
-                    </visibilityPriorities>
-                    <customSpacing>
-                        <real value="3.4028234663852886e+38"/>
-                        <real value="3.4028234663852886e+38"/>
-                    </customSpacing>
-                </stackView>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="AltServer" customModuleProvider="target">
                     <connections>
                         <outlet property="appMenu" destination="uQy-DD-JDr" id="7cY-Ov-AOW"/>
-                        <outlet property="authenticationAppleIDTextField" destination="zLd-d8-ghZ" id="wW5-0J-zdq"/>
-                        <outlet property="authenticationPasswordTextField" destination="9rp-Vx-rvB" id="ZoC-DI-jzQ"/>
+                        <outlet property="checkForUpdatesMenuItem" destination="Tnq-gD-Eic" id="Afg-3B-Upd"/>
                         <outlet property="connectedDevicesMenu" destination="KJ9-WY-pW1" id="Mcv-64-iFU"/>
                         <outlet property="enableJITMenu" destination="la4-Sa-L3C" id="YrW-hR-uA7"/>
                         <outlet property="installAltStoreMenuItem" destination="MJ8-Lt-SSV" id="KYp-c5-8Ru"/>
@@ -68,6 +22,10 @@
                         <outlet property="launchAtLoginMenuItem" destination="IyR-FQ-upe" id="Fxn-EP-hwH"/>
                         <outlet property="sideloadAppMenuItem" destination="x0e-zI-0A2" id="GJo-FY-1GO"/>
                         <outlet property="sideloadIPAConnectedDevicesMenu" destination="IuI-bV-fTY" id="QQw-St-HfG"/>
+                        <outlet property="settingsMenuItem" destination="Afg-1A-Set" id="Afg-3A-Set"/>
+                        <outlet property="simplifiedChineseLanguageMenuItem" destination="Afg-1H-Zhs" id="Afg-2H-Zhs"/>
+                        <outlet property="systemLanguageMenuItem" destination="Afg-1F-Sys" id="Afg-2F-Sys"/>
+                        <outlet property="englishLanguageMenuItem" destination="Afg-1G-Eng" id="Afg-2G-Eng"/>
                     </connections>
                 </customObject>
                 <application id="hnw-xV-0zn" sceneMemberID="viewController">
@@ -86,7 +44,7 @@
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                                         <menuItem title="Install AltForge…" id="MJ8-Lt-SSV">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Install AltForge…" systemMenu="recentDocuments" id="KJ9-WY-pW1">
+                                            <menu key="submenu" title="Install AltForge…" id="KJ9-WY-pW1">
                                                 <items>
                                                     <menuItem title="No Connected Devices" id="N5N-3K-XuR">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
@@ -99,7 +57,7 @@
                                         </menuItem>
                                         <menuItem title="Sideload .ipa…" id="x0e-zI-0A2" userLabel="Install .ipa">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Sideload .ipa…" systemMenu="recentDocuments" id="IuI-bV-fTY">
+                                            <menu key="submenu" title="Sideload .ipa…" id="IuI-bV-fTY">
                                                 <items>
                                                     <menuItem title="No Connected Devices" id="in5-an-MD0">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
@@ -112,7 +70,7 @@
                                         </menuItem>
                                         <menuItem title="Enable JIT for App…" id="TvL-8M-oPZ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Enable JIT for App…" systemMenu="recentDocuments" id="la4-Sa-L3C">
+                                            <menu key="submenu" title="Enable JIT for App…" id="la4-Sa-L3C">
                                                 <items>
                                                     <menuItem title="No Connected Devices" id="Aya-FP-EzE">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
@@ -121,13 +79,41 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="1ZZ-BB-xHy"/>
-                                        <menuItem title="Launch at Login" id="IyR-FQ-upe" userLabel="Launch At Login">
+                                        <menuItem title="Settings" id="Afg-1A-Set">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="Settings…" keyEquivalent="," id="Afg-1A-Set">
-                                            <connections>
-                                                <action selector="showSettings:" target="Voe-Tx-rLC" id="Afg-1B-Set"/>
-                                            </connections>
+                                            <menu key="submenu" title="Settings" id="Afg-1C-Mnu">
+                                                <items>
+                                                    <menuItem title="Launch at Login" id="IyR-FQ-upe" userLabel="Launch At Login">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="Afg-1I-Sep"/>
+                                                    <menuItem title="Language" id="Afg-1D-Lng">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <menu key="submenu" title="Language" id="Afg-1E-Lmn">
+                                                            <items>
+                                                                <menuItem title="System Default" id="Afg-1F-Sys">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    <connections>
+                                                                        <action selector="selectPreferredLanguage:" target="Voe-Tx-rLC" id="Afg-2F-Act"/>
+                                                                    </connections>
+                                                                </menuItem>
+                                                                <menuItem title="English" tag="1" id="Afg-1G-Eng">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    <connections>
+                                                                        <action selector="selectPreferredLanguage:" target="Voe-Tx-rLC" id="Afg-2G-Act"/>
+                                                                    </connections>
+                                                                </menuItem>
+                                                                <menuItem title="Simplified Chinese" tag="2" id="Afg-1H-Zhs">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    <connections>
+                                                                        <action selector="selectPreferredLanguage:" target="Voe-Tx-rLC" id="Afg-2H-Act"/>
+                                                                    </connections>
+                                                                </menuItem>
+                                                            </items>
+                                                        </menu>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
                                         </menuItem>
                                         <menuItem title="Remove Legacy Mail Plug-in…" id="3CM-gV-X2G" userLabel="Mail Plug-in">
                                             <modifierMask key="keyEquivalentModifierMask"/>

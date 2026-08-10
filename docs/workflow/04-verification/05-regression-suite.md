@@ -71,9 +71,9 @@ xcodebuild build \
 
 - 运行 `bash -n Scripts/package_macos_dmg.sh` 与 repository contract。
 - 运行 `bash -n Scripts/verify_apple_release_artifacts.sh`；tag workflow 在 Apple runner 上用实际版本和 build number 执行该脚本。
-- 使用独立 DerivedData 构建 Release AltServer，并通过脚本生成新的输出路径；本地启动验证可添加 `--ad-hoc-sign`，CI Release 不添加。
+- 使用独立 DerivedData 构建 Release AltServer，并通过脚本生成新的输出路径；本地与 CI Release 都使用 `--ad-hoc-sign` 密封 DMG 内的 staging App，不修改原构建输出。
 - 执行 `hdiutil verify`，只读挂载后检查 `AltForge Server.app`、Applications symlink、bundle identifier、版本和目标架构。
-- CI verifier 同时检查 IPA Payload/identity/version、DMG 的 arm64+x86_64 架构和当前 non-Developer-ID policy；Xcode linker ad-hoc signature 可接受，但出现 Authority/Team ID 时 fail closed。publish job 在创建 Draft 前执行 checksum manifest verification。
+- CI verifier 同时检查 IPA Payload/identity/version、DMG 的 arm64+x86_64 架构和当前 non-Developer-ID policy；App 必须通过 `codesign --verify --deep --strict` 且保持 ad-hoc/no Team ID/no Authority，linker-only 或无效嵌套签名必须 fail closed。publish job 在创建 Draft 前执行 checksum manifest verification。
 - 验证后推出本次挂载、清理 DerivedData 与 staging；保留 DMG 仅限用户需要试装时。
 - 本地 ad-hoc 签名不得替代 Developer ID、notarization 或另一台 Mac 的 Gatekeeper 验证。
 
@@ -84,9 +84,14 @@ xcodebuild build \
 - 静态检查 Info.plist、storyboard、string catalogs 和用户可见源码，不允许 About/菜单回退到旧公开名称。
 - 构建 AltServer Release，检查 `CFBundleDisplayName`、版权、19/38 px template 菜单图标和完整 AppIcon slots。
 - 无设备时显示可理解 placeholder；USB、Wi-Fi 与同时连接分别显示正确标签，双连接优先 USB。
-- 切换跟随系统、English、简体中文，退出并重新打开后检查菜单、About、设置和错误文案。
+- 确认设置项直接位于状态菜单子菜单中且不会打开独立窗口；切换登录启动后显示“已开启/已关闭/需要批准”并与系统登录项一致，签名或注册失败时出现可恢复错误；切换跟随系统、English、简体中文后出现重启提示，立即重启后检查菜单、About 和错误文案。
+- 确认 Install AltForge 使用安装图标，三个设备子菜单均未被标记成 Recent Documents，也不显示系统注入的时钟图标。
 - 更新检查覆盖更新可用、已最新、404/离线、超时、无效 JSON 与非 GitHub URL；不得自动下载或替换 App。
 - 遗留邮件插件未安装时入口隐藏；存在时只显示明确的清理文案。
+- 无历史账号时可手工输入；成功认证后账号进入最近使用列表，未勾选记住密码时重新选择账号不预填密码。
+- 勾选记住密码后只检查本机 Keychain，不检查 UserDefaults、日志或发布产物；忘记账号同时移除可选密码。
+- 密码眼睛按钮在 secure/plain 间无损切换，Caps Lock 开关实时显示/隐藏提示，关闭窗口后 local event monitor 已释放。
+- 损坏、超限或不可访问的 Keychain archive fail closed，仍允许手工认证且不显示账号、密码或底层 Keychain 详情。
 
 ## Suite F：Windows AltServer
 

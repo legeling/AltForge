@@ -10,6 +10,7 @@ BRAND_ROOT = File.join(ROOT, "docs/assets/brand")
 APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon.png")
 CORAL_APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon-coral.png")
 TEMPLATE_ICON = File.join(BRAND_ROOT, "altforge-template-icon.png")
+MENU_BAR_CROP_SIZE = 780
 
 def run!(*command)
   stdout, stderr, status = Open3.capture3(*command)
@@ -24,6 +25,16 @@ def resize_png(source, destination, size)
     file.close
     run!("sips", "-z", size.to_s, size.to_s, source, "--out", file.path)
     FileUtils.mv(file.path, destination)
+  end
+end
+
+def resize_cropped_png(source, destination, size, crop_size)
+  FileUtils.mkdir_p(File.dirname(destination))
+
+  Dir.mktmpdir("altforge-brand", File.dirname(destination)) do |directory|
+    cropped = File.join(directory, "cropped.png")
+    run!("sips", "-c", crop_size.to_s, crop_size.to_s, source, "--out", cropped)
+    resize_png(cropped, destination, size)
   end
 end
 
@@ -82,8 +93,8 @@ mac_icons.each do |filename, size|
   resize_png(APP_ICON, File.join(ROOT, "AltServer/Assets.xcassets/AppIcon.appiconset", filename), size)
 end
 
-resize_png(TEMPLATE_ICON, File.join(ROOT, "AltServer/Assets.xcassets/MenuBarIcon.imageset/MenuBar@19.png"), 19)
-resize_png(TEMPLATE_ICON, File.join(ROOT, "AltServer/Assets.xcassets/MenuBarIcon.imageset/MenuBar@38.png"), 38)
+resize_cropped_png(TEMPLATE_ICON, File.join(ROOT, "AltServer/Assets.xcassets/MenuBarIcon.imageset/MenuBar@19.png"), 19, MENU_BAR_CROP_SIZE)
+resize_cropped_png(TEMPLATE_ICON, File.join(ROOT, "AltServer/Assets.xcassets/MenuBarIcon.imageset/MenuBar@38.png"), 38, MENU_BAR_CROP_SIZE)
 resize_png(TEMPLATE_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/SmallIcon.imageset/AltForgeSmallIcon.png"), 512)
 resize_png(APP_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/AltForge.imageset/AltForge@2x.png"), 120)
 resize_png(APP_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/AltForge.imageset/AltForge@3x.png"), 180)

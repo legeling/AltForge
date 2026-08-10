@@ -26,13 +26,121 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Settings…"
+            "value" : "Settings"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设置…"
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "Afg-1C-Mnu.title" : {
+      "comment" : "Localized from AltServer/Main.storyboard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "Afg-1D-Lng.title" : {
+      "comment" : "Localized from AltServer/Main.storyboard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
+          }
+        }
+      }
+    },
+    "Afg-1E-Lmn.title" : {
+      "comment" : "Localized from AltServer/Main.storyboard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
+          }
+        }
+      }
+    },
+    "Afg-1F-Sys.title" : {
+      "comment" : "Localized from AltServer/Main.storyboard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Default"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跟随系统"
+          }
+        }
+      }
+    },
+    "Afg-1G-Eng.title" : {
+      "comment" : "Localized from AltServer/Main.storyboard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        }
+      }
+    },
+    "Afg-1H-Zhs.title" : {
+      "comment" : "Localized from AltServer/Main.storyboard.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simplified Chinese"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文"
           }
         }
       }
@@ -321,24 +429,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有已连接的设备"
-          }
-        }
-      }
-    },
-    "BXa-Re-rs3.placeholderString" : {
-      "comment" : "Localized from AltServer/Main.storyboard.",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Apple ID"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple ID"
           }
         }
       }
@@ -1185,24 +1275,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "拷贝"
-          }
-        }
-      }
-    },
-    "xqJ-wt-DlP.placeholderString" : {
-      "comment" : "Localized from AltServer/Main.storyboard.",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Password"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "密码"
           }
         }
       }

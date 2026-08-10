@@ -94,15 +94,15 @@ executable="$app_path/Contents/MacOS/AltServer"
 architectures=" $(lipo -archs "$executable") "
 [[ "$architectures" == *" arm64 "* && "$architectures" == *" x86_64 "* ]] || { echo "macOS executable is not Universal (arm64 + x86_64)." >&2; exit 65; }
 
-if signature_details="$(codesign -dvvv "$app_path" 2>&1)"; then
-  if [[ "$signature_details" != *"Signature=adhoc"* || "$signature_details" != *"TeamIdentifier=not set"* || "$signature_details" == *"Authority="* ]]; then
-    echo "Release workflow produced a macOS app outside the reviewed ad-hoc/unsigned signing policy." >&2
-    exit 65
-  fi
+codesign --verify --deep --strict --verbose=2 "$app_path"
+signature_details="$(codesign -dvvv "$app_path" 2>&1)"
+if [[ "$signature_details" != *"Signature=adhoc"* || "$signature_details" != *"TeamIdentifier=not set"* || "$signature_details" == *"Authority="* ]]; then
+  echo "Release workflow produced a macOS app outside the reviewed ad-hoc signing policy." >&2
+  exit 65
 fi
 if codesign -d "$dmg_path" >/dev/null 2>&1; then
   echo "Release workflow unexpectedly produced a signed DMG without the Developer ID release path being configured." >&2
   exit 65
 fi
 
-echo "Apple release artifacts passed structure, identity, version, architecture, and non-Developer-ID policy checks."
+echo "Apple release artifacts passed structure, identity, version, architecture, deep ad-hoc signature, and non-Developer-ID policy checks."
