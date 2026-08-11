@@ -137,8 +137,10 @@ final class InstallationProgressWindowController: NSWindowController
     private let percentageLabel = NSTextField(labelWithString: "")
     private let currentSourceLabel = NSTextField(labelWithString: "")
     private let sourcePicker = NSPopUpButton()
+    private let closeButton = NSButton(title: NSLocalizedString("Close", comment: ""), target: nil, action: nil)
     private let downloadInformationStack = NSStackView()
     private let sourceStack = NSStackView()
+    private var completionCloseHandler: (() -> Void)?
 
     init(deviceName: String, downloadControl: ALTInstallationDownloadControl)
     {
@@ -147,7 +149,7 @@ final class InstallationProgressWindowController: NSWindowController
 
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 440, height: 190),
-            styleMask: [.titled, .miniaturizable],
+            styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
         )
@@ -157,6 +159,8 @@ final class InstallationProgressWindowController: NSWindowController
         window.center()
 
         super.init(window: window)
+        window.delegate = self
+        window.standardWindowButton(.closeButton)?.isEnabled = false
         self.configureContent()
         self.downloadControl.observe { [weak self] sources, selectedIdentifier in
             self?.updateDownloadSources(sources, selectedIdentifier: selectedIdentifier)
@@ -235,6 +239,14 @@ final class InstallationProgressWindowController: NSWindowController
         }
 
         self.setDownloadControlsVisible(update.stage == .downloading)
+        if case .completed = update.stage
+        {
+            self.closeButton.isHidden = false
+        }
+        else
+        {
+            self.closeButton.isHidden = true
+        }
         self.setProgress(update)
     }
 
@@ -242,6 +254,36 @@ final class InstallationProgressWindowController: NSWindowController
     {
         self.progressIndicator.stopAnimation(nil)
         self.window?.orderOut(nil)
+    }
+
+    func showCompletion(onClose: @escaping () -> Void)
+    {
+        if !Thread.isMainThread
+        {
+            return DispatchQueue.main.async { [weak self] in
+                self?.showCompletion(onClose: onClose)
+            }
+        }
+
+        self.completionCloseHandler = onClose
+        self.window?.standardWindowButton(.closeButton)?.isEnabled = true
+        self.update(ALTInstallationProgressUpdate(stage: .completed, fractionCompleted: 1))
+        self.show()
+    }
+}
+
+extension InstallationProgressWindowController: NSWindowDelegate
+{
+    func windowShouldClose(_ sender: NSWindow) -> Bool
+    {
+        self.completionCloseHandler != nil
+    }
+
+    func windowWillClose(_ notification: Notification)
+    {
+        let closeHandler = self.completionCloseHandler
+        self.completionCloseHandler = nil
+        closeHandler?()
     }
 }
 
@@ -283,6 +325,13 @@ private extension InstallationProgressWindowController
         self.sourcePicker.action = #selector(self.selectDownloadSource(_:))
         self.sourcePicker.setContentHuggingPriority(.required, for: .horizontal)
 
+        self.closeButton.target = self
+        self.closeButton.action = #selector(self.closeCompletion(_:))
+        self.closeButton.keyEquivalent = "\r"
+        self.closeButton.bezelStyle = .rounded
+        self.closeButton.isHidden = true
+        self.closeButton.translatesAutoresizingMaskIntoConstraints = false
+
         let textStack = NSStackView(views: [self.titleLabel, self.detailLabel])
         textStack.orientation = .vertical
         textStack.alignment = .leading
@@ -314,6 +363,7 @@ private extension InstallationProgressWindowController
         contentView.addSubview(self.progressIndicator)
         contentView.addSubview(self.downloadInformationStack)
         contentView.addSubview(self.sourceStack)
+        contentView.addSubview(self.closeButton)
 
         NSLayoutConstraint.activate([
             iconView.widthAnchor.constraint(equalToConstant: 56),
@@ -331,6 +381,9 @@ private extension InstallationProgressWindowController
             self.sourceStack.trailingAnchor.constraint(equalTo: self.progressIndicator.trailingAnchor),
             self.sourceStack.topAnchor.constraint(equalTo: self.downloadInformationStack.bottomAnchor, constant: 10),
             self.sourceStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -18),
+            self.closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            self.closeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -18),
+            self.closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 88),
             self.percentageLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 44),
             self.sourcePicker.widthAnchor.constraint(greaterThanOrEqualToConstant: 128)
         ])
@@ -415,5 +468,11 @@ private extension InstallationProgressWindowController
     {
         guard let identifier = sender.selectedItem?.representedObject as? String else { return }
         self.downloadControl.select(identifier)
+    }
+
+    @objc func closeCompletion(_ sender: NSButton)
+    {
+        guard self.completionCloseHandler != nil else { return }
+        self.window?.performClose(sender)
     }
 }

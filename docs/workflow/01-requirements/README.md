@@ -34,6 +34,9 @@
 - `FR-008` AltForge 必须跟踪已安装应用与签名到期信息，并在用户触发或系统允许时刷新活动应用。
 - `FR-009` 用户必须能添加、读取和更新兼容的 AltStore source，并按稳定 source ID 去重。
 - `FR-010` 官方 AltForge source 必须指向本仓库 GitHub Release 的 `apps.json` 与 IPA。
+- `FR-033` iOS 主导航必须聚焦浏览、来源、我的 App 和设置，不提供聚合资讯标签页；source 中的资讯数据结构与来源详情内的上下文展示继续保持兼容。
+- `FR-034` iOS 主标签必须使用一致的系统语义图标；官方来源和 AltForge 自身卡片不得被旧 metadata 恢复为大面积红色。设置页必须使用可适配深浅色的系统语义颜色，版本必须来自构建产物，并同时展示本仓库维护者、上游原始开发者/设计归属和 AltForge 自有 GitHub、Issue、隐私入口。
+- `FR-035` iOS 主应用在桌面、系统问题报告、崩溃报告和其他公开界面中必须显示 AltForge；当前产品与配套服务必须显示 AltForge / AltForge Server。为兼容上游同步和既有数据，内部 target、scheme、Swift module、app bundle 目录、协议标识、数据库名称和历史 identifier 可以继续使用 AltStore，但不得成为系统或用户可见名称。
 
 ### 诊断与可选能力
 
@@ -54,13 +57,14 @@
 - `FR-023` 能改变 feature flags、可信/封禁 source 或官方推荐内容的远程配置必须由本仓库发布；上游服务只能作为明确披露且不可替代的兼容性依赖。
 - `FR-024` 用户可见的支持、隐私、GitHub、FAQ 和桌面发布入口必须指向 AltForge 自有仓库内容；没有自有账号的社交或赞助入口不得冒充上游账号。
 - `FR-025` macOS Release 必须使用可挂载 DMG，包含公开命名的 `AltForge Server.app` 和 `/Applications` 快捷方式；在 Developer ID 路径落地前，CI 与本地验证必须对 staging App 做 deep ad-hoc 完整性签名，以支持 ServiceManagement 并拒绝不完整的 linker-only signature，但不得冒充 Developer ID 身份或 notarization。
-- `FR-026` macOS 桌面端的 About、菜单、通知和错误必须使用 AltForge Server 公开身份，保留 AltForge contributors、上游项目/版权、第三方社区与许可证归属；内部兼容标识无需批量改名。
+- `FR-026` macOS 桌面端的 `.app` 包目录、Mach-O executable、登录项/后台项目系统提示、About、菜单、通知和错误必须使用 AltForge Server 公开身份，保留 AltForge contributors、上游项目/版权、第三方社区与许可证归属；About 必须提供足够空间并水平居中显示完整的 AltForge GitHub 仓库地址及 Releases、文档和 Issue 入口，可点击链接悬停时必须显示指向手势；内部 target、module 和兼容标识无需批量改名。
 - `FR-027` macOS 菜单必须显示设备的 USB/Wi-Fi 连接方式，提供可恢复的检查更新和遗留邮件插件清理文案，并在状态菜单的设置子菜单中直接提供登录时启动、跟随系统、English 和简体中文选项，不额外打开设置窗口；登录启动必须通过系统勾选和“已开启/已关闭/需要批准”文本反馈真实状态，注册失败不得静默；语言变化必须明确提示重启并允许用户立即重启。
 - `FR-028` AltForge 自有的更新、远程配置、Developer Disk 索引和用户入口必须由 `legeling/AltForge` 发布；第三方依赖、Apple 服务、Patreon 和 Developer Disk 文件来源必须按真实所有者保留并显式披露。Classic 不得访问上游 Marketplace、Fediverse 或 OAuth 控制面，禁止把外部服务伪装成本仓库服务。
-- `FR-029` macOS Apple ID 认证窗口必须支持选择成功认证过的账号、用户明确选择是否记住密码、密码显隐和 Caps Lock 提醒；账号与可选密码只在认证成功后写入本机 Keychain，不得进入 UserDefaults、日志或错误详情，并提供忘记账号的操作。每次打开窗口最多执行一次用于填充历史账号的 Keychain archive 读取，账号切换必须复用窗口生命周期内的有界快照，并在 modal 结束后释放。成功查询 Apple 团队后，历史账号必须显示最后确认的免费、个人开发者或组织/企业类型，但不得声称持久 Apple 登录状态。窗口必须提供 macOS 原生最小化能力。双重认证必须使用匹配的独立窗口，仅接受六位数字且不得持久化验证码。认证请求期间窗口必须保持显示，失败后保留用户输入、恢复编辑并显示完整本地化的内联错误，只有认证成功或用户主动取消时才关闭。Classic 构建不得使用会禁用 AltSign SRP 认证实现的 Marketplace 编译条件。
+- `FR-029` macOS Apple ID 认证窗口必须支持选择成功认证过的账号、用户明确选择是否记住密码、密码显隐和 Caps Lock 提醒；账号与可选密码只在认证成功后写入本机 Keychain，不得进入 UserDefaults、日志或错误详情，并提供忘记账号的操作。“记住密码”说明必须提醒用户：读取已保存密码时 macOS 可能要求输入 Mac 登录密码进行钥匙串授权，这不是 Apple ID 密码。每次打开窗口最多执行一次用于填充历史账号的 Keychain archive 读取，账号切换必须复用窗口生命周期内的有界快照，并在 modal 结束后释放。成功查询 Apple 团队后，历史账号必须显示最后确认的免费、个人开发者或组织/企业类型，但不得声称持久 Apple 登录状态。窗口必须提供 macOS 原生最小化能力。双重认证必须使用匹配的独立窗口，仅接受六位数字且不得持久化验证码。认证请求期间窗口必须保持显示，失败后保留用户输入、恢复编辑并显示完整本地化的内联错误，只有认证成功或用户主动取消时才关闭。Classic 构建不得使用会禁用 AltSign SRP 认证实现的 Marketplace 编译条件。
 - `FR-030` macOS 安装流程不得自动撤销普通 Xcode、分发或其他非 AltForge 证书。只允许复用序列号匹配且持有本机私钥的 AltForge/旧 AltStore 开发证书；替换托管证书前必须说明受影响范围并取得明确确认，新建证书必须使用 AltForge 标识。
-- `FR-031` macOS 安装流程在 Apple ID 认证成功后必须持续显示团队、设备、证书、下载、签名和设备安装进度；下载阶段必须使用左右对称的全宽进度条，并显示已下载量、总大小、实时速度、当前线路及手动线路选择。同一设备同一时间最多存在一个安装任务，重复操作只聚焦现有进度。官方 IPA 下载必须有有界超时，并在 GitHub 直连失败后按固定数量尝试 GitHub Release 镜像；仓库可以为 tag 固定版本声明自有 HTTPS CDN，自动模式优先 CDN，手动切换必须取消旧任务且不得并发下载。任何非 GitHub 下载必须以官方 source 或 GitHub Release API 返回的大小和 SHA-256 校验通过后才能解压、签名或安装，所有结束路径必须释放设备任务与临时文件。
+- `FR-031` macOS 安装流程在 Apple ID 认证成功后必须持续显示团队、设备、证书、下载、签名和设备安装进度；下载阶段必须使用左右对称的全宽进度条，并根据 `URLSessionDownloadDelegate` 的实际写入字节显示百分比、已下载量、总大小、实时速度、当前线路及手动线路选择。同一设备同一时间最多存在一个安装任务，重复操作只聚焦现有进度。官方 IPA 下载必须有有界超时，并在 GitHub 直连失败后按固定数量尝试 GitHub Release 镜像；仓库可以为 tag 固定版本声明自有 HTTPS CDN，自动模式优先 CDN，手动切换必须取消旧任务且不得并发下载。任何非 GitHub 下载必须以官方 source 或 GitHub Release API 返回的大小和 SHA-256 校验通过后才能解压、签名或安装。installation_proxy 明确返回 `Complete` 时必须完成设备事务并显示可由用户关闭的安装成功窗口，不能依赖终态是否携带百分比，也不能用固定计时器自动隐藏成功结果。
 - `FR-032` iOS 客户端只有在系统实际提供 App Group container 时才能迁移数据库与已缓存 Apps；重签后只有 App Group 元数据但无 container 时必须继续使用应用沙盒，禁止删除、替换或移动同一路径，并允许未来取得 container 后重新尝试迁移。
+- `FR-036` iOS 设置页、认证页和“我的 App”之间切换不得因展示层动态配色退出；安装、更新和刷新失败或异常退出后，错误日志必须保留有界的客户端诊断编号、失败阶段和相对耗时轨迹，并允许一次复制诊断报告。记录可以包含操作类型、App 名称与 bundle ID、USB/Wi-Fi/本机连接类别、账号团队类别和错误域/代码，但不得包含 Apple ID、密码、验证码、UDID、团队 ID、Server 名称/ID、证书、profile 内容或本地/远程文件路径。Apple developer team 必须沿用账号返回结果自动选择，并在设置中显示实际团队名称与账号类型；认证和工作原理说明必须准确覆盖 USB/Wi-Fi、签名、安装、七天有效期与刷新条件。
 
 ## 非功能需求
 
@@ -90,12 +94,15 @@
 - `AC-014` Classic 启动读取的 flags、known sources 与 recommended collections 均来自本仓库 Release；空配置不得引入上游远程行为。覆盖 `FR-023`。
 - `AC-015` 首次启动时本地 build number 与官方 source build number 一致，不显示伪更新；离线 fallback 显示 AltForge identity。覆盖 `FR-016`、`FR-024`。
 - `AC-016` macOS 打包脚本拒绝无效输入和覆盖已有文件，生成可通过 `hdiutil verify` 的 DMG；挂载后 App、Applications 快捷方式、bundle identifier 与产品版本均正确。覆盖 `FR-025`。
-- `AC-017` About/菜单/设置没有旧版公开名称；设备项显示 USB 或 Wi-Fi；语言偏好重启后生效；更新检查在 10 秒内成功或给出手工入口，且只打开合法 GitHub HTTPS Release URL。覆盖 `FR-026`、`FR-027`。
+- `AC-017` build product、executable、登录项系统提示、About/菜单/设置没有旧版公开名称；升级旧开发构建后关闭并重新开启登录项会注册当前 App；设备项显示 USB 或 Wi-Fi；语言偏好重启后生效；更新检查在 10 秒内成功或给出手工入口，且只打开合法 GitHub HTTPS Release URL。覆盖 `FR-026`、`FR-027`。
 - `AC-018` repository contract 能区分自有控制面与允许的外部依赖：macOS/Windows Developer Disk 索引、Classic flags/source/recommended 配置均来自本仓库 Release，Classic source 刷新和交互更新不会访问上游 Fediverse/CloudKit，遗留 Mail plug-in 不再访问上游更新服务，未配置自有 OAuth 回调时 Patreon 入口 fail closed。覆盖 `FR-028`。
 - `AC-019` 给定无历史账号、新账号、八个历史账号、旧版无类型 archive、损坏 Keychain archive、Caps Lock 开启、密码显隐切换、错误密码、握手失败和 2FA challenge，认证窗口保持可操作；失败时账号、密码和记住密码状态不丢失，用户可直接修改并重试，错误与 AltSign recovery 文案不会中英混排。只有 Apple 认证成功后才关闭窗口并以最近使用顺序更新最多八个账号，团队查询成功后显示账号类型，未勾选记住密码时不保存密码，验证码只接受六位 ASCII 数字且不持久化。覆盖 `FR-029`。
 - `AC-020` 给定普通 Xcode 证书、可复用 AltForge 证书、私钥缺失的旧 AltStore 证书和混合证书列表，流程只复用序列号匹配的本机证书，只对 AltForge/旧 AltStore 证书显示精确替换确认，取消时不撤销任何证书，任何路径都不得把列表第一张普通证书作为 fallback。覆盖 `FR-030`。
-- `AC-021` 登录成功后进度窗口按顺序显示准备账号、注册设备、准备证书、下载、签名和安装；所有阶段的进度条与窗口左右边距一致，下载阶段显示实际百分比、已下载/总大小、平滑实时速度和当前线路。用户可在自动、GitHub、配置 CDN和两个固定镜像间手动切换，切换时旧下载被取消且只有一条下载任务；镜像下载的大小或 SHA-256 不匹配时拒绝安装。连续点击同一设备不会产生第二条认证、下载或签名链路，成功、失败和取消后可重新发起。覆盖 `FR-031`。
+- `AC-021` 登录成功后进度窗口按顺序显示准备账号、注册设备、准备证书、下载、签名和安装；所有阶段的进度条与窗口左右边距一致，下载阶段按 delegate 实际写入字节显示百分比、已下载/总大小、平滑实时速度和当前线路。用户可在自动、GitHub、配置 CDN和两个固定镜像间手动切换，切换时旧下载被取消且只有一条下载任务；镜像下载的大小或 SHA-256 不匹配时拒绝安装。连续点击同一设备不会产生第二条认证、下载或签名链路；设备返回 `Complete` 后即使同一状态仍带 100% 也必须显示完成窗口，该窗口提供本地化关闭按钮和原生标题栏关闭按钮，并保持到用户主动关闭，关闭后可重新发起。覆盖 `FR-031`。
 - `AC-022` 给定 Info.plist 含 App Group identifier 但 `containerURL` 返回 `nil` 的重签应用，首次启动不执行迁移、不修改 `Library/Application Support` 且能继续加载数据库；任何解析结果中迁移源和目标相同都必须在文件协调与替换前直接跳过。覆盖 `FR-032`。
+- `AC-023` iOS 启动后仅显示浏览、来源、我的 App 和设置四个主标签，默认进入浏览；来源详情仍能解析并展示该来源声明的资讯。覆盖 `FR-033`。
+- `AC-024` iOS 四个主标签使用系统图标；官方来源和自身应用卡片使用 AltForge 深薄荷色；设置页在深浅色模式使用系统分组背景，显示构建版本、AltForge Contributors、上游原始开发者和原始设计，所有项目入口指向 `legeling/AltForge`。覆盖 `FR-034`。
+- `AC-025` iOS 构建产物的 `CFBundleDisplayName`、`CFBundleName`、`CFBundleExecutable` 和实际 Mach-O 文件均为 AltForge；AltTests 能加载该 executable。公开 storyboard/XIB/string catalog 不再显示当前产品为 AltStore 或 AltServer，同时仍准确保留 AltStore PAL、AltStore 2.0、第三方 source、上游致谢和旧证书兼容文本。覆盖 `FR-035`。
 
 ## 范围外
 
@@ -128,3 +135,6 @@
 | `FR-030` | `DES-016` | `TEST-029` | `T-018` |
 | `FR-031` | `DES-017` | `TEST-030` | `T-019` |
 | `FR-032` | `DES-018` | `TEST-031` | `T-020` |
+| `FR-033` | `DES-019` | `TEST-032` | `T-021` |
+| `FR-034` | `DES-020` | `TEST-033` | `T-022` |
+| `FR-035` | `DES-021` | `TEST-034` | `T-023` |

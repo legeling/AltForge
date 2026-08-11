@@ -27,11 +27,15 @@
 | `TEST-023` | Remote configuration | P0 | Script/Static | 自有 flags/source/recommended 配置与安全默认值 | Automated |
 | `TEST-024` | Identity/update | P1 | Static/Build/Manual | buildVersion、离线身份、支持/隐私/FAQ/桌面入口 | Partial |
 | `TEST-025` | macOS packaging | P1 | Script/Packaging/Manual | DMG 结构、Applications link、image verify、bundle/version、首次启动 | Partial |
-| `TEST-026` | macOS desktop UX | P1 | Static/Build/Manual | AltForge Server identity、About、USB/Wi-Fi、图标、更新检查、登录项三态/失败恢复、设置与语言重启 | Partial |
+| `TEST-026` | macOS desktop UX | P1 | Static/Build/Manual | AltForge Server build product/executable/system login-item identity、expanded About/GitHub links、USB/Wi-Fi、图标、更新检查、登录项三态/失败恢复、设置与语言重启 | Partial |
 | `TEST-027` | Network ownership | P0 | Script/Static/Build | 自有控制面、Developer Disk schema/host、Classic Fediverse fail-closed、遗留 plug-in 无网络、OAuth fail-closed | Partial |
 | `TEST-028` | macOS authentication | P1 | Static/Build/Manual Security UI | single-read credential snapshot、saved account selection、Keychain-only password consent、reveal、Caps Lock、forget、failure retry/input retention、localized AltSign errors、six-digit 2FA input/paste、corrupt archive | Partial |
 | `TEST-029` | macOS certificate ownership | P0 | Static/Build/Manual Security | known account team type in picker、legacy archive、managed certificate reuse/replace consent、unrelated Xcode certificate protection、cancel no-op | Partial |
-| `TEST-030` | macOS installation/download | P0 | Static/Build/Network/Manual E2E | per-device dedup、symmetric stage/progress UI、bytes/total/speed、manual source switch/cancel、configured CDN priority、GitHub timeout、bounded mirror fallback、size/SHA-256 rejection、cleanup | Partial |
+| `TEST-030` | macOS installation/download | P0 | Static/Build/Network/Manual E2E | per-device dedup、delegate bytes/total/speed、installation-proxy Complete、symmetric UI、localized close button/titlebar close、manual source switch/cancel、configured CDN priority、GitHub timeout、bounded mirror fallback、size/SHA-256 rejection、cleanup | Partial |
 | `TEST-031` | iOS App Group migration | P1 | Static/Build/Simulator/Manual E2E | metadata present + container unavailable、source/destination identity guard、sandbox fallback、future migration retry、no data deletion | Partial |
+| `TEST-032` | iOS main navigation | P2 | Static/Build/Simulator | four tabs、Browse default、source-scoped News retained | Partial |
+| `TEST-033` | iOS brand/settings | P2 | Static/Build/Simulator UI | SF Symbols、official tint override、dynamic settings colors、bundle version、credits/repository links、zh-Hans labels | Partial |
+| `TEST-034` | iOS public identity | P1 | Static/Build/Manual System UI | display/bundle/executable names、AltTests host、public resource scan、legacy identity allowlist、system crash-report title | Partial |
+| `TEST-035` | iOS install/authentication diagnostics | P0 | Static/Build/Simulator/Manual E2E | settings-to-My Apps crash regression、temporary object ID、20 records/16 stages/120-char detail bounds、diagnostic ID/failure stage/relative trace、copy report、sensitive-field allowlist、interrupted-operation recovery log、team selection、auth/workflow bilingual UI、third-party IPA device install | Partial |
 
 状态只能使用：`Automated`、`CI defined`、`Partial`、`Planned`、`Manual pending`、`Manual harness only`、`Blocked`。状态变化必须同步 coverage map。

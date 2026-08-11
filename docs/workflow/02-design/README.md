@@ -131,11 +131,11 @@ Release workflow 与本地验证都只对 staging 副本执行 `--ad-hoc-sign`�
 
 ### `DES-014` AltForge Server 菜单与设置
 
-公开产品名使用 AltForge Server，Info.plist、About、菜单、通知和用户错误统一这一名称；Xcode target、Mach-O executable、协议类型、旧数据路径和上游源码头继续保留 AltServer，避免破坏兼容与制造无意义同步冲突。About 以贡献者和项目社区为单位表达维护/致谢，同时单独保留上游版权事实和 AGPL v3.0。
+公开产品名使用 AltForge Server，Xcode build product、`.app` 包目录、Mach-O executable、Info.plist、登录项/后台项目系统提示、About、菜单、通知和用户错误统一这一名称。Xcode target 与 `PRODUCT_MODULE_NAME` 继续保留 `AltServer`，使 `AltServer-Swift.h`、协议类型、旧数据路径和上游源码头保持兼容；scheme 的 `BlueprintName` 指向内部 target，而 `BuildableName` 指向 `AltForge Server.app`。About 使用 560 × 420 pt 的独立原生窗口，主体内容水平居中，以贡献者和项目社区为单位表达维护/致谢，单独保留上游版权事实和 AGPL v3.0，并显示可复制、可点击的完整 `https://github.com/legeling/AltForge` 地址及 Releases、文档和 Issue 入口。URL 与链接按钮通过 cursor rect 在悬停时显示 pointing-hand 光标。
 
 打开状态菜单时，只调用一次 `availableDevices` 和一次 USB-only `connectedDevices`，将 USB identifier 组成有界集合；三个设备子菜单复用该集合生成 `设备名（USB）` 或 `设备名（Wi-Fi）`，同时使用 template SF Symbols。USB/Wi-Fi 同时可用时优先 USB。菜单栏图标继续使用 19/38 px alpha template asset，并在运行时显式设置 template 渲染。
 
-`Settings` 是状态菜单内的子菜单，不创建独立窗口；其中直接包含 `Launch at Login` 开关和语言子菜单。登录启动菜单项使用标准 `NSMenuItem.state`，并以本地化标题补充 `On/Off/Requires Approval`；macOS 13+ 使用 `SMAppService.mainApp` 的真实状态、可抛错 register/unregister 和登录项系统设置入口，macOS 11/12 才使用 `LaunchAtLogin` fallback。语言选择使用单选勾选状态，保存到 App 自有 preference，并为下一次启动设置 `AppleLanguages`；选择“跟随系统”时移除覆盖。偏好在重启前显式写盘，随后明确提供“立即重启/稍后”；立即重启只创建一个 0.5 秒延迟的短生命周期 relauncher，避免选择丢失和新旧服务实例长期并存。Storyboard/string catalog 仍是唯一文本源，不尝试在当前进程热替换已加载资源。设备子菜单不得声明为 `recentDocuments` 系统菜单，避免 macOS 注入与安装无关的时钟图标；安装、设置和检查更新入口分别使用安装、齿轮和刷新 template SF Symbol，安装图标另提供兼容 fallback。
+`Settings` 是状态菜单内的子菜单，不创建独立窗口；其中直接包含 `Launch at Login` 开关和语言子菜单。登录启动菜单项使用标准 `NSMenuItem.state`，并以本地化标题补充 `On/Off/Requires Approval`；macOS 13+ 使用 `SMAppService.mainApp` 的真实状态、可抛错 register/unregister 和登录项系统设置入口，macOS 11/12 才使用 `LaunchAtLogin` fallback。macOS 会缓存同一 bundle identifier 的旧注册路径与展示信息，所以从历史 `AltServer.app` 开发构建升级后由用户关闭再开启一次登录项以完成 unregister/register；App 不在启动时静默修改用户的登录项授权。语言选择使用单选勾选状态，保存到 App 自有 preference，并为下一次启动设置 `AppleLanguages`；选择“跟随系统”时移除覆盖。偏好在重启前显式写盘，随后明确提供“立即重启/稍后”；立即重启只创建一个 0.5 秒延迟的短生命周期 relauncher，避免选择丢失和新旧服务实例长期并存。Storyboard/string catalog 仍是唯一文本源，不尝试在当前进程热替换已加载资源。设备子菜单不得声明为 `recentDocuments` 系统菜单，避免 macOS 注入与安装无关的时钟图标；安装、设置和检查更新入口分别使用安装、齿轮和刷新 template SF Symbol，安装图标另提供兼容 fallback。
 
 “检查更新”对固定 GitHub API 发出单次 GET，请求超时 10 秒且不重试。解析只接受 200 JSON；打开 Release 前必须验证 `https` 和 `github.com` host。它只比较当前 `CFBundleShortVersionString` 与 latest tag，不承担下载、签名或安装职责；首次 Release 尚未发布、离线、限流或格式错误均返回明确的手工 Releases 入口。
 
@@ -159,7 +159,7 @@ Apple verification handler 使用匹配的独立 window controller 替代验证�
 
 AltServer 复用仓库已经固定的 KeychainAccess package，新建仅属于桌面端的 `afterFirstUnlockThisDeviceOnly` service。账号与可选密码编码为 versioned 单项 archive，使账号顺序和密码选择通过一次 Keychain update 原子替换；最多八个账号、64 KiB archive、账号 320 字符和密码 1024 字符。认证窗口通过一次 `credentialSnapshot` 读取账号和可选密码，账号下拉只查询该 window-modal 生命周期内的有界快照；结束时释放快照和表单值，不把凭据提升为进程级缓存。读取、选择、更新和忘记账号均为有界 `O(accounts + bytes)`，账号数上限使 UI 更新为常量级；不得使用 UserDefaults、明文文件、Application Support、App bundle、日志或同步型 iCloud Keychain fallback。
 
-只有 `ALTAppleAPI.authenticate` 返回 account/session 后才触发 credential callback。勾选“记住密码”时保存密码，未勾选时仍保留账号但清除该账号的旧密码；损坏或不可访问的 archive fail closed，窗口显示无敏感详情的内联提示并继续允许手工登录。Keychain 更新失败不改变认证/安装结果，仅发送不含账号的本地通知。
+只有 `ALTAppleAPI.authenticate` 返回 account/session 后才触发 credential callback。勾选“记住密码”时保存密码，未勾选时仍保留账号但清除该账号的旧密码；窗口在复选框下以英文和简体中文说明 macOS 读取密码时可能请求 Keychain 授权，并明确所需的是 Mac 登录密码而非 Apple ID 密码。损坏或不可访问的 archive fail closed，窗口显示无敏感详情的内联提示并继续允许手工登录。Keychain 更新失败不改变认证/安装结果，仅发送不含账号的本地通知。
 
 登录窗口使用异步 submission callback 驱动现有安装链路，点击继续只进入有界的 loading state，不结束 modal session。认证前失败在主线程恢复全部输入控件并显示本地化内联错误；只有取得 account/session 后才保存凭据并关闭窗口，随后团队、设备、证书、签名或安装阶段的错误继续使用全局错误窗口。AltSign 的用户可见错误 key 在 AltServer 主 string catalog 中提供完整简体中文翻译，避免 framework fallback 英文与中文标题混排。
 
@@ -171,17 +171,47 @@ Classic AltForge Server 通过 AltSign 已有的 CoreCrypto/SRP 实现完成 Gra
 
 ### `DES-017` macOS 单设备安装事务与 Release 下载
 
-`AppDelegate` 以设备 identifier 保存单次运行期安装 activity。认证、远程 IPA、本地 IPA、签名和设备写入共用这一锁；重复点击同一设备不创建第二条链路，只把认证窗口或现有进度窗口带到前台。任务成功、失败、用户取消或认证窗口关闭时均删除 activity。不同设备仍可各自执行，但每台设备最多一条任务，字典规模受当前连接设备数限制。
+`AppDelegate` 以设备 identifier 保存单次运行期安装 activity。认证、远程 IPA、本地 IPA、签名和设备写入共用这一锁；重复点击同一设备不创建第二条链路，只把认证窗口或现有进度窗口带到前台。失败、用户取消或认证窗口关闭时删除 activity；成功时底层事务立即结束，但用于持有完成窗口的 UI activity 保留到用户关闭窗口。不同设备仍可各自执行，但每台设备最多一条任务，字典规模受当前连接设备数限制。
 
-Apple ID 认证成功后关闭凭据窗口，并立即显示独立原生进度窗口。安装管理器通过显式 callback 报告团队查询、设备注册、证书、设备准备、IPA 下载、描述文件、签名和安装阶段；URLSession 与底层 `NSProgress` 提供下载及设备安装百分比。全宽进度条不为隐藏的百分比标签预留右侧列；下载信息放在独立行，使用 `ByteCountFormatter` 显示已下载量、总大小和指数平滑后的即时速度。下载源选择器由线程安全的单任务 control 连接 UI 与 URLSession，切换时增加 generation、取消并释放旧 task/KVO，只接受当前 generation 的 completion，避免旧回调覆盖新下载。窗口不记录账号、UDID、证书或签名材料，完成后短暂显示成功状态，失败时先关闭进度再进入既有结构化错误窗口。
+Apple ID 认证成功后关闭凭据窗口，并立即显示独立原生进度窗口。安装管理器通过显式 callback 报告团队查询、设备注册、证书、设备准备、IPA 下载、描述文件、签名和安装阶段；下载使用独立 `URLSessionDownloadDelegate` 的 `didWriteData` 实际字节回调，最多每 0.1 秒向 UI 提交一次且保证完成样本，设备写入继续使用底层 `NSProgress`。全宽进度条不为隐藏的百分比标签预留右侧列；下载信息放在独立行，使用 `ByteCountFormatter` 显示已下载量、总大小和指数平滑后的即时速度。下载源选择器由线程安全的单任务 control 连接 UI 与 URLSession，切换时增加 generation、取消并释放旧 transfer/session，只接受当前 generation 的 completion，避免旧回调覆盖新下载；任何迟到成功文件立即删除。窗口不记录账号、UDID、证书或签名材料。设备 installation_proxy 返回 `Status == Complete` 时无论是否仍携带百分比都把子进度置满并完成底层事务；进度窗口切换为简洁的完成状态，仅此时显示默认的本地化“关闭”按钮并启用原生标题栏关闭按钮，两者复用同一受控 close path；设备级 UI activity 保留到用户关闭窗口，避免固定延迟让结果一闪而过。失败时先关闭进度再进入既有结构化错误窗口。
 
-官方 source 仍选择 tag 固定的 `github.com/legeling/AltForge/releases/download/.../AltForge.ipa`，并携带发布时生成的 size/SHA-256；旧 metadata 缺失时再以固定 GitHub API 查询同名 asset。当前版本可以声明最多四个经过 HTTPS 结构校验的 `downloadMirrors`，其中仓库 Actions 变量生成的自有 CDN 排在自动线路首位；随后是 GitHub 和两个固定 HTTPS 反向代理。用户也可选择单一线路立即重启下载。所有镜像下载后以 1 MiB 流式块计算 SHA-256，并同时校验文件大小，任何不匹配都失败，绝不解压。自动尝试数上限为配置 CDN 4 个、GitHub 1 个和固定公共镜像 2 个，始终顺序执行；请求 idle timeout 为 45 秒、总资源 timeout 为 600 秒。时间复杂度为 `O(sum(attempted download bytes))`，额外内存为 `O(1 MiB)`，临时文件、task 与 KVO 在成功、失败和线路切换时释放。
+官方 source 仍选择 tag 固定的 `github.com/legeling/AltForge/releases/download/.../AltForge.ipa`，并携带发布时生成的 size/SHA-256；旧 metadata 缺失时再以固定 GitHub API 查询同名 asset。当前版本可以声明最多四个经过 HTTPS 结构校验的 `downloadMirrors`，其中仓库 Actions 变量生成的自有 CDN 排在自动线路首位；随后是 GitHub 和两个固定 HTTPS 反向代理。用户也可选择单一线路立即重启下载。所有镜像下载后以 1 MiB 流式块计算 SHA-256，并同时校验文件大小，任何不匹配都失败，绝不解压。自动尝试数上限为配置 CDN 4 个、GitHub 1 个和固定公共镜像 2 个，始终顺序执行；请求 idle timeout 为 45 秒、总资源 timeout 为 600 秒。时间复杂度为 `O(sum(attempted download bytes))`，额外内存为 `O(1 MiB)`，临时文件与 delegate session 在成功、失败和线路切换时释放。
 
 ### `DES-018` iOS App Group 数据迁移降级
 
 `FileManager.altstoreSharedDirectory` 是 App Group 可用性的唯一运行时真相：Info.plist 中的 `ALTAppGroups` 只表示候选 identifier，不能证明当前 provisioning profile 和系统 sandbox 已授予 container。`DatabaseManager` 在任何 `NSFileCoordinator` intent、Core Data migration、删除或目录替换之前同时要求迁移偏好开启且 shared container URL 非空。
 
 免费开发者或其他重签环境无法解析 container 时，`PersistentContainer` 与 `InstalledApp` 保持既有 application-support fallback，启动按普通沙盒路径继续；迁移偏好不清除，以便未来获得有效 entitlement 后再尝试。即使运行期 container 解析状态发生变化，标准化后的数据库与 Apps 源/目标路径必须分别不同，否则整次迁移无写入返回。判断与路径比较均为常数成本 `O(1)`，不新增复制、轮询或重试。
+
+### `DES-019` iOS 主导航收敛
+
+主 `UITabBarController` 只装载浏览、来源、我的 App 和设置四个入口，并将浏览作为默认首屏。聚合资讯场景及其主导航关系从 `Main.storyboard` 删除，`Tab` 枚举顺序与 storyboard relationship 顺序保持一致，避免删减后 deep link 选中错误标签。
+
+资讯仍是 AltStore source 格式的一部分，因此不修改 `NewsItem`、Core Data model、source decoder 或来源详情页面。这样第三方 source 继续兼容，用户仍可在具体来源中查看有上下文的公告，同时避免一个内容重复且价值较低的全局聚合页。启动只实例化四个主导航 controller，时间与额外空间均为 `O(1)`；source 同步复杂度不变。
+
+### `DES-020` iOS 品牌与设置语义颜色
+
+主 tab 在 `TabBarController` 统一覆盖 storyboard 的历史图片，分别使用 bag、source stack、app grid 和 gear 的 SF Symbols，并提供 selected variant。图标表达功能而非品牌，因此不复用 App 图标或上游自定义 SVG。
+
+官方来源色与交互强调色分离：`Primary` 是适配深浅模式的品牌薄荷色，`SourceTint` 是对大面积卡片降低亮度后的 token。官方 source ID 与 AltForge bundle ID 在展示层强制使用 `SourceTint`，避免本地 Core Data 缓存或旧 Release metadata 恢复珊瑚红；第三方 source/app 仍尊重自己的 tint。下一次 Release 生成器输出相同的固定深色 metadata。
+
+设置 controller 使用 `systemGroupedBackground`、`secondarySystemGroupedBackground`、`label`、`secondaryLabel` 和 `separator`，不再用旧青色作为整页背景。版本只读取 bundle 的 `CFBundleShortVersionString`，确保与 Xcode/release contract 的 2.4.0 真相一致。Credits 将 AltForge Contributors 标为维护者，同时保留 Riley Testut 和 Caroline Moore 的上游贡献归属；项目 GitHub、Issue 和隐私仍归本仓库。所有操作均为固定规模 UI 配置，不新增 I/O 或网络请求。
+
+### `DES-021` iOS 公开身份与内部兼容边界
+
+主应用 Info.plist 固定 `CFBundleDisplayName` 和 `CFBundleName` 为 `AltForge`，AltStore target 的 Debug/Release build settings 固定 `EXECUTABLE_NAME = AltForge`。AltTests 的 `TEST_HOST` 继续定位 `AltStore.app`，但加载其中的 `AltForge` executable。这样系统崩溃报告与进程身份使用 AltForge，同时不改 target/scheme、Swift module、产品包目录和 Release 中的 `Payload/AltStore.app`，避免 storyboard module、现有脚本和上游同步产生大范围兼容风险。
+
+公开品牌扫描只检查 storyboard/XIB 的用户属性和 string catalog 实际显示值，不机械替换符号、文件名、协议、数据库、URL scheme、第三方 source、AltStore PAL/2.0 或上游归属。新证书、新 App Group 和导出 UTI 使用 AltForge；证书读取同时接受 AltForge 和旧 AltStore 前缀，以保证升级兼容。AltSign submodule 的历史本地化 key 保持不变，由主 App catalog 提供 AltForge 显示值。运行时额外成本为 `O(1)`；回归扫描为 `O(resource bytes)`。
+
+### `DES-022` iOS 安装恢复日志与认证界面
+
+设置页不在 `UITableViewDelegate.willDisplay` 中递归修改任意子视图；页面背景、导航、已知 label、cell 和 separator 使用 UIKit 语义色，避免对 UIKit 私有视图发送未支持 selector。认证 storyboard 同样使用 `systemGroupedBackground`、`secondarySystemGroupedBackground`、`label`、`secondaryLabel`、`tertiaryLabel` 和 AltForge `Primary`，并把凭据用途说明放在表单之后的固定间距，而不是压到超长页面底部。
+
+`AuthenticationOperation.fetchTeam` 保留现有确定性顺序：优先复用仍存在的 active team，否则依次选择 individual、organization、free 和首个未知团队；设置页从持久化 active team 显示实际名称、Apple ID 和本地化账号类型，不从 GitHub 仓库或维护者身份推断 Apple developer team。
+
+AppManager 在操作进入队列前创建值快照，并把最多 20 条 pending operation 写入独立 UserDefaults key。每条记录带随机客户端诊断编号，以及最多 16 个 `{relative date, stage, bounded detail}` 事件；阶段只覆盖查找 Server、认证、准备/验证 App、准备描述文件、签名、发送、设备安装、刷新和终态，不记录进度回调的每个百分比。detail 最长 120 个字符，允许值只有 USB/Wi-Fi/本机连接类别与 Apple 团队类别。失败时把诊断编号、最后一个非终态阶段和相对耗时轨迹作为 `NSError.userInfo` 字符串写入既有 `LoggedError`，不修改 Core Data schema 或 Server Protocol；错误详情可查看这些字段，复制操作输出一个有界诊断报告。
+
+成功完成后消费 pending record；失败时必须先把正常错误日志保存成功再消费，保存失败则保留到下次启动。应用下次在数据库启动成功后读取遗留记录并生成一次 `LoggedError`，只在日志落库成功后删除记录，说明上次进程在结果落库前结束。记录允许 App 名称和 bundle ID，但不包含 Apple ID、密码、验证码、UDID、团队 ID、Server 名称/ID、证书、profile 内容或文件 URL。错误关系解析仅允许永久 object ID，并通过 throwing `existingObject(with:)` 查询；temporary ID 或已删除对象使用 `AnyApp` 快照。单次 append 为 `O(k + e)`，`k <= 20`、`e <= 16`，总持久化空间有固定上限；不新增网络 I/O、后台进程或跨端协议字段。
 
 ## 可选目标与边界
 

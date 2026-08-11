@@ -145,19 +145,19 @@ struct OperationError: ALTLocalizedError
         case .unknownResult: return NSLocalizedString("The operation returned an unknown result.", comment: "")
         case .timedOut: return NSLocalizedString("The operation timed out.", comment: "")
         case .notAuthenticated: return NSLocalizedString("You are not signed in.", comment: "")
-        case .unknownUDID: return NSLocalizedString("AltStore could not determine this device's UDID.", comment: "")
+        case .unknownUDID: return NSLocalizedString("AltForge could not determine this device's UDID.", comment: "")
         case .invalidApp: return NSLocalizedString("The app is in an invalid format.", comment: "")
         case .invalidParameters: return NSLocalizedString("Invalid parameters.", comment: "")
         case .maximumAppIDLimitReached: return NSLocalizedString("You cannot register more than 10 App IDs within a 7 day period.", comment: "")
-        case .noSources: return NSLocalizedString("There are no AltStore sources.", comment: "")
-        case .missingAppGroup: return NSLocalizedString("AltStore's shared app group could not be accessed.", comment: "")
+        case .noSources: return NSLocalizedString("There are no AltForge sources.", comment: "")
+        case .missingAppGroup: return NSLocalizedString("AltForge's shared app group could not be accessed.", comment: "")
         case .forbidden:
             guard let failureReason = self._failureReason else { return NSLocalizedString("The operation is forbidden.", comment: "") }
             return failureReason
             
         case .sourceNotAdded:
             let sourceName = self.sourceName.map { String(format: NSLocalizedString("The source “%@”", comment: ""), $0) } ?? NSLocalizedString("The source", comment: "")
-            return String(format: NSLocalizedString("%@ is not added to AltStore.", comment: ""), sourceName)
+            return String(format: NSLocalizedString("%@ is not added to AltForge.", comment: ""), sourceName)
 
         case .appNotFound:
             let appName = self.appName ?? NSLocalizedString("The app", comment: "")
@@ -165,7 +165,7 @@ struct OperationError: ALTLocalizedError
 
         case .openAppFailed:
             let appName = self.appName ?? NSLocalizedString("the app", comment: "")
-            return String(format: NSLocalizedString("AltStore was denied permission to launch %@.", comment: ""), appName)
+            return String(format: NSLocalizedString("AltForge was denied permission to launch %@.", comment: ""), appName)
 
         case .serverNotFound: return NSLocalizedString("AltForge Server could not be found.", comment: "")
         case .connectionFailed: return NSLocalizedString("A connection to AltForge Server could not be established.", comment: "")

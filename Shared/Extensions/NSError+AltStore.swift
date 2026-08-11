@@ -135,6 +135,9 @@ public extension NSError
             NSLocalizedFailureReasonErrorKey,
             NSLocalizedRecoverySuggestionErrorKey,
             ALTLocalizedTitleErrorKey,
+            ALTDiagnosticIDErrorKey,
+            ALTDiagnosticStageErrorKey,
+            ALTDiagnosticTraceErrorKey,
             ALTSourceFileErrorKey,
             ALTSourceLineErrorKey,
             NSUnderlyingErrorKey
@@ -178,6 +181,9 @@ public extension NSError
             case NSLocalizedFailureReasonErrorKey: keyName = NSLocalizedString("Failure Reason", comment: "")
             case NSLocalizedRecoverySuggestionErrorKey: keyName = NSLocalizedString("Recovery Suggestion", comment: "")
             case ALTLocalizedTitleErrorKey: keyName = NSLocalizedString("Title", comment: "")
+            case ALTDiagnosticIDErrorKey: keyName = NSLocalizedString("Diagnostic ID", comment: "")
+            case ALTDiagnosticStageErrorKey: keyName = NSLocalizedString("Failure Stage", comment: "")
+            case ALTDiagnosticTraceErrorKey: keyName = NSLocalizedString("Operation Trace", comment: "")
             case ALTSourceFileErrorKey: keyName = NSLocalizedString("Source File", comment: "")
             case ALTSourceLineErrorKey: keyName = NSLocalizedString("Source Line", comment: "")
             case NSUnderlyingErrorKey: keyName = NSLocalizedString("Underlying Error", comment: "")

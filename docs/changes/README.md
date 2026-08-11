@@ -17,6 +17,7 @@
 | [`CHG-20260810-003`](active/CHG-20260810-003-macos-apple-id-account-manager/README.md) | macOS Apple ID 账号管理 | In progress |
 | [`CHG-20260810-004`](active/CHG-20260810-004-resilient-macos-installation/README.md) | macOS 可见安装进度与可靠 Release 下载 | In progress |
 | [`CHG-20260810-005`](active/CHG-20260810-005-ios-app-group-migration-fallback/README.md) | iOS App Group 迁移降级修复 | In progress |
+| [`CHG-20260811-004`](active/CHG-20260811-004-ios-install-crash-diagnostics-authentication/README.md) | iOS 安装中断崩溃、恢复日志与认证说明 | In progress / device E2E pending |
 
 ## Completed
 
@@ -33,6 +34,9 @@
 | [`CHG-20260809-003`](completed/2026/08/CHG-20260809-003-tag-only-release-versioning/README.md) | 收敛 tag-only 构建与统一版本 | 2026-08-10 |
 | [`CHG-20260809-004`](completed/2026/08/CHG-20260809-004-release-safety-update-independence/README.md) | 发布安全与更新独立性 | 2026-08-10 |
 | [`CHG-20260809-006`](completed/2026/08/CHG-20260809-006-macos-dmg-local-validation/README.md) | macOS DMG 与本地安装验证 | 2026-08-10 |
+| [`CHG-20260811-001`](completed/2026/08/CHG-20260811-001-ios-main-navigation/README.md) | 移除 iOS 聚合资讯页并收敛主导航 | 2026-08-11 |
+| [`CHG-20260811-002`](completed/2026/08/CHG-20260811-002-ios-brand-settings-polish/README.md) | 收敛 iOS 品牌、配色与设置身份 | 2026-08-11 |
+| [`CHG-20260811-003`](completed/2026/08/CHG-20260811-003-ios-public-identity-crash-name/README.md) | 修复 iOS 系统崩溃报告与公开品牌残留 | 2026-08-11 |
 
 ## 记录要求
 

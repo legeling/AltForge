@@ -90,7 +90,7 @@ mac_info="$app_path/Contents/Info.plist"
 [[ "$(plutil -extract CFBundleShortVersionString raw "$mac_info")" == "$version" ]] || { echo "macOS version is incorrect." >&2; exit 65; }
 [[ "$(plutil -extract CFBundleVersion raw "$mac_info")" == "$build_number" ]] || { echo "macOS build number is incorrect." >&2; exit 65; }
 
-executable="$app_path/Contents/MacOS/AltServer"
+executable="$app_path/Contents/MacOS/AltForge Server"
 architectures=" $(lipo -archs "$executable") "
 [[ "$architectures" == *" arm64 "* && "$architectures" == *" x86_64 "* ]] || { echo "macOS executable is not Universal (arm64 + x86_64)." >&2; exit 65; }
 

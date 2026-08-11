@@ -14,6 +14,9 @@ import AltSign
 
 public let ALTLocalizedTitleErrorKey = "ALTLocalizedTitle"
 public let ALTLocalizedDescriptionKey = "ALTLocalizedDescription"
+public let ALTDiagnosticIDErrorKey = "ALTDiagnosticID"
+public let ALTDiagnosticStageErrorKey = "ALTDiagnosticStage"
+public let ALTDiagnosticTraceErrorKey = "ALTDiagnosticTrace"
 
 public protocol ALTLocalizedError<Code>: LocalizedError, CustomNSError, CustomStringConvertible
 {

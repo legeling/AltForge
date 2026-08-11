@@ -15,9 +15,8 @@ extension TabBarController
 {
     private enum Tab: Int, CaseIterable
     {
-        case news
-        case sources
         case browse
+        case sources
         case myApps
         case settings
     }
@@ -47,13 +46,26 @@ class TabBarController: UITabBarController
     override func viewDidLoad() 
     {
         super.viewDidLoad()
-        
-        let browseNavigationController = self.viewControllers![Tab.browse.rawValue] as! UINavigationController
+
+        guard let viewControllers, viewControllers.count == Tab.allCases.count else { return }
+
+        let browseNavigationController = viewControllers[Tab.browse.rawValue] as! UINavigationController
         browseNavigationController.tabBarItem.image = UIImage(systemName: "bag")
+        browseNavigationController.tabBarItem.selectedImage = UIImage(systemName: "bag.fill")
         self.featuredViewController = browseNavigationController.viewControllers.first as? FeaturedViewController
-        
-        let sourcesNavigationController = self.viewControllers![Tab.sources.rawValue] as! UINavigationController
+
+        let sourcesNavigationController = viewControllers[Tab.sources.rawValue] as! UINavigationController
+        sourcesNavigationController.tabBarItem.image = UIImage(systemName: "square.stack.3d.up")
+        sourcesNavigationController.tabBarItem.selectedImage = UIImage(systemName: "square.stack.3d.up.fill")
         self.sourcesViewController = sourcesNavigationController.viewControllers.first as? SourcesViewController
+
+        let myAppsNavigationController = viewControllers[Tab.myApps.rawValue] as! UINavigationController
+        myAppsNavigationController.tabBarItem.image = UIImage(systemName: "square.grid.2x2")
+        myAppsNavigationController.tabBarItem.selectedImage = UIImage(systemName: "square.grid.2x2.fill")
+
+        let settingsNavigationController = viewControllers[Tab.settings.rawValue] as! UINavigationController
+        settingsNavigationController.tabBarItem.image = UIImage(systemName: "gearshape")
+        settingsNavigationController.tabBarItem.selectedImage = UIImage(systemName: "gearshape.fill")
         
         #if MARKETPLACE
         if #available(iOS 18, *)

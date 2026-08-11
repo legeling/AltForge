@@ -43,6 +43,8 @@ class RefreshAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
             
             guard let app = self.context.app else { throw OperationError.appNotFound(name: nil) }
             guard let udid = Bundle.main.object(forInfoDictionaryKey: Bundle.Info.deviceID) as? String else { throw OperationError.unknownUDID }
+
+            self.context.recordDiagnostic(.refreshingApp, detail: server.connectionType.localizedDiagnosticName)
             
             Logger.sideload.notice("Refreshing provisioning profiles for app \(self.context.bundleIdentifier, privacy: .public)...")
             

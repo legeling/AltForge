@@ -42,6 +42,8 @@ class ResignAppOperation: ResultOperation<ALTApplication>, @unchecked Sendable
             let team = self.context.team,
             let certificate = self.context.certificate
         else { return self.finish(.failure(OperationError.invalidParameters)) }
+
+        self.context.recordDiagnostic(.signingApp)
         
         Logger.sideload.notice("Resigning app \(self.context.bundleIdentifier, privacy: .public)...")
         
@@ -139,7 +141,7 @@ private extension ResignAppOperation
             
             // Add app-specific exported UTI so we can check later if this app (extension) is installed or not.
             let installedAppUTI = ["UTTypeConformsTo": [],
-                                   "UTTypeDescription": "AltStore Installed App",
+                                   "UTTypeDescription": "AltForge Installed App",
                                    "UTTypeIconFiles": [],
                                    "UTTypeIdentifier": InstalledApp.installedAppUTI(forBundleIdentifier: profile.bundleIdentifier),
                                    "UTTypeTagSpecification": [:]] as [String : Any]

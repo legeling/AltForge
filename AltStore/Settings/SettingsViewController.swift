@@ -107,11 +107,12 @@ class SettingsViewController: UITableViewController
     @IBOutlet private var blueskyButton: UIButton!
     @IBOutlet private var twitterButton: UIButton!
     @IBOutlet private var githubButton: UIButton!
-    
+
+    @IBOutlet private var footerTitleLabel: UILabel!
     @IBOutlet private var versionLabel: UILabel!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return .default
     }
     
     required init?(coder aDecoder: NSCoder)
@@ -130,6 +131,15 @@ class SettingsViewController: UITableViewController
         self.prototypeHeaderFooterView = nib.instantiate(withOwner: nil, options: nil)[0] as? SettingsHeaderFooterView
         
         self.tableView.register(nib, forHeaderFooterViewReuseIdentifier: "HeaderFooterView")
+
+        self.tableView.backgroundColor = .systemGroupedBackground
+        self.tableView.separatorColor = .separator
+        self.tableView.indicatorStyle = .default
+        self.view.tintColor = .altPrimary
+
+        self.footerTitleLabel.textColor = .secondaryLabel
+        self.versionLabel.textColor = .secondaryLabel
+        self.githubButton.tintColor = .label
         
         let debugModeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(SettingsViewController.handleDebugModeGesture(_:)))
         debugModeGestureRecognizer.delegate = self
@@ -137,29 +147,16 @@ class SettingsViewController: UITableViewController
         debugModeGestureRecognizer.numberOfTouchesRequired = 3
         self.tableView.addGestureRecognizer(debugModeGestureRecognizer)
         
-        if let version = Bundle.main.object(forInfoDictionaryKey: "ALTVersion") as? String
-        {
-            self.versionLabel.text = String(format: NSLocalizedString("Version %@", comment: "AltStore Version"), version)
-        }
-        else if let installedApp = InstalledApp.fetchAltStore(in: DatabaseManager.shared.viewContext)
+        if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         {
             #if BETA
-            // Only show build version for BETA builds.
-            let localizedVersion = if let bundleVersion = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as? String {
-                "\(installedApp.version) (\(bundleVersion))"
-            }
-            else {
-                installedApp.localizedVersion
-            }
+            let buildVersion = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as? String
+            let localizedVersion = buildVersion.map { "\(version) (\($0))" } ?? version
             #else
-            let localizedVersion = installedApp.version
+            let localizedVersion = version
             #endif
-            
-            self.versionLabel.text = String(format: NSLocalizedString("Version %@", comment: "AltStore Version"), localizedVersion)
-        }
-        else if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-        {
-            self.versionLabel.text = String(format: NSLocalizedString("Version %@", comment: "AltStore Version"), version)
+
+            self.versionLabel.text = String(format: NSLocalizedString("Version %@", comment: "AltForge Version"), localizedVersion)
         }
         else
         {
@@ -167,6 +164,16 @@ class SettingsViewController: UITableViewController
         }
         
         self.tableView.contentInset.bottom = 20
+
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationAppearance.configureWithOpaqueBackground()
+        navigationAppearance.backgroundColor = .systemGroupedBackground
+        navigationAppearance.shadowColor = nil
+        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        navigationAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        self.navigationController?.navigationBar.tintColor = .altPrimary
+        self.navigationController?.navigationBar.standardAppearance = navigationAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationAppearance
 
         [self.mastodonButton, self.threadsButton, self.blueskyButton, self.twitterButton].forEach { $0?.isHidden = true }
         
@@ -199,20 +206,8 @@ class SettingsViewController: UITableViewController
         
         if #available(iOS 26, *)
         {
-            // Removes styling created by NavigationBar
-            self.navigationController?.navigationBar.scrollEdgeAppearance = UINavigationBarAppearance()
-            self.navigationController?.navigationBar.standardAppearance = UINavigationBarAppearance()
-            
-            let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithDefaultBackground()
-            appearance.shadowColor = nil
-            appearance.titleTextAttributes = textAttributes
-            appearance.largeTitleTextAttributes = textAttributes
-            
-            self.navigationItem.standardAppearance = appearance
-            self.navigationItem.scrollEdgeAppearance = appearance
+            self.navigationItem.standardAppearance = navigationAppearance
+            self.navigationItem.scrollEdgeAppearance = navigationAppearance
         }
     }
     
@@ -293,9 +288,9 @@ private extension SettingsViewController
             else
             {
                 #if MARKETPLACE
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Sign in with your social web account to like apps, updates, and news items in AltStore.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Sign in with your social web account to like apps, updates, and news items in AltForge.", comment: "")
                 #else
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Sign in with your Apple ID to download apps from AltStore.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Sign in with your Apple ID to download apps from AltForge.", comment: "")
                 #endif
             }
             
@@ -337,7 +332,7 @@ private extension SettingsViewController
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Personalize your AltStore experience by choosing an alternate app icon.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Personalize your AltForge experience by choosing an alternate app icon.", comment: "")
             }
             
             
@@ -547,7 +542,7 @@ private extension SettingsViewController
     
     func clearCache()
     {
-        let alertController = UIAlertController(title: NSLocalizedString("Are you sure you want to clear AltStore's cache?", comment: ""),
+        let alertController = UIAlertController(title: NSLocalizedString("Are you sure you want to clear AltForge's cache?", comment: ""),
                                                 message: NSLocalizedString("This will remove all temporary files as well as backups for uninstalled apps.", comment: ""),
                                                 preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: UIAlertAction.cancel.title, style: UIAlertAction.cancel.style) { [weak self] _ in
@@ -751,7 +746,7 @@ extension SettingsViewController
         
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
     {
         let section = Section.allCases[section]
@@ -909,8 +904,9 @@ extension SettingsViewController
             let row = CreditsRow.allCases[indexPath.row]
             switch row
             {
-            case .developer: self.openMastodon(username: "@rileytestut@mastodon.social")
-            case .operations: self.openThreads(username: "shanegill.io")
+            case .developer:
+                UIApplication.shared.open(URL(string: "https://github.com/altstoreio/AltStore")!, options: [:])
+            case .operations: self.followAltStoreGitHub()
             case .designer: self.openTwitter(username: "1carolinemoore")
             case .softwareLicenses: break
             }

@@ -21,6 +21,10 @@ class SettingsHeaderFooterView: UITableViewHeaderFooterView
     override func awakeFromNib()
     {
         super.awakeFromNib()
+
+        self.primaryLabel.textColor = .secondaryLabel
+        self.secondaryLabel.textColor = .secondaryLabel
+        self.button.tintColor = .altPrimary
         
         self.contentView.layoutMargins = .zero
         self.contentView.preservesSuperviewLayoutMargins = true

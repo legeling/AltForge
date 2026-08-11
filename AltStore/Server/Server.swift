@@ -6,6 +6,7 @@
 //  Copyright © 2019 Riley Testut. All rights reserved.
 //
 
+import Foundation
 import Network
 
 extension Server
@@ -15,6 +16,18 @@ extension Server
         case wireless
         case wired
         case local
+    }
+}
+
+extension Server.ConnectionType
+{
+    var localizedDiagnosticName: String {
+        switch self
+        {
+        case .wireless: return NSLocalizedString("Wi-Fi", comment: "Server connection type")
+        case .wired: return NSLocalizedString("USB", comment: "Server connection type")
+        case .local: return NSLocalizedString("On-device", comment: "Server connection type")
+        }
     }
 }
 

@@ -46,6 +46,8 @@ class FetchProvisioningProfilesOperation: ResultOperation<[String: ALTProvisioni
         else { return self.finish(.failure(OperationError.invalidParameters)) }
         
         guard let app = self.context.app else { return self.finish(.failure(OperationError.appNotFound(name: nil))) }
+
+        self.context.recordDiagnostic(.preparingProfiles)
         
         Logger.sideload.notice("Fetching provisioning profiles for app \(self.context.bundleIdentifier, privacy: .public)...")
         
@@ -452,7 +454,7 @@ extension FetchProvisioningProfilesOperation
                             dispatchGroup.enter()
                             
                             // Not all characters are allowed in group names, so we replace periods with spaces (like Apple does).
-                            let name = "AltStore " + groupIdentifier.replacingOccurrences(of: ".", with: " ")
+                            let name = "AltForge " + groupIdentifier.replacingOccurrences(of: ".", with: " ")
                             
                             ALTAppleAPI.shared.addAppGroup(withName: name, groupIdentifier: adjustedGroupIdentifier, team: team, session: session) { (group, error) in
                                 switch Result(group, error)

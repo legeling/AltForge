@@ -62,91 +62,91 @@
       }
     },
     "4rk-ge-FSj.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Enable iTunes Wi-Fi Sync and connect to the same Wi-Fi as AltServer.\"; ObjectID = \"4rk-ge-FSj\";",
+      "comment" : "Class = \"UILabel\"; text = \"Connect by USB, or enable Wi-Fi sync and put both devices on the same network.\"; ObjectID = \"4rk-ge-FSj\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Enable iTunes Wi-Fi Sync and connect to the same Wi-Fi as AltServer."
+            "value" : "Connect by USB, or enable Wi-Fi sync and put both devices on the same network."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iTunes Wi-Fi同期を有効にし、AltServerと同じWi-Fiに接続してください。"
+            "value" : "USBで接続するか、Wi-Fi同期を有効にして両方のデバイスを同じネットワークに接続します。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ative a Sincronização via Wi‑Fi do iTunes e conecte-se à mesma rede Wi‑Fi que o AltServer."
+            "value" : "Conecte por USB ou ative a sincronização por Wi‑Fi e coloque os dois dispositivos na mesma rede."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "启用 iTunes Wi-Fi 同步并连接到与 AltServer 相同的 Wi-Fi。"
+            "value" : "使用 USB 连接，或启用 Wi-Fi 同步并让两台设备接入同一网络。"
           }
         }
       }
     },
     "5nk-NR-jtV.title" : {
-      "comment" : "Class = \"UINavigationItem\"; title = \"Refresh AltStore\"; ObjectID = \"5nk-NR-jtV\";",
+      "comment" : "Class = \"UINavigationItem\"; title = \"Refresh AltForge\"; ObjectID = \"5nk-NR-jtV\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Refresh AltStore"
+            "value" : "Refresh AltForge"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreを更新"
+            "value" : "AltForgeを更新"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Atualizar o AltStore"
+            "value" : "Atualizar o AltForge"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "刷新 AltStore"
+            "value" : "刷新 AltForge"
           }
         }
       }
     },
     "6HP-Xh-sAH.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Leave AltServer running in the background on your computer.\"; ObjectID = \"6HP-Xh-sAH\";",
+      "comment" : "Class = \"UILabel\"; text = \"Keep AltForge Server open on your Mac or Windows PC while installing or refreshing apps.\"; ObjectID = \"6HP-Xh-sAH\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Leave AltServer running in the background on your computer."
+            "value" : "Keep AltForge Server open on your Mac or Windows PC while installing or refreshing apps."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerをコンピュータのバックグラウンドで実行したままにしてください。"
+            "value" : "アプリのインストールや更新中は、MacまたはWindows PCでAltForge Serverを開いたままにします。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantenha o AltServer em segundo plano no seu computador."
+            "value" : "Mantenha o AltForge Server aberto no Mac ou PC com Windows durante a instalação ou atualização de apps."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "让 AltServer 在计算机后台运行。"
+            "value" : "安装或刷新应用时，请在 Mac 或 Windows 电脑上保持 AltForge Server 运行。"
           }
         }
       }
@@ -272,91 +272,91 @@
       }
     },
     "EI2-V3-zQZ.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Welcome to AltStore.\"; ObjectID = \"EI2-V3-zQZ\";",
+      "comment" : "Class = \"UILabel\"; text = \"Welcome to AltForge.\"; ObjectID = \"EI2-V3-zQZ\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Welcome to AltStore."
+            "value" : "Welcome to AltForge."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreへようこそ。"
+            "value" : "AltForgeへようこそ。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Boas-vindas ao AltStore."
+            "value" : "Boas-vindas ao AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "欢迎使用 AltStore。"
+            "value" : "欢迎使用 AltForge。"
           }
         }
       }
     },
     "esj-pD-D4A.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Connect to Wi-Fi\"; ObjectID = \"esj-pD-D4A\";",
+      "comment" : "Class = \"UILabel\"; text = \"Connect Your iPhone\"; ObjectID = \"esj-pD-D4A\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Connect to Wi-Fi"
+            "value" : "Connect Your iPhone"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wi-Fiに接続"
+            "value" : "iPhoneを接続"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conectar ao Wi-Fi"
+            "value" : "Conecte o iPhone"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "连接 Wi-Fi"
+            "value" : "连接 iPhone"
           }
         }
       }
     },
     "HU5-Hv-E3d.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Apps are refreshed in the background when on same Wi-Fi as AltServer.\"; ObjectID = \"HU5-Hv-E3d\";",
+      "comment" : "Class = \"UILabel\"; text = \"Free-account signatures usually last 7 days. Refresh while AltForge Server is reachable before they expire.\"; ObjectID = \"HU5-Hv-E3d\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Apps are refreshed in the background when on same Wi-Fi as AltServer."
+            "value" : "Free-account signatures usually last 7 days. Refresh while AltForge Server is reachable before they expire."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerと同じWi-Fiに接続している場合、アプリはバックグラウンドで更新されます。"
+            "value" : "無料アカウントの署名は通常7日間有効です。期限切れ前にAltForge Serverへ接続して更新してください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Os apps são atualizados em segundo plano quando estiverem na mesma rede Wi‑Fi que o AltServer."
+            "value" : "Assinaturas de contas gratuitas normalmente duram 7 dias. Atualize antes do vencimento com o AltForge Server acessível."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当 Wi-Fi 与 AltServer 相同时，应用会在后台刷新。"
+            "value" : "免费账号签名通常有效 7 天。请在到期前连接 AltForge Server 刷新。"
           }
         }
       }
@@ -422,61 +422,61 @@
       }
     },
     "JeJ-bk-UCA.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Download Apps\"; ObjectID = \"JeJ-bk-UCA\";",
+      "comment" : "Class = \"UILabel\"; text = \"Sign and Install\"; ObjectID = \"JeJ-bk-UCA\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Download Apps"
+            "value" : "Sign and Install"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アプリをダウンロード"
+            "value" : "署名してインストール"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Baixar apps"
+            "value" : "Assinar e instalar"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "下载 App"
+            "value" : "签名并安装"
           }
         }
       }
     },
     "M7T-9j-uyt.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Browse and download apps directly from AltStore.\"; ObjectID = \"M7T-9j-uyt\";",
+      "comment" : "Class = \"UILabel\"; text = \"AltForge selects your Apple developer team, signs the app, then sends it through AltForge Server.\"; ObjectID = \"M7T-9j-uyt\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Browse and download apps directly from AltStore."
+            "value" : "AltForge selects your Apple developer team, signs the app, then sends it through AltForge Server."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreから直接アプリを閲覧、ダウンロードできます。"
+            "value" : "AltForgeがAppleデベロッパチームを選択してアプリに署名し、AltForge Server経由で送信します。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Navegue e baixe apps diretamente pelo AltStore."
+            "value" : "O AltForge seleciona sua equipe Apple, assina o app e o envia pelo AltForge Server."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "直接从 AltStore 浏览和下载应用。"
+            "value" : "AltForge 会自动选择您的 Apple 开发者团队，为应用签名，再通过 AltForge Server 发送。"
           }
         }
       }
@@ -512,31 +512,31 @@
       }
     },
     "nvb-Aq-sYa.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Apps Refresh Automatically\"; ObjectID = \"nvb-Aq-sYa\";",
+      "comment" : "Class = \"UILabel\"; text = \"Refresh Before Expiry\"; ObjectID = \"nvb-Aq-sYa\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Apps Refresh Automatically"
+            "value" : "Refresh Before Expiry"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アプリは自動的に更新されます"
+            "value" : "期限切れ前に更新"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Atualização automática de apps"
+            "value" : "Atualize antes do vencimento"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "应用自动刷新"
+            "value" : "到期前刷新"
           }
         }
       }
@@ -572,31 +572,31 @@
       }
     },
     "on2-62-waY.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Your Apple ID is used to configure apps so they can be installed on this device. Your credentials will be stored securely in this device's Keychain and sent only to Apple for authentication.\"; ObjectID = \"on2-62-waY\";",
+      "comment" : "Class = \"UILabel\"; text = \"AltForge asks Apple for the developer teams linked to this Apple ID, selects the best available team, and shows it in Settings. Credentials stay in this device's Keychain and are sent only to Apple for authentication.\"; ObjectID = \"on2-62-waY\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Your Apple ID is used to configure apps so they can be installed on this device. Your credentials will be stored securely in this device's Keychain and sent only to Apple for authentication."
+            "value" : "AltForge asks Apple for the developer teams linked to this Apple ID, selects the best available team, and shows it in Settings. Credentials stay in this device's Keychain and are sent only to Apple for authentication."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apple IDは、アプリをこのデバイスにインストールできるように設定するために使用されます。認証情報は、このデバイスのキーチェーンに安全に保存され、認証のためにのみAppleに送信されます。"
+            "value" : "AltForgeはAppleからこのApple IDに関連付けられたデベロッパチームを取得し、最適なチームを選択して設定に表示します。認証情報はこのデバイスのキーチェーンに保存され、認証のためにのみAppleへ送信されます。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seu Apple ID é usado para configurar apps e permitir sua instalação neste dispositivo. Suas credenciais serão armazenadas com segurança no Chaveiro do dispositivo e enviadas apenas à Apple para autenticação."
+            "value" : "O AltForge consulta na Apple as equipes vinculadas a este Apple ID, seleciona a melhor disponível e a mostra nos Ajustes. As credenciais ficam no Chaveiro do dispositivo e são enviadas apenas à Apple para autenticação."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "您的 Apple ID 用于配置应用，以便将它们安装在此设备上。您的凭据将安全地存储在此设备的 Keychain 中，并且仅发送给 Apple 进行身份验证。"
+            "value" : "AltForge 会向 Apple 查询此 Apple ID 关联的开发者团队，自动选择最合适的团队，并在设置中显示。凭据仅保存在本设备的 Keychain 中，并且只发送给 Apple 进行身份验证。"
           }
         }
       }
@@ -782,31 +782,31 @@
       }
     },
     "XKD-XH-eB0.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Launch AltServer\"; ObjectID = \"XKD-XH-eB0\";",
+      "comment" : "Class = \"UILabel\"; text = \"Launch AltForge Server\"; ObjectID = \"XKD-XH-eB0\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Launch AltServer"
+            "value" : "Launch AltForge Server"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerを起動"
+            "value" : "AltForge Serverを起動"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abrir o AltServer"
+            "value" : "Abrir o AltForge Server"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "启动 AltServer"
+            "value" : "启动 AltForge Server"
           }
         }
       }

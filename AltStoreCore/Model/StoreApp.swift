@@ -98,6 +98,11 @@ public class StoreApp: NSManagedObject, Decodable, Fetchable, Federatable, @unch
     
     @NSManaged @objc(downloadURL) internal var _downloadURL: URL
     @NSManaged public private(set) var tintColor: UIColor?
+
+    @nonobjc public var effectiveTintColor: UIColor? {
+        return self.bundleIdentifier == StoreApp.altstoreAppID ? .altSourceTint : self.tintColor
+    }
+
     @NSManaged public private(set) var isBeta: Bool
     
     // Required for Marketplace apps.
@@ -711,7 +716,7 @@ public extension StoreApp
         app.name = "AltForge"
         app.bundleIdentifier = StoreApp.altstoreAppID
         app.developerName = "AltForge Contributors"
-        app.localizedDescription = "AltForge installs, refreshes, and manages sideloaded apps with AltServer."
+        app.localizedDescription = "AltForge installs, refreshes, and manages sideloaded apps with AltForge Server."
         app.iconURL = URL(string: "https://raw.githubusercontent.com/legeling/AltForge/marketplace/AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/AltForgeIcon.png")!
         app.screenshotURLs = []
         app.sourceIdentifier = Source.altStoreIdentifier

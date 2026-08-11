@@ -29,7 +29,7 @@ xcodebuild build \
   CODE_SIGNING_ALLOWED=NO
 
 Scripts/package_macos_dmg.sh \
-  --app "$derived_data/Build/Products/Release/AltServer.app" \
+  --app "$derived_data/Build/Products/Release/AltForge Server.app" \
   --output "build/local/AltForge-AltServer-macOS.dmg" \
   --ad-hoc-sign
 ```

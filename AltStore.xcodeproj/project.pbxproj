@@ -12,6 +12,7 @@
 		A18F00010000000000000003 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = D56435E52E2ACC89007D1935 /* KeychainAccess */; };
 		A18F00010000000000000004 /* AppleIDVerificationWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */; };
 		A18F00010000000000000005 /* InstallationProgressWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000014 /* InstallationProgressWindowController.swift */; };
+		A18F00010000000000000006 /* AboutWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000015 /* AboutWindowController.swift */; };
 		A17F00000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000011 /* Localizable.xcstrings */; };
 		A17F00000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000012 /* Localizable.xcstrings */; };
 		A17F00000000000000000003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000013 /* Localizable.xcstrings */; };
@@ -708,7 +709,8 @@
 		A18F00010000000000000011 /* AppleIDAuthenticationWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIDAuthenticationWindowController.swift; sourceTree = "<group>"; };
 		A18F00010000000000000012 /* AppleIDCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIDCredentialStore.swift; sourceTree = "<group>"; };
 		A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIDVerificationWindowController.swift; sourceTree = "<group>"; };
-		A18F00010000000000000014 /* InstallationProgressWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationProgressWindowController.swift; sourceTree = "<group>"; };
+			A18F00010000000000000014 /* InstallationProgressWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationProgressWindowController.swift; sourceTree = "<group>"; };
+			A18F00010000000000000015 /* AboutWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindowController.swift; sourceTree = "<group>"; };
 		A17F00000000000000000011 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000013 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
@@ -759,7 +761,7 @@
 		BF44EEEF246B08BA002A52F2 /* BackupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupController.swift; sourceTree = "<group>"; };
 		BF44EEF2246B3A17002A52F2 /* AltBackup.ipa */ = {isa = PBXFileReference; lastKnownFileType = file; path = AltBackup.ipa; sourceTree = "<group>"; };
 		BF44EEFB246B4550002A52F2 /* RemoveAppOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveAppOperation.swift; sourceTree = "<group>"; };
-		BF45868D229872EA00BD7491 /* AltServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AltServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF45868D229872EA00BD7491 /* AltForge Server.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AltForge Server.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF45868F229872EA00BD7491 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF458693229872EA00BD7491 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF458696229872EA00BD7491 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -1463,6 +1465,7 @@
 				A18F00010000000000000012 /* AppleIDCredentialStore.swift */,
 				A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */,
 				A18F00010000000000000014 /* InstallationProgressWindowController.swift */,
+				A18F00010000000000000015 /* AboutWindowController.swift */,
 				BF458695229872EA00BD7491 /* Main.storyboard */,
 				BFAD67A225E0854500D4C4D1 /* DeveloperDiskManager.swift */,
 				BFF0394A25F0551600BE607D /* MenuController.swift */,
@@ -2019,7 +2022,7 @@
 			isa = PBXGroup;
 			children = (
 				BFD2476A2284B9A500981D42 /* AltStore.app */,
-				BF45868D229872EA00BD7491 /* AltServer.app */,
+				BF45868D229872EA00BD7491 /* AltForge Server.app */,
 				BF45872B2298D31600BD7491 /* libimobiledevice.a */,
 				BF5C5FC5237DF5AE00EDD0C6 /* AltPlugin.mailbundle */,
 				BF58047B246A28F7008AE704 /* AltBackup.app */,
@@ -2695,7 +2698,7 @@
 				D58D5F2D26DFE68E00E55E38 /* LaunchAtLogin */,
 			);
 			productName = AltServer;
-			productReference = BF45868D229872EA00BD7491 /* AltServer.app */;
+			productReference = BF45868D229872EA00BD7491 /* AltForge Server.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BF45872A2298D31600BD7491 /* libimobiledevice */ = {
@@ -3240,6 +3243,7 @@
 				D58032EE2AB241D100878F5E /* AnisetteError.swift in Sources */,
 				BF458690229872EA00BD7491 /* AppDelegate.swift in Sources */,
 				A18F00010000000000000005 /* InstallationProgressWindowController.swift in Sources */,
+				A18F00010000000000000006 /* AboutWindowController.swift in Sources */,
 				BFECAC8424FD950B0077C41F /* ALTConstants.m in Sources */,
 				BF4586C52298CDB800BD7491 /* ALTDeviceManager.mm in Sources */,
 				D58032F02AB2429D00878F5E /* ProcessInfo+Device.swift in Sources */,
@@ -3919,7 +3923,9 @@
 				);
 				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = AltServer;
+				EXECUTABLE_NAME = "AltForge Server";
+				PRODUCT_NAME = "AltForge Server";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "AltServer/AltServer-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -3972,7 +3978,9 @@
 				);
 				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = AltServer;
+				EXECUTABLE_NAME = "AltForge Server";
+				PRODUCT_NAME = "AltForge Server";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "AltServer/AltServer-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -4430,6 +4438,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6P6G44MPGD;
 				ENABLE_BITCODE = NO;
+				EXECUTABLE_NAME = AltForge;
 				"EXCLUDED_SOURCE_FILE_NAMES[sdk=iphonesimulator*]" = "libfragmentzip.a libcurl.a";
 				INFOPLIST_FILE = AltStore/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4471,6 +4480,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6P6G44MPGD;
 				ENABLE_BITCODE = NO;
+				EXECUTABLE_NAME = AltForge;
 				"EXCLUDED_SOURCE_FILE_NAMES[sdk=iphonesimulator*]" = "libfragmentzip.a libcurl.a";
 				INFOPLIST_FILE = AltStore/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4583,7 +4593,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltStore.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AltStore";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltStore.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AltForge";
 			};
 			name = Debug;
 		};
@@ -4607,7 +4617,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltStore.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AltStore";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltStore.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AltForge";
 			};
 			name = Release;
 		};
@@ -4703,7 +4713,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/../Frameworks",
-					"@executable_path/AltServer.app/Contents/Frameworks",
+					"@executable_path/AltForge Server.app/Contents/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4745,7 +4755,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/../Frameworks",
-					"@executable_path/AltServer.app/Contents/Frameworks",
+					"@executable_path/AltForge Server.app/Contents/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

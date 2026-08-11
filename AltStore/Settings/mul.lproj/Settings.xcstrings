@@ -212,31 +212,31 @@
       }
     },
     "7L1-AA-2yo.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Could not connect to AltServer.\"; ObjectID = \"7L1-AA-2yo\";",
+      "comment" : "Class = \"UILabel\"; text = \"Could not connect to AltForge Server.\"; ObjectID = \"7L1-AA-2yo\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Could not connect to AltServer."
+            "value" : "Could not connect to AltForge Server."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerに接続できませんでした。"
+            "value" : "AltForge Serverに接続できませんでした。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Não foi possível conectar ao AltServer."
+            "value" : "Não foi possível conectar ao AltForge Server."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法连接到 AltServer。"
+            "value" : "无法连接到 AltForge Server。"
           }
         }
       }
@@ -550,31 +550,31 @@
       }
     },
     "fGU-Fp-XgM.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Designer\"; ObjectID = \"fGU-Fp-XgM\";",
+      "comment" : "Class = \"UILabel\"; text = \"Original Design\"; ObjectID = \"fGU-Fp-XgM\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Designer"
+            "value" : "Original Design"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デザイナー"
+            "value" : "オリジナルデザイン"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Designer"
+            "value" : "Design original"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设计师"
+            "value" : "原始设计"
           }
         }
       }
@@ -605,31 +605,31 @@
       "shouldTranslate" : false
     },
     "hRA-OK-Vjw.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Developer\"; ObjectID = \"hRA-OK-Vjw\";",
+      "comment" : "Class = \"UILabel\"; text = \"Original Developer\"; ObjectID = \"hRA-OK-Vjw\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Developer"
+            "value" : "Original Developer"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開発者"
+            "value" : "オリジナル開発者"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Desenvolvedor"
+            "value" : "Desenvolvedor original"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "开发者"
+            "value" : "原始开发者"
           }
         }
       }
@@ -889,61 +889,61 @@
       "shouldTranslate" : false
     },
     "oqY-wY-1Vf.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Operations\"; ObjectID = \"oqY-wY-1Vf\";",
+      "comment" : "Class = \"UILabel\"; text = \"Maintainers\"; ObjectID = \"oqY-wY-1Vf\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Operations"
+            "value" : "Maintainers"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "オペレーション"
+            "value" : "メンテナー"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Operações"
+            "value" : "Mantenedores"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "运营"
+            "value" : "维护者"
           }
         }
       }
     },
     "pMI-Aj-nQF.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Send Feedback\"; ObjectID = \"pMI-Aj-nQF\";",
+      "comment" : "Class = \"UILabel\"; text = \"Suggest an Improvement\"; ObjectID = \"pMI-Aj-nQF\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Send Feedback"
+            "value" : "Suggest an Improvement"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "フィードバックを送信"
+            "value" : "改善を提案"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enviar feedback"
+            "value" : "Sugerir uma melhoria"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "发送反馈"
+            "value" : "提出改进建议"
           }
         }
       }
@@ -1309,31 +1309,31 @@
       }
     },
     "XFa-MY-7cV.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Follow AltStore for updates\"; ObjectID = \"XFa-MY-7cV\";",
+      "comment" : "Class = \"UILabel\"; text = \"AltForge on GitHub\"; ObjectID = \"XFa-MY-7cV\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Follow AltStore for updates"
+            "value" : "AltForge on GitHub"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreをフォローして最新情報を入手しましょう"
+            "value" : "GitHub で AltForge を見る"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Siga o AltStore para receber atualizações"
+            "value" : "AltForge no GitHub"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "关注 AltStore 获取更新"
+            "value" : "在 GitHub 上查看 AltForge"
           }
         }
       }
@@ -1399,29 +1399,28 @@
       }
     },
     "ylE-VL-7Fq.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"Shane Gill\"; ObjectID = \"ylE-VL-7Fq\";",
+      "comment" : "Class = \"UILabel\"; text = \"AltForge Contributors\"; ObjectID = \"ylE-VL-7Fq\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Shane Gill"
+            "value" : "AltForge Contributors"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Shane Gill"
+            "value" : "AltForge Contributors"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Shane Gill"
+            "value" : "AltForge 贡献者"
           }
         }
-      },
-      "shouldTranslate" : false
+      }
     },
     "lng-detail-label.text" : {
       "comment" : "Class = \"UILabel\"; text = \"English\"; ObjectID = \"lng-detail-label\";",

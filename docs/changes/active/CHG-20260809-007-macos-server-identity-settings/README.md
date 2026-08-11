@@ -10,8 +10,8 @@
 
 ## 范围
 
-- 对外统一使用 `AltForge Server`；保留内部 target、executable、协议、历史数据目录与兼容通知中的 `AltServer`。
-- About 显示 AltForge contributors、AltStore/pymobiledevice3 communities、上游版权与 AGPL v3.0，不突出个人感谢。
+- 对外统一使用 `AltForge Server`，包括 `.app` 包目录、Mach-O executable 和 macOS 登录项/后台项目提示；只保留内部 Xcode target、Swift module、协议、历史数据目录与兼容通知中的 `AltServer`。
+- About 使用更宽且内容水平居中的独立原生窗口，显示项目简介、版本、可复制/点击的完整 GitHub 仓库地址、Releases、文档、Issue、AltForge contributors、AltStore/pymobiledevice3 communities、上游版权与 AGPL v3.0；所有链接悬停时使用指向手势，不突出个人感谢。
 - 设备菜单显示名称、USB/Wi-Fi 标签和对应系统图标；USB 与 Wi-Fi 同时可用时优先显示 USB。
 - 实现有 10 秒超时、无重试的 GitHub Latest Release 检查；只比较版本并打开经过 HTTPS/host 校验的 Release 页面，不自动替换 App。
 - 把旧邮件插件入口改成仅在检测到遗留插件时出现的明确清理操作。
@@ -21,7 +21,7 @@
 
 ## 非范围
 
-- 重命名 Xcode target、Mach-O executable、Bonjour/安装协议、旧数据目录或兼容通知。
+- 重命名 Xcode target、Swift module、Bonjour/安装协议、旧数据目录或兼容通知。
 - Sparkle 自动下载/安装、Developer ID 签名和 notarization。
 - 把非英语/简体中文的历史翻译批量机器改写。
 
@@ -43,7 +43,7 @@
 ## 验证计划
 
 - JSON/XML/PBX/Swift parse 与 repository contract。
-- AltServer arm64 Release build；检查 Info.plist、string catalogs、App/menu icon 和 DMG bundle 名称。
+- AltServer scheme 的 macOS build；检查 Info.plist、string catalogs、App/menu icon、`AltForge Server.app` 包名、`AltForge Server` executable 和登录项系统提示。
 - 无设备、USB、Wi-Fi、USB+Wi-Fi 菜单矩阵。
 - 跟随系统、English、简体中文重启矩阵。
 - 更新可用、已最新、404/离线、恶意/无效 Release URL 失败矩阵。
@@ -56,8 +56,10 @@
 - 本地 `2.4.0 (3)` preview DMG 通过 `hdiutil verify`、只读挂载、Applications symlink、arm64/x86_64 架构和 ad-hoc deep/strict signature 检查。
 - 挂载后的 bundle 对外名称为 `AltForge Server`，英文与简体中文资源均存在；版权同时保留 AltForge contributors 与 AltStore/AltServer 上游归属。
 - App 图标各槽位尺寸、菜单栏 19/38 px template 图标、USB/Wi-Fi 标签、设置入口和更新 URL 防护已由 repository contract 覆盖。
+- 标准小型 About panel 已替换为 560 × 420 pt 的独立窗口；GitHub 仓库、Releases、文档和 Issue 入口及英文/简体中文文案通过 repository contract 与 macOS Debug build。
+- Xcode target 与 Swift module 继续使用内部名 `AltServer`，公开 build product 和 executable 已改为 `AltForge Server.app` / `AltForge Server`；repository contract、scheme/PBX/XML 检查和干净 macOS Debug build 已验证产物身份。
 - Windows 静态 contract 确认产品名为 `AltForge Server`、保留上游版权、更新菜单使用 `Check for Updates...`，并在设备名后标注 USB/Wi-Fi；Windows hosted build 仍由下一次 Draft Release 验证。
-- 未启动 preview App，避免与用户当前运行的同 bundle identifier 旧版冲突；真实菜单、语言重启和设备连接状态保留为手工 smoke test。
+- 当前 Debug 版已启动供手工复测；升级自旧开发构建时需要先关闭再开启一次“登录时启动”，以注销 macOS 缓存的旧 bundle 路径并注册当前 `AltForge Server.app`。系统登录项提示、真实菜单、语言重启和设备连接状态仍保留为手工 smoke test。
 - 该 change 最初交付的独立设置窗口已根据实际使用反馈由 `CHG-20260810-001` 改为状态菜单内联设置；本记录保留原始实现事实。
 
 ## 残余风险
@@ -65,3 +67,4 @@
 - 当前开发机没有可自动化使用的脱敏 iOS 设备，USB/Wi-Fi 实机菜单状态仍需用户复测。
 - 首个公开 Release 前 latest endpoint 会返回 404，应显示可恢复错误而不是伪造“已最新”。
 - Developer ID 与 notarization 仍由独立 issue 跟踪。
+- macOS 可能缓存同一 bundle identifier 的旧登录项展示名；代码不能在未取得用户操作意图时静默 unregister/register，因此旧开发构建升级后的首次验证需要手工关闭并重新开启登录项。

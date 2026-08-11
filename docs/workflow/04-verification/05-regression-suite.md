@@ -33,6 +33,14 @@ xcodebuild build \
   CODE_SIGNING_ALLOWED=NO
 ```
 
+主导航变化执行 `TEST-032`：在 simulator 确认底栏依次只有浏览、来源、我的 App、设置，默认进入浏览，并检查 source 详情中的资讯区域仍可访问。
+
+iOS 品牌或设置变化执行 `TEST-033`：静态检查四个 SF Symbols、官方 source/app tint override、metadata 色值、无 `ALTVersion` 和本仓库 URL；构建后在深色与浅色 simulator 检查来源/自身 App 卡片、设置动态背景、2.4.0 版本、AltForge Contributors、Riley Testut、Caroline Moore 及简体中文不截断。
+
+iOS 公开身份变化执行 `TEST-034`：静态检查 `CFBundleDisplayName`、`CFBundleName`、Debug/Release `EXECUTABLE_NAME`、AltTests host，以及所有 iOS storyboard/XIB 用户属性和 string catalog 显示值。构建后检查 Info.plist 的 executable 与实际 Mach-O 文件均为 AltForge；保留内部 `AltStore.app`/module/协议和明确允许的 AltStore PAL、AltStore 2.0、第三方 source、上游致谢、旧证书兼容名称。系统问题报告标题由真机或受控 crash 手工确认，不在用户设备上主动制造崩溃。
+
+iOS 安装崩溃、恢复日志或认证页面变化执行 `TEST-035`：先检查脱敏系统 crash report 的异常类型和首个业务栈帧，再运行 repository contract、catalog JSON 解析、Authentication storyboard XML 解析和 iOS Simulator build。在同一 Simulator 至少执行 6 轮“设置 -> 我的 App -> 设置”，确认进程不变且没有新 crash report；验证工作原理的 USB/Wi-Fi、团队选择、签名和七天刷新说明。遗留 operation record 最多 20 条，每条最多 16 个阶段、单条 detail 最多 120 字符；失败日志必须显示诊断编号、最后非终态阶段和相对耗时轨迹，并能复制有界报告。fixture 必须证明只记录连接/团队类别而不记录凭据、UDID、团队或 Server ID、证书/profile 和路径，记录只在日志成功保存后消费。真实 IPA 的签名、发送、安装、失败日志和清理由 Suite E 完成，Simulator 结果不得替代设备 E2E。
+
 ## Suite C：Unicode archive
 
 触发：AltSign ZIP、application name、resign、download/install path 变化。
@@ -83,14 +91,16 @@ xcodebuild build \
 触发：AltForge Server 公开名称、About/版权、状态菜单、设备发现、检查更新、图标、设置或 macOS 本地化变化。
 
 - 静态检查 Info.plist、storyboard、string catalogs 和用户可见源码，不允许 About/菜单回退到旧公开名称。
-- 构建 AltServer Release，检查 `CFBundleDisplayName`、版权、19/38 px template 菜单图标和完整 AppIcon slots。
+- About 使用较宽且主体水平居中的独立窗口，完整显示可复制/点击的 `https://github.com/legeling/AltForge`，并能打开 Releases、文档和 Issue；URL 和链接按钮悬停时显示 pointing-hand 光标，英文与简体中文下不得截断主要内容。
+- 使用内部 AltServer scheme 构建 Release，检查产物为 `AltForge Server.app`、`CFBundleExecutable` 为 `AltForge Server`、`PRODUCT_MODULE_NAME` 仍为 `AltServer`，并检查 `CFBundleDisplayName`、版权、19/38 px template 菜单图标和完整 AppIcon slots。
 - 无设备时显示可理解 placeholder；USB、Wi-Fi 与同时连接分别显示正确标签，双连接优先 USB。
-- 确认设置项直接位于状态菜单子菜单中且不会打开独立窗口；切换登录启动后显示“已开启/已关闭/需要批准”并与系统登录项一致，签名或注册失败时出现可恢复错误；切换跟随系统、English、简体中文后出现重启提示，立即重启后检查菜单、About 和错误文案。
+- 确认设置项直接位于状态菜单子菜单中且不会打开独立窗口；切换登录启动后显示“已开启/已关闭/需要批准”并与系统登录项一致，macOS 系统提示使用 AltForge Server，签名或注册失败时出现可恢复错误；从历史 `AltServer.app` 开发构建升级时先关闭再开启一次登录项，确认当前 App 路径取代缓存注册；切换跟随系统、English、简体中文后出现重启提示，立即重启后检查菜单、About 和错误文案。
 - 确认 Install AltForge 使用安装图标，三个设备子菜单均未被标记成 Recent Documents，也不显示系统注入的时钟图标。
 - 更新检查覆盖更新可用、已最新、404/离线、超时、无效 JSON 与非 GitHub URL；不得自动下载或替换 App。
 - 遗留邮件插件未安装时入口隐藏；存在时只显示明确的清理文案。
 - 无历史账号时可手工输入；成功认证后账号进入最近使用列表，未勾选记住密码时重新选择账号不预填密码。
 - 勾选记住密码后只检查本机 Keychain，不检查 UserDefaults、日志或发布产物；忘记账号同时移除可选密码。
+- 英文与简体中文的“记住密码”说明都必须预告 macOS 可能请求钥匙串授权，并明确提示应输入 Mac 登录密码而不是 Apple ID 密码；长文案不得被截断。
 - 打开认证窗口时账号与可选密码只读取一次 Keychain archive；切换多个账号不触发第二次读取，窗口结束后不保留 credential snapshot 或表单值。ad-hoc Debug 重建后的单次系统授权不冒充 Developer ID 签名行为。
 - 密码眼睛按钮在 secure/plain 间无损切换，Caps Lock 开关实时显示/隐藏提示，关闭窗口后 local event monitor 已释放。
 - 损坏、超限或不可访问的 Keychain archive fail closed，仍允许手工认证且不显示账号、密码或底层 Keychain 详情。
@@ -100,7 +110,8 @@ xcodebuild build \
 - 检查 `Dependencies/AltSign/Package.swift` 未定义 `MARKETPLACE`；macOS 构建必须编译并链接 AltSign 的 CoreCrypto/SRP 路径，避免 `GSAContext.start()` 在网络请求前固定失败。
 - 已验证账号仅在下拉列表右侧显示免费、个人开发者或组织/企业；未知类型不显示占位标识，旧版 archive 可读取并在下次团队查询后更新，标识不表示持久 session。
 - 混合证书列表中普通 Xcode/分发证书不得进入 revoke 路径；缓存仅在托管证书序列号一致时复用，替换旧 AltForge/AltStore 证书必须明确确认，取消后证书列表不变。
-- 同一设备连续触发安装时只保留一条认证/下载/签名链路并聚焦现有窗口；认证成功后阶段窗口持续可见，进度条左右边距一致，下载显示已下载量/总大小/实时速度/当前线路。手动切换自动、GitHub、配置 CDN或固定镜像时取消旧 task 且旧 completion 不得覆盖新线路；自动候选顺序与数量有界，IPA 大小或 SHA-256 不匹配必须失败且释放设备锁、KVO 和临时文件。
+- 同一设备连续触发安装时只保留一条认证/下载/签名链路并聚焦现有窗口；认证成功后阶段窗口持续可见，进度条左右边距一致，下载显示已下载量/总大小/实时速度/当前线路。手动切换自动、GitHub、配置 CDN 或固定镜像时取消旧 transfer/session 且旧 completion 不得覆盖新线路；自动候选顺序与数量有界，IPA 大小或 SHA-256 不匹配必须失败且释放设备锁、delegate session 和临时文件。
+- 快速和限速下载都从 delegate `didWriteData` 收到实际字节；UI 更新有界且最后显示 100%，不能只停在 0% 后跳阶段。installation_proxy 返回带或不带 100% 的 `Complete` 状态都必须触发“安装完成”和通知；完成窗口不按计时器消失，本地化“关闭”按钮和原生标题栏关闭按钮均可关闭窗口，关闭后才释放 UI activity 并允许同一设备再次发起。
 
 ## Suite F：Windows AltServer
 

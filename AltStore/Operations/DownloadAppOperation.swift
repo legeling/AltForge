@@ -55,6 +55,8 @@ class DownloadAppOperation: ResultOperation<ALTApplication>, @unchecked Sendable
             self.finish(.failure(error))
             return
         }
+
+        self.context.recordDiagnostic(.preparingApp)
         
         Logger.sideload.notice("Downloading app \(self.bundleIdentifier, privacy: .public)...")
         

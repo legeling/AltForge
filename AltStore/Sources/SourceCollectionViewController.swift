@@ -507,7 +507,7 @@ extension SourceCollectionViewController
     DatabaseManager.shared.startForPreview()
     
     let sourceCollection = SourceCollection(localizedTitle: "Popular Sources That We Really Really Really Really Love",
-                                            localizedDescription: "A collection of popular sources on AltStore. A collection of popular sources on AltStore. A collection of popular sources on AltStore.",
+                                            localizedDescription: "A collection of popular sources on AltForge. A collection of popular sources on AltForge. A collection of popular sources on AltForge.",
                                             emoji: "🦚",
                                             tintColor: .systemPink, sources: [
         .init(url: URL(string: "https://content-download-egs.distro.on.epicgames.com/iOS/altstore/source.json")!),

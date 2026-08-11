@@ -112,7 +112,7 @@ extension ServerManager
             case .wireless:
                 guard let service = server.service else { return finish(.failure(ALTServerError(.connectionFailed))) }
                 
-                Logger.sideload.debug("Connecting to AltServer: \(service.name, privacy: .public)")
+                Logger.sideload.debug("Connecting to AltForge Server: \(service.name, privacy: .public)")
                 
                 let connection = NWConnection(to: .service(name: service.name, type: service.type, domain: service.domain, interface: nil), using: .tcp)
                 self.connectToRemoteServer(server, connection: connection, completion: finish(_:))
@@ -239,17 +239,17 @@ extension ServerManager: NetServiceBrowserDelegate
 {
     func netServiceBrowserWillSearch(_ browser: NetServiceBrowser)
     {
-        Logger.main.notice("Discovering AltServers...")
+        Logger.main.notice("Discovering AltForge Servers...")
     }
     
     func netServiceBrowserDidStopSearch(_ browser: NetServiceBrowser)
     {
-        Logger.main.notice("Stopped discovering AltServers.")
+        Logger.main.notice("Stopped discovering AltForge Servers.")
     }
     
     func netServiceBrowser(_ browser: NetServiceBrowser, didNotSearch errorDict: [String : NSNumber])
     {
-        Logger.main.error("Failed to discover AltServers. \(errorDict, privacy: .public)")
+        Logger.main.error("Failed to discover AltForge Servers. \(errorDict, privacy: .public)")
     }
     
     func netServiceBrowser(_ browser: NetServiceBrowser, didFind service: NetService, moreComing: Bool)

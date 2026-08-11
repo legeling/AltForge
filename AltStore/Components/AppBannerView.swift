@@ -164,7 +164,7 @@ extension AppBannerView
                     self.isBeta = true
                 }
                 
-                self.tintColor = storeApp.tintColor
+                self.tintColor = storeApp.effectiveTintColor
             }
         }
         

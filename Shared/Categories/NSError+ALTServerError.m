@@ -229,7 +229,7 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
             
             if (appName == nil || osVersion == nil)
             {
-                return NSLocalizedString(@"Your device must be running iOS 12.2 or later to install AltStore.", @"");
+                return NSLocalizedString(@"Your device must be running iOS 12.2 or later to install AltForge.", @"");
             }
             
             return [NSString stringWithFormat:NSLocalizedString(@"%@ requires %@ or later.", @""), appName, osVersion];
@@ -301,7 +301,7 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
             
         case ALTServerErrorMaximumFreeAppLimitReached:
 #if TARGET_OS_OSX
-            return NSLocalizedString(@"Please deactivate a sideloaded app with AltStore in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit.", @"");
+            return NSLocalizedString(@"Please deactivate a sideloaded app with AltForge in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit.", @"");
 #else
             return NSLocalizedString(@"Please deactivate a sideloaded app in order to install another one.\n\nIf you're running iOS 13.5 or later, make sure “Offload Unused Apps” is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps.", @"");
 #endif

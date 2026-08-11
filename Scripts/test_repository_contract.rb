@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "json"
+require "rexml/document"
 require "uri"
 
 root = File.expand_path("..", __dir__)
@@ -18,6 +19,128 @@ def png_dimensions(root, path)
   raise "#{path} is not a PNG" unless data.start_with?("\x89PNG\r\n\x1a\n".b)
 
   data.byteslice(16, 8).unpack("NN")
+end
+
+ios_main_storyboard = read(root, "AltStore/Base.lproj/Main.storyboard")
+ios_main_document = REXML::Document.new(ios_main_storyboard)
+ios_tab_destinations = REXML::XPath.match(
+  ios_main_document,
+  "//tabBarController[@customClass='TabBarController']/connections/segue[@relationship='viewControllers']"
+).map { |segue| segue.attributes.fetch("destination").value }
+assert(ios_tab_destinations == %w[faz-B4-Sub HCK-G6-KdY 3Ew-ox-i4n p3d-dP-Swg], "iOS tabs must remain Browse, Sources, My Apps, and Settings")
+assert(!ios_main_storyboard.include?('customClass="NewsViewController"'), "the aggregate News page must not return to the iOS main storyboard")
+
+ios_sources_storyboard = read(root, "AltStore/Sources/Base.lproj/Sources.storyboard")
+ios_source_details = read(root, "AltStore/Sources/SourceDetailContentViewController.swift")
+assert(ios_sources_storyboard.include?('customClass="NewsViewController"'), "source-specific news must remain available from source details")
+assert(ios_source_details.include?("NewsItem.sortedFetchRequest(for: self.source)"), "source details must retain source-scoped news compatibility")
+
+ios_tab_controller = read(root, "AltStore/TabBarController.swift")
+ios_tab_cases = ios_tab_controller[/private enum Tab: Int, CaseIterable\s*\{(.*?)\n    \}/m, 1]&.scan(/case (\w+)/)&.flatten
+assert(ios_tab_cases == %w[browse sources myApps settings], "iOS tab indices must match the four main storyboard tabs")
+%w[bag square.stack.3d.up square.grid.2x2 gearshape].each do |symbol|
+  assert(ios_tab_controller.include?(%Q[UIImage(systemName: "#{symbol}")]), "iOS tab bar must use the system symbol #{symbol}")
+end
+
+ios_settings_storyboard = read(root, "AltStore/Settings/Base.lproj/Settings.storyboard")
+ios_settings = read(root, "AltStore/Settings/SettingsViewController.swift")
+ios_info_plist = read(root, "AltStore/Info.plist")
+assert(!ios_info_plist.include?("<key>ALTVersion</key>"), "iOS settings version must not come from a stale ALTVersion override")
+assert(ios_info_plist.include?("<key>CFBundleName</key>\n\t<string>AltForge</string>"), "iOS system and crash-report identity must use AltForge")
+ios_project = read(root, "AltStore.xcodeproj/project.pbxproj")
+assert(ios_project.scan("EXECUTABLE_NAME = AltForge;").length == 2, "iOS Debug and Release executables must be named AltForge")
+assert(ios_project.scan('/AltStore.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AltForge').length == 2, "iOS test hosts must follow the AltForge executable name")
+assert(ios_settings.include?('object(forInfoDictionaryKey: "CFBundleShortVersionString")'), "iOS settings must read the built product version")
+assert(ios_settings.include?("https://github.com/legeling/AltForge"), "iOS settings must link to the AltForge repository")
+assert(ios_settings.include?("https://github.com/altstoreio/AltStore"), "iOS credits must retain the upstream project link")
+{
+  "Original Developer" => "Riley Testut",
+  "Maintainers" => "AltForge Contributors",
+  "Original Design" => "Caroline Moore",
+  "AltForge on GitHub" => nil,
+  "Suggest an Improvement" => nil
+}.each do |label, value|
+  assert(ios_settings_storyboard.include?(%Q[text="#{label}"]), "iOS settings is missing #{label}")
+  assert(ios_settings_storyboard.include?(%Q[text="#{value}"]), "iOS settings is missing #{value}") if value
+end
+assert(ios_settings.include?(".systemGroupedBackground"), "iOS settings must use the system grouped background")
+assert(!ios_settings.include?("willDisplay cell:"), "iOS settings must not recursively recolor UIKit cell internals during display")
+assert(!ios_settings.include?("applyDynamicColors"), "the crash-prone recursive settings recoloring helper must not return")
+settings_background = JSON.parse(read(root, "AltStore/Resources/Assets.xcassets/Colors/SettingsBackground.colorset/Contents.json"))
+settings_components = settings_background.fetch("colors").map { |entry| entry.fetch("color").fetch("components") }
+assert(settings_components.all? { |components| components.values_at("red", "green", "blue").all? { |value| value.to_f.between?(0.0, 1.0) } }, "settings background components must be normalized sRGB values")
+assert(settings_background.fetch("colors").length == 2, "settings background must provide light and dark appearances")
+assert(read(root, "AltStoreCore/Model/Source.swift").include?("return .altSourceTint"), "the official source must ignore stale release tint metadata")
+source_tint = JSON.parse(read(root, "AltStoreCore/Resources/Colors.xcassets/SourceTint.colorset/Contents.json"))
+assert(source_tint.fetch("colors").length == 2, "official source tint must provide light and dark appearances")
+
+ios_interface_files = Dir.glob(File.join(root, "AltStore/**/*.{storyboard,xib}"))
+ios_public_interface_values = ios_interface_files.flat_map do |path|
+  File.read(path).scan(/\b(?:text|title|placeholder|toolTip|label|headerTitle|footerTitle)="([^"]*)"/).flatten
+end
+stale_ios_interface_values = ios_public_interface_values.select do |value|
+  (value.include?("AltStore") && !value.include?("AltStore PAL") && !value.include?("AltStore 2.0")) || value.include?("AltServer")
+end
+assert(stale_ios_interface_values.empty?, "iOS interface resources still expose an upstream public name: #{stale_ios_interface_values.first}")
+ios_public_catalogs = Dir.glob(File.join(root, "AltStore/**/*.xcstrings")).map { |path| JSON.parse(File.read(path)) }
+ios_public_values = ios_public_catalogs.flat_map do |catalog|
+  catalog.fetch("strings").flat_map do |key, entry|
+    localizations = entry.fetch("localizations", {})
+    english = localizations.dig("en", "stringUnit", "value") || key
+    [english] + localizations.values.map { |localization| localization.dig("stringUnit", "value") }.compact
+  end
+end
+stale_ios_brand_strings = ios_public_values.uniq.select do |value|
+  (value.include?("AltStore") && !value.include?("AltStore PAL") && !value.include?("AltStore 2.0")) || value.include?("AltServer")
+end
+assert(stale_ios_brand_strings.empty?, "iOS public strings still expose an upstream public name: #{stale_ios_brand_strings.first}")
+assert(read(root, "AltStore/Operations/ResignAppOperation.swift").include?('"UTTypeDescription": "AltForge Installed App"'), "installed-app metadata must use AltForge")
+assert(read(root, "AltStore/Operations/FetchProvisioningProfilesOperation.swift").include?('let name = "AltForge " + groupIdentifier'), "new App Groups must use the AltForge public prefix")
+ios_authentication = read(root, "AltStore/Operations/AuthenticationOperation.swift")
+assert(ios_authentication.include?('let machineName = "AltForge - " + UIDevice.current.name'), "new iOS signing certificates must use AltForge")
+assert(ios_authentication.include?('machineName.starts(with: "AltForge") || machineName.starts(with: "AltStore")'), "certificate migration must recognize AltForge and legacy AltStore names")
+assert(ios_authentication.index("$0.type == .individual") < ios_authentication.index("$0.type == .organization"), "iOS authentication must prefer an individual developer team before an organization team")
+assert(ios_authentication.index("$0.type == .organization") < ios_authentication.index("$0.type == .free"), "iOS authentication must prefer an organization team before a free team")
+
+ios_authentication_storyboard = read(root, "AltStore/Authentication/Base.lproj/Authentication.storyboard")
+assert(ios_authentication_storyboard.include?("selects the best available team, and shows it in Settings"), "iOS authentication must explain automatic developer-team selection")
+assert(ios_authentication_storyboard.include?("Connect by USB, or enable Wi-Fi sync"), "iOS workflow must explain both USB and Wi-Fi connections")
+assert(ios_authentication_storyboard.include?("Free-account signatures usually last 7 days"), "iOS workflow must explain free-account expiry")
+ios_authentication_strings = JSON.parse(read(root, "AltStore/Authentication/mul.lproj/Authentication.xcstrings")).fetch("strings")
+%w[4rk-ge-FSj.text 6HP-Xh-sAH.text esj-pD-D4A.text HU5-Hv-E3d.text JeJ-bk-UCA.text M7T-9j-uyt.text nvb-Aq-sYa.text on2-62-waY.text].each do |key|
+  assert(ios_authentication_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese authentication string: #{key}")
+end
+assert(read(root, "AltStoreCore/Model/StoreApp.swift").include?("with AltForge Server."), "the built-in app description must use AltForge Server")
+
+ios_app_manager = read(root, "AltStore/Managing Apps/AppManager.swift")
+assert(ios_app_manager.include?("static let maximumCount = 20"), "interrupted iOS operation records must remain bounded")
+assert(ios_app_manager.include?("static let maximumEventCount = 16"), "iOS diagnostic traces must have a bounded stage count")
+assert(ios_app_manager.include?("static let maximumDetailLength = 120"), "iOS diagnostic event details must have a bounded length")
+assert(ios_app_manager.include?("ALTDiagnosticIDErrorKey"), "iOS failure logs must persist a client diagnostic ID")
+assert(ios_app_manager.include?("ALTDiagnosticStageErrorKey"), "iOS failure logs must persist the last active stage")
+assert(ios_app_manager.include?("ALTDiagnosticTraceErrorKey"), "iOS failure logs must persist a bounded operation trace")
+assert(ios_app_manager.include?('values = [context.server?.connectionType.localizedDiagnosticName, context.team?.type.localizedDescription]'), "authentication diagnostics must be limited to connection and team categories")
+assert(ios_app_manager.include?("recoverInterruptedOperations"), "interrupted iOS operations must become visible after relaunch")
+assert(ios_app_manager.include?("guard didSave else { return }"), "interrupted operation records must remain pending until the recovery log saves")
+assert(ios_app_manager.scan("guard didSave else { return }").length >= 2, "failed operations must remain pending until their error log saves")
+assert(ios_app_manager.include?("!app.objectID.isTemporaryID"), "StoreApp relationships must reject temporary cross-context object IDs")
+assert(ios_app_manager.include?("context.existingObject(with: app.objectID)"), "StoreApp relationships must use throwing existing-object lookup")
+assert(ios_app_manager.include?("context.existingObject(with: managedObjectID)"), "error logging must use safe cross-context lookup")
+assert(read(root, "AltStore/AppDelegate.swift").include?("AppManager.shared.recoverInterruptedOperations()"), "database startup must recover interrupted operation logs")
+
+ios_operation_contexts = read(root, "AltStore/Operations/OperationContexts.swift")
+%w[findingServer authenticating preparingApp verifyingApp preparingProfiles signingApp sendingApp installingApp refreshingApp].each do |stage|
+  assert(ios_operation_contexts.include?("case #{stage}"), "missing bounded iOS diagnostic stage: #{stage}")
+end
+ios_error_log = read(root, "AltStore/Settings/Error Log/ErrorLogViewController.swift")
+assert(ios_error_log.include?('NSLocalizedString("Copy Diagnostic Report"'), "error log must expose the bounded diagnostic report action")
+assert(ios_error_log.include?("ALTDiagnosticTraceErrorKey"), "copied error reports must include the operation trace")
+diagnostic_detail_calls = Dir.glob(File.join(root, "AltStore/**/*.swift")).flat_map { |path| File.readlines(path).grep(/recordDiagnostic\(\..*detail:/) }
+assert(diagnostic_detail_calls.all? { |line| line.include?("localizedDiagnosticName") || line.include?("authenticationDiagnosticDetail") }, "diagnostic details must remain on the connection/team-category allowlist")
+
+ios_strings = JSON.parse(read(root, "AltStore/Resources/Localizable.xcstrings")).fetch("strings")
+["Authentication Ready", "Authenticating Apple ID", "Diagnostic ID", "Failure Stage", "Operation Trace", "Copy Diagnostic Report"].each do |key|
+  assert(ios_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese diagnostic string: #{key}")
 end
 
 workflow = read(root, ".github/workflows/release.yml")
@@ -91,6 +214,19 @@ info_plist = read(root, "AltServer/Info.plist")
 assert(info_plist.include?("<key>CFBundleDisplayName</key>\n\t<string>AltForge Server</string>"), "macOS public application name must be AltForge Server")
 assert(info_plist.include?("Copyright © 2026 AltForge contributors."), "AltForge contributor copyright is missing")
 assert(info_plist.include?("AltStore and AltServer © Riley Testut and contributors."), "upstream copyright attribution is missing")
+macos_project = read(root, "AltStore.xcodeproj/project.pbxproj")
+assert(macos_project.scan('PRODUCT_NAME = "AltForge Server";').length == 2, "macOS Debug and Release products must be named AltForge Server")
+assert(macos_project.scan('EXECUTABLE_NAME = "AltForge Server";').length == 2, "macOS Debug and Release executables must be named AltForge Server")
+assert(macos_project.scan("PRODUCT_MODULE_NAME = AltServer;").length == 2, "the public macOS product rename must preserve the internal Swift module")
+assert(macos_project.include?('path = "AltForge Server.app";'), "the macOS build product must use the public bundle filename")
+assert(macos_project.scan('@executable_path/AltForge Server.app/Contents/Frameworks').length == 2, "macOS helper runpaths must follow the public bundle filename")
+altserver_scheme = read(root, "AltStore.xcodeproj/xcshareddata/xcschemes/AltServer.xcscheme")
+assert(!altserver_scheme.include?('BuildableName = "AltServer.app"'), "the AltServer scheme must launch the public AltForge Server bundle")
+altxpc_scheme = read(root, "AltStore.xcodeproj/xcshareddata/xcschemes/AltXPC.xcscheme")
+assert(!altxpc_scheme.include?('BuildableName = "AltServer.app"'), "the AltXPC scheme must launch the public AltForge Server bundle")
+assert(workflow.include?('Build/Products/Release/AltForge Server.app'), "release packaging must consume the public macOS build product")
+assert(dmg_packager.include?('-volname "AltForge Server"'), "the macOS DMG volume must use the AltForge Server public identity")
+assert(apple_artifact_verifier.include?('Contents/MacOS/AltForge Server'), "release verification must inspect the public macOS executable")
 
 storyboard = read(root, "AltServer/Base.lproj/Main.storyboard")
 %w[About\ AltForge\ Server Quit\ AltForge\ Server Settings Language System\ Default English Simplified\ Chinese Check\ for\ Updates… Remove\ Legacy\ Mail\ Plug-in…].each do |title|
@@ -171,8 +307,11 @@ assert(installation_manager.include?("configuration.timeoutIntervalForResource =
 assert(installation_manager.include?("var downloadMirrors: [URL]?"), "official source metadata must support repository-configured CDN mirrors")
 assert(installation_manager.include?("configuredMirrorURLs.prefix(4)"), "configured CDN mirror fan-out must remain bounded")
 assert(installation_manager.include?("downloadControl.setSelectionHandler"), "download source selection must restart the active transfer")
-assert(installation_manager.include?("task?.cancel()"), "manual source switching must cancel the previous transfer")
+assert(installation_manager.include?("transfer?.cancel()"), "manual source switching must cancel the previous transfer")
 assert(installation_manager.include?("bytesPerSecond"), "release downloads must report live transfer speed")
+assert(installation_manager.include?("URLSessionDownloadDelegate"), "release download progress must come from URLSession delegate byte callbacks")
+assert(installation_manager.include?("didWriteData bytesWritten"), "release downloads must report actual bytes written")
+assert(!installation_manager.include?("downloadTask.progress.observe(\\.completedUnitCount"), "release downloads must not rely on unreliable task-progress KVO")
 
 installation_progress = read(root, "AltServer/InstallationProgressWindowController.swift")
 assert(installation_progress.include?("case downloading"), "macOS installation progress must expose the download stage")
@@ -180,8 +319,17 @@ assert(installation_progress.include?("fractionCompleted"), "macOS installation 
 assert(installation_progress.include?("ByteCountFormatter"), "download progress must format transferred and total bytes")
 assert(installation_progress.include?("ALTInstallationDownloadControl"), "download progress must expose a bounded source selector")
 assert(installation_progress.include?("self.progressIndicator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24)"), "the progress bar must use symmetric horizontal margins")
+assert(installation_progress.include?("styleMask: [.titled, .closable, .miniaturizable]"), "the completed installation window must expose the native close control")
+assert(installation_progress.include?("func showCompletion(onClose:"), "installation success must remain visible until the user closes it")
+assert(installation_progress.include?('NSButton(title: NSLocalizedString("Close"'), "installation success must provide an explicit localized close button")
+assert(installation_progress.include?("self.window?.performClose(sender)"), "the completion button must use the same guarded window close path")
 assert(app_delegate.include?("activeInstallations[device.identifier]"), "macOS installation must deduplicate work by device identifier")
 assert(app_delegate.include?("activeInstallation.focus()"), "a duplicate installation request must focus the existing operation")
+assert(app_delegate.include?("progressController.showCompletion"), "installation success must present the closeable completion state")
+assert(!app_delegate.include?("DispatchQueue.main.asyncAfter(deadline: .now() + 1.5)"), "installation success must not disappear on a fixed timer")
+device_manager = read(root, "AltServer/Devices/ALTDeviceManager.mm")
+assert(device_manager.include?("instproxy_status_get_name(status, &statusName)"), "device installation completion must inspect the installation-proxy status name")
+assert(device_manager.include?('strcmp(statusName, "Complete") == 0'), "device installation must finish when installation_proxy reports Complete")
 certificate_flow = installation_manager[/func fetchCertificate\(.*?\n    func prepareAllProvisioningProfiles/m]
 assert(certificate_flow, "macOS certificate flow could not be inspected")
 assert(certificate_flow.include?('machineName.hasPrefix("AltForge") || machineName.hasPrefix("AltStore")'), "certificate replacement must be limited to AltForge-managed certificates")
@@ -195,6 +343,8 @@ assert(!altsign_package.include?('.define("MARKETPLACE")'), "Classic AltServer a
 release_generator = read(root, "Scripts/generate_release_metadata.rb")
 assert(release_generator.include?('parser.on("--cdn-base-url URL")'), "release metadata generation must accept an explicit CDN base URL")
 assert(release_generator.include?('current_version["downloadMirrors"]'), "release metadata must publish the configured CDN mirror")
+assert(release_generator.scan('"tintColor" => "#315952"').length == 2, "release source and app metadata must use the restrained AltForge tint")
+assert(!release_generator.include?("#C52A42"), "release metadata must not restore the legacy full-card red tint")
 assert(workflow.include?("ALT_FORGE_CDN_BASE_URL"), "release workflow must pass the repository CDN variable to metadata generation")
 
 plugin_manager = read(root, "AltServer/Plugin/PluginManager.swift")
@@ -223,9 +373,12 @@ app_icon_catalog.fetch("images").each do |entry|
 end
 
 desktop_strings = JSON.parse(read(root, "AltServer/Resources/Localizable.xcstrings")).fetch("strings")
-%w[AltForge\ Server Account Account\ Could\ Not\ Be\ Saved Apple\ ID\ Account Apple\ ID\ Verified Caps\ Lock\ is\ on. Downloading\ AltForge Forget\ Account Free\ Account Hide\ Password Individual\ Developer Installation\ Complete Installation\ Progress Organization\ /\ Enterprise Remember\ password Replace\ AltForge\ Certificate Saved\ accounts\ are\ unavailable.\ You\ can\ still\ sign\ in. Saved\ passwords\ are\ stored\ in\ this\ Mac's\ Keychain. Show\ Password Sign\ in\ with\ Apple\ ID Signing\ AltForge Check\ for\ Updates… Remove\ Plug-in USB Wi-Fi].each do |key|
+%w[AltForge\ Server Account Account\ Could\ Not\ Be\ Saved Apple\ ID\ Account Apple\ ID\ Verified Caps\ Lock\ is\ on. Close Downloading\ AltForge Forget\ Account Free\ Account Hide\ Password Individual\ Developer Installation\ Complete Installation\ Progress Organization\ /\ Enterprise Remember\ password Replace\ AltForge\ Certificate Saved\ accounts\ are\ unavailable.\ You\ can\ still\ sign\ in. Saved\ passwords\ stay\ in\ Keychain.\ macOS\ may\ ask\ for\ your\ Mac\ login\ password\ to\ read\ them,\ not\ your\ Apple\ ID\ password. Show\ Password Sign\ in\ with\ Apple\ ID Signing\ AltForge Check\ for\ Updates… Remove\ Plug-in USB Wi-Fi].each do |key|
   localized_key = key.gsub('\\ ', ' ')
   assert(desktop_strings.dig(localized_key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese desktop string: #{localized_key}")
+end
+["About AltForge Server", "AltForge Server is the macOS companion for AltForge. It downloads, signs, and installs AltForge and other IPA files on your Apple devices.", "Documentation", "GitHub Repository", "Releases", "Report an Issue", "Version %@ (%@)"].each do |key|
+  assert(desktop_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese About string: #{key}")
 end
 ["Automatic (Recommended)", "Current source: %@", "Downloading the verified IPA from the selected mirror…", "GitHub (Official)", "The selected download sources could not download AltForge."].each do |key|
   assert(desktop_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese download string: #{key}")
@@ -247,6 +400,12 @@ end
 end
 credits_key = "AltForge Server is maintained by the AltForge contributors and builds on the AltStore and pymobiledevice3 communities. AltForge is distributed under the GNU AGPL v3.0 license."
 assert(desktop_strings.key?(credits_key), "About credits must use project/community attribution")
+about_ui = read(root, "AltServer/AboutWindowController.swift")
+assert(about_ui.include?('width: 560, height: 420'), "the custom About window must provide room for project details")
+assert(about_ui.include?('https://github.com/legeling/AltForge'), "the About window must show the AltForge GitHub repository")
+assert(about_ui.include?("contentStack.alignment = .centerX"), "the About window content must be horizontally centered")
+assert(about_ui.include?("addCursorRect(self.bounds, cursor: .pointingHand)"), "clickable About links must use the pointing-hand cursor")
+assert(app_delegate.include?("self.aboutWindowController.show()"), "the About menu must present the custom project window")
 assert(!app_delegate.include?("Thanks to"), "About credits must not single out an individual thank-you")
 
 windows_menu = read(root, "AltServer-Windows/AltServer/AltServer.cpp")

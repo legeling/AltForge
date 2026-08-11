@@ -16,6 +16,8 @@
 | [`ISSUE-20260808-006`](ISSUE-20260808-006-altsign-classic-baseline.md) | AltSign submodule 仍基于 Marketplace 配置 | P0 | Open | `FR-001`, `FR-002`, `T-011` |
 | [`ISSUE-20260808-007`](ISSUE-20260808-007-zh-error-test-spacing.md) | 简体中文环境下错误描述测试存在空格假设 | P1 | Open | `FR-011`, `TEST-010`, `T-006` |
 | [`ISSUE-20260809-001`](ISSUE-20260809-001-windows-build-device-validation.md) | Windows 构建与真实设备验证待完成 | P1 | Open | `FR-018`, `FR-019`, `T-012` |
+| [`ISSUE-20260811-001`](ISSUE-20260811-001-macos-install-progress-device-regression.md) | macOS 安装进度真机回归待验证 | P0 | Open | `FR-031`, `TEST-030`, `T-019` |
+| [`ISSUE-20260811-002`](ISSUE-20260811-002-ios-third-party-install-device-validation.md) | iOS 第三方 IPA 安装与恢复日志真机回归待验证 | P0 | Open | `FR-036`, `TEST-035`, `T-024` |
 
 ## 状态规则
 

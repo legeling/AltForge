@@ -4,6 +4,12 @@
 
 # Key Behaviors
 
+## iOS 主导航
+
+- 主标签固定为浏览、软件源、我的 App、设置，并默认进入浏览。
+- 不提供跨 source 的聚合资讯标签；source 声明的资讯仍在对应来源详情中展示。
+- deep link 通过 `TabBarController.Tab` 选择目标标签，枚举顺序必须与主 storyboard 的 relationship 顺序一致。
+
 ## 安装 AltForge
 
 1. AltServer 发现已连接设备并读取设备类型、UDID 和系统版本。
@@ -17,6 +23,8 @@
 规则：最低系统不满足时可以提示最后一个兼容版本；不能静默安装不兼容版本。
 
 macOS 状态菜单为每个 device identifier 只维护一个活动安装。认证成功后必须显示准备、下载、签名和设备安装进度；重复点击同一设备只聚焦既有窗口。下载阶段显示已下载量、总大小、实时速度和当前线路，允许在自动、GitHub、仓库配置 CDN 与固定公共镜像间切换；线路切换只保留一个 URLSession task。任何镜像 IPA 必须匹配官方 source 或 GitHub Release API 的大小和 SHA-256，校验失败不得进入解压或签名。
+
+macOS 桌面产物的公开目录和 executable 均为 `AltForge Server`；内部 Xcode target 与 Swift module 仍为 `AltServer`。登录时启动使用当前 App 的 ServiceManagement 注册，系统登录项/后台项目提示应显示公开名称。从历史 `AltServer.app` 开发构建升级时，用户需要关闭再开启一次登录项以替换 macOS 缓存的旧注册路径；App 不在后台静默改变这项用户授权。
 
 ## 从 AltForge 安装应用
 
@@ -59,6 +67,18 @@ macOS 状态菜单为每个 device identifier 只维护一个活动安装。认�
 - 非默认 port 与有效 path 属于 source identity。
 - 解析成功后才写入 Core Data；权限或 schema 错误必须可见。
 - 官方 source 的 latest download URL 是稳定入口，具体版本信息来自生成的 `apps.json`。
+- 官方 source 与 AltForge 自身应用在 UI 中使用仓库定义的 `SourceTint`；该覆盖优先于已缓存 metadata，仅影响官方 identity，第三方 source/app 继续使用自己的 tint。
+
+## iOS 品牌与设置
+
+- 四个主标签使用表达功能的 SF Symbols，不把 App 品牌图标当作来源或设置图标。
+- 设置页使用系统动态 grouped/label/separator 颜色，不能再以旧版青色作为整页背景。
+- 设置版本来自当前 bundle 的 `CFBundleShortVersionString`，不得由独立静态键覆盖。
+- Credits 同时展示 AltForge Contributors、上游原始开发者 Riley Testut 和原始设计 Caroline Moore；AltForge 的 GitHub、Issue 与隐私入口归 `legeling/AltForge`。
+- 系统公开身份由 `CFBundleDisplayName`、`CFBundleName` 和实际 executable 共同定义，三者均为 AltForge，避免系统问题报告回退到历史 target 名。
+- `AltStore` target/scheme/Swift module、`AltStore.app` 包目录、协议/数据库/历史 identifier 属于内部兼容边界，不应为了视觉品牌做机械重命名；AltStore PAL、AltStore 2.0、第三方 source、上游归属和旧证书识别继续保留真实名称。
+- GitHub 仓库地址表示 AltForge 项目的固定维护与发布归属，不用于推断用户的 Apple 开发者身份。认证后从 Apple 返回的团队中优先复用 active team，否则按个人开发者、组织、免费团队、首个未知团队的顺序自动选择，并在设置中显示实际团队名称和类型。
+- 安装、更新和刷新进入队列时只持久化最多 20 条脱敏 operation 摘要；每条最多保存 16 个关键阶段和 120 字符 detail。正常结束立即删除，失败时把客户端诊断编号、最后阶段和相对耗时轨迹写入既有错误日志，进程在结果落库前中断时于下次启动补写一次错误日志。诊断只允许连接类别和团队类别等低敏上下文，不保存凭据、设备/团队/Server 标识、签名材料或文件路径。设置、我的 App 和认证页面不得通过递归遍历 UIKit 私有子视图实现动态配色。
 
 ## 错误传输
 
@@ -66,6 +86,7 @@ macOS 状态菜单为每个 device identifier 只维护一个活动安装。认�
 - `ALTLocalizedError` 提供 failure、reason 和 recovery suggestion。
 - `CodableError` 只编码允许的数据类型；unsupported userInfo 不跨进程传输。
 - 客户端收到错误后优先显示可操作的恢复建议，详细诊断进入 error log。
+- 诊断轨迹使用客户端生成的 operation ID，只关联本机 AppManager 阶段；当前不改变 Server Protocol，也不宣称能关联 macOS/Windows Server 的独立日志。
 
 ## Release
 

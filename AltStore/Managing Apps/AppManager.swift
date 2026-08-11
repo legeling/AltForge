@@ -19,6 +19,157 @@ import AltStoreCore
 import AltSign
 import Roxas
 
+private struct PendingAppOperationEvent: Codable
+{
+    let date: Date
+    let stage: AppOperationDiagnosticStage
+    let detail: String?
+}
+
+private struct PendingAppOperation: Codable
+{
+    static let maximumCount = 20
+    static let maximumEventCount = 16
+    static let maximumDetailLength = 120
+
+    let operation: String
+    let appName: String
+    let bundleIdentifier: String
+    let date: Date
+    let operationID: String?
+    var events: [PendingAppOperationEvent]?
+
+    init(operation: String, appName: String, bundleIdentifier: String, date: Date)
+    {
+        self.operation = operation
+        self.appName = appName
+        self.bundleIdentifier = bundleIdentifier
+        self.date = date
+        self.operationID = UUID().uuidString
+        self.events = [PendingAppOperationEvent(date: date, stage: .queued, detail: nil)]
+    }
+
+    var identifier: String {
+        return self.operation + ":" + self.bundleIdentifier
+    }
+}
+
+private final class PendingAppOperationStore
+{
+    static let shared = PendingAppOperationStore()
+
+    private let key = "com.legeling.AltForge.pendingAppOperations"
+    private let lock = NSLock()
+
+    private init()
+    {
+    }
+
+    func begin(_ record: PendingAppOperation)
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        var records = self.load()
+        records.removeAll { $0.identifier == record.identifier }
+        records.append(record)
+        records = Array(records.suffix(PendingAppOperation.maximumCount))
+        self.save(records)
+    }
+
+    func finish(identifier: String)
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        var records = self.load()
+        records.removeAll { $0.identifier == identifier }
+        self.save(records)
+    }
+
+    func append(identifier: String, stage: AppOperationDiagnosticStage, detail: String? = nil)
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        var records = self.load()
+        guard let index = records.firstIndex(where: { $0.identifier == identifier }) else { return }
+
+        let boundedDetail = detail.map { String($0.prefix(PendingAppOperation.maximumDetailLength)) }
+        var events = records[index].events ?? []
+        guard events.last?.stage != stage || events.last?.detail != boundedDetail else { return }
+
+        events.append(PendingAppOperationEvent(date: Date(), stage: stage, detail: boundedDetail))
+        records[index].events = Array(events.suffix(PendingAppOperation.maximumEventCount))
+        self.save(records)
+    }
+
+    func diagnosticUserInfo(identifier: String) -> [String: String]
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        guard let record = self.load().first(where: { $0.identifier == identifier }) else { return [:] }
+        return self.diagnosticUserInfo(for: record)
+    }
+
+    func all() -> [PendingAppOperation]
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        return self.load()
+    }
+
+    private func load() -> [PendingAppOperation]
+    {
+        guard let data = UserDefaults.standard.data(forKey: self.key) else { return [] }
+        return (try? Foundation.JSONDecoder().decode([PendingAppOperation].self, from: data)) ?? []
+    }
+
+    private func save(_ records: [PendingAppOperation])
+    {
+        guard !records.isEmpty else {
+            UserDefaults.standard.removeObject(forKey: self.key)
+            return
+        }
+
+        if let data = try? JSONEncoder().encode(records)
+        {
+            UserDefaults.standard.set(data, forKey: self.key)
+        }
+    }
+
+    private func diagnosticUserInfo(for record: PendingAppOperation) -> [String: String]
+    {
+        var userInfo = [String: String]()
+
+        if let operationID = record.operationID
+        {
+            userInfo[ALTDiagnosticIDErrorKey] = operationID
+        }
+
+        let events = record.events ?? []
+        if let failureStage = events.reversed().first(where: { !$0.stage.isTerminal })?.stage
+        {
+            userInfo[ALTDiagnosticStageErrorKey] = failureStage.localizedName
+        }
+
+        if !events.isEmpty
+        {
+            let lines = events.map { event -> String in
+                let elapsed = max(0, event.date.timeIntervalSince(record.date))
+                let prefix = String(format: "+%.1fs %@", elapsed, event.stage.localizedName)
+                guard let detail = event.detail, !detail.isEmpty else { return prefix }
+                return prefix + " (" + detail + ")"
+            }
+            userInfo[ALTDiagnosticTraceErrorKey] = lines.joined(separator: "\n")
+        }
+
+        return userInfo
+    }
+}
+
 extension AppManager
 {
     static let didFetchSourceNotification = Notification.Name("io.altstore.AppManager.didFetchSource")
@@ -90,6 +241,33 @@ class AppManager: ObservableObject
                 installedApp.isRefreshing = isRefreshing
             }
             .store(in: &self.cancellables)
+    }
+}
+
+extension AppManager
+{
+    func recoverInterruptedOperations()
+    {
+        let records = PendingAppOperationStore.shared.all()
+        for record in records
+        {
+            guard let operation = LoggedError.Operation(rawValue: record.operation) else {
+                PendingAppOperationStore.shared.finish(identifier: record.identifier)
+                continue
+            }
+
+            let description = NSLocalizedString("AltForge closed before this operation finished, so the result could not be recorded.", comment: "Unexpected termination recovery error")
+            let suggestion = NSLocalizedString("Open AltForge Server, confirm the device connection, then try again. If the app appears on the Home Screen, remove it before retrying.", comment: "Unexpected termination recovery suggestion")
+            let error = NSError(domain: "com.legeling.AltForge.InterruptedOperation",
+                                code: 1,
+                                userInfo: [NSLocalizedDescriptionKey: description,
+                                           NSLocalizedRecoverySuggestionErrorKey: suggestion])
+            let app = AnyApp(name: record.appName, bundleIdentifier: record.bundleIdentifier, url: nil, storeApp: nil)
+            self.log(error, operation: operation, app: app, diagnosticIdentifier: record.identifier) { didSave in
+                guard didSave else { return }
+                PendingAppOperationStore.shared.finish(identifier: record.identifier)
+            }
+        }
     }
 }
 
@@ -377,7 +555,7 @@ extension AppManager
     {
         let (sourceName, sourceID) = await $source.perform { ($0.name, $0.identifier) }
         guard sourceID != Source.altStoreIdentifier else {
-            throw OperationError.forbidden(failureReason: NSLocalizedString("The default AltStore source cannot be removed.", comment: ""))
+            throw OperationError.forbidden(failureReason: NSLocalizedString("The default AltForge source cannot be removed.", comment: ""))
         }
         
         let title = String(format: NSLocalizedString("Are you sure you want to remove the source “%@”?", comment: ""), sourceName)
@@ -1180,20 +1358,32 @@ internal extension AppManager
                 return app
             }
         }
-        
+
+        var appSnapshot: AnyApp {
+            guard let managedApp = self.app as? NSManagedObject else {
+                return AnyApp(name: self.app.name, bundleIdentifier: self.app.bundleIdentifier, url: nil, storeApp: nil)
+            }
+
+            var snapshot = AnyApp(name: NSLocalizedString("App", comment: ""), bundleIdentifier: "unknown", url: nil, storeApp: nil)
+            guard let context = managedApp.managedObjectContext else { return snapshot }
+
+            context.performAndWait {
+                guard !managedApp.isDeleted else { return }
+                snapshot = AnyApp(name: self.app.name, bundleIdentifier: self.app.bundleIdentifier, url: nil, storeApp: nil)
+            }
+            return snapshot
+        }
+
+        fileprivate var pendingRecord: PendingAppOperation {
+            let app = self.appSnapshot
+            return PendingAppOperation(operation: self.loggedErrorOperation.rawValue,
+                                       appName: app.name,
+                                       bundleIdentifier: app.bundleIdentifier,
+                                       date: Date())
+        }
+
         var bundleIdentifier: String {
-            var bundleIdentifier: String!
-            
-            if let context = (self.app as? NSManagedObject)?.managedObjectContext
-            {
-                context.performAndWait { bundleIdentifier = self.app.bundleIdentifier }
-            }
-            else
-            {
-                bundleIdentifier = self.app.bundleIdentifier
-            }
-            
-            return bundleIdentifier
+            return self.appSnapshot.bundleIdentifier
         }
         
         var loggedErrorOperation: LoggedError.Operation {
@@ -1218,10 +1408,20 @@ private extension AppManager
     {
         let operations = operations.filter { self.progress(for: $0) == nil || self.progress(for: $0)?.isCancelled == true }
         
+        var pendingIdentifiers = [String]()
         for operation in operations
         {
             let progress = Progress.discreteProgress(totalUnitCount: 100)
             self.set(progress, for: operation)
+            let record = operation.pendingRecord
+            PendingAppOperationStore.shared.begin(record)
+            pendingIdentifiers.append(record.identifier)
+        }
+        group.context.diagnosticHandler = { stage, detail in
+            for identifier in pendingIdentifiers
+            {
+                PendingAppOperationStore.shared.append(identifier: identifier, stage: stage, detail: detail)
+            }
         }
         
         if let viewController = presentingViewController
@@ -1237,9 +1437,14 @@ private extension AppManager
                 switch result
                 {
                 case .failure(let error): group.context.error = error
-                case .success: break
+                case .success:
+                    group.context.recordDiagnostic(.authenticated, detail: self.authenticationDiagnosticDetail(for: group.context))
                 }
             }
+        }
+        else
+        {
+            group.context.recordDiagnostic(.authenticated, detail: self.authenticationDiagnosticDetail(for: group.context))
         }
         
         func performAppOperations()
@@ -1371,6 +1576,10 @@ private extension AppManager
         
         let context = context ?? InstallAppOperationContext(bundleIdentifier: app.bundleIdentifier, authenticatedContext: group.context)
         assert(context.authenticatedContext === group.context)
+        let pendingIdentifier = appOperation.pendingRecord.identifier
+        context.diagnosticHandler = { stage, detail in
+            PendingAppOperationStore.shared.append(identifier: pendingIdentifier, stage: stage, detail: detail)
+        }
         
         context.beginInstallationHandler = { (installedApp) in
             switch appOperation
@@ -1378,6 +1587,8 @@ private extension AppManager
             case .update where installedApp.bundleIdentifier == StoreApp.altstoreAppID:
                 // AltStore will quit before installation finishes,
                 // so assume if we get this far the update will finish successfully.
+                PendingAppOperationStore.shared.append(identifier: pendingIdentifier, stage: .completed)
+                PendingAppOperationStore.shared.finish(identifier: pendingIdentifier)
                 let event = AnalyticsManager.Event.updatedApp(installedApp)
                 AnalyticsManager.shared.trackEvent(event)
                 
@@ -1630,7 +1841,10 @@ private extension AppManager
             case .success(let installedApp):
                 context.installedApp = installedApp
                 
-                if let app = app as? StoreApp, let storeApp = installedApp.managedObjectContext?.object(with: app.objectID) as? StoreApp
+                if let app = app as? StoreApp,
+                   !app.objectID.isTemporaryID,
+                   let context = installedApp.managedObjectContext,
+                   let storeApp = try? context.existingObject(with: app.objectID) as? StoreApp
                 {
                     installedApp.storeApp = storeApp
                 }
@@ -1673,6 +1887,10 @@ private extension AppManager
         let progress = Progress.discreteProgress(totalUnitCount: 100)
         
         let context = AppOperationContext(bundleIdentifier: app.bundleIdentifier, authenticatedContext: group.context)
+        let pendingIdentifier = operation.pendingRecord.identifier
+        context.diagnosticHandler = { stage, detail in
+            PendingAppOperationStore.shared.append(identifier: pendingIdentifier, stage: stage, detail: detail)
+        }
         context.app = ALTApplication(fileURL: app.fileURL)
         
         /* Fetch Provisioning Profiles */
@@ -1993,7 +2211,7 @@ private extension AppManager
                         
                         // Add app-specific exported UTI so we can check later if this temporary backup app is still installed or not.
                         let installedAppUTI = ["UTTypeConformsTo": [],
-                                               "UTTypeDescription": "AltStore Backup App",
+                                               "UTTypeDescription": "AltForge Backup App",
                                                "UTTypeIconFiles": [],
                                                "UTTypeIdentifier": app.installedBackupAppUTI,
                                                "UTTypeTagSpecification": [:]] as [String : Any]
@@ -2073,6 +2291,8 @@ private extension AppManager
     
     func finish(_ operation: AppOperation, result: Result<InstalledApp, Error>, group: RefreshGroup, progress: Progress?)
     {
+        let pendingIdentifier = operation.pendingRecord.identifier
+
         let result = result.mapError { (resultError) -> Error in
             guard let error = resultError as? ALTServerError else { return resultError }
             
@@ -2143,27 +2363,14 @@ private extension AppManager
                 Logger.main.error("Failed to save InstalledApp to database. \(error.localizedDescription, privacy: .public)")
                 throw error
             }
+
+            PendingAppOperationStore.shared.append(identifier: pendingIdentifier, stage: .completed)
+            PendingAppOperationStore.shared.finish(identifier: pendingIdentifier)
         }
         catch let nsError as NSError
         {
-            var appName: String!
-            if let app = operation.app as? (NSManagedObject & AppProtocol)
-            {
-                if let context = app.managedObjectContext
-                {
-                    context.performAndWait {
-                        appName = app.name
-                    }
-                }
-                else
-                {
-                    appName = NSLocalizedString("App", comment: "")
-                }
-            }
-            else
-            {
-                appName = operation.app.name
-            }
+            let app = operation.appSnapshot
+            let appName = app.name
             
             let localizedTitle: String
             switch operation
@@ -2179,8 +2386,12 @@ private extension AppManager
             
             let error = nsError.withLocalizedTitle(localizedTitle)
             group.set(.failure(error), forAppWithBundleIdentifier: operation.bundleIdentifier)
-            
-            self.log(error, operation: operation.loggedErrorOperation, app: operation.app)
+
+            PendingAppOperationStore.shared.append(identifier: pendingIdentifier, stage: .failed)
+            self.log(error, operation: operation.loggedErrorOperation, app: app, diagnosticIdentifier: pendingIdentifier) { didSave in
+                guard didSave else { return }
+                PendingAppOperationStore.shared.finish(identifier: pendingIdentifier)
+            }
         }
     }
 }
@@ -2263,42 +2474,92 @@ internal extension AppManager
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeIntervalUntilNotification, repeats: false)
         
         let content = UNMutableNotificationContent()
-        content.title = NSLocalizedString("AltStore Expiring Soon", comment: "")
-        content.body = NSLocalizedString("AltStore will expire in 24 hours. Open the app and refresh it to prevent it from expiring.", comment: "")
+        content.title = NSLocalizedString("AltForge Expiring Soon", comment: "")
+        content.body = NSLocalizedString("AltForge will expire in 24 hours. Open the app and refresh it to prevent it from expiring.", comment: "")
         content.sound = .default
         
         let request = UNNotificationRequest(identifier: AppManager.expirationWarningNotificationID, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
     
-    func log(_ error: Error, operation: LoggedError.Operation, app: AppProtocol)
+    func log(_ error: Error,
+             operation: LoggedError.Operation,
+             app: AppProtocol,
+             diagnosticIdentifier: String? = nil,
+             completionHandler: ((Bool) -> Void)? = nil)
     {
         switch error
         {
-        case is CancellationError: return // Don't log CancellationErrors
-        case let nsError as NSError where nsError.domain == CancellationError()._domain: return
+        case is CancellationError:
+            completionHandler?(false)
+            return // Don't log CancellationErrors
+
+        case let nsError as NSError where nsError.domain == CancellationError()._domain:
+            completionHandler?(false)
+            return
+
         default: break
         }
         
-        // Sanitize NSError on same thread before performing background task.
-        let sanitizedError = (error as NSError).sanitizedForSerialization()
+        // Snapshot managed object values on their own context before crossing queues.
+        let nsError = error as NSError
+        var userInfo = nsError.userInfo
+        if let diagnosticIdentifier
+        {
+            for (key, value) in PendingAppOperationStore.shared.diagnosticUserInfo(identifier: diagnosticIdentifier) where userInfo[key] == nil
+            {
+                userInfo[key] = value
+            }
+        }
+        let sanitizedError = NSError(domain: nsError.domain, code: nsError.code, userInfo: userInfo).sanitizedForSerialization()
+        var appSnapshot = AnyApp(name: NSLocalizedString("App", comment: ""), bundleIdentifier: "unknown", url: nil, storeApp: nil)
+        var managedObjectID: NSManagedObjectID?
+
+        if let managedApp = app as? NSManagedObject, let managedObjectContext = managedApp.managedObjectContext
+        {
+            managedObjectContext.performAndWait {
+                guard !managedApp.isDeleted else { return }
+                appSnapshot = AnyApp(name: app.name, bundleIdentifier: app.bundleIdentifier, url: nil, storeApp: nil)
+                if !managedApp.objectID.isTemporaryID
+                {
+                    managedObjectID = managedApp.objectID
+                }
+            }
+        }
+        else if !(app is NSManagedObject)
+        {
+            appSnapshot = AnyApp(name: app.name, bundleIdentifier: app.bundleIdentifier, url: nil, storeApp: nil)
+        }
         
         DatabaseManager.shared.persistentContainer.performBackgroundTask { context in
-            var app = app
-            if let managedApp = app as? NSManagedObject, let tempApp = context.object(with: managedApp.objectID) as? AppProtocol
+            let loggedApp: AppProtocol
+            if let managedObjectID,
+               let managedApp = try? context.existingObject(with: managedObjectID) as? AppProtocol
             {
-                app = tempApp
+                loggedApp = managedApp
+            }
+            else
+            {
+                loggedApp = appSnapshot
             }
             
             do
             {
-                _ = LoggedError(error: sanitizedError, app: app, operation: operation, context: context)
+                _ = LoggedError(error: sanitizedError, app: loggedApp, operation: operation, context: context)
                 try context.save()
+                completionHandler?(true)
             }
             catch let saveError
             {
-                print("[ALTLog] Failed to log error \(sanitizedError.domain) code \(sanitizedError.code) for \(app.bundleIdentifier):", saveError)
+                print("[ALTLog] Failed to log error \(sanitizedError.domain) code \(sanitizedError.code) for \(appSnapshot.bundleIdentifier):", saveError)
+                completionHandler?(false)
             }
         }
+    }
+
+    func authenticationDiagnosticDetail(for context: AuthenticatedOperationContext) -> String?
+    {
+        let values = [context.server?.connectionType.localizedDiagnosticName, context.team?.type.localizedDescription].compactMap { $0 }
+        return values.isEmpty ? nil : values.joined(separator: " / ")
     }
 }

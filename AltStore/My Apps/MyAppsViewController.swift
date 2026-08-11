@@ -237,7 +237,7 @@ private extension MyAppsViewController
             cell.layoutMargins.left = self.view.layoutMargins.left
             cell.layoutMargins.right = self.view.layoutMargins.right
             
-            cell.tintColor = app.tintColor ?? .altPrimary
+            cell.tintColor = app.effectiveTintColor ?? .altPrimary
             cell.versionDescriptionTextView.text = latestSupportedVersion.localizedDescription
             
             if let description = latestSupportedVersion.localizedDescription?.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -288,7 +288,7 @@ private extension MyAppsViewController
             if let federatedItem = latestSupportedVersion.federatedItem
             {
                 cell.fediverseInteractionsView.isHidden = false
-                cell.fediverseInteractionsView.tintColor = app.tintColor ?? .altPrimary
+                cell.fediverseInteractionsView.tintColor = app.effectiveTintColor ?? .altPrimary
                 cell.fediverseInteractionsView.shareHandler = { [weak self] _ in self }
                 cell.fediverseInteractionsView.presentingViewController = self
                 cell.fediverseInteractionsView.configure(with: federatedItem)
@@ -354,7 +354,7 @@ private extension MyAppsViewController
         let dataSource = RSTFetchedResultsCollectionViewPrefetchingDataSource<InstalledApp, UIImage>(fetchRequest: fetchRequest, managedObjectContext: DatabaseManager.shared.viewContext)
         dataSource.cellIdentifierHandler = { _ in "AppCell" }
         dataSource.cellConfigurationHandler = { (cell, installedApp, indexPath) in
-            let tintColor = installedApp.storeApp?.tintColor ?? .altPrimary
+            let tintColor = installedApp.storeApp?.effectiveTintColor ?? .altPrimary
             
             let cell = cell as! InstalledAppCollectionViewCell
             cell.layoutMargins.left = self.view.layoutMargins.left
@@ -1417,7 +1417,7 @@ private extension MyAppsViewController
     
     func remove(_ installedApp: InstalledApp)
     {
-        let title = String(format: NSLocalizedString("Remove “%@” from AltStore?", comment: ""), installedApp.name)
+        let title = String(format: NSLocalizedString("Remove “%@” from AltForge?", comment: ""), installedApp.name)
         let message: String
         
         if UserDefaults.standard.isLegacyDeactivationSupported
@@ -1476,7 +1476,7 @@ private extension MyAppsViewController
     func backup(_ installedApp: InstalledApp)
     {
         let title = NSLocalizedString("Start Backup?", comment: "")
-        let message = NSLocalizedString("This will replace any previous backups. Please leave AltStore open until the backup is complete.", comment: "")
+        let message = NSLocalizedString("This will replace any previous backups. Please leave AltForge open until the backup is complete.", comment: "")
 
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         alertController.addAction(.cancel)

@@ -17,6 +17,7 @@
 - 可编辑账号选择器显示最近成功认证的账号，并提供忘记账号按钮。
 - 账号通过团队查询后记录最后确认的免费、个人开发者或组织/企业类型，仅在自定义账号选择器右侧显示已确认类型；未知类型不显示占位标识，也不把历史账号误称为持久登录会话。
 - 提供“记住密码”复选框；只有用户勾选且 Apple 认证成功后才保存密码。
+- 在“记住密码”下方明确提醒：读取已保存密码时，macOS 可能弹出钥匙串授权并要求输入 Mac 登录密码，而不是 Apple ID 密码。
 - 使用 secure/plain 双文本框和眼睛图标切换密码显隐；显示实时 Caps Lock 提醒。
 - 点击继续后保持登录窗口与输入状态；认证失败以内联双语错误恢复编辑和重试，仅在取得 Apple account/session 后关闭。
 - 保留 macOS 原生最小化按钮，允许用户在输入或认证期间将账号窗口收进 Dock；窗口不提供会破坏固定表单布局的缩放按钮。
@@ -69,6 +70,7 @@ Caps Lock 使用窗口 modal 生命周期内唯一 local event monitor，窗口�
 - 已确认失败根因是 AltSign package 错误定义 `MARKETPLACE`，导致 SRP 函数固定失败；已移除该条件并新增静态回归门禁，macOS Debug 构建覆盖真实 CoreCrypto 编译路径。
 - 账号 archive 已兼容增加团队类型，只有选择器显示已确认类型；证书路径移除 `certificates.first` fallback，只允许明确替换 AltForge/旧 AltStore 证书。
 - 账号窗口改为一次性读取 credential snapshot，账号选择不再发起第二次 Keychain 读取；repository contract、Swift 5 macOS Debug build 和 diff whitespace 检查通过。
+- 账号窗口的双语钥匙串说明已补充系统授权提示，明确区分 Mac 登录密码与 Apple ID 密码。
 - 真实 Apple 认证、2FA、Keychain 系统交互及设备安装矩阵仍待脱敏人工验证，因此 change 保持 `In progress`。
 
 ## 回滚

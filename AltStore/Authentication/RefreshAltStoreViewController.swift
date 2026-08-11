@@ -23,12 +23,14 @@ class RefreshAltStoreViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
+
+        self.view.backgroundColor = .systemGroupedBackground
         
         self.placeholderView.textLabel.isHidden = true
         
         self.placeholderView.detailTextLabel.textAlignment = .left
-        self.placeholderView.detailTextLabel.textColor = UIColor.white.withAlphaComponent(0.6)
-        self.placeholderView.detailTextLabel.text = NSLocalizedString("AltStore was unable to use an existing signing certificate, so it had to create a new one. This will cause any apps installed with an existing certificate to expire — including AltStore.\n\nTo prevent AltStore from expiring early, please refresh the app now. AltStore will quit once refreshing is complete.", comment: "")
+        self.placeholderView.detailTextLabel.textColor = .secondaryLabel
+        self.placeholderView.detailTextLabel.text = NSLocalizedString("AltForge was unable to use an existing signing certificate, so it had to create a new one. This will cause any apps installed with an existing certificate to expire — including AltForge.\n\nTo prevent AltForge from expiring early, please refresh the app now. AltForge will quit once refreshing is complete.", comment: "")
     }
 }
 
@@ -58,7 +60,7 @@ private extension RefreshAltStoreViewController
                         sender.progress = nil
                         sender.isIndicatingActivity = false
                         
-                        let alertController = UIAlertController(title: NSLocalizedString("Failed to Refresh AltStore", comment: ""), message: error.localizedFailureReason ?? error.localizedDescription, preferredStyle: .alert)
+                        let alertController = UIAlertController(title: NSLocalizedString("Failed to Refresh AltForge", comment: ""), message: error.localizedFailureReason ?? error.localizedDescription, preferredStyle: .alert)
                         alertController.addAction(UIAlertAction(title: NSLocalizedString("Try Again", comment: ""), style: .default, handler: { (action) in
                             refresh()
                         }))

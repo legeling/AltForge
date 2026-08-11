@@ -235,10 +235,10 @@ private extension AppleIDAuthenticationWindowController
 
         self.rememberPasswordButton.state = .off
 
-        let keychainLabel = NSTextField(wrappingLabelWithString: NSLocalizedString("Saved passwords are stored in this Mac's Keychain.", comment: ""))
+        let keychainLabel = NSTextField(wrappingLabelWithString: NSLocalizedString("Saved passwords stay in Keychain. macOS may ask for your Mac login password to read them, not your Apple ID password.", comment: ""))
         keychainLabel.textColor = .secondaryLabelColor
         keychainLabel.font = .systemFont(ofSize: NSFont.smallSystemFontSize)
-        keychainLabel.maximumNumberOfLines = 2
+        keychainLabel.maximumNumberOfLines = 3
 
         self.storageWarningLabel.textColor = .systemRed
         self.storageWarningLabel.font = .systemFont(ofSize: NSFont.smallSystemFontSize)

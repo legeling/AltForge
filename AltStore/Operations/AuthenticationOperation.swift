@@ -15,7 +15,7 @@ import AltSign
 
 private extension UIColor
 {
-    static let altInvertedPrimary = UIColor(named: "SettingsHighlighted")!
+    static let altInvertedPrimary = UIColor.altPrimary
 }
 
 typealias AuthenticationError = AuthenticationErrorCode.Error
@@ -81,6 +81,8 @@ class AuthenticationOperation: ResultOperation<(ALTTeam, ALTCertificate, ALTAppl
             self.finish(.failure(error))
             return
         }
+
+        self.context.recordDiagnostic(.authenticating)
                 
         // Sign In
         self.signIn() { (result) in
@@ -496,7 +498,7 @@ private extension AuthenticationOperation
     {
         func requestCertificate()
         {
-            let machineName = "AltStore - " + UIDevice.current.name
+            let machineName = "AltForge - " + UIDevice.current.name
             ALTAppleAPI.shared.addCertificate(machineName: machineName, to: team, session: session) { (certificate, error) in
                 do
                 {
@@ -530,7 +532,13 @@ private extension AuthenticationOperation
         
         func replaceCertificate(from certificates: [ALTCertificate])
         {
-            guard let certificate = certificates.first(where: { $0.machineName?.starts(with: "AltStore") == true }) ?? certificates.first else { return completionHandler(.failure(AuthenticationError(.noCertificate))) }
+            let certificate = certificates.first
+            {
+                guard let machineName = $0.machineName else { return false }
+                return machineName.starts(with: "AltForge") || machineName.starts(with: "AltStore")
+            }
+
+            guard let certificate = certificate ?? certificates.first else { return completionHandler(.failure(AuthenticationError(.noCertificate))) }
             
             ALTAppleAPI.shared.revoke(certificate, for: team, session: session) { (success, error) in
                 if let error = error, !success

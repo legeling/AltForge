@@ -328,7 +328,10 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         [progress becomeCurrentWithPendingUnitCount:3];
         
         NSError *writeError = nil;
-        if (![self writeDirectory:appBundleURL toDestinationURL:destinationURL client:afc progress:nil error:&writeError])
+        BOOL didWriteApplication = [self writeDirectory:appBundleURL toDestinationURL:destinationURL client:afc progress:nil error:&writeError];
+        [progress resignCurrent];
+
+        if (!didWriteApplication)
         {
             int removeResult = afc_remove_path_and_contents(afc, stagingURL.relativePath.fileSystemRepresentation);
             NSLog(@"Remove staging app result: %@", @(removeResult));
@@ -1667,17 +1670,23 @@ void ALTDeviceManagerUpdateStatus(plist_t command, plist_t status, void *uuid)
     
     char *name = NULL;
     char *description = NULL;
+    char *statusName = NULL;
     uint64_t code = 0;
     instproxy_status_get_error(status, &name, &description, &code);
-    
-    if ((percent == -1 && progress.completedUnitCount > 0) || code != 0 || name != NULL)
+    instproxy_status_get_name(status, &statusName);
+
+    BOOL hasError = (code != 0 || name != NULL);
+    BOOL didComplete = (statusName != NULL && strcmp(statusName, "Complete") == 0);
+    BOOL didCompleteWithoutStatus = (statusName == NULL && percent == -1 && progress.completedUnitCount > 0);
+
+    if (didComplete || didCompleteWithoutStatus || hasError)
     {
         void (^completionHandler)(NSError *) = ALTDeviceManager.sharedManager.installationCompletionHandlers[UUID];
         if (completionHandler != nil)
         {
             NSString *localizedDescription = @(description ?: "");
             
-            if (code != 0 || name != NULL)
+            if (hasError)
             {
                 NSLog(@"Error installing app. %@ (%@). %@", @(code), @(name ?: ""), localizedDescription);
                 
@@ -1707,6 +1716,7 @@ void ALTDeviceManagerUpdateStatus(plist_t command, plist_t status, void *uuid)
             }
             else
             {
+                progress.completedUnitCount = progress.totalUnitCount;
                 NSLog(@"Finished installing app!");
                 completionHandler(nil);
             }
@@ -1721,6 +1731,10 @@ void ALTDeviceManagerUpdateStatus(plist_t command, plist_t status, void *uuid)
         
         NSLog(@"Installation Progress: %@", @(percent));
     }
+
+    free(statusName);
+    free(description);
+    free(name);
 }
 
 void ALTDeviceManagerUpdateAppDeletionStatus(plist_t command, plist_t status, void *uuid)

@@ -23,6 +23,13 @@ class AuthenticationViewController: UIViewController
     
     @IBOutlet private var appleIDBackgroundView: UIView!
     @IBOutlet private var passwordBackgroundView: UIView!
+
+    @IBOutlet private var welcomeTitleLabel: UILabel!
+    @IBOutlet private var welcomeSubtitleLabel: UILabel!
+    @IBOutlet private var appleIDTitleLabel: UILabel!
+    @IBOutlet private var passwordTitleLabel: UILabel!
+    @IBOutlet private var explanationTitleLabel: UILabel!
+    @IBOutlet private var explanationBodyLabel: UILabel!
     
     @IBOutlet private var scrollView: UIScrollView!
     @IBOutlet private var contentStackView: UIStackView!
@@ -30,6 +37,26 @@ class AuthenticationViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
+
+        self.view.backgroundColor = .systemGroupedBackground
+        self.scrollView.indicatorStyle = .default
+
+        self.welcomeTitleLabel.textColor = .label
+        self.welcomeSubtitleLabel.textColor = .secondaryLabel
+        self.appleIDTitleLabel.textColor = .secondaryLabel
+        self.passwordTitleLabel.textColor = .secondaryLabel
+        self.explanationTitleLabel.textColor = .label
+        self.explanationBodyLabel.textColor = .secondaryLabel
+
+        self.appleIDBackgroundView.backgroundColor = .secondarySystemGroupedBackground
+        self.passwordBackgroundView.backgroundColor = .secondarySystemGroupedBackground
+        self.appleIDTextField.textColor = .label
+        self.passwordTextField.textColor = .label
+        self.appleIDTextField.attributedPlaceholder = NSAttributedString(string: self.appleIDTextField.placeholder ?? "",
+                                                                         attributes: [.foregroundColor: UIColor.tertiaryLabel])
+        self.passwordTextField.attributedPlaceholder = NSAttributedString(string: self.passwordTextField.placeholder ?? "",
+                                                                          attributes: [.foregroundColor: UIColor.tertiaryLabel])
+        self.signInButton.backgroundColor = .altPrimary
         
         self.signInButton.activityIndicatorView.style = .medium
         self.signInButton.activityIndicatorView.color = .white
@@ -37,7 +64,7 @@ class AuthenticationViewController: UIViewController
         for view in [self.appleIDBackgroundView!, self.passwordBackgroundView!, self.signInButton!]
         {
             view.clipsToBounds = true
-            view.layer.cornerRadius = 16
+            view.layer.cornerRadius = 14
         }
 
         if UIScreen.main.isExtraCompactHeight

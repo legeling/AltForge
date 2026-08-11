@@ -30,6 +30,11 @@ public extension Source
     }
     
     var effectiveTintColor: UIColor? {
+        if self.identifier == Source.altStoreIdentifier
+        {
+            return .altSourceTint
+        }
+
         return self.tintColor ?? self.apps.first?.tintColor
     }
     

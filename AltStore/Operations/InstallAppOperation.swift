@@ -44,6 +44,8 @@ class InstallAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
             let resignedApp = self.context.resignedApp,
             let connection = self.context.installationConnection
         else { return self.finish(.failure(OperationError.invalidParameters)) }
+
+        self.context.recordDiagnostic(.installingApp, detail: connection.server.connectionType.localizedDiagnosticName)
         
         Logger.sideload.notice("Installing resigned app \(resignedApp.bundleIdentifier, privacy: .public)...")
         

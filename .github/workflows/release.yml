@@ -125,7 +125,7 @@ jobs:
 
       - name: Package macOS application
         run: |
-          app="$RUNNER_TEMP/DerivedData-macOS/Build/Products/Release/AltServer.app"
+          app="$RUNNER_TEMP/DerivedData-macOS/Build/Products/Release/AltForge Server.app"
           test -d "$app"
           Scripts/package_macos_dmg.sh \
             --app "$app" \

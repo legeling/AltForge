@@ -55,7 +55,7 @@ extension FederationManager
             if !isBridged
             {
                 let title = String(localized: "Would you like to bridge your Bluesky account to the fediverse?")
-                let message = String(localized: "This will allow you to like apps in AltStore.")
+                let message = String(localized: "This will allow you to like apps in AltForge.")
                 
                 let bridgeAction = UIAlertAction(title: String(localized: "Bridge Account"), style: .default)
                 let laterAction = UIAlertAction(title: String(localized: "Later"), style: .cancel)

@@ -59,6 +59,82 @@
         }
       }
     },
+    "About AltForge Server" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于 AltForge Server"
+          }
+        }
+      }
+    },
+    "AltForge Server is the macOS companion for AltForge. It downloads, signs, and installs AltForge and other IPA files on your Apple devices." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 是 AltForge 的 macOS 配套程序，用于下载、签名并将 AltForge 和其他 IPA 文件安装到你的 Apple 设备。"
+          }
+        }
+      }
+    },
+    "Documentation" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文档"
+          }
+        }
+      }
+    },
+    "GitHub Repository" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub 仓库"
+          }
+        }
+      }
+    },
+    "Releases" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发行版本"
+          }
+        }
+      }
+    },
+    "Report an Issue" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "报告问题"
+          }
+        }
+      }
+    },
+    "Version %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %1$@ (%2$@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本 %1$@（%2$@）"
+          }
+        }
+      }
+    },
     "AltForge was successfully installed on %@." : {
       "localizations" : {
         "en" : {
@@ -981,12 +1057,12 @@
         }
       }
     },
-    "Saved passwords are stored in this Mac's Keychain." : {
+    "Saved passwords stay in Keychain. macOS may ask for your Mac login password to read them, not your Apple ID password." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已保存的密码会存储在这台 Mac 的钥匙串中。"
+            "value" : "保存的密码只存储在钥匙串中。读取时，macOS 可能会要求输入 Mac 登录密码，而不是 Apple ID 密码。"
           }
         }
       }
@@ -1027,6 +1103,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "取消"
+          }
+        }
+      }
+    },
+    "Close" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
           }
         }
       }
@@ -1979,12 +2065,12 @@
         }
       }
     },
-    "Please deactivate a sideloaded app with AltStore in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit." : {
+    "Please deactivate a sideloaded app with AltForge in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请使用 AltStore 停用一个已侧载的 App，然后再安装其他 App。\n\n如果你运行的是 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App，以免它们被错误计入此限制。"
+            "value" : "请使用 AltForge 停用一个已侧载的 App，然后再安装其他 App。\n\n如果你运行的是 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App，以免它们被错误计入此限制。"
           }
         }
       }
@@ -2205,12 +2291,12 @@
         }
       }
     },
-    "Your device must be running iOS 12.2 or later to install AltStore." : {
+    "Your device must be running iOS 12.2 or later to install AltForge." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设备必须运行 iOS 12.2 或更高版本才能安装 AltStore。"
+            "value" : "设备必须运行 iOS 12.2 或更高版本才能安装 AltForge。"
           }
         }
       }
@@ -2637,10 +2723,16 @@
     },
     "Make sure your computer's date & time matches your iOS device and try again. You may need to re-install AltStore with AltServer if the problem persists." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Make sure your computer's date & time matches your iOS device and try again. You may need to re-install AltForge with AltForge Server if the problem persists."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请确认电脑与 iOS 设备的日期和时间一致，然后重试。如果问题持续存在，可能需要通过 AltServer 重新安装 AltStore。"
+            "value" : "请确认电脑与 iOS 设备的日期和时间一致，然后重试。如果问题持续存在，可能需要通过 AltForge Server 重新安装 AltForge。"
           }
         }
       }

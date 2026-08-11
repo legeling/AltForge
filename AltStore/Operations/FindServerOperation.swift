@@ -47,8 +47,10 @@ class FindServerOperation: ResultOperation<Server>, @unchecked Sendable
             self.finish(.success(server))
             return
         }
+
+        self.context.recordDiagnostic(.findingServer)
         
-        Logger.sideload.notice("Discovering AltServers...")
+        Logger.sideload.notice("Discovering AltForge Servers...")
         
         let notificationCenter = CFNotificationCenterGetDarwinNotifyCenter()
         let observer = Unmanaged.passUnretained(self).toOpaque()
@@ -73,21 +75,21 @@ class FindServerOperation: ResultOperation<Server>, @unchecked Sendable
             }
             else if self.isWiredServerConnectionAvailable
             {
-                Logger.sideload.notice("Found AltServer connected via USB!")
+                Logger.sideload.notice("Found AltForge Server connected via USB!")
                 
                 let server = Server(connectionType: .wired)
                 self.finish(.success(server))
             }
             else if let server = ServerManager.shared.discoveredServers.first(where: { $0.isPreferred })
             {
-                Logger.sideload.notice("Found preferred AltServer! \(server.localizedName ?? "nil", privacy: .public)")
+                Logger.sideload.notice("Found preferred AltForge Server! \(server.localizedName ?? "nil", privacy: .public)")
                 
                 // Preferred server.
                 self.finish(.success(server))
             }
             else if let server = ServerManager.shared.discoveredServers.first
             {
-                Logger.sideload.notice("Found AltServer! \(server.localizedName ?? "nil", privacy: .public)")
+                Logger.sideload.notice("Found AltForge Server! \(server.localizedName ?? "nil", privacy: .public)")
                 
                 // Any available server.
                 self.finish(.success(server))

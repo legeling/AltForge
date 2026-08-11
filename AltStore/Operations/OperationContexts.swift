@@ -15,10 +15,51 @@ import AltSign
 
 import Roxas
 
+enum AppOperationDiagnosticStage: String, Codable
+{
+    case queued
+    case findingServer
+    case authenticating
+    case authenticated
+    case preparingApp
+    case verifyingApp
+    case preparingProfiles
+    case refreshingApp
+    case signingApp
+    case sendingApp
+    case installingApp
+    case completed
+    case failed
+
+    var localizedName: String {
+        switch self
+        {
+        case .queued: return NSLocalizedString("Queued", comment: "App operation diagnostic stage")
+        case .findingServer: return NSLocalizedString("Finding AltForge Server", comment: "App operation diagnostic stage")
+        case .authenticating: return NSLocalizedString("Authenticating Apple ID", comment: "App operation diagnostic stage")
+        case .authenticated: return NSLocalizedString("Authentication Ready", comment: "App operation diagnostic stage")
+        case .preparingApp: return NSLocalizedString("Preparing App", comment: "App operation diagnostic stage")
+        case .verifyingApp: return NSLocalizedString("Verifying App", comment: "App operation diagnostic stage")
+        case .preparingProfiles: return NSLocalizedString("Preparing Provisioning Profiles", comment: "App operation diagnostic stage")
+        case .refreshingApp: return NSLocalizedString("Refreshing App", comment: "App operation diagnostic stage")
+        case .signingApp: return NSLocalizedString("Signing App", comment: "App operation diagnostic stage")
+        case .sendingApp: return NSLocalizedString("Sending App", comment: "App operation diagnostic stage")
+        case .installingApp: return NSLocalizedString("Installing on Device", comment: "App operation diagnostic stage")
+        case .completed: return NSLocalizedString("Completed", comment: "App operation diagnostic stage")
+        case .failed: return NSLocalizedString("Failed", comment: "App operation diagnostic stage")
+        }
+    }
+
+    var isTerminal: Bool {
+        return self == .completed || self == .failed
+    }
+}
+
 class OperationContext
 {
     var server: Server?
     var error: Error?
+    var diagnosticHandler: ((AppOperationDiagnosticStage, String?) -> Void)?
     
     var presentingViewController: UIViewController? {
         get {
@@ -58,6 +99,12 @@ class OperationContext
     convenience init(context: OperationContext)
     {
         self.init(server: context.server, error: context.error, operations: context.operations.allObjects)
+        self.diagnosticHandler = context.diagnosticHandler
+    }
+
+    func recordDiagnostic(_ stage: AppOperationDiagnosticStage, detail: String? = nil)
+    {
+        self.diagnosticHandler?(stage, detail)
     }
 }
 
@@ -78,6 +125,7 @@ class AuthenticatedOperationContext: OperationContext
         self.team = context.team
         self.certificate = context.certificate
         self.authenticationOperation = context.authenticationOperation
+        self.diagnosticHandler = context.diagnosticHandler
     }
 }
 
@@ -86,6 +134,7 @@ class AppOperationContext
 {
     let bundleIdentifier: String
     let authenticatedContext: AuthenticatedOperationContext
+    var diagnosticHandler: ((AppOperationDiagnosticStage, String?) -> Void)?
     
     var app: ALTApplication?
     var provisioningProfiles: [String: ALTProvisioningProfile]?
@@ -113,6 +162,18 @@ class AppOperationContext
     {
         self.bundleIdentifier = bundleIdentifier
         self.authenticatedContext = authenticatedContext
+    }
+
+    func recordDiagnostic(_ stage: AppOperationDiagnosticStage, detail: String? = nil)
+    {
+        if let diagnosticHandler = self.diagnosticHandler
+        {
+            diagnosticHandler(stage, detail)
+        }
+        else
+        {
+            self.authenticatedContext.recordDiagnostic(stage, detail: detail)
+        }
     }
     
     subscript<T>(dynamicMember keyPath: WritableKeyPath<AuthenticatedOperationContext, T>) -> T

@@ -80,7 +80,7 @@ class SourcesViewController: UICollectionViewController
         self.placeholderView.stackView.isLayoutMarginsRelativeArrangement = true
         self.placeholderView.stackView.addArrangedSubview(self.placeholderViewButton)
         
-        var detailText = NSLocalizedString("Sources determine what apps are available in AltStore. The more sources you add, the better your AltStore experience will be.", comment: "")
+        var detailText = NSLocalizedString("Sources determine what apps are available in AltForge. The more sources you add, the better your AltForge experience will be.", comment: "")
         
         if let sources = UserDefaults.shared.recommendedSources, !sources.isEmpty
         {
@@ -362,7 +362,7 @@ private extension SourcesViewController
                 case .failure(OperationError.cancelled): break
                     
                 case .failure(var error as SourceError):
-                    let title = String(format: NSLocalizedString("“%@” could not be added to AltStore.", comment: ""), error.$source.name)
+                    let title = String(format: NSLocalizedString("“%@” could not be added to AltForge.", comment: ""), error.$source.name)
                     error.errorTitle = title
                     self.present(error)
                     

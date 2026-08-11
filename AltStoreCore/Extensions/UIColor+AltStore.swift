@@ -13,6 +13,7 @@ public extension UIColor
     private static let colorBundle = Bundle(for: DatabaseManager.self)
     
     static let altPrimary = UIColor(named: "Primary", in: colorBundle, compatibleWith: nil)!
+    static let altSourceTint = UIColor(named: "SourceTint", in: colorBundle, compatibleWith: nil)!
     static let deltaPrimary = UIColor(named: "DeltaPrimary", in: colorBundle, compatibleWith: nil)
     static let clipPrimary = UIColor(named: "ClipPrimary", in: colorBundle, compatibleWith: nil)
     

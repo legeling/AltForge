@@ -1,6 +1,216 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Authentication Ready" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "认证已就绪"
+          }
+        }
+      }
+    },
+    "Authenticating Apple ID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在认证 Apple ID"
+          }
+        }
+      }
+    },
+    "Completed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完成"
+          }
+        }
+      }
+    },
+    "Copy Diagnostic Report" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制诊断报告"
+          }
+        }
+      }
+    },
+    "Diagnostic ID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "诊断编号"
+          }
+        }
+      }
+    },
+    "Error Code" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误代码"
+          }
+        }
+      }
+    },
+    "Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失败"
+          }
+        }
+      }
+    },
+    "Failure Stage" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失败阶段"
+          }
+        }
+      }
+    },
+    "Finding AltForge Server" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在查找 AltForge Server"
+          }
+        }
+      }
+    },
+    "Installing on Device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在安装到设备"
+          }
+        }
+      }
+    },
+    "On-device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本机"
+          }
+        }
+      }
+    },
+    "Operation Trace" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作轨迹"
+          }
+        }
+      }
+    },
+    "Preparing App" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备 App"
+          }
+        }
+      }
+    },
+    "Preparing Provisioning Profiles" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备描述文件"
+          }
+        }
+      }
+    },
+    "Queued" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已进入队列"
+          }
+        }
+      }
+    },
+    "Refreshing App" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在刷新 App"
+          }
+        }
+      }
+    },
+    "Sending App" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在发送 App"
+          }
+        }
+      }
+    },
+    "Signing App" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在签名 App"
+          }
+        }
+      }
+    },
+    "USB" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB"
+          }
+        }
+      }
+    },
+    "Verifying App" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在验证 App"
+          }
+        }
+      }
+    },
+    "Wi-Fi" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wi-Fi"
+          }
+        }
+      }
+    },
     "“%@” Blocked" : {
       "localizations" : {
         "ja" : {
@@ -23,24 +233,24 @@
         }
       }
     },
-    "“%@” could not be added to AltStore." : {
+    "“%@” could not be added to AltForge." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "「%@」をAltStoreに追加できませんでした。"
+            "value" : "「%@」をAltForgeに追加できませんでした。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“%@” não pôde ser adicionado ao AltStore."
+            "value" : "“%@” não pôde ser adicionado ao AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“%@”无法添加到 AltStore。"
+            "value" : "“%@”无法添加到 AltForge。"
           }
         }
       }
@@ -515,7 +725,7 @@
         }
       }
     },
-    "%@ is not added to AltStore." : {
+    "%@ is not added to AltForge." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -526,13 +736,13 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ não foi adicionado ao AltStore."
+            "value" : "%@ não foi adicionado ao AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 未添加到 AltStore。"
+            "value" : "%@ 未添加到 AltForge。"
           }
         }
       }
@@ -1000,13 +1210,13 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerへの接続が確立できませんでした。"
+            "value" : "AltForge Serverへの接続が確立できませんでした。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Não foi possível estabelecer uma conexão com o AltServer."
+            "value" : "Não foi possível estabelecer uma conexão com o AltForge Server."
           }
         },
         "zh-Hans" : {
@@ -1435,6 +1645,29 @@
         }
       }
     },
+    "AltForge closed before this operation finished, so the result could not be recorded." : {
+      "comment" : "Unexpected termination recovery error",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作が完了する前にAltForgeが終了したため、結果を記録できませんでした。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O AltForge foi encerrado antes do fim da operação, portanto o resultado não pôde ser registrado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 在操作完成前意外关闭，因此未能记录操作结果。"
+          }
+        }
+      }
+    },
     "AltForge does not operate a Patreon campaign. Link an account only to access apps from compatible sources that require a pledge." : {
       "localizations" : {
         "zh-Hans" : {
@@ -1472,13 +1705,13 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerが見つかりませんでした。"
+            "value" : "AltForge Serverが見つかりませんでした。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O AltServer não foi encontrado."
+            "value" : "O AltForge Server não foi encontrado."
           }
         },
         "zh-Hans" : {
@@ -1489,200 +1722,200 @@
         }
       }
     },
-    "AltStore can only install marketplace apps that have been notarized by Apple." : {
+    "AltForge can only install marketplace apps that have been notarized by Apple." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreはAppleによって公証済みのマーケットプレイスアプリのみをインストールできます。"
+            "value" : "AltForgeはAppleによって公証済みのマーケットプレイスアプリのみをインストールできます。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O AltStore só pode instalar apps de marketplace que tenham sido notarizados pela Apple."
+            "value" : "O AltForge só pode instalar apps de marketplace que tenham sido notarizados pela Apple."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 只能安装经过 Apple 公证的市场应用。"
+            "value" : "AltForge 只能安装经过 Apple 公证的市场应用。"
           }
         }
       }
     },
-    "AltStore could not determine this device's UDID." : {
+    "AltForge could not determine this device's UDID." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreはこのデバイスのUDIDを特定できませんでした。"
+            "value" : "AltForgeはこのデバイスのUDIDを特定できませんでした。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O AltStore não conseguiu determinar o UDID deste dispositivo."
+            "value" : "O AltForge não conseguiu determinar o UDID deste dispositivo."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 无法确定该设备的 UDID。"
+            "value" : "AltForge 无法确定该设备的 UDID。"
           }
         }
       }
     },
-    "AltStore does not have detailed information for these entitlements." : {
+    "AltForge does not have detailed information for these entitlements." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreにはこれらのエンタイトルメントに関する詳細情報がありません。"
+            "value" : "AltForgeにはこれらのエンタイトルメントに関する詳細情報がありません。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O AltStore não possui informações detalhadas sobre esses entitlements."
+            "value" : "O AltForge não possui informações detalhadas sobre esses entitlements."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 没有这些权利的详细信息。"
+            "value" : "AltForge 没有这些权利的详细信息。"
           }
         }
       }
     },
-    "AltStore Expiring Soon" : {
+    "AltForge Expiring Soon" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreの期限がまもなく切れます"
+            "value" : "AltForgeの期限がまもなく切れます"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O AltStore irá expirar em breve"
+            "value" : "O AltForge irá expirar em breve"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 即将到期"
+            "value" : "AltForge 即将到期"
           }
         }
       }
     },
-    "AltStore News" : {
+    "AltForge News" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreニュース"
+            "value" : "AltForgeニュース"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Novidades do AltStore"
+            "value" : "Novidades do AltForge"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 新闻"
+            "value" : "AltForge 新闻"
           }
         }
       }
     },
-    "AltStore was denied permission to launch %@." : {
+    "AltForge was denied permission to launch %@." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreは%@を起動する権限を拒否されました。"
+            "value" : "AltForgeは%@を起動する権限を拒否されました。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O AltStore teve a permissão negada para iniciar o %@."
+            "value" : "O AltForge teve a permissão negada para iniciar o %@."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 被拒绝启动 %@ 的权限。"
+            "value" : "AltForge 被拒绝启动 %@ 的权限。"
           }
         }
       }
     },
-    "AltStore was unable to use an existing signing certificate, so it had to create a new one. This will cause any apps installed with an existing certificate to expire — including AltStore.\n\nTo prevent AltStore from expiring early, please refresh the app now. AltStore will quit once refreshing is complete." : {
+    "AltForge was unable to use an existing signing certificate, so it had to create a new one. This will cause any apps installed with an existing certificate to expire — including AltForge.\n\nTo prevent AltForge from expiring early, please refresh the app now. AltForge will quit once refreshing is complete." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreは既存の署名証明書を使用できなかったため、新しい証明書を作成する必要がありました。これにより、既存の証明書でインストールされたアプリ（AltStoreを含む）はすべて期限切れとなります。\n\nAltStoreの早期期限切れを防ぐため、今すぐアプリを更新してください。更新が完了するとAltStoreは終了します。"
+            "value" : "AltForgeは既存の署名証明書を使用できなかったため、新しい証明書を作成する必要がありました。これにより、既存の証明書でインストールされたアプリ（AltForgeを含む）はすべて期限切れとなります。\n\nAltForgeの早期期限切れを防ぐため、今すぐアプリを更新してください。更新が完了するとAltForgeは終了します。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O AltStore não conseguiu usar um certificado de assinatura existente, então precisou criar um novo. Isso fará com que quaisquer apps instalados com um certificado anterior expirem, incluindo o próprio AltStore.\n\nPara evitar que o AltStore expire antes do tempo, atualize o app agora. O AltStore será encerrado assim que a atualização for concluída."
+            "value" : "O AltForge não conseguiu usar um certificado de assinatura existente, então precisou criar um novo. Isso fará com que quaisquer apps instalados com um certificado anterior expirem, incluindo o próprio AltForge.\n\nPara evitar que o AltForge expire antes do tempo, atualize o app agora. O AltForge será encerrado assim que a atualização for concluída."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 无法使用现有签名证书，因此必须创建一个新证书。这将导致使用现有证书安装的任何应用过期 - 包括 AltStore。\n\n为了防止 AltStore 提前过期，请立即刷新应用。刷新完成后，AltStore 将退出。"
+            "value" : "AltForge 无法使用现有签名证书，因此必须创建一个新证书。这将导致使用现有证书安装的任何应用过期 - 包括 AltForge。\n\n为了防止 AltForge 提前过期，请立即刷新应用。刷新完成后，AltForge 将退出。"
           }
         }
       }
     },
-    "AltStore will expire in 24 hours. Open the app and refresh it to prevent it from expiring." : {
+    "AltForge will expire in 24 hours. Open the app and refresh it to prevent it from expiring." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreは24時間後に期限切れになります。期限切れを防ぐにはアプリを開き、更新してください。"
+            "value" : "AltForgeは24時間後に期限切れになります。期限切れを防ぐにはアプリを開き、更新してください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O AltStore expirará em 24 horas. Abra o app e atualize-o para evitar que ele expire."
+            "value" : "O AltForge expirará em 24 horas. Abra o app e atualize-o para evitar que ele expire."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 将在 24 小时后过期。打开应用并刷新以防止其过期。"
+            "value" : "AltForge 将在 24 小时后过期。打开应用并刷新以防止其过期。"
           }
         }
       }
     },
-    "AltStore's shared app group could not be accessed." : {
+    "AltForge's shared app group could not be accessed." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreの共有アプリグループにアクセスできませんでした。"
+            "value" : "AltForgeの共有アプリグループにアクセスできませんでした。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Não foi possível acessar o grupo de apps compartilhado do AltStore."
+            "value" : "Não foi possível acessar o grupo de apps compartilhado do AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 的共享应用组无法访问。"
+            "value" : "AltForge 的共享应用组无法访问。"
           }
         }
       }
@@ -2039,24 +2272,24 @@
         }
       }
     },
-    "Are you sure you want to clear AltStore's cache?" : {
+    "Are you sure you want to clear AltForge's cache?" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreのキャッシュをクリアしてもよろしいですか？"
+            "value" : "AltForgeのキャッシュをクリアしてもよろしいですか？"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tem certeza de que deseja limpar o cache do AltStore?"
+            "value" : "Tem certeza de que deseja limpar o cache do AltForge?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "您确定要清除 AltStore 的缓存吗？"
+            "value" : "您确定要清除 AltForge 的缓存吗？"
           }
         }
       }
@@ -3372,46 +3605,46 @@
         }
       }
     },
-    "Each app and app extension installed with AltStore must register an App ID with Apple.\n\nApp IDs for paid developer accounts never expire, and there is no limit to how many you can create." : {
+    "Each app and app extension installed with AltForge must register an App ID with Apple.\n\nApp IDs for paid developer accounts never expire, and there is no limit to how many you can create." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreでインストールされた各アプリおよびアプリ拡張機能は、AppleにアプリIDを登録する必要があります。\n\n有料の開発者用アカウントのアプリIDには期限がなく、作成数に制限はありません。"
+            "value" : "AltForgeでインストールされた各アプリおよびアプリ拡張機能は、AppleにアプリIDを登録する必要があります。\n\n有料の開発者用アカウントのアプリIDには期限がなく、作成数に制限はありません。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cada app e extensão de app instalada com o AltStore deve registrar um App ID com a Apple.\n\nEm contas de desenvolvedor pagas, os App IDs nunca expiram e não há limite de criação."
+            "value" : "Cada app e extensão de app instalada com o AltForge deve registrar um App ID com a Apple.\n\nEm contas de desenvolvedor pagas, os App IDs nunca expiram e não há limite de criação."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 AltStore 安装的每个应用和应用扩展都必须向 Apple 注册 App ID。\n\n付费开发者账户的 App IDs 永不过期，并且您可以创建的数量没有限制。"
+            "value" : "使用 AltForge 安装的每个应用和应用扩展都必须向 Apple 注册 App ID。\n\n付费开发者账户的 App IDs 永不过期，并且您可以创建的数量没有限制。"
           }
         }
       }
     },
-    "Each app and app extension installed with AltStore must register an App ID with Apple. Apple limits non-developer Apple IDs to 10 App IDs at a time.\n\n**App IDs can't be deleted**, but they do expire after one week. AltStore will automatically renew App IDs for all active apps once they've expired." : {
+    "Each app and app extension installed with AltForge must register an App ID with Apple. Apple limits non-developer Apple IDs to 10 App IDs at a time.\n\n**App IDs can't be deleted**, but they do expire after one week. AltForge will automatically renew App IDs for all active apps once they've expired." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreでインストールされた各アプリおよびアプリ拡張機能は、AppleにアプリIDを登録する必要があります。非開発者用の Apple ID では、同時に作成できるApp IDは最大10件までです。\n\n\n**アプリIDは削除できません**が、1週間後に期限切れとなります。AltStoreは、期限が切れたすべてのアクティブなアプリのアプリIDを自動的に更新します。"
+            "value" : "AltForgeでインストールされた各アプリおよびアプリ拡張機能は、AppleにアプリIDを登録する必要があります。非開発者用の Apple ID では、同時に作成できるApp IDは最大10件までです。\n\n\n**アプリIDは削除できません**が、1週間後に期限切れとなります。AltForgeは、期限が切れたすべてのアクティブなアプリのアプリIDを自動的に更新します。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cada app e extensão de app instalada com o AltStore deve registrar um App ID com a Apple. A Apple limita Apple IDs de não desenvolvedor a 10 App IDs por vez.\n\n**Os App IDs não podem ser excluídos**, mas expiram após uma semana. O AltStore os renovará automaticamente para todos os apps ativos quando expirarem."
+            "value" : "Cada app e extensão de app instalada com o AltForge deve registrar um App ID com a Apple. A Apple limita Apple IDs de não desenvolvedor a 10 App IDs por vez.\n\n**Os App IDs não podem ser excluídos**, mas expiram após uma semana. O AltForge os renovará automaticamente para todos os apps ativos quando expirarem."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 AltStore 安装的每个应用和应用扩展都必须向 Apple 注册 App ID。 Apple 将非开发人员 Apple ID 限制为一次最多 10 个 App IDs。\n\n**App IDs 无法删除**，但它们会在一星期后过期。所有活动应用过期后，AltStore 都会自动续订 App IDs。"
+            "value" : "使用 AltForge 安装的每个应用和应用扩展都必须向 Apple 注册 App ID。 Apple 将非开发人员 Apple ID 限制为一次最多 10 个 App IDs。\n\n**App IDs 无法删除**，但它们会在一星期后过期。所有活动应用过期后，AltForge 都会自动续订 App IDs。"
           }
         }
       }
@@ -3421,13 +3654,13 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerと同じWi-Fiに接続しているときに、バックグラウンドでアプリを自動的に更新するには、バックグラウンド更新を有効にしてください。"
+            "value" : "AltForge Serverと同じWi-Fiに接続しているときに、バックグラウンドでアプリを自動的に更新するには、バックグラウンド更新を有効にしてください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ative a atualização em segundo plano para atualizar automaticamente os apps em segundo plano quando estiver conectado à mesma rede Wi-Fi que o AltServer."
+            "value" : "Ative a atualização em segundo plano para atualizar automaticamente os apps em segundo plano quando estiver conectado à mesma rede Wi-Fi que o AltForge Server."
           }
         },
         "zh-Hans" : {
@@ -3966,24 +4199,24 @@
         }
       }
     },
-    "Failed to Refresh AltStore" : {
+    "Failed to Refresh AltForge" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreの更新に失敗しました"
+            "value" : "AltForgeの更新に失敗しました"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Falha ao atualizar o AltStore"
+            "value" : "Falha ao atualizar o AltForge"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "刷新失败 AltStore"
+            "value" : "刷新失败 AltForge"
           }
         }
       }
@@ -5351,18 +5584,46 @@
         }
       }
     },
-    "Make sure you're on the same Wi-Fi network as a computer running AltForge Server, or try connecting this device to your computer via USB." : {
+    "Make sure your computer's date & time matches your iOS device and try again. You may need to re-install AltStore with AltServer if the problem persists." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Make sure your computer's date & time matches your iOS device and try again. You may need to re-install AltForge with AltForge Server if the problem persists."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerを実行しているコンピュータと同じWi-Fiネットワークに接続していることを確認するか、このデバイスをUSB経由でコンピュータに接続してみてください。"
+            "value" : "コンピュータとiOSデバイスの日付と時刻が一致していることを確認して、もう一度お試しください。問題が解決しない場合は、AltForge ServerでAltForgeを再インストールする必要があります。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verifique se você está na mesma rede Wi-Fi de um computador com o AltServer em execução ou tente conectar este dispositivo ao computador via USB."
+            "value" : "Certifique-se de que a data e hora do computador correspondam às do dispositivo iOS e tente novamente. Se o problema persistir, talvez seja necessário reinstalar o AltForge usando o AltForge Server."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确认电脑与 iOS 设备的日期和时间一致，然后重试。如果问题持续存在，可能需要通过 AltForge Server 重新安装 AltForge。"
+          }
+        }
+      }
+    },
+    "Make sure you're on the same Wi-Fi network as a computer running AltForge Server, or try connecting this device to your computer via USB." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Serverを実行しているコンピュータと同じWi-Fiネットワークに接続していることを確認するか、このデバイスをUSB経由でコンピュータに接続してみてください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifique se você está na mesma rede Wi-Fi de um computador com o AltForge Server em execução ou tente conectar este dispositivo ao computador via USB."
           }
         },
         "zh-Hans" : {
@@ -5886,24 +6147,24 @@
         }
       }
     },
-    "One or more apps in source “%@” are missing a marketplaceID. This most likely means they are not notarized, which is not supported by this version of AltStore." : {
+    "One or more apps in source “%@” are missing a marketplaceID. This most likely means they are not notarized, which is not supported by this version of AltForge." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ソース「%@」内の1つ以上のアプリにマーケットプレイスIDが欠落しています。これはおそらく、アプリが公証されていないことを意味しており、このバージョンのAltStoreではサポートされていません。"
+            "value" : "ソース「%@」内の1つ以上のアプリにマーケットプレイスIDが欠落しています。これはおそらく、アプリが公証されていないことを意味しており、このバージョンのAltForgeではサポートされていません。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Um ou mais apps na fonte “%@” estão sem marketplaceID. Isso provavelmente significa que eles não são notarizados, o que não é compatível com esta versão do AltStore."
+            "value" : "Um ou mais apps na fonte “%@” estão sem marketplaceID. Isso provavelmente significa que eles não são notarizados, o que não é compatível com esta versão do AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "软件源“%@”中的一个或多个应用缺少市场 ID。这很可能意味着它们没有经过公证，此版本的 AltStore 不支持这一点。"
+            "value" : "软件源“%@”中的一个或多个应用缺少市场 ID。这很可能意味着它们没有经过公证，此版本的 AltForge 不支持这一点。"
           }
         }
       }
@@ -6058,6 +6319,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开占位符"
+          }
+        }
+      }
+    },
+    "Open AltForge Server, confirm the device connection, then try again. If the app appears on the Home Screen, remove it before retrying." : {
+      "comment" : "Unexpected termination recovery suggestion",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Serverを開き、デバイス接続を確認してから再試行してください。ホーム画面にアプリがある場合は、削除してから再試行してください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abra o AltForge Server, confirme a conexão do dispositivo e tente novamente. Se o app aparecer na Tela de Início, remova-o antes de repetir."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请打开 AltForge Server，确认设备连接后重试。如果主屏幕上已出现该应用，请先删除再重试。"
           }
         }
       }
@@ -6238,24 +6522,24 @@
         }
       }
     },
-    "Personalize your AltStore experience by choosing an alternate app icon." : {
+    "Personalize your AltForge experience by choosing an alternate app icon." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "代替のアプリアイコンを選択して、AltStoreの体験をカスタマイズします。"
+            "value" : "代替のアプリアイコンを選択して、AltForgeの体験をカスタマイズします。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Personalize sua experiência com o AltStore escolhendo um ícone alternativo para o app."
+            "value" : "Personalize sua experiência com o AltForge escolhendo um ícone alternativo para o app."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "通过选择备用应用图标来个性化您的 AltStore 体验。"
+            "value" : "通过选择备用应用图标来个性化您的 AltForge 体验。"
           }
         }
       }
@@ -6524,24 +6808,24 @@
         }
       }
     },
-    "Receive access to beta versions of AltStore, Delta, and more by becoming a patron." : {
+    "Receive access to beta versions of AltForge, Delta, and more by becoming a patron." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "パトロンになると、AltStoreやDeltaなどのベータ版にアクセスできます。"
+            "value" : "パトロンになると、AltForgeやDeltaなどのベータ版にアクセスできます。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Torne-se um apoiador e receba acesso a versões beta da AltStore, Delta e outros."
+            "value" : "Torne-se um apoiador e receba acesso a versões beta da AltForge, Delta e outros."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "成为订阅会员即可访问 AltStore、Delta 等的测试版。"
+            "value" : "成为订阅会员即可访问 AltForge、Delta 等的测试版。"
           }
         }
       }
@@ -6772,13 +7056,13 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "リモートAltServer%@"
+            "value" : "リモートAltForge Server%@"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer remoto %@"
+            "value" : "AltForge Server remoto %@"
           }
         },
         "zh-Hans" : {
@@ -6833,24 +7117,24 @@
         }
       }
     },
-    "Remove “%@” from AltStore?" : {
+    "Remove “%@” from AltForge?" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreから「%@」を削除しますか？"
+            "value" : "AltForgeから「%@」を削除しますか？"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remover “%@” do AltStore?"
+            "value" : "Remover “%@” do AltForge?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "从 AltStore 中删除“%@”吗？"
+            "value" : "从 AltForge 中删除“%@”吗？"
           }
         }
       }
@@ -7141,24 +7425,24 @@
         }
       }
     },
-    "Sign in with your Apple ID to download apps from AltStore." : {
+    "Sign in with your Apple ID to download apps from AltForge." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreからアプリをダウンロードするには、Apple IDでサインインしてください。"
+            "value" : "AltForgeからアプリをダウンロードするには、Apple IDでサインインしてください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inicie sessão com seu Apple ID para baixar apps no AltStore."
+            "value" : "Inicie sessão com seu Apple ID para baixar apps no AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 Apple ID 登录，从 AltStore 下载应用。"
+            "value" : "使用 Apple ID 登录，从 AltForge 下载应用。"
           }
         }
       }
@@ -7185,24 +7469,24 @@
         }
       }
     },
-    "Sign in with your social web account to like apps, updates, and news items in AltStore." : {
+    "Sign in with your social web account to like apps, updates, and news items in AltForge." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreのアプリ、アップデート、ニュース項目にいいね！するには、ソーシャルウェブアカウントでサインインしてください。"
+            "value" : "AltForgeのアプリ、アップデート、ニュース項目にいいね！するには、ソーシャルウェブアカウントでサインインしてください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Entre com sua conta de rede social para curtir apps, atualizações e novidades no AltStore."
+            "value" : "Entre com sua conta de rede social para curtir apps, atualizações e novidades no AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用您的社交网络账户登录，以喜欢 AltStore 中的应用、更新和新闻项目。"
+            "value" : "使用您的社交网络账户登录，以喜欢 AltForge 中的应用、更新和新闻项目。"
           }
         }
       }
@@ -7361,24 +7645,24 @@
         }
       }
     },
-    "Sources determine what apps are available in AltStore. The more sources you add, the better your AltStore experience will be." : {
+    "Sources determine what apps are available in AltForge. The more sources you add, the better your AltForge experience will be." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ソースによってAltStoreで利用可能なアプリが決まります。ソースを追加すればするほど、AltStoreの体験が向上します。"
+            "value" : "ソースによってAltForgeで利用可能なアプリが決まります。ソースを追加すればするほど、AltForgeの体験が向上します。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "As fontes determinam quais apps estão disponíveis no AltStore. Quanto mais fontes você adicionar, melhor será sua experiência no AltStore."
+            "value" : "As fontes determinam quais apps estão disponíveis no AltForge. Quanto mais fontes você adicionar, melhor será sua experiência no AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "软件源决定 AltStore 中可用的应用。您添加的软件源越多，您的 AltStore 体验就会越好。"
+            "value" : "软件源决定 AltForge 中可用的应用。您添加的软件源越多，您的 AltForge 体验就会越好。"
           }
         }
       }
@@ -7884,13 +8168,13 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServerへの接続が切断されました。"
+            "value" : "AltForge Serverへの接続が切断されました。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A conexão com o AltServer foi interrompida."
+            "value" : "A conexão com o AltForge Server foi interrompida."
           }
         },
         "zh-Hans" : {
@@ -7901,7 +8185,7 @@
         }
       }
     },
-    "The default AltStore source cannot be removed." : {
+    "The default AltForge source cannot be removed." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -7912,13 +8196,13 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A fonte padrão do AltStore não pode ser removida."
+            "value" : "A fonte padrão do AltForge não pode ser removida."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法删除默认的 AltStore 源。"
+            "value" : "无法删除默认的 AltForge 源。"
           }
         }
       }
@@ -8143,46 +8427,46 @@
         }
       }
     },
-    "The more you open AltStore, the more chances it's given to refresh apps in the background." : {
+    "The more you open AltForge, the more chances it's given to refresh apps in the background." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreを起動すればするほど、バックグラウンドでアプリを更新する機会が増えます。"
+            "value" : "AltForgeを起動すればするほど、バックグラウンドでアプリを更新する機会が増えます。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quanto mais você abre o AltStore, mais oportunidades ele tem de atualizar os apps em segundo plano."
+            "value" : "Quanto mais você abre o AltForge, mais oportunidades ele tem de atualizar os apps em segundo plano."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 打开的次数越多，在后台刷新应用的机会就越多。"
+            "value" : "AltForge 打开的次数越多，在后台刷新应用的机会就越多。"
           }
         }
       }
     },
-    "The more you use AltStore, the more often iOS will allow it to refresh apps in the background." : {
+    "The more you use AltForge, the more often iOS will allow it to refresh apps in the background." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreを使用すればするほど、iOSはバックグラウンドでのアプリ更新をより頻繁に許可するようになります。"
+            "value" : "AltForgeを使用すればするほど、iOSはバックグラウンドでのアプリ更新をより頻繁に許可するようになります。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quanto mais você usar o AltStore, com mais frequência o iOS permitirá que ele atualize os apps em segundo plano."
+            "value" : "Quanto mais você usar o AltForge, com mais frequência o iOS permitirá que ele atualize os apps em segundo plano."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "您使用 AltStore 的次数越多，iOS 就越频繁地允许其在后台刷新应用。"
+            "value" : "您使用 AltForge 的次数越多，iOS 就越频繁地允许其在后台刷新应用。"
           }
         }
       }
@@ -8529,68 +8813,68 @@
         }
       }
     },
-    "The source “%@” contains notarized apps, which are not supported by this version of AltStore." : {
+    "The source “%@” contains notarized apps, which are not supported by this version of AltForge." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ソース「%@」には、このバージョンのAltStoreではサポートされていない、公証済みアプリが含まれています。"
+            "value" : "ソース「%@」には、このバージョンのAltForgeではサポートされていない、公証済みアプリが含まれています。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A fonte “%@” contém apps notarizados, que não são compatíveis com esta versão do AltStore."
+            "value" : "A fonte “%@” contém apps notarizados, que não são compatíveis com esta versão do AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "软件源“%@”包含经过公证的应用，此版本的 AltStore 不支持这些应用。"
+            "value" : "软件源“%@”包含经过公证的应用，此版本的 AltForge 不支持这些应用。"
           }
         }
       }
     },
-    "The source “%@” has been blocked by AltStore for security reasons." : {
+    "The source “%@” has been blocked by AltForge for security reasons." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "セキュリティ上の理由により、ソース「%@」はAltStoreによってブロックされました。"
+            "value" : "セキュリティ上の理由により、ソース「%@」はAltForgeによってブロックされました。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A fonte “%@” foi bloqueada pelo AltStore por motivos de segurança."
+            "value" : "A fonte “%@” foi bloqueada pelo AltForge por motivos de segurança."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "出于安全原因，软件源“%@”已被 AltStore 阻止。"
+            "value" : "出于安全原因，软件源“%@”已被 AltForge 阻止。"
           }
         }
       }
     },
-    "The source “%@” is not supported by this version of AltStore." : {
+    "The source “%@” is not supported by this version of AltForge." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ソース「%@」は、このバージョンのAltStoreではサポートされていません。"
+            "value" : "ソース「%@」は、このバージョンのAltForgeではサポートされていません。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A fonte “%@” não é compatível com esta versão do AltStore."
+            "value" : "A fonte “%@” não é compatível com esta versão do AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此版本的 AltStore 不支持软件源“%@”。"
+            "value" : "此版本的 AltForge 不支持软件源“%@”。"
           }
         }
       }
@@ -8639,68 +8923,68 @@
         }
       }
     },
-    "There are no AltStore sources." : {
+    "There are no AltForge sources." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreソースがありません。"
+            "value" : "AltForgeソースがありません。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Não há nenhuma fonte do AltStore."
+            "value" : "Não há nenhuma fonte do AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有 AltStore 源。"
+            "value" : "没有 AltForge 源。"
           }
         }
       }
     },
-    "These are permissions required by “%@” that AltStore does not recognize. Make sure you understand them before continuing." : {
+    "These are permissions required by “%@” that AltForge does not recognize. Make sure you understand them before continuing." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "これらは「%@」に必要な権限ですが、AltStoreでは認識されていません。続行する前に、必ずこれらの権限について理解してください。"
+            "value" : "これらは「%@」に必要な権限ですが、AltForgeでは認識されていません。続行する前に、必ずこれらの権限について理解してください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Estas são permissões exigidas por “%@” que o AltStore não reconhece. Certifique-se de que você as compreenda antes de continuar."
+            "value" : "Estas são permissões exigidas por “%@” que o AltForge não reconhece. Certifique-se de que você as compreenda antes de continuar."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这些是“%@”所需的权限，但 AltStore 无法识别。在继续之前请确保您理解它们。"
+            "value" : "这些是“%@”所需的权限，但 AltForge 无法识别。在继续之前请确保您理解它们。"
           }
         }
       }
     },
-    "These permissions must be declared by the source in order for AltStore to install this app:" : {
+    "These permissions must be declared by the source in order for AltForge to install this app:" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreがこのアプリをインストールするには、ソース側で以下の権限を宣言する必要があります："
+            "value" : "AltForgeがこのアプリをインストールするには、ソース側で以下の権限を宣言する必要があります："
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Para que o AltStore possa instalar este app, a fonte precisa declarar estas permissões:"
+            "value" : "Para que o AltForge possa instalar este app, a fonte precisa declarar estas permissões:"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这些权限必须由软件源声明，以便 AltStore 安装此应用："
+            "value" : "这些权限必须由软件源声明，以便 AltForge 安装此应用："
           }
         }
       }
@@ -8821,46 +9105,46 @@
         }
       }
     },
-    "This jailbreak has an untethered version, which means %@ will never expire — even after 7 days or rebooting the device.\n\nInstalling an untethered jailbreak requires a few extra steps, but AltStore will walk you through the process.\n\nWould you like to continue? " : {
+    "This jailbreak has an untethered version, which means %@ will never expire — even after 7 days or rebooting the device.\n\nInstalling an untethered jailbreak requires a few extra steps, but AltForge will walk you through the process.\n\nWould you like to continue? " : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "この脱獄にはアンテザードバージョンがあります。つまり%@は、7日経過後やデバイスの再起動後でも有効期限が切れることはありません。\n\nアンテザード脱獄のインストールには追加手順が必要ですが、AltStoreがプロセスをご案内します。\n\n続行してもよろしいですか？"
+            "value" : "この脱獄にはアンテザードバージョンがあります。つまり%@は、7日経過後やデバイスの再起動後でも有効期限が切れることはありません。\n\nアンテザード脱獄のインストールには追加手順が必要ですが、AltForgeがプロセスをご案内します。\n\n続行してもよろしいですか？"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este jailbreak possui uma versão untethered, o que significa que %@ nunca expirará — mesmo após 7 dias ou ao reiniciar o dispositivo.\n\nA instalação de um jailbreak untethered requer algumas etapas extras, mas o AltStore irá guiar você durante o processo.\n\nDeseja continuar?"
+            "value" : "Este jailbreak possui uma versão untethered, o que significa que %@ nunca expirará — mesmo após 7 dias ou ao reiniciar o dispositivo.\n\nA instalação de um jailbreak untethered requer algumas etapas extras, mas o AltForge irá guiar você durante o processo.\n\nDeseja continuar?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此越狱工具支持完美越狱，这意味着 %@ 永不过期，即使超过 7 天或设备重启也不受影响。\n\n进行完美越狱需要一些额外步骤，AltStore 会引导你完成整个过程。\n\n要继续吗？"
+            "value" : "此越狱工具支持完美越狱，这意味着 %@ 永不过期，即使超过 7 天或设备重启也不受影响。\n\n进行完美越狱需要一些额外步骤，AltForge 会引导你完成整个过程。\n\n要继续吗？"
           }
         }
       }
     },
-    "This jailbreak is untethered, which means %@ will never expire — even after 7 days or rebooting the device.\n\nInstalling an untethered jailbreak requires a few extra steps, but AltStore will walk you through the process.\n\nWould you like to continue? " : {
+    "This jailbreak is untethered, which means %@ will never expire — even after 7 days or rebooting the device.\n\nInstalling an untethered jailbreak requires a few extra steps, but AltForge will walk you through the process.\n\nWould you like to continue? " : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "この脱獄はアンテザードです。つまり%@は、7日経過後やデバイスの再起動後も期限切れになることはありません。\n\nアンテザード脱獄のインストールには追加手順が必要ですが、AltStoreがプロセスをご案内します。\n\n続行してもよろしいですか？"
+            "value" : "この脱獄はアンテザードです。つまり%@は、7日経過後やデバイスの再起動後も期限切れになることはありません。\n\nアンテザード脱獄のインストールには追加手順が必要ですが、AltForgeがプロセスをご案内します。\n\n続行してもよろしいですか？"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este jailbreak é untethered, o que significa que %@ nunca expirará — mesmo após 7 dias ou ao reiniciar o dispositivo.\n\nA instalação de um jailbreak untethered requer algumas etapas extras, mas o AltStore irá guiar você durante o processo.\n\nDeseja continuar?"
+            "value" : "Este jailbreak é untethered, o que significa que %@ nunca expirará — mesmo após 7 dias ou ao reiniciar o dispositivo.\n\nA instalação de um jailbreak untethered requer algumas etapas extras, mas o AltForge irá guiar você durante o processo.\n\nDeseja continuar?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这是完美越狱，因此 %@ 永不过期，即使超过 7 天或设备重启也不受影响。\n\n安装完美越狱需要一些额外步骤，AltStore 会引导你完成整个过程。\n\n要继续吗？"
+            "value" : "这是完美越狱，因此 %@ 永不过期，即使超过 7 天或设备重启也不受影响。\n\n安装完美越狱需要一些额外步骤，AltForge 会引导你完成整个过程。\n\n要继续吗？"
           }
         }
       }
@@ -8909,24 +9193,24 @@
         }
       }
     },
-    "This will allow you to like apps in AltStore." : {
+    "This will allow you to like apps in AltForge." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "これにより、AltStoreでアプリを「いいね！」できるようになります。"
+            "value" : "これにより、AltForgeでアプリを「いいね！」できるようになります。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Isso permitirá que você curta apps no AltStore."
+            "value" : "Isso permitirá que você curta apps no AltForge."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这将允许您喜欢 AltStore 中的应用。"
+            "value" : "这将允许您喜欢 AltForge 中的应用。"
           }
         }
       }
@@ -8997,24 +9281,24 @@
         }
       }
     },
-    "This will replace any previous backups. Please leave AltStore open until the backup is complete." : {
+    "This will replace any previous backups. Please leave AltForge open until the backup is complete." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "これにより、以前のバックアップがすべて置き換えられます。バックアップが完了するまで、AltStoreを開いたままにしておいてください。"
+            "value" : "これにより、以前のバックアップがすべて置き換えられます。バックアップが完了するまで、AltForgeを開いたままにしておいてください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Isso substituirá quaisquer backups anteriores. Mantenha o AltStore aberto até que o backup seja concluído."
+            "value" : "Isso substituirá quaisquer backups anteriores. Mantenha o AltForge aberto até que o backup seja concluído."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这将替换任何以前的备份。请将 AltStore 保持打开状态，直至备份完成。"
+            "value" : "这将替换任何以前的备份。请将 AltForge 保持打开状态，直至备份完成。"
           }
         }
       }
@@ -9327,24 +9611,24 @@
         }
       }
     },
-    "Unable to Launch AltStore" : {
+    "Unable to Launch AltForge" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStoreを起動できません"
+            "value" : "AltForgeを起動できません"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Não foi possível iniciar o AltStore"
+            "value" : "Não foi possível iniciar o AltForge"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法启动 AltStore"
+            "value" : "无法启动 AltForge"
           }
         }
       }
@@ -10301,13 +10585,13 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "有線AltServer"
+            "value" : "有線AltForge Server"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer via cabo"
+            "value" : "AltForge Server via cabo"
           }
         },
         "zh-Hans" : {
@@ -10626,24 +10910,24 @@
         }
       }
     },
-    "You're signed into Patreon but haven't connected your account with AltStore.\n\nPlease connect your account to download Patreon-exclusive apps." : {
+    "You're signed into Patreon but haven't connected your account with AltForge.\n\nPlease connect your account to download Patreon-exclusive apps." : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Patreonにはサインインしていますが、アカウントがAltStoreと連携されていません。\n\nPatreon限定アプリをダウンロードするには、アカウントを連携してください。"
+            "value" : "Patreonにはサインインしていますが、アカウントがAltForgeと連携されていません。\n\nPatreon限定アプリをダウンロードするには、アカウントを連携してください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Você está conectado ao Patreon, mas ainda não vinculou sua conta ao AltStore.\n\nConecte sua conta para baixar apps exclusivos do Patreon."
+            "value" : "Você está conectado ao Patreon, mas ainda não vinculou sua conta ao AltForge.\n\nConecte sua conta para baixar apps exclusivos do Patreon."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "您已登录 Patreon，但尚未将您的账户与 AltStore 连接。\n\n请连接您的账户以下载 Patreon 专属应用。"
+            "value" : "您已登录 Patreon，但尚未将您的账户与 AltForge 连接。\n\n请连接您的账户以下载 Patreon 专属应用。"
           }
         }
       }
@@ -11200,12 +11484,12 @@
         }
       }
     },
-    "Please deactivate a sideloaded app with AltStore in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit." : {
+    "Please deactivate a sideloaded app with AltForge in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请使用 AltStore 停用一个已侧载的 App，然后再安装其他 App。\n\n如果你运行的是 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App，以免它们被错误计入此限制。"
+            "value" : "请使用 AltForge 停用一个已侧载的 App，然后再安装其他 App。\n\n如果你运行的是 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App，以免它们被错误计入此限制。"
           }
         }
       }
@@ -11416,12 +11700,12 @@
         }
       }
     },
-    "Your device must be running iOS 12.2 or later to install AltStore." : {
+    "Your device must be running iOS 12.2 or later to install AltForge." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设备必须运行 iOS 12.2 或更高版本才能安装 AltStore。"
+            "value" : "设备必须运行 iOS 12.2 或更高版本才能安装 AltForge。"
           }
         }
       }

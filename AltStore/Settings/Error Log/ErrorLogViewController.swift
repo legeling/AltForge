@@ -117,8 +117,9 @@ private extension ErrorLogViewController
             let displayScale = (self.traitCollection.displayScale == 0.0) ? 1.0 : self.traitCollection.displayScale // 0.0 == "unspecified"
             cell.appIconImageView.layer.borderWidth = 1.0 / displayScale
                         
+            let copyActionTitle = nsError.userInfo[ALTDiagnosticTraceErrorKey] == nil ? NSLocalizedString("Copy Error Message", comment: "") : NSLocalizedString("Copy Diagnostic Report", comment: "")
             let menu = UIMenu(title: "", children: [
-                UIAction(title: NSLocalizedString("Copy Error Message", comment: ""), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
+                UIAction(title: copyActionTitle, image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
                     self?.copyErrorMessage(for: loggedError)
                 },
                 UIAction(title: NSLocalizedString("Copy Error Code", comment: ""), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
@@ -269,9 +270,25 @@ private extension ErrorLogViewController
     func copyErrorMessage(for loggedError: LoggedError)
     {
         let nsError = loggedError.error as NSError
-        let errorMessage = [nsError.localizedDescription, nsError.localizedRecoverySuggestion].compactMap { $0 }.joined(separator: "\n\n")
+        var report = [
+            loggedError.localizedFailure,
+            NSLocalizedString("Error Code", comment: "") + ": " + loggedError.error.localizedErrorCode,
+            nsError.localizedDescription,
+            nsError.localizedRecoverySuggestion
+        ].compactMap { $0 }
+
+        let diagnosticFields = [
+            (NSLocalizedString("Diagnostic ID", comment: ""), ALTDiagnosticIDErrorKey),
+            (NSLocalizedString("Failure Stage", comment: ""), ALTDiagnosticStageErrorKey),
+            (NSLocalizedString("Operation Trace", comment: ""), ALTDiagnosticTraceErrorKey)
+        ]
+        for (label, key) in diagnosticFields
+        {
+            guard let value = nsError.userInfo[key] as? String, !value.isEmpty else { continue }
+            report.append(label + ":\n" + value)
+        }
         
-        UIPasteboard.general.string = errorMessage
+        UIPasteboard.general.string = report.joined(separator: "\n\n")
     }
     
     func copyErrorCode(for loggedError: LoggedError)

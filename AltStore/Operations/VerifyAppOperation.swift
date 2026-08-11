@@ -57,6 +57,8 @@ class VerifyAppOperation: ResultOperation<Void>, @unchecked Sendable
             {
                 throw error
             }
+
+            self.context.recordDiagnostic(.verifyingApp)
             
             let appName = self.context.app?.name ?? NSLocalizedString("The app", comment: "")
             self.localizedFailure = String(format: NSLocalizedString("%@ could not be installed.", comment: ""), appName)

@@ -40,8 +40,10 @@ class SendAppOperation: ResultOperation<ServerConnection>, @unchecked Sendable
         }
         
         guard let resignedApp = self.context.resignedApp, let server = self.context.server else { return self.finish(.failure(OperationError.invalidParameters)) }
+
+        self.context.recordDiagnostic(.sendingApp, detail: server.connectionType.localizedDiagnosticName)
         
-        Logger.sideload.notice("Sending app \(self.context.bundleIdentifier, privacy: .public) to AltServer \(server.localizedName ?? "nil", privacy: .public)...")
+        Logger.sideload.notice("Sending app \(self.context.bundleIdentifier, privacy: .public) to AltForge Server \(server.localizedName ?? "nil", privacy: .public)...")
         
         // self.context.resignedApp.fileURL points to the app bundle, but we want the .ipa.
         let app = AnyApp(name: resignedApp.name, bundleIdentifier: self.context.bundleIdentifier, url: resignedApp.fileURL, storeApp: nil)
@@ -107,11 +109,11 @@ private extension SendAppOperation
                             switch result
                             {
                             case .failure(let error):
-                                Logger.sideload.error("Failed to send app to AltServer \(connection.server.localizedName ?? "nil", privacy: .public). \(error.localizedDescription, privacy: .public)")
+                                Logger.sideload.error("Failed to send app to AltForge Server \(connection.server.localizedName ?? "nil", privacy: .public). \(error.localizedDescription, privacy: .public)")
                                 completionHandler(.failure(error))
                                 
                             case .success:
-                                Logger.sideload.notice("Finished sending app to AltServer \(connection.server.localizedName ?? "nil", privacy: .public)!")
+                                Logger.sideload.notice("Finished sending app to AltForge Server \(connection.server.localizedName ?? "nil", privacy: .public)!")
                                 completionHandler(.success(()))
                             }
                         }

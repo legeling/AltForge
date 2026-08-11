@@ -37,6 +37,99 @@ private let session: URLSession = {
     return session
 }()
 
+private final class ReleaseDownloadTransfer: NSObject, URLSessionDownloadDelegate, URLSessionTaskDelegate
+{
+    typealias ProgressHandler = (_ completedBytes: Int64, _ totalBytes: Int64?) -> Void
+    typealias CompletionHandler = (_ fileURL: URL?, _ response: URLResponse?, _ error: Error?) -> Void
+
+    private let request: URLRequest
+    private let progressHandler: ProgressHandler
+    private var completionHandler: CompletionHandler?
+    private var session: URLSession!
+    private var task: URLSessionDownloadTask?
+    private var downloadedFileURL: URL?
+    private var fileError: Error?
+
+    init(request: URLRequest, progressHandler: @escaping ProgressHandler, completionHandler: @escaping CompletionHandler)
+    {
+        self.request = request
+        self.progressHandler = progressHandler
+        self.completionHandler = completionHandler
+        super.init()
+
+        let configuration = URLSessionConfiguration.default
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        configuration.urlCache = nil
+        configuration.timeoutIntervalForRequest = 45
+        configuration.timeoutIntervalForResource = 600
+
+        let delegateQueue = OperationQueue()
+        delegateQueue.maxConcurrentOperationCount = 1
+        delegateQueue.qualityOfService = .utility
+        self.session = URLSession(configuration: configuration, delegate: self, delegateQueue: delegateQueue)
+    }
+
+    func start()
+    {
+        guard self.task == nil else { return }
+        let task = self.session.downloadTask(with: self.request)
+        self.task = task
+        task.resume()
+    }
+
+    func cancel()
+    {
+        self.task?.cancel()
+        self.session.invalidateAndCancel()
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    )
+    {
+        let totalBytes = totalBytesExpectedToWrite > 0 ? totalBytesExpectedToWrite : nil
+        self.progressHandler(max(totalBytesWritten, 0), totalBytes)
+    }
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL)
+    {
+        let destinationURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("download")
+
+        do
+        {
+            try FileManager.default.moveItem(at: location, to: destinationURL)
+            self.downloadedFileURL = destinationURL
+        }
+        catch
+        {
+            self.fileError = error
+        }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)
+    {
+        let completionHandler = self.completionHandler
+        self.completionHandler = nil
+        self.task = nil
+        session.finishTasksAndInvalidate()
+
+        let finalError = self.fileError ?? error
+        if finalError != nil, let downloadedFileURL = self.downloadedFileURL
+        {
+            try? FileManager.default.removeItem(at: downloadedFileURL)
+            self.downloadedFileURL = nil
+        }
+
+        completionHandler?(self.downloadedFileURL, task.response, finalError)
+    }
+}
+
 private final class ProgressObservationHolder
 {
     var observation: NSKeyValueObservation?
@@ -493,8 +586,7 @@ private extension ALTDeviceManager
         let stateLock = NSLock()
         var generation = 0
         var isFinished = false
-        var currentTask: URLSessionDownloadTask?
-        var currentObservation: NSKeyValueObservation?
+        var currentTransfer: ReleaseDownloadTransfer?
 
         func isCurrent(_ expectedGeneration: Int) -> Bool
         {
@@ -513,14 +605,11 @@ private extension ALTDeviceManager
             }
             isFinished = true
             generation += 1
-            let task = currentTask
-            let observation = currentObservation
-            currentTask = nil
-            currentObservation = nil
+            let transfer = currentTransfer
+            currentTransfer = nil
             stateLock.unlock()
 
-            observation?.invalidate()
-            task?.cancel()
+            transfer?.cancel()
             downloadControl.finish()
             completionHandler(result)
         }
@@ -547,73 +636,18 @@ private extension ALTDeviceManager
 
             var request = URLRequest(url: candidate.url)
             request.timeoutInterval = 45
-            var downloadTask: URLSessionDownloadTask!
-            downloadTask = session.downloadTask(with: request) { fileURL, response, error in
-                guard isCurrent(expectedGeneration) else { return }
-
-                stateLock.lock()
-                guard !isFinished, generation == expectedGeneration, currentTask === downloadTask else
-                {
-                    stateLock.unlock()
-                    return
-                }
-                let completedObservation = currentObservation
-                currentTask = nil
-                currentObservation = nil
-                stateLock.unlock()
-                completedObservation?.invalidate()
-
-                do
-                {
-                    if let response = response as? HTTPURLResponse
-                    {
-                        guard (200..<300).contains(response.statusCode) else {
-                            throw CocoaError(.fileReadUnknown, userInfo: [NSURLErrorKey: candidate.url])
-                        }
-                    }
-
-                    let (fileURL, _) = try Result((fileURL, response), error).get()
-                    defer { try? FileManager.default.removeItem(at: fileURL) }
-
-                    if let integrity
-                    {
-                        let fileSize = try fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize.map(Int64.init) ?? -1
-                        guard fileSize == integrity.size,
-                              try self.sha256(of: fileURL) == integrity.sha256
-                        else
-                        {
-                            throw CocoaError(.fileReadCorruptFile, userInfo: [NSURLErrorKey: candidate.url])
-                        }
-                    }
-
-                    guard isCurrent(expectedGeneration) else { return }
-                    progressHandler(ALTInstallationProgressUpdate(
-                        stage: .downloading,
-                        fractionCompleted: 1,
-                        usesMirror: candidate.usesMirror,
-                        completedBytes: integrity?.size,
-                        totalBytes: integrity?.size,
-                        downloadSourceTitle: candidate.source.title
-                    ))
-                    finish(.success(fileURL), expectedGeneration: expectedGeneration)
-                }
-                catch
-                {
-                    guard isCurrent(expectedGeneration) else { return }
-                    attempt(sequence, index: index + 1, expectedGeneration: expectedGeneration, previousError: error)
-                }
-            }
 
             let speedLock = NSLock()
             let startedAt = ProcessInfo.processInfo.systemUptime
             var lastSampleTime = startedAt
+            var lastProgressReportTime = startedAt
             var lastCompletedBytes: Int64 = 0
             var smoothedBytesPerSecond: Double?
-            let observation = downloadTask.progress.observe(\.completedUnitCount, options: [.initial, .new]) { progress, _ in
+            var transfer: ReleaseDownloadTransfer!
+            transfer = ReleaseDownloadTransfer(request: request, progressHandler: { completedBytes, expectedBytes in
                 guard isCurrent(expectedGeneration) else { return }
 
-                let completedBytes = max(progress.completedUnitCount, 0)
-                let totalBytes = integrity?.size ?? (progress.totalUnitCount > 0 ? progress.totalUnitCount : nil)
+                let totalBytes = integrity?.size ?? expectedBytes
                 let now = ProcessInfo.processInfo.systemUptime
 
                 speedLock.lock()
@@ -628,8 +662,15 @@ private extension ALTDeviceManager
                 }
                 let averageSpeed = now > startedAt ? Double(completedBytes) / (now - startedAt) : nil
                 let bytesPerSecond = smoothedBytesPerSecond ?? averageSpeed
+                let didFinishTransfer = totalBytes.map { completedBytes >= $0 } ?? false
+                let shouldReportProgress = didFinishTransfer || now - lastProgressReportTime >= 0.1
+                if shouldReportProgress
+                {
+                    lastProgressReportTime = now
+                }
                 speedLock.unlock()
 
+                guard shouldReportProgress else { return }
                 let fractionCompleted = totalBytes.flatMap { $0 > 0 ? min(Double(completedBytes) / Double($0), 1) : nil }
                 progressHandler(ALTInstallationProgressUpdate(
                     stage: .downloading,
@@ -640,20 +681,74 @@ private extension ALTDeviceManager
                     bytesPerSecond: bytesPerSecond,
                     downloadSourceTitle: candidate.source.title
                 ))
-            }
+            }, completionHandler: { fileURL, response, error in
+                guard isCurrent(expectedGeneration) else
+                {
+                    if let fileURL { try? FileManager.default.removeItem(at: fileURL) }
+                    return
+                }
+
+                stateLock.lock()
+                guard !isFinished, generation == expectedGeneration, currentTransfer === transfer else
+                {
+                    stateLock.unlock()
+                    if let fileURL { try? FileManager.default.removeItem(at: fileURL) }
+                    return
+                }
+                currentTransfer = nil
+                stateLock.unlock()
+
+                do
+                {
+                    if let response = response as? HTTPURLResponse
+                    {
+                        guard (200..<300).contains(response.statusCode) else {
+                            throw CocoaError(.fileReadUnknown, userInfo: [NSURLErrorKey: candidate.url])
+                        }
+                    }
+
+                    let (fileURL, _) = try Result((fileURL, response), error).get()
+                    defer { try? FileManager.default.removeItem(at: fileURL) }
+                    let fileSize = try fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize.map(Int64.init) ?? -1
+
+                    if let integrity
+                    {
+                        guard fileSize == integrity.size,
+                              try self.sha256(of: fileURL) == integrity.sha256
+                        else
+                        {
+                            throw CocoaError(.fileReadCorruptFile, userInfo: [NSURLErrorKey: candidate.url])
+                        }
+                    }
+
+                    guard isCurrent(expectedGeneration) else { return }
+                    progressHandler(ALTInstallationProgressUpdate(
+                        stage: .downloading,
+                        fractionCompleted: 1,
+                        usesMirror: candidate.usesMirror,
+                        completedBytes: max(fileSize, 0),
+                        totalBytes: fileSize > 0 ? fileSize : integrity?.size,
+                        downloadSourceTitle: candidate.source.title
+                    ))
+                    finish(.success(fileURL), expectedGeneration: expectedGeneration)
+                }
+                catch
+                {
+                    guard isCurrent(expectedGeneration) else { return }
+                    attempt(sequence, index: index + 1, expectedGeneration: expectedGeneration, previousError: error)
+                }
+            })
 
             stateLock.lock()
             guard !isFinished, generation == expectedGeneration else
             {
                 stateLock.unlock()
-                observation.invalidate()
-                downloadTask.cancel()
+                transfer.cancel()
                 return
             }
-            currentTask = downloadTask
-            currentObservation = observation
+            currentTransfer = transfer
             stateLock.unlock()
-            downloadTask.resume()
+            transfer.start()
         }
 
         func start(_ selectedIdentifier: String)
@@ -670,14 +765,11 @@ private extension ALTDeviceManager
             }
             generation += 1
             let expectedGeneration = generation
-            let task = currentTask
-            let observation = currentObservation
-            currentTask = nil
-            currentObservation = nil
+            let transfer = currentTransfer
+            currentTransfer = nil
             stateLock.unlock()
 
-            observation?.invalidate()
-            task?.cancel()
+            transfer?.cancel()
             downloadControl.configure(sources: availableSources, selectedIdentifier: selectedIdentifier)
             attempt(sequence, index: 0, expectedGeneration: expectedGeneration)
         }
@@ -1247,7 +1339,7 @@ private extension ALTDeviceManager
                             dispatchGroup.enter()
                             
                             // Not all characters are allowed in group names, so we replace periods with spaces (like Apple does).
-                            let name = "AltStore " + groupIdentifier.replacingOccurrences(of: ".", with: " ")
+                            let name = "AltForge " + groupIdentifier.replacingOccurrences(of: ".", with: " ")
                             
                             ALTAppleAPI.shared.addAppGroup(withName: name, groupIdentifier: adjustedGroupIdentifier, team: team, session: session) { (group, error) in
                                 switch Result(group, error)

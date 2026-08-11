@@ -6,7 +6,7 @@ usage() {
   cat <<'EOF'
 Usage: Scripts/package_macos_dmg.sh --app PATH --output PATH [--ad-hoc-sign]
 
-Packages AltServer.app in a compressed DMG with an Applications shortcut.
+Packages AltForge Server.app in a compressed DMG with an Applications shortcut.
 Use --ad-hoc-sign to seal the complete app bundle without claiming a Developer ID identity.
 EOF
 }
@@ -73,7 +73,7 @@ if [[ "$ad_hoc_sign" == true ]]; then
 fi
 
 hdiutil create \
-  -volname "AltForge AltServer" \
+  -volname "AltForge Server" \
   -srcfolder "$staging_root" \
   -format UDZO \
   -imagekey zlib-level=9 \

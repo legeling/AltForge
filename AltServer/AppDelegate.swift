@@ -84,6 +84,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let pluginManager = PluginManager()
     private let appleIDCredentialStore = AppleIDCredentialStore()
+    private let aboutWindowController = AboutWindowController()
     private var activeInstallations = [String: ActiveInstallation]()
     private static let languagePreferenceKey = "AltForgePreferredLanguage"
     
@@ -600,10 +601,8 @@ private extension AppDelegate
                 switch result
                 {
                 case .success(let application):
-                    finishActiveInstallation()
-                    progressController.update(ALTInstallationProgressUpdate(stage: .completed, fractionCompleted: 1))
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        progressController.closeProgressWindow()
+                    progressController.showCompletion {
+                        finishActiveInstallation()
                     }
 
                     let content = UNMutableNotificationContent()
@@ -811,20 +810,7 @@ private extension AppDelegate
     
     @IBAction private func showAboutPanel(_ sender: NSMenuItem)
     {
-        var options: [NSApplication.AboutPanelOptionKey: Any] = [
-            .applicationName: NSLocalizedString("AltForge Server", comment: "")
-        ]
-        
-        if #available(macOS 12, *)
-        {
-            let creditText = NSLocalizedString("AltForge Server is maintained by the AltForge contributors and builds on the AltStore and pymobiledevice3 communities. AltForge is distributed under the GNU AGPL v3.0 license.", comment: "")
-            var credits = try! AttributedString(markdown: creditText)
-            credits.font = .systemFont(ofSize: NSFont.smallSystemFontSize) // YOLO ignore Sendable warning.
-            options[.credits] = NSAttributedString(credits)
-        }
-                
-        NSApplication.shared.orderFrontStandardAboutPanel(options: options)
-        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+        self.aboutWindowController.show()
     }
 }
 

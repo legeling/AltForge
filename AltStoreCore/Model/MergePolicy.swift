@@ -402,7 +402,7 @@ open class MergePolicy: RSTRelationshipPreservingMergePolicy
                 }
                 catch
                 {
-                    let nsError = error.serialized(withFailure: NSLocalizedString("AltStore's database could not be saved.", comment: ""))
+                    let nsError = error.serialized(withFailure: NSLocalizedString("AltForge's database could not be saved.", comment: ""))
                     throw nsError
                 }
                 

@@ -53,7 +53,7 @@ extension LaunchViewController
         }
         catch let error as NSError
         {
-            let title = error.userInfo[NSLocalizedFailureErrorKey] as? String ?? NSLocalizedString("Unable to Launch AltStore", comment: "")
+            let title = error.userInfo[NSLocalizedFailureErrorKey] as? String ?? NSLocalizedString("Unable to Launch AltForge", comment: "")
             
             let errorDescription: String
             
