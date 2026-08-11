@@ -240,24 +240,46 @@ jobs:
             "${cdn_args[@]}" \
             "${previous_args[@]}"
 
-      - name: Create draft GitHub Release
+      - name: Publish GitHub Release assets
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           cd "$RUNNER_TEMP/Artifacts"
           sha256sum --check SHA256SUMS.txt
-          gh release create "$GITHUB_REF_NAME" \
-            AltForge.ipa \
-            AltForge-AltServer-macOS.dmg \
-            AltForge-AltServer-Windows.zip \
-            apps.json \
-            flags.json \
-            sources.json \
-            recommended-sources.json \
-            developerdisks.json \
-            SHA256SUMS.txt \
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" \
+              AltForge.ipa \
+              AltForge-AltServer-macOS.dmg \
+              AltForge-AltServer-Windows.zip \
+              apps.json \
+              flags.json \
+              sources.json \
+              recommended-sources.json \
+              developerdisks.json \
+              SHA256SUMS.txt \
+              --repo "$GITHUB_REPOSITORY" \
+              --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              AltForge.ipa \
+              AltForge-AltServer-macOS.dmg \
+              AltForge-AltServer-Windows.zip \
+              apps.json \
+              flags.json \
+              sources.json \
+              recommended-sources.json \
+              developerdisks.json \
+              SHA256SUMS.txt \
+              --repo "$GITHUB_REPOSITORY" \
+              --verify-tag \
+              --generate-notes \
+              --draft \
+              --title "AltForge $GITHUB_REF_NAME"
+          fi
+
+          mkdir -p "$RUNNER_TEMP/Published"
+          gh release download "$GITHUB_REF_NAME" \
             --repo "$GITHUB_REPOSITORY" \
-            --verify-tag \
-            --generate-notes \
-            --draft \
-            --title "AltForge $GITHUB_REF_NAME"
+            --dir "$RUNNER_TEMP/Published"
+          cd "$RUNNER_TEMP/Published"
+          sha256sum --check SHA256SUMS.txt

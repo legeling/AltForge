@@ -188,6 +188,9 @@ assert(!workflow.match?(/^\s*branches:/), "release workflow must not run for bra
 prepare_job = workflow[/^  prepare:.*?^  apple:/m]
 assert(prepare_job&.include?("submodules: recursive"), "release prepare job must check out submodules before repository policy validation")
 assert(workflow.include?("--draft"), "release workflow must create a draft release")
+assert(workflow.include?('gh release upload "$GITHUB_REF_NAME"'), "an explicitly re-pushed release tag must replace assets through the release workflow")
+assert(workflow.include?("--clobber"), "same-tag recovery must replace every reviewed release asset")
+assert(!workflow.include?("gh release delete"), "same-tag recovery must not delete the public release")
 assert(workflow.include?("vcpkg_baseline: ${{ steps.version.outputs.vcpkg_baseline }}"), "prepare must expose the manifest vcpkg baseline")
 assert(workflow.include?("ref: ${{ needs.prepare.outputs.vcpkg_baseline }}"), "Windows must check out the manifest vcpkg baseline")
 
@@ -229,6 +232,7 @@ assert(workflow.include?("Scripts/package_macos_dmg.sh"), "release workflow must
 assert(workflow.match?(/package_macos_dmg\.sh.*?--ad-hoc-sign/m), "release workflow must seal the full app bundle for ServiceManagement login items")
 assert(workflow.include?("Scripts/verify_apple_release_artifacts.sh"), "release workflow must verify packaged Apple artifacts")
 assert(workflow.include?("sha256sum --check SHA256SUMS.txt"), "release workflow must verify generated checksums before creating the Draft")
+assert(workflow.scan("sha256sum --check SHA256SUMS.txt").length == 2, "release workflow must verify both local and downloaded release assets")
 assert(workflow.match?(/gh release create "\$GITHUB_REF_NAME".*?--repo "\$GITHUB_REPOSITORY"/m), "Draft creation must identify the repository after entering the artifact directory")
 assert(workflow.include?("testALTApplicationIgnoresMalformedOptionalMetadata"), "release CI must run the malformed IPA metadata regression")
 assert(workflow.include?("testThemePreferenceDefaultsAndRoundTrips"), "release CI must run the theme preference regression")

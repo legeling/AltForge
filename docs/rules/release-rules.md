@@ -10,6 +10,7 @@
 - 核对 Classic/Marketplace 形态、bundle/version、最低系统、entitlement、submodule gitlink 和 dependency lockfile。
 - 运行 release 所需 build/test、artifact smoke test 和 checksum 验证；签名、notarization、真实设备安装等未执行项必须明确披露。
 - 标签 workflow 只能创建 Draft Release。维护者必须下载 Draft 资产、执行 checksum 复核并审阅安装说明与已知风险，之后才可人工公开发布。
+- 已公开 tag 只有在维护者明确授权同版本紧急替换时才可 force 更新；workflow 必须重新构建全部平台产物、更新 metadata/checksum、原位覆盖同名资产并重新下载校验，禁止先删除公开 Release 或只手工替换 IPA。
 - Apple job 必须在上传前验证 IPA Payload、DMG image/Applications link、bundle identity、版本/build number、arm64+x86_64 架构和当前签名策略；publish job 必须在创建 Draft 前重新执行 `SHA256SUMS.txt` 校验。
 - Release notes 只描述实际交付行为，区分新功能、修复、兼容限制、升级/回滚步骤和已知风险。
 
@@ -25,6 +26,6 @@
 ## 权限与回滚
 
 - 创建/推送 tag、触发发布、上传或删除 artifact、修改 source feed 均需要用户明确授权。
-- 发布失败时停止后续步骤，保留可诊断日志并清理临时凭据/产物；禁止对同一 tag 静默换包。
+- 发布失败时停止后续步骤，保留可诊断日志并清理临时凭据/产物；禁止对同一 tag 静默换包。同版本紧急替换必须保留旧 commit、run 和 checksum 审计记录。
 - 已发布版本需要撤回时，记录原因、影响、替代版本和用户操作；Git 历史与 release 页面处理必须可审计。
 - 发布后新增 `docs/releases/vx.y.z.md`，同步 change/issue 状态并验证下载链接与 checksum。
