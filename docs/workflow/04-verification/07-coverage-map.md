@@ -19,7 +19,7 @@
 | Release source history | `FR-022` | `DES-012` | `TEST-022` | Metadata fixture covers pinned URL, merge, de-duplication and 20-version bound | `T-014` |
 | Remote configuration | `FR-023` | `DES-012` | `TEST-023` | Safe JSON defaults and Classic repository endpoints automated | `T-014` |
 | Update and user identity | `FR-016`, `FR-024` | `DES-012` | `TEST-024` | Static contract, iOS targeted tests/build and macOS arm64 Release build pass; manual navigation and Windows build pending | `T-014` |
-| macOS DMG | `FR-025` | `DES-013` | `TEST-025` | Shared packager/static contract and local Universal image/mount/bundle checks pass; CI artifact/checksum gates defined; Finder launch, real tag run and Developer ID/notarization pending | `T-015` |
+| macOS DMG | `FR-025` | `DES-013` | `TEST-025` | Shared packager/static contract and local Universal package/mount/signature smoke cover writable staging and fail-closed persistence; final 520 × 300 hidden-chrome screenshot and user visual review pass; real tag run and Developer ID/notarization pending | `T-015` |
 | macOS desktop identity/settings | `FR-026`, `FR-027` | `DES-014` | `TEST-026` | Public product/executable, internal module, expanded About/GitHub links, inline settings/install-icon/SMAppService/restart static contract and clean Debug build plus prior Universal Release, iOS Simulator and preview DMG checks pass; system login-item prompt and full USB/Wi-Fi/language/update UI matrix pending | `T-016` |
 | Network ownership | `FR-028` | `DES-015` | `TEST-027` | Repository contract、JSON/plist validation、iOS/macOS builds pass; Windows static coverage only | `T-017` |
 | macOS Apple ID credentials and certificate ownership | `FR-029`, `FR-030` | `DES-016` | `TEST-028`, `TEST-029` | Static contract and macOS build cover single-read credential snapshot, account-type metadata and managed-certificate filtering; sanitized mock UI passed, real authentication/certificate/device matrix pending | `T-018` |
@@ -28,7 +28,8 @@
 | iOS main navigation | `FR-033` | `DES-019` | `TEST-032` | Repository contract、storyboard compile、iOS build 和临时 simulator 四标签检查通过；source 详情资讯手工 fixture 待补 | `T-021` |
 | iOS brand and settings | `FR-034` | `DES-020` | `TEST-033` | Repository contract、storyboard 编译、iOS build 和 iOS 26.5 深浅色 simulator 已覆盖图标、颜色、版本与归属；真机视觉矩阵待补 | `T-022` |
 | iOS public identity | `FR-035` | `DES-021` | `TEST-034` | Repository contract、iOS build/build-for-testing 和产物检查覆盖 bundle/executable/test host、Universal Mach-O 与公开资源 allowlist；系统 crash-report 标题待真机手工确认 | `T-023` |
-| iOS install crash, diagnostics and authentication | `FR-036` | `DES-022` | `TEST-035` | 重复 crash report 已定位；有界脱敏阶段轨迹、复制诊断报告、repository contract、iOS build、简体中文工作原理 UI 和 6 轮 Settings/My Apps simulator 往返纳入回归；诊断日志 runtime 与第三方 IPA 真机 E2E 待验证 | `T-024` |
+| iOS install crash, diagnostics and authentication | `FR-036` | `DES-022` | `TEST-035` | 第二轮真机反馈推翻首轮完成结论；固定白字、无结果 precondition、畸形 plist 类型访问、原子 operation journal 和前台 checkpoint 已纳入修复与回归，repository contract 与 iOS/macOS Release build 通过；runtime fixture、深浅色 UI 与第三方 IPA 真机 E2E 待验证 | `T-024` |
+| iOS theme colors | `FR-037` | `DES-023` | `TEST-036` | Forge Red default、four-value preference/fallback、localized swatch picker、dynamic primary/source tint and release metadata are covered by XCTest/static contracts, resource parsing and a full Release-iphoneos build; light/dark visual matrix pending | `T-025` |
 
 ## 风险排序
 

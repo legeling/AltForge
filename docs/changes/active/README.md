@@ -18,5 +18,6 @@
 | [`CHG-20260810-004`](CHG-20260810-004-resilient-macos-installation/README.md) | macOS 可见安装进度与可靠 Release 下载 | In progress |
 | [`CHG-20260810-005`](CHG-20260810-005-ios-app-group-migration-fallback/README.md) | iOS App Group 迁移降级修复 | In progress |
 | [`CHG-20260811-004`](CHG-20260811-004-ios-install-crash-diagnostics-authentication/README.md) | iOS 安装中断崩溃、恢复日志与认证说明 | In progress / device E2E pending |
+| [`CHG-20260811-006`](CHG-20260811-006-ios-theme-color-selection/README.md) | iOS 主题色选择与默认品牌色 | Release build passed / visual matrix pending |
 
 已完成工作不得继续留在这里；完成 converge 后移动到 `completed/YYYY/MM/`，被放弃或替代时移动到 `legacy/YYYY/MM/`。

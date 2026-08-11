@@ -18,6 +18,7 @@
 | [`CHG-20260810-004`](active/CHG-20260810-004-resilient-macos-installation/README.md) | macOS 可见安装进度与可靠 Release 下载 | In progress |
 | [`CHG-20260810-005`](active/CHG-20260810-005-ios-app-group-migration-fallback/README.md) | iOS App Group 迁移降级修复 | In progress |
 | [`CHG-20260811-004`](active/CHG-20260811-004-ios-install-crash-diagnostics-authentication/README.md) | iOS 安装中断崩溃、恢复日志与认证说明 | In progress / device E2E pending |
+| [`CHG-20260811-006`](active/CHG-20260811-006-ios-theme-color-selection/README.md) | iOS 主题色选择与默认品牌色 | Release build passed / visual matrix pending |
 
 ## Completed
 
@@ -37,6 +38,7 @@
 | [`CHG-20260811-001`](completed/2026/08/CHG-20260811-001-ios-main-navigation/README.md) | 移除 iOS 聚合资讯页并收敛主导航 | 2026-08-11 |
 | [`CHG-20260811-002`](completed/2026/08/CHG-20260811-002-ios-brand-settings-polish/README.md) | 收敛 iOS 品牌、配色与设置身份 | 2026-08-11 |
 | [`CHG-20260811-003`](completed/2026/08/CHG-20260811-003-ios-public-identity-crash-name/README.md) | 修复 iOS 系统崩溃报告与公开品牌残留 | 2026-08-11 |
+| [`CHG-20260811-005`](completed/2026/08/CHG-20260811-005-macos-dmg-finder-layout/README.md) | 收敛 macOS DMG Finder 布局 | 2026-08-11 |
 
 ## 记录要求
 

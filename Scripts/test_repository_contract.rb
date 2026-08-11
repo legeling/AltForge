@@ -64,8 +64,12 @@ assert(ios_settings.include?("https://github.com/altstoreio/AltStore"), "iOS cre
   assert(ios_settings_storyboard.include?(%Q[text="#{value}"]), "iOS settings is missing #{value}") if value
 end
 assert(ios_settings.include?(".systemGroupedBackground"), "iOS settings must use the system grouped background")
+assert(ios_settings_storyboard.include?('text="Theme Color"'), "iOS settings must expose theme-color selection")
+assert(ios_settings.include?("ThemeSelectionViewController"), "iOS settings must provide a native theme-color picker")
+assert(ios_settings.include?("UIGraphicsImageRenderer"), "theme choices must include visual color swatches")
 assert(!ios_settings.include?("willDisplay cell:"), "iOS settings must not recursively recolor UIKit cell internals during display")
 assert(!ios_settings.include?("applyDynamicColors"), "the crash-prone recursive settings recoloring helper must not return")
+assert(!ios_settings_storyboard.match?(/<color key="(?:textColor|tintColor)" (?:white="1"|red="1" green="1" blue="1")/), "iOS settings must not keep fixed white text or tint colors on a dynamic light background")
 settings_background = JSON.parse(read(root, "AltStore/Resources/Assets.xcassets/Colors/SettingsBackground.colorset/Contents.json"))
 settings_components = settings_background.fetch("colors").map { |entry| entry.fetch("color").fetch("components") }
 assert(settings_components.all? { |components| components.values_at("red", "green", "blue").all? { |value| value.to_f.between?(0.0, 1.0) } }, "settings background components must be normalized sRGB values")
@@ -73,6 +77,18 @@ assert(settings_background.fetch("colors").length == 2, "settings background mus
 assert(read(root, "AltStoreCore/Model/Source.swift").include?("return .altSourceTint"), "the official source must ignore stale release tint metadata")
 source_tint = JSON.parse(read(root, "AltStoreCore/Resources/Colors.xcassets/SourceTint.colorset/Contents.json"))
 assert(source_tint.fetch("colors").length == 2, "official source tint must provide light and dark appearances")
+primary_tint = JSON.parse(read(root, "AltStoreCore/Resources/Colors.xcassets/Primary.colorset/Contents.json"))
+primary_light_components = primary_tint.fetch("colors").first.fetch("color").fetch("components")
+assert(primary_light_components.fetch("red").to_f > primary_light_components.fetch("green").to_f, "the default AltForge accent must be Forge Red, not the legacy green")
+theme_defaults = read(root, "AltStoreCore/Extensions/UserDefaults+AltStore.swift")
+assert(theme_defaults.include?("public enum AltTheme: String, CaseIterable"), "theme choices must use the shared preference model")
+assert(theme_defaults.include?("public static let defaultTheme: AltTheme = .forgeRed"), "Forge Red must remain the default theme")
+assert(theme_defaults.include?("var preferredTheme: AltTheme"), "theme choice must persist in UserDefaults")
+theme_colors = read(root, "AltStoreCore/Extensions/UIColor+AltStore.swift")
+assert(theme_colors.include?("UserDefaults.standard.preferredTheme.primaryColor"), "primary UI tint must resolve from the selected theme")
+assert(theme_colors.include?("UserDefaults.standard.preferredTheme.sourceTintColor"), "the official source tint must resolve from the selected theme")
+assert(read(root, "AltStore/Extensions/UIColor+AltStore.swift").include?("var contrastingForegroundColor: UIColor"), "filled theme controls must derive a readable foreground color")
+assert(read(root, "AltStore/AppDelegate.swift").include?("NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.themeDidChange"), "theme changes must refresh active application chrome")
 
 ios_interface_files = Dir.glob(File.join(root, "AltStore/**/*.{storyboard,xib}"))
 ios_public_interface_values = ios_interface_files.flat_map do |path|
@@ -121,12 +137,20 @@ assert(ios_app_manager.include?("ALTDiagnosticStageErrorKey"), "iOS failure logs
 assert(ios_app_manager.include?("ALTDiagnosticTraceErrorKey"), "iOS failure logs must persist a bounded operation trace")
 assert(ios_app_manager.include?('values = [context.server?.connectionType.localizedDiagnosticName, context.team?.type.localizedDescription]'), "authentication diagnostics must be limited to connection and team categories")
 assert(ios_app_manager.include?("recoverInterruptedOperations"), "interrupted iOS operations must become visible after relaunch")
+assert(ios_app_manager.include?("PendingAppOperations.json"), "pending iOS operations must use an atomic on-disk journal")
+assert(ios_app_manager.include?("try data.write(to: self.fileURL, options: .atomic)"), "pending iOS operation journal writes must be atomic")
+assert(ios_app_manager.include?("recoverUnexpectedTermination"), "unexpected foreground termination must become visible after relaunch")
+assert(ios_app_manager.include?("CurrentSession.json") && ios_app_manager.include?("InterruptedSession.json"), "app lifecycle recovery must retain bounded current and interrupted session records")
 assert(ios_app_manager.include?("guard didSave else { return }"), "interrupted operation records must remain pending until the recovery log saves")
 assert(ios_app_manager.scan("guard didSave else { return }").length >= 2, "failed operations must remain pending until their error log saves")
 assert(ios_app_manager.include?("!app.objectID.isTemporaryID"), "StoreApp relationships must reject temporary cross-context object IDs")
 assert(ios_app_manager.include?("context.existingObject(with: app.objectID)"), "StoreApp relationships must use throwing existing-object lookup")
 assert(ios_app_manager.include?("context.existingObject(with: managedObjectID)"), "error logging must use safe cross-context lookup")
 assert(read(root, "AltStore/AppDelegate.swift").include?("AppManager.shared.recoverInterruptedOperations()"), "database startup must recover interrupted operation logs")
+assert(read(root, "AltStore/AppDelegate.swift").include?("AppManager.shared.recoverUnexpectedTermination()"), "database startup must recover unexpected foreground termination logs")
+ios_my_apps = read(root, "AltStore/My Apps/MyAppsViewController.swift")
+assert(!ios_my_apps.include?("switch Result(context.installedApp, context.error)"), "third-party IPA completion must not precondition-crash when an operation ends without a result")
+assert(ios_my_apps.include?("The installation ended before AltForge received a result."), "missing third-party IPA results must become a handled error")
 
 ios_operation_contexts = read(root, "AltStore/Operations/OperationContexts.swift")
 %w[findingServer authenticating preparingApp verifyingApp preparingProfiles signingApp sendingApp installingApp refreshingApp].each do |stage|
@@ -139,9 +163,14 @@ diagnostic_detail_calls = Dir.glob(File.join(root, "AltStore/**/*.swift")).flat_
 assert(diagnostic_detail_calls.all? { |line| line.include?("localizedDiagnosticName") || line.include?("authenticationDiagnosticDetail") }, "diagnostic details must remain on the connection/team-category allowlist")
 
 ios_strings = JSON.parse(read(root, "AltStore/Resources/Localizable.xcstrings")).fetch("strings")
-["Authentication Ready", "Authenticating Apple ID", "Diagnostic ID", "Failure Stage", "Operation Trace", "Copy Diagnostic Report"].each do |key|
+["Authentication Ready", "Authenticating Apple ID", "Diagnostic ID", "Failure Stage", "Operation Trace", "Copy Diagnostic Report", "AltForge closed unexpectedly while it was active.", "The installation ended before AltForge received a result.", "Theme Color", "Forge Red", "Ocean Blue", "Indigo", "Rose", "Selected"].each do |key|
   assert(ios_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese diagnostic string: #{key}")
 end
+
+altsign_application = read(root, "Dependencies/AltSign/AltSign/Model/ALTApplication.mm")
+assert(altsign_application.include?('isKindOfClass:[NSDictionary class]'), "untrusted IPA icon dictionaries must be type-checked before subscripting")
+assert(altsign_application.include?('isKindOfClass:[NSString class]'), "untrusted IPA string metadata must be type-checked before use")
+assert(altsign_application.include?('isKindOfClass:[NSNumber class]'), "untrusted IPA device-family values must be type-checked before conversion")
 
 workflow = read(root, ".github/workflows/release.yml")
 workflow_names = Dir.children(File.join(root, ".github/workflows")).select { |name| name.end_with?(".yml", ".yaml") }.sort
@@ -194,11 +223,22 @@ assert(workflow.match?(/package_macos_dmg\.sh.*?--ad-hoc-sign/m), "release workf
 assert(workflow.include?("Scripts/verify_apple_release_artifacts.sh"), "release workflow must verify packaged Apple artifacts")
 assert(workflow.include?("sha256sum --check SHA256SUMS.txt"), "release workflow must verify generated checksums before creating the Draft")
 assert(workflow.match?(/gh release create "\$GITHUB_REF_NAME".*?--repo "\$GITHUB_REPOSITORY"/m), "Draft creation must identify the repository after entering the artifact directory")
+assert(workflow.include?("testALTApplicationIgnoresMalformedOptionalMetadata"), "release CI must run the malformed IPA metadata regression")
+assert(workflow.include?("testThemePreferenceDefaultsAndRoundTrips"), "release CI must run the theme preference regression")
 
 dmg_packager = read(root, "Scripts/package_macos_dmg.sh")
 assert(dmg_packager.include?("hdiutil create"), "DMG packager must use the macOS disk image utility")
-assert(dmg_packager.include?('staged_app="$staging_root/AltForge Server.app"'), "DMG must present the public AltForge Server application name")
+assert(dmg_packager.include?('staged_app="$content_root/AltForge Server.app"'), "DMG must present the public AltForge Server application name")
 assert(dmg_packager.include?("ln -s /Applications"), "DMG packager must include an Applications shortcut")
+assert(dmg_packager.include?("-format UDRW"), "DMG packager must create a writable staging image for deterministic Finder metadata")
+assert(dmg_packager.include?('mount_point="/Volumes/$volume_name"'), "DMG packager must use the standard Finder volume location")
+assert(dmg_packager.include?('[[ ! -e "$mount_point" ]]'), "DMG packager must not replace or reuse a user-mounted volume")
+assert(dmg_packager.include?("set pathbar visible of dmgWindow to false"), "DMG Finder window must hide the path bar")
+assert(dmg_packager.include?("set bounds of dmgWindow to {120, 120, 640, 420}"), "DMG Finder window must use the reviewed compact 520 by 300 point layout")
+assert(dmg_packager.include?('set position of item "AltForge Server.app"'), "DMG Finder layout must position the application explicitly")
+assert(dmg_packager.include?('set position of item "Applications"'), "DMG Finder layout must position the Applications shortcut explicitly")
+assert(dmg_packager.include?('[[ -f "$mount_point/.DS_Store" ]]'), "DMG packaging must fail if Finder metadata was not persisted")
+assert(dmg_packager.include?("hdiutil convert"), "DMG packager must compress the configured writable image")
 assert(dmg_packager.include?("hdiutil verify"), "DMG packager must verify the generated image")
 
 apple_artifact_verifier = read(root, "Scripts/verify_apple_release_artifacts.sh")
@@ -225,7 +265,7 @@ assert(!altserver_scheme.include?('BuildableName = "AltServer.app"'), "the AltSe
 altxpc_scheme = read(root, "AltStore.xcodeproj/xcshareddata/xcschemes/AltXPC.xcscheme")
 assert(!altxpc_scheme.include?('BuildableName = "AltServer.app"'), "the AltXPC scheme must launch the public AltForge Server bundle")
 assert(workflow.include?('Build/Products/Release/AltForge Server.app'), "release packaging must consume the public macOS build product")
-assert(dmg_packager.include?('-volname "AltForge Server"'), "the macOS DMG volume must use the AltForge Server public identity")
+assert(dmg_packager.include?('volume_name="AltForge Server"'), "the macOS DMG volume must use the AltForge Server public identity")
 assert(apple_artifact_verifier.include?('Contents/MacOS/AltForge Server'), "release verification must inspect the public macOS executable")
 
 storyboard = read(root, "AltServer/Base.lproj/Main.storyboard")
@@ -343,7 +383,7 @@ assert(!altsign_package.include?('.define("MARKETPLACE")'), "Classic AltServer a
 release_generator = read(root, "Scripts/generate_release_metadata.rb")
 assert(release_generator.include?('parser.on("--cdn-base-url URL")'), "release metadata generation must accept an explicit CDN base URL")
 assert(release_generator.include?('current_version["downloadMirrors"]'), "release metadata must publish the configured CDN mirror")
-assert(release_generator.scan('"tintColor" => "#315952"').length == 2, "release source and app metadata must use the restrained AltForge tint")
+assert(release_generator.scan('"tintColor" => "#8E1735"').length == 2, "release source and app metadata must use the default Forge Red tint")
 assert(!release_generator.include?("#C52A42"), "release metadata must not restore the legacy full-card red tint")
 assert(workflow.include?("ALT_FORGE_CDN_BASE_URL"), "release workflow must pass the repository CDN variable to metadata generation")
 

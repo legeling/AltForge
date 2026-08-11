@@ -36,7 +36,7 @@
 | `TEST-022` source 固定 URL、历史继承、去重与上限 | `FR-022` | Script/Packaging | fixture 自动化覆盖，最多保留 20 个版本 |
 | `TEST-023` AltForge 自有远程配置与安全默认值 | `FR-023` | Script/Static | JSON schema 与 Classic endpoint contract 自动化覆盖 |
 | `TEST-024` update/离线 identity 与用户入口 | `FR-016`, `FR-024` | Static/Build/Manual | repository contract、iOS 定向测试/构建与 macOS arm64 Release build 通过；手工入口点击和 Windows build 待执行 |
-| `TEST-025` macOS DMG contract 与本地安装 | `FR-025` | Script/Packaging/Manual | 本机 Universal DMG 创建、image verify、挂载、symlink、bundle/version/signature 检查通过；CI IPA/DMG verifier 与 publish checksum gate 已定义，Finder 首次启动和真实 tag run 待执行 |
+| `TEST-025` macOS DMG contract 与本地安装 | `FR-025` | Script/Packaging/Manual | 本机 Universal DMG 创建、image verify、挂载、symlink、bundle/version/signature 检查通过；Finder 实测为 520 × 300 bounds、隐藏多余栏位和固定图标位置，第二轮截图与用户视觉确认通过；真实 tag run 待执行 |
 | `TEST-026` AltForge Server 身份、菜单与设置 | `FR-026`, `FR-027` | Static/Build/Manual | repository contract 与干净 macOS Debug build 覆盖 `AltForge Server.app`/同名 executable、内部 `AltServer` module、独立 About/GitHub links、菜单内联设置和安装图标；此前 macOS Universal Release、iOS Simulator build 和 preview DMG mount/signature 检查通过；系统登录项提示、新版 About 截图、语言重启和 USB/Wi-Fi 实机状态待手工验证 |
 | `TEST-027` 网络所有权、Developer Disk 索引、Classic Fediverse 与可选 OAuth fail-closed | `FR-028` | Script/Static/Build | repository/release contract、JSON/plist 与 iOS/macOS build 通过；Windows build 未执行 |
 | `TEST-028` macOS Apple ID 账号与凭据管理 | `FR-029` | Static/Build/Manual Security UI | repository contract 覆盖单次 credential snapshot 读取/释放、失败保留输入、内联重试、AltSign 错误双语完整性和 Classic SRP 启用条件；macOS build 已编译 CoreCrypto/GSAContext，脱敏 mock 账号/验证码窗口视觉检查通过，真实 Apple 认证、2FA、Keychain 系统交互和设备安装矩阵待执行 |
@@ -47,6 +47,7 @@
 | `TEST-033` iOS 品牌与设置语义色 | `FR-034` | Static/Build/Simulator UI | repository contract、iOS build 和 iOS 26.5 深浅色 Simulator 通过；真机视觉矩阵待执行 |
 | `TEST-034` iOS 公开身份 | `FR-035` | Static/Build/Manual System UI | bundle/executable/test host 与公开资源扫描通过；系统 crash-report 标题待真机确认 |
 | `TEST-035` iOS 安装崩溃、恢复日志与认证说明 | `FR-036` | Static/Build/Simulator/Manual E2E | crash report 根因、repository contract、iOS build、工作原理 UI 和 6 轮标签切换通过且无新 crash；恢复日志 runtime 与第三方 IPA 真机安装待执行 |
+| `TEST-036` iOS 主题色选择 | `FR-037` | Unit/Static/Build/Simulator UI | 偏好 XCTest、动态颜色与设置色板 repository contract、Swift/XML/JSON 解析和完整 Release-iphoneos build 通过；四主题深浅色切换和重启持久化待执行 |
 
 ## 首批高价值失败测试
 

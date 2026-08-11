@@ -4,12 +4,18 @@
 
 用户在认证或导入第三方 IPA 后切换到“我的 App”时，应用会直接退出，应用内错误日志为空；认证页仍保留旧版整页青色视觉、过大的垂直留白和不够准确的工作原理说明。
 
+首个替换构建完成真机试用后，用户再次报告两个 P0 回归：浅色模式下设置页仍有固定白色文字而不可读；第三方 IPA 安装中仍会退出，重新进入“我的 App”继续退出，而且错误日志为空。代码复核确认第三方 IPA 完成回调在“无结果且无错误”时会触发 `Result` convenience initializer 的 `preconditionFailure`，AltSign 对不可信 `Info.plist` 的字符串、字典、数组元素也存在未完整验证类型就调用方法或下标的异常路径。
+
 本机 Simulator 的系统崩溃报告已经把重复崩溃定位到 `SettingsViewController.tableView(_:willDisplay:forRowAt:)`：设置页为动态改色递归遍历 cell 层级时触发未识别 selector。该异常发生在 AppManager 操作链之外，所以原有 `LoggedError` 不会记录它。
 
 ## 范围
 
 - 删除设置 cell 的高风险递归改色回调，改用系统语义色和已有 outlet 配色。
+- 把设置 Storyboard 中残留的固定白色文字和 tint 改成 `label`/`secondaryLabel` 系统语义色；认证导航栏也使用动态背景、标题和品牌 tint，不在运行时递归遍历 UIKit 私有层级。
+- 第三方 IPA 完成回调不再通过可触发 `preconditionFailure` 的可选值构造 `Result`；缺失结果转成可记录、可展示的普通安装错误。
+- AltSign 在读取 IPA `Info.plist` 的名称、bundle ID、版本、最低系统、设备族和图标元数据前验证实际 plist 类型，畸形可选字段降级或忽略而不是触发 Objective-C 异常。
 - 安装/刷新操作开始时只持久化有界、脱敏的操作摘要，正常完成后删除；下次启动发现未完成摘要时补写一条可见错误日志。
+- pending operation 使用 Application Support 下的原子 JSON journal，UserDefaults 仅作为存储不可用时的兼容 fallback；前台 session 额外保留一条 current/interrupted checkpoint，只有没有更具体的 pending operation 时才生成一条意外退出日志。
 - 为每次操作记录随机客户端诊断编号和最多 16 个关键阶段；失败日志持久化最后阶段与相对耗时轨迹，并可从错误菜单一次复制诊断报告。
 - 错误日志跨 Core Data context 关联对象时只使用永久 object ID 和 `existingObject(with:)`，否则退化为值快照。
 - StoreApp 安装成功后安全解析目标 context 中的关系，不对 temporary object ID 调用 `object(with:)`。
@@ -25,7 +31,7 @@
 
 ## 复杂度与资源
 
-操作恢复记录最多保留 20 条，每条最多 16 个事件、detail 最多 120 字符。append 为 `O(k + e)`，`k <= 20`、`e <= 16`；持久化数据只包含操作类型、应用名、bundle ID、客户端诊断编号、时间、阶段、USB/Wi-Fi/本机类别和团队类别，不包含 Apple ID、密码、验证码、团队 ID、Server 名称/ID、证书/profile、设备 ID 或 IPA/下载路径。错误记录仍通过单个 Core Data background context 写入，不修改 schema/Server Protocol，不新增网络请求、端口、长期进程或无界缓存。
+操作恢复记录最多保留 20 条，每条最多 16 个事件、detail 最多 120 字符。append 为 `O(k + e)`，`k <= 20`、`e <= 16`；每次更新只原子重写一份上限为常数的小型 JSON。前台 session 只保留 current 与 interrupted 两条固定大小记录。持久化数据只包含操作类型、应用名、bundle ID、客户端诊断编号、时间、预定义 UI checkpoint、USB/Wi-Fi/本机类别和团队类别，不包含 Apple ID、密码、验证码、团队 ID、Server 名称/ID、证书/profile、设备 ID 或 IPA/下载路径。错误记录仍通过单个 Core Data background context 写入，不修改 schema/Server Protocol，不新增网络请求、端口、长期进程或无界缓存。
 
 ## 验证计划
 
@@ -34,6 +40,9 @@
 - repository contract 覆盖 20/16/120 上限、诊断字段、关键阶段、复制报告和敏感字段禁止项。
 - 构建 iOS Simulator target，并在相同 Simulator 反复执行“设置 -> 我的 App -> 设置”切换。
 - 模拟遗留未完成操作记录后重启，确认错误日志出现一次且记录被消费。
+- 构造包含错误 plist 类型的最小 `.app` fixture，确认 `ALTApplication` 不抛异常且对可选元数据安全降级。
+- 让第三方 IPA 外层 operation 无结果结束，确认返回普通失败、不会触发 precondition，且下一次启动能从原子 journal 或前台 checkpoint 恢复一条日志。
+- 在浅色与深色模式检查设置、认证和错误日志，不得存在固定白色文字覆盖浅色系统背景。
 - 第三方 IPA 的真实签名、设备发送与安装仍需在解锁真机上验证；Simulator 只能验证 UI、数据库和恢复路径。
 
 ## 已执行验证
@@ -44,11 +53,13 @@
 - 2026-08-11：AltStore Debug 在 generic iOS Simulator、关闭签名的构建通过；同一 iOS 26.5 Simulator 连续执行 6 轮“设置 -> 我的 App”往返后进程 PID 保持不变，未生成新的系统崩溃报告。
 - 2026-08-11：工作原理页面在简体中文 Simulator 中展示四步完整说明。登录页视觉和恢复日志的完整运行时路径仍需连通 AltForge Server；第三方 IPA 必须在解锁真机上验证。
 - 2026-08-11：新增有界诊断链后 repository contract、全部 iOS string catalog JSON、相关 storyboard XML、15 个受影响 Swift 文件的前端语法解析和 `git diff --check` 通过。新的完整 `xcodebuild` 尝试被执行沙箱阻止访问 CoreSimulatorService/Xcode 用户缓存，未把该次尝试记为构建通过；构建临时目录已清理。
+- 2026-08-11：第二轮真机反馈确认首个替换构建仍存在浅色模式不可读、第三方 IPA 退出和空日志，先前“已修复”的结论撤回；定位到固定白色 Storyboard 资源、无结果 `preconditionFailure` 和不可信 plist 类型访问三个代码风险。已新增语义色静态门禁、畸形 plist XCTest fixture、原子 operation journal 与前台 checkpoint；完整 build 和真机复测仍待完成。
+- 2026-08-11：使用隔离的 DerivedData 和本地依赖缓存完成无签名 `Release-iphoneos` generic device build 与 `Release` macOS `arm64/x86_64` build；本地 IPA 结构、bundle identifier、版本和 executable 检查通过。当前代码的第三方 IPA 真机安装与恢复日志仍未验证，不能仅凭构建结果宣称 P0 已关闭。
 
 ## 当前状态
 
-实现和既有 Simulator 崩溃回归已经通过，新增诊断链仍需完成本 change 的命令行 build 与 runtime fixture，change 保持 active。真实第三方 IPA 签名、发送、安装及失败日志可见性由 `ISSUE-20260811-002` 跟踪；在该 P0 设备回归完成前不宣称安装链路已经完全修复，也不触发 Release。
+第二轮修复正在验证，change 保持 active。真实第三方 IPA 签名、发送、安装及失败日志可见性由 `ISSUE-20260811-002` 跟踪；在浅色真机视觉、畸形 fixture、无结果完成、意外终止恢复和第三方 IPA 真机回归完成前，不宣称安装链路已经修复，也不公开新的替换 Release。经维护者明确授权，可先由 tag workflow 生成 Draft 和校验和供设备验证。
 
 ## 回滚
 
-恢复设置回调、AppManager 原错误关联方式和旧认证资源即可。恢复记录使用独立 UserDefaults key，回滚版本会忽略它；不改变 Core Data schema、bundle ID、签名协议或 Server Protocol。
+恢复设置资源、AppManager 原错误关联方式和旧认证资源即可。回滚版本会忽略 Application Support 中的诊断 JSON；不改变 Core Data schema、bundle ID、签名协议或 Server Protocol。AltSign 回滚必须先恢复 nested repo commit，再更新 superproject gitlink，不能留下 dirty submodule。

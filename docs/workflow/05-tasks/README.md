@@ -22,7 +22,7 @@
 | `T-012` 集成 Windows AltServer 单仓库交付 | In progress | `FR-018`, `FR-019`; `DES-011`; `TEST-018`, `TEST-019` | 源码/固定依赖/CI/Release ZIP 已定义，Windows runner 与真实设备验证通过 |
 | `T-013` 收敛 tag-only 构建与统一版本 | In progress | `FR-020`; `DES-010`; `TEST-020` | 普通 push/PR 不构建，tag/version contract 自动校验，三平台标签构建通过 |
 | `T-014` 收敛发布审核与更新独立性 | In progress | `FR-021`-`FR-024`; `DES-012`; `TEST-021`-`TEST-024` | Draft gate、历史 source、自有远程配置、更新判断和用户入口通过本地 contract，真实 Draft 待标签验证 |
-| `T-015` 建立 macOS DMG 与本地安装验证 | In progress | `FR-025`; `DES-013`; `TEST-025` | CI 使用共用 DMG packager，本机完成 build/package/mount/bundle 验证并补齐安装指南；Developer ID/notarization 作为独立后续范围 |
+| `T-015` 建立 macOS DMG 与本地安装验证 | In progress | `FR-025`; `DES-013`; `TEST-025` | CI 使用共用 DMG packager，本机完成 build/package/mount/bundle、520 × 300 hidden-chrome screenshot 与用户视觉确认；真实 tag 和 Developer ID/notarization 待完成 |
 | `T-016` 收敛 AltForge Server 菜单与设置 | In progress | `FR-026`, `FR-027`; `DES-014`; `TEST-026` | build product/executable、扩展 About/GitHub 入口、公开身份、连接方式、安装图标、菜单内设置、更新与双语通过 build/static；系统登录项提示、新版 About 截图、实机连接与语言重启待验证 |
 | `T-017` 收敛仓库网络所有权 | Done with Windows gap | `FR-028`; `DES-015`; `TEST-027` | 自有控制面均由本仓库发布，外部依赖被准确分类，Developer Disk 索引进入 Release，Classic Fediverse、遗留 plug-in 和默认 OAuth 均 fail closed；contract 与 Apple build 通过，Windows build 待 CI |
 | `T-018` 建立 macOS Apple ID 账号与证书管理 | In progress | `FR-029`, `FR-030`; `DES-016`; `TEST-028`, `TEST-029` | 单次 Keychain snapshot、最近账号、团队类型、托管证书保护和六位 2FA 通过 static/build；真实认证/证书/UI matrix 待验证 |
@@ -31,7 +31,8 @@
 | `T-021` 收敛 iOS 主导航资讯页 | Done | `FR-033`; `DES-019`; `TEST-032` | 主导航仅保留四个核心标签并默认进入浏览，source 资讯兼容不变，contract/build/simulator UI 通过 |
 | `T-022` 收敛 iOS 品牌、配色与设置身份 | Done with device gap | `FR-034`; `DES-020`; `TEST-033` | 系统 tab 图标、官方 tint、动态设置配色、bundle 版本、本仓库入口与上游致谢已通过 contract/build/深浅色 simulator UI；真机视觉矩阵待补 |
 | `T-023` 修复 iOS 公开身份和 crash-report 名称 | Done with system UI gap | `FR-035`; `DES-021`; `TEST-034` | bundle/executable/test host、公开资源 allowlist、iOS build/build-for-testing 与产物 Mach-O 检查通过；系统 crash-report 标题待真机手工确认 |
-| `T-024` 修复 iOS 安装中断崩溃、恢复日志与认证说明 | In progress | `FR-036`; `DES-022`; `TEST-035` | 系统 crash report 根因移除、跨 context 日志安全、有界脱敏阶段轨迹与复制报告已实现；认证/工作原理双语和 simulator 回归纳入验证，诊断日志 runtime 与第三方 IPA 真机安装待验证 |
+| `T-024` 修复 iOS 安装中断崩溃、恢复日志与认证说明 | In progress / second device regression | `FR-036`; `DES-022`; `TEST-035` | 第二轮真机反馈确认仍有浅色不可读、安装退出和空日志；固定白字、无结果 precondition、畸形 plist、原子 journal 与前台 checkpoint 修复已实现，iOS/macOS Release build 通过，runtime fixture 和第三方 IPA 真机复测待完成 |
+| `T-025` 增加 iOS 主题色选择 | In progress / visual matrix pending | `FR-037`; `DES-023`; `TEST-036` | 默认锻造红、四主题持久化、设置色板、动态导航/标签/官方来源 tint 和双语 contract 已实现；Release-iphoneos build 通过，深浅色真机矩阵待完成 |
 
 ## Analyze 门禁结果
 

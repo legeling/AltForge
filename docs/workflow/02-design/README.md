@@ -125,7 +125,7 @@ AltForge 没有自有官网或社交账号时，以仓库 README、Issues、隐�
 
 ### `DES-013` macOS DMG 打包与本地验证
 
-`Scripts/package_macos_dmg.sh` 是 CI 与本地共用的唯一 DMG 打包入口。脚本把输入 App 复制到任务专属临时 staging，加入 `/Applications` 快捷方式，以 `hdiutil` 生成压缩 DMG 并立即执行 image verify；成功、失败或中断都会清理 staging。处理时间与 I/O 为 `O(app bytes)`，除一个 App 副本和压缩映像外不常驻额外大型数据。
+`Scripts/package_macos_dmg.sh` 是 CI 与本地共用的唯一 DMG 打包入口。脚本把输入 App 复制到任务专属临时 staging，加入 `/Applications` 快捷方式，先创建 UDRW 中间映像并以 Finder AppleScript 写入 `.DS_Store`：内容区域固定为 520 × 300 pt，88 pt 图标分别位于左右两侧，工具栏、状态栏和路径栏隐藏。Finder 只会为标准 `/Volumes` 挂载持久化目录窗口元数据，因此脚本使用公开卷名挂载，并在发现同名现有卷时拒绝继续，避免操作用户挂载。元数据缺失时 fail closed；成功后推出可写映像、转换为 UDZO 压缩 DMG 并立即执行 image verify。成功、失败或中断都会推出本任务捕获的设备并清理 staging。处理时间与 I/O 为 `O(app bytes)`，Finder 布局为固定两个项目的 `O(1)` 操作，除一个 App 副本、可写中间映像和压缩映像外不常驻额外大型数据。
 
 Release workflow 与本地验证都只对 staging 副本执行 `--ad-hoc-sign`，密封完整 App bundle，使 `SMAppService` 能验证登录项来源，并由 artifact verifier 执行 `codesign --verify --deep --strict`。该签名没有 Team ID、证书身份或 notarization，不得描述为可信发行身份；Developer ID、hardened runtime 和 notarization 必须在获得正式凭据后通过独立 change 设计。脚本不会修改 Xcode build 输出，并拒绝覆盖已有输出，防止静默替换人工审核中的 artifact。
 
@@ -193,7 +193,7 @@ Apple ID 认证成功后关闭凭据窗口，并立即显示独立原生进度�
 
 主 tab 在 `TabBarController` 统一覆盖 storyboard 的历史图片，分别使用 bag、source stack、app grid 和 gear 的 SF Symbols，并提供 selected variant。图标表达功能而非品牌，因此不复用 App 图标或上游自定义 SVG。
 
-官方来源色与交互强调色分离：`Primary` 是适配深浅模式的品牌薄荷色，`SourceTint` 是对大面积卡片降低亮度后的 token。官方 source ID 与 AltForge bundle ID 在展示层强制使用 `SourceTint`，避免本地 Core Data 缓存或旧 Release metadata 恢复珊瑚红；第三方 source/app 仍尊重自己的 tint。下一次 Release 生成器输出相同的固定深色 metadata。
+官方来源色与交互强调色分离：`Primary` 用于交互强调，`SourceTint` 是对大面积卡片降低亮度后的 token。官方 source ID 与 AltForge bundle ID 在展示层强制使用 `SourceTint`，避免本地 Core Data 缓存或旧 Release metadata 改变官方品牌色；第三方 source/app 仍尊重自己的 tint。`DES-023` 在此 token 边界上加入用户主题解析，并让 Release metadata 使用默认锻造红作为兼容值。
 
 设置 controller 使用 `systemGroupedBackground`、`secondarySystemGroupedBackground`、`label`、`secondaryLabel` 和 `separator`，不再用旧青色作为整页背景。版本只读取 bundle 的 `CFBundleShortVersionString`，确保与 Xcode/release contract 的 2.4.0 真相一致。Credits 将 AltForge Contributors 标为维护者，同时保留 Riley Testut 和 Caroline Moore 的上游贡献归属；项目 GitHub、Issue 和隐私仍归本仓库。所有操作均为固定规模 UI 配置，不新增 I/O 或网络请求。
 
@@ -209,9 +209,17 @@ Apple ID 认证成功后关闭凭据窗口，并立即显示独立原生进度�
 
 `AuthenticationOperation.fetchTeam` 保留现有确定性顺序：优先复用仍存在的 active team，否则依次选择 individual、organization、free 和首个未知团队；设置页从持久化 active team 显示实际名称、Apple ID 和本地化账号类型，不从 GitHub 仓库或维护者身份推断 Apple developer team。
 
-AppManager 在操作进入队列前创建值快照，并把最多 20 条 pending operation 写入独立 UserDefaults key。每条记录带随机客户端诊断编号，以及最多 16 个 `{relative date, stage, bounded detail}` 事件；阶段只覆盖查找 Server、认证、准备/验证 App、准备描述文件、签名、发送、设备安装、刷新和终态，不记录进度回调的每个百分比。detail 最长 120 个字符，允许值只有 USB/Wi-Fi/本机连接类别与 Apple 团队类别。失败时把诊断编号、最后一个非终态阶段和相对耗时轨迹作为 `NSError.userInfo` 字符串写入既有 `LoggedError`，不修改 Core Data schema 或 Server Protocol；错误详情可查看这些字段，复制操作输出一个有界诊断报告。
+AppManager 在操作进入队列前创建值快照，并把最多 20 条 pending operation 原子写入 Application Support 下的 JSON journal；UserDefaults 只在受保护存储暂时不可用时作为兼容 fallback。每条记录带随机客户端诊断编号，以及最多 16 个 `{relative date, stage, bounded detail}` 事件；阶段只覆盖查找 Server、认证、准备/验证 App、准备描述文件、签名、发送、设备安装、刷新和终态，不记录进度回调的每个百分比。detail 最长 120 个字符，允许值只有 USB/Wi-Fi/本机连接类别与 Apple 团队类别。失败时把诊断编号、最后一个非终态阶段和相对耗时轨迹作为 `NSError.userInfo` 字符串写入既有 `LoggedError`，不修改 Core Data schema 或 Server Protocol；错误详情可查看这些字段，复制操作输出一个有界诊断报告。
+
+App lifecycle 另以两个固定大小的原子 JSON 保存 current/interrupted foreground session，只记录随机 session ID、时间、active 状态和预定义页面 checkpoint。若启动时同时存在 pending operation，则只生成更具体的 operation recovery 日志并消费 session 记录；只有没有 pending operation 时才生成一条 runtime 意外退出日志。第三方 IPA completion 显式区分 success/error/missing-result，missing-result 转普通 `OperationError`；AltSign 对所有来自 IPA `Info.plist` 的可选字符串、字典和数组元素先做类型验证，畸形字段不得进入 Objective-C 异常路径。
 
 成功完成后消费 pending record；失败时必须先把正常错误日志保存成功再消费，保存失败则保留到下次启动。应用下次在数据库启动成功后读取遗留记录并生成一次 `LoggedError`，只在日志落库成功后删除记录，说明上次进程在结果落库前结束。记录允许 App 名称和 bundle ID，但不包含 Apple ID、密码、验证码、UDID、团队 ID、Server 名称/ID、证书、profile 内容或文件 URL。错误关系解析仅允许永久 object ID，并通过 throwing `existingObject(with:)` 查询；temporary ID 或已删除对象使用 `AnyApp` 快照。单次 append 为 `O(k + e)`，`k <= 20`、`e <= 16`，总持久化空间有固定上限；不新增网络 I/O、后台进程或跨端协议字段。
+
+### `DES-023` iOS 动态主题色
+
+`AltTheme` 位于 AltStoreCore 的既有 UserDefaults 扩展边界，使用四个稳定 raw value，并由 `preferredTheme` 负责默认值、持久化和非法值回退。`UIColor.altPrimary` 与 `altSourceTint` 从当前偏好按深浅模式动态生成，不再把一次性 asset lookup 当作运行时主题真相；颜色 asset 与 Release metadata 只保留锻造红默认/兼容值。
+
+设置页在现有 Display 静态分组加入一行，并 push 原生 inset-grouped table。每个候选使用固定 24 point 圆形色板、文本和 checkmark，不新增第三方 UI。选择后写偏好并发送进程内通知；UIApplication 只更新已知 window、navigation bar 和 tab bar，Settings 自己 reload data，不递归遍历 UIKit 私有层级。官方 source 和自身 app 继续通过 `effectiveTintColor` 强制取动态 `altSourceTint`，第三方 metadata tint 路径不变。集合和窗口数量均有系统上限，本功能不新增网络或磁盘文件。
 
 ## 可选目标与边界
 
