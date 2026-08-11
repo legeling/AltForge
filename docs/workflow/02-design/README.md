@@ -157,9 +157,31 @@ Classic 的三个远程配置端点不再保留上游 Marketplace 分支。当�
 
 Apple verification handler 使用匹配的独立 window controller 替代验证码 `NSAlert`。验证码字段过滤为最多六位 ASCII 数字，兼容粘贴；验证码只经当前 callback 返回给 AltSign，窗口退出后释放，不进入 Keychain、UserDefaults 或日志。
 
-AltServer 复用仓库已经固定的 KeychainAccess package，新建仅属于桌面端的 `afterFirstUnlockThisDeviceOnly` service。账号与可选密码编码为 versioned 单项 archive，使账号顺序和密码选择通过一次 Keychain update 原子替换；最多八个账号、64 KiB archive、账号 320 字符和密码 1024 字符。读取、选择、更新和忘记账号均为有界 `O(accounts + bytes)`，账号数上限使 UI 更新为常量级；不得使用 UserDefaults、明文文件、日志或同步型 iCloud Keychain fallback。
+AltServer 复用仓库已经固定的 KeychainAccess package，新建仅属于桌面端的 `afterFirstUnlockThisDeviceOnly` service。账号与可选密码编码为 versioned 单项 archive，使账号顺序和密码选择通过一次 Keychain update 原子替换；最多八个账号、64 KiB archive、账号 320 字符和密码 1024 字符。认证窗口通过一次 `credentialSnapshot` 读取账号和可选密码，账号下拉只查询该 window-modal 生命周期内的有界快照；结束时释放快照和表单值，不把凭据提升为进程级缓存。读取、选择、更新和忘记账号均为有界 `O(accounts + bytes)`，账号数上限使 UI 更新为常量级；不得使用 UserDefaults、明文文件、Application Support、App bundle、日志或同步型 iCloud Keychain fallback。
 
 只有 `ALTAppleAPI.authenticate` 返回 account/session 后才触发 credential callback。勾选“记住密码”时保存密码，未勾选时仍保留账号但清除该账号的旧密码；损坏或不可访问的 archive fail closed，窗口显示无敏感详情的内联提示并继续允许手工登录。Keychain 更新失败不改变认证/安装结果，仅发送不含账号的本地通知。
+
+登录窗口使用异步 submission callback 驱动现有安装链路，点击继续只进入有界的 loading state，不结束 modal session。认证前失败在主线程恢复全部输入控件并显示本地化内联错误；只有取得 account/session 后才保存凭据并关闭窗口，随后团队、设备、证书、签名或安装阶段的错误继续使用全局错误窗口。AltSign 的用户可见错误 key 在 AltServer 主 string catalog 中提供完整简体中文翻译，避免 framework fallback 英文与中文标题混排。
+
+Classic AltForge Server 通过 AltSign 已有的 CoreCrypto/SRP 实现完成 GrandSlam 认证。`MARKETPLACE` 条件会使 `GSAContext` 的密钥生成和服务端校验固定失败，只适用于不包含该能力的 Marketplace 产物；Classic package target 禁止定义该条件，并由 repository contract 检查。这里不复制或自行实现密码学算法。
+
+账号 archive 的 credential 增加可选 team-type raw value，保持 archive version 1 向后兼容；未知值不显示类型，避免把尚未查询的账号误标成异常状态。认证成功先保存账号与密码 consent，`fetchTeam` 成功后在主线程补写 `.free`、`.individual` 或 `.organization`。只有自定义账号选择器在已确认类型时显示这一快照，当前可编辑账号行保持简洁；类型不表示持久 Apple session。
+
+证书流程先过滤 machine name 为 `AltForge*` 或历史 `AltStore*` 的托管证书，再用服务端 machine identifier 解密本机 P12，并要求序列号一致。缓存不可复用时只允许用户明确替换托管证书；没有托管证书时直接请求创建 `AltForge` 证书，失败则返回错误，不撤销任意 `certificates.first`。该边界保护 Xcode 与团队成员的签名资产。
+
+### `DES-017` macOS 单设备安装事务与 Release 下载
+
+`AppDelegate` 以设备 identifier 保存单次运行期安装 activity。认证、远程 IPA、本地 IPA、签名和设备写入共用这一锁；重复点击同一设备不创建第二条链路，只把认证窗口或现有进度窗口带到前台。任务成功、失败、用户取消或认证窗口关闭时均删除 activity。不同设备仍可各自执行，但每台设备最多一条任务，字典规模受当前连接设备数限制。
+
+Apple ID 认证成功后关闭凭据窗口，并立即显示独立原生进度窗口。安装管理器通过显式 callback 报告团队查询、设备注册、证书、设备准备、IPA 下载、描述文件、签名和安装阶段；URLSession 与底层 `NSProgress` 提供下载及设备安装百分比。全宽进度条不为隐藏的百分比标签预留右侧列；下载信息放在独立行，使用 `ByteCountFormatter` 显示已下载量、总大小和指数平滑后的即时速度。下载源选择器由线程安全的单任务 control 连接 UI 与 URLSession，切换时增加 generation、取消并释放旧 task/KVO，只接受当前 generation 的 completion，避免旧回调覆盖新下载。窗口不记录账号、UDID、证书或签名材料，完成后短暂显示成功状态，失败时先关闭进度再进入既有结构化错误窗口。
+
+官方 source 仍选择 tag 固定的 `github.com/legeling/AltForge/releases/download/.../AltForge.ipa`，并携带发布时生成的 size/SHA-256；旧 metadata 缺失时再以固定 GitHub API 查询同名 asset。当前版本可以声明最多四个经过 HTTPS 结构校验的 `downloadMirrors`，其中仓库 Actions 变量生成的自有 CDN 排在自动线路首位；随后是 GitHub 和两个固定 HTTPS 反向代理。用户也可选择单一线路立即重启下载。所有镜像下载后以 1 MiB 流式块计算 SHA-256，并同时校验文件大小，任何不匹配都失败，绝不解压。自动尝试数上限为配置 CDN 4 个、GitHub 1 个和固定公共镜像 2 个，始终顺序执行；请求 idle timeout 为 45 秒、总资源 timeout 为 600 秒。时间复杂度为 `O(sum(attempted download bytes))`，额外内存为 `O(1 MiB)`，临时文件、task 与 KVO 在成功、失败和线路切换时释放。
+
+### `DES-018` iOS App Group 数据迁移降级
+
+`FileManager.altstoreSharedDirectory` 是 App Group 可用性的唯一运行时真相：Info.plist 中的 `ALTAppGroups` 只表示候选 identifier，不能证明当前 provisioning profile 和系统 sandbox 已授予 container。`DatabaseManager` 在任何 `NSFileCoordinator` intent、Core Data migration、删除或目录替换之前同时要求迁移偏好开启且 shared container URL 非空。
+
+免费开发者或其他重签环境无法解析 container 时，`PersistentContainer` 与 `InstalledApp` 保持既有 application-support fallback，启动按普通沙盒路径继续；迁移偏好不清除，以便未来获得有效 entitlement 后再尝试。即使运行期 container 解析状态发生变化，标准化后的数据库与 Apps 源/目标路径必须分别不同，否则整次迁移无写入返回。判断与路径比较均为常数成本 `O(1)`，不新增复制、轮询或重试。
 
 ## 可选目标与边界
 

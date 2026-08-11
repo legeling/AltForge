@@ -22,7 +22,9 @@
 | macOS DMG | `FR-025` | `DES-013` | `TEST-025` | Shared packager/static contract and local Universal image/mount/bundle checks pass; CI artifact/checksum gates defined; Finder launch, real tag run and Developer ID/notarization pending | `T-015` |
 | macOS desktop identity/settings | `FR-026`, `FR-027` | `DES-014` | `TEST-026` | Inline settings/install-icon/SMAppService/restart static contract and ad-hoc Debug launch plus prior Universal Release, iOS Simulator and preview DMG checks pass; Developer ID login registration and full USB/Wi-Fi/language/update UI matrix pending | `T-016` |
 | Network ownership | `FR-028` | `DES-015` | `TEST-027` | Repository contract、JSON/plist validation、iOS/macOS builds pass; Windows static coverage only | `T-017` |
-| macOS Apple ID credentials | `FR-029` | `DES-016` | `TEST-028` | Static contract, macOS build, and sanitized mock account/2FA window visual checks passed; real authentication/device matrix pending | `T-018` |
+| macOS Apple ID credentials and certificate ownership | `FR-029`, `FR-030` | `DES-016` | `TEST-028`, `TEST-029` | Static contract and macOS build cover single-read credential snapshot, account-type metadata and managed-certificate filtering; sanitized mock UI passed, real authentication/certificate/device matrix pending | `T-018` |
+| macOS installation transaction and Release download | `FR-031` | `DES-017` | `TEST-030` | Static contract and macOS build cover per-device dedup, symmetric progress, transfer metrics, manual source cancellation, bounded CDN/mirrors and integrity checks; live switching and real-device completion/failure cleanup pending | `T-019` |
+| iOS App Group migration fallback | `FR-032` | `DES-018` | `TEST-031` | Historical source fails the new contract; current static regression, iOS build and temporary iOS 26.5 simulator launch pass; re-signed device launch pending | `T-020` |
 
 ## 风险排序
 

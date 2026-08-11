@@ -51,6 +51,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 | **Unicode IPA 支持** | 读取 UTF-8 和 Info-ZIP Unicode Path 元数据，为常见东亚旧式文件名编码提供有界 fallback，并以 UTF-8 写出 ZIP 路径。 |
 | **Apple App ID 兼容** | 只把 Apple App ID description 转为安全 ASCII，不修改应用的 Unicode 显示名。 |
 | **开发团队** | 客户端和 AltServer 安装链路均支持个人、组织和免费开发团队 fallback。 |
+| **可靠桌面安装** | 显示传输量、速度、线路、签名和设备安装进度；同一设备只执行一条任务，并可在通过 SHA-256 校验的 GitHub、配置 CDN 和镜像线路间手动切换。 |
 | **维护修复** | 防止已过期应用显示负数天数；macOS 错误详情保留富文本格式并支持选择复制。 |
 | **构建与文档** | 使用同一套由 tag 驱动的 workflow 完成有边界的 iOS、macOS、Windows 验证、打包与发布，并在 [`docs/`](docs/README.md) 中维护完整 spec 和变更历史。 |
 
@@ -62,7 +63,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
   <tr>
     <td width="50%" valign="top">
       <strong>安装发布版本</strong><br><br>
-      下载 macOS 或 Windows AltServer，连接并信任设备，然后在 AltServer 菜单中选择 <strong>Install AltForge</strong>。<br><br>
+      下载 macOS 或 Windows AltServer，连接并信任设备，然后在 AltServer 菜单中选择 <strong>Install AltForge</strong>。macOS Server 会为每台设备保留一个可见任务，显示传输量与速度，并允许切换经过校验的下载线路。<br><br>
       <a href="https://github.com/legeling/AltForge/releases"><strong>打开 GitHub Releases →</strong></a>
     </td>
     <td width="50%" valign="top">

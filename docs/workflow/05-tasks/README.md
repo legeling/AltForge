@@ -25,7 +25,9 @@
 | `T-015` 建立 macOS DMG 与本地安装验证 | In progress | `FR-025`; `DES-013`; `TEST-025` | CI 使用共用 DMG packager，本机完成 build/package/mount/bundle 验证并补齐安装指南；Developer ID/notarization 作为独立后续范围 |
 | `T-016` 收敛 AltForge Server 菜单与设置 | In progress | `FR-026`, `FR-027`; `DES-014`; `TEST-026` | 公开身份、团体归属、连接方式、安装图标、登录启动明确状态、菜单内设置、检查更新、遗留插件文案和双语设置通过 build/static；实机连接与语言重启待验证 |
 | `T-017` 收敛仓库网络所有权 | Done with Windows gap | `FR-028`; `DES-015`; `TEST-027` | 自有控制面均由本仓库发布，外部依赖被准确分类，Developer Disk 索引进入 Release，Classic Fediverse、遗留 plug-in 和默认 OAuth 均 fail closed；contract 与 Apple build 通过，Windows build 待 CI |
-| `T-018` 建立 macOS Apple ID 账号管理 | In progress | `FR-029`; `DES-016`; `TEST-028` | 最近账号、Keychain 记住密码、显隐、Caps Lock、忘记账号和六位 2FA 窗口通过 static/build；真实认证 UI matrix 待验证 |
+| `T-018` 建立 macOS Apple ID 账号与证书管理 | In progress | `FR-029`, `FR-030`; `DES-016`; `TEST-028`, `TEST-029` | 单次 Keychain snapshot、最近账号、团队类型、托管证书保护和六位 2FA 通过 static/build；真实认证/证书/UI matrix 待验证 |
+| `T-019` 建立 macOS 单设备安装事务与多线路 Release 下载 | In progress | `FR-031`; `DES-017`; `TEST-030` | 设备级去重、对称阶段窗口、传输量/速度、手动切源取消、配置 CDN、固定镜像与 size/SHA-256 校验通过 static/build/full-hash network smoke；真实设备和完整切源/失败清理矩阵待验证 |
+| `T-020` 修复 iOS App Group 不可用时首次启动失败 | In progress | `FR-032`; `DES-018`; `TEST-031` | 真实 container gate、same-path 保护、历史失败 contract、iOS build 与 simulator 首次启动通过；重签真机首次启动待验证 |
 
 ## Analyze 门禁结果
 

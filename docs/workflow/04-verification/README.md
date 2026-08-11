@@ -39,7 +39,10 @@
 | `TEST-025` macOS DMG contract 与本地安装 | `FR-025` | Script/Packaging/Manual | 本机 Universal DMG 创建、image verify、挂载、symlink、bundle/version/signature 检查通过；CI IPA/DMG verifier 与 publish checksum gate 已定义，Finder 首次启动和真实 tag run 待执行 |
 | `TEST-026` AltForge Server 身份、菜单与设置 | `FR-026`, `FR-027` | Static/Build/Manual | repository contract、菜单内联设置/安装图标 macOS Debug build、macOS Universal Release、iOS Simulator build 和 preview DMG mount/signature 检查通过；菜单 UI、语言重启和 USB/Wi-Fi 实机状态待手工验证 |
 | `TEST-027` 网络所有权、Developer Disk 索引、Classic Fediverse 与可选 OAuth fail-closed | `FR-028` | Script/Static/Build | repository/release contract、JSON/plist 与 iOS/macOS build 通过；Windows build 未执行 |
-| `TEST-028` macOS Apple ID 账号与凭据管理 | `FR-029` | Static/Build/Manual Security UI | repository contract、macOS build 与脱敏 mock 账号/验证码窗口视觉检查通过；真实 Apple 认证、2FA、Keychain 系统交互和设备安装矩阵待执行 |
+| `TEST-028` macOS Apple ID 账号与凭据管理 | `FR-029` | Static/Build/Manual Security UI | repository contract 覆盖单次 credential snapshot 读取/释放、失败保留输入、内联重试、AltSign 错误双语完整性和 Classic SRP 启用条件；macOS build 已编译 CoreCrypto/GSAContext，脱敏 mock 账号/验证码窗口视觉检查通过，真实 Apple 认证、2FA、Keychain 系统交互和设备安装矩阵待执行 |
+| `TEST-029` macOS 账号类型与证书所有权 | `FR-030` | Static/Build/Manual Security | repository contract 检查团队类型持久化、AltForge owner filter、序列号匹配、显式替换确认及无任意证书 fallback；真实 Apple 证书列表、取消零写入和团队协作场景待执行 |
+| `TEST-030` macOS 单设备安装与 Release 下载 | `FR-031` | Static/Build/Network/Manual E2E | contract 检查设备去重、对称进度条、传输量/速度、手动线路取消、有限 CDN/镜像、digest 与双超时；macOS build 通过，`gh-proxy.com` 完整流式下载 hash 与 GitHub API 一致；真实线路切换与设备安装待验证 |
+| `TEST-031` iOS App Group migration fallback | `FR-032` | Static/Build/Simulator/Manual E2E | 历史源码回归失败、当前 repository contract 与 iOS Simulator build 通过；临时 iOS 26.5 simulator 首次启动进入主界面，附加 log 查询返回 65，真实重签设备待执行 |
 
 ## 首批高价值失败测试
 

@@ -15,5 +15,7 @@
 | [`CHG-20260810-002`](CHG-20260810-002-macos-menu-icon-scale/README.md) | 放大 macOS 菜单栏图标 | Implemented / menu bar smoke pending |
 | [`CHG-20260810-001`](CHG-20260810-001-macos-inline-settings-menu/README.md) | macOS 菜单内联设置与安装图标修复 | In progress / live settings smoke |
 | [`CHG-20260810-003`](CHG-20260810-003-macos-apple-id-account-manager/README.md) | macOS Apple ID 账号管理 | In progress |
+| [`CHG-20260810-004`](CHG-20260810-004-resilient-macos-installation/README.md) | macOS 可见安装进度与可靠 Release 下载 | In progress |
+| [`CHG-20260810-005`](CHG-20260810-005-ios-app-group-migration-fallback/README.md) | iOS App Group 迁移降级修复 | In progress |
 
 已完成工作不得继续留在这里；完成 converge 后移动到 `completed/YYYY/MM/`，被放弃或替代时移动到 `legacy/YYYY/MM/`。

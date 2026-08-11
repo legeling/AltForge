@@ -16,6 +16,8 @@
 
 规则：最低系统不满足时可以提示最后一个兼容版本；不能静默安装不兼容版本。
 
+macOS 状态菜单为每个 device identifier 只维护一个活动安装。认证成功后必须显示准备、下载、签名和设备安装进度；重复点击同一设备只聚焦既有窗口。下载阶段显示已下载量、总大小、实时速度和当前线路，允许在自动、GitHub、仓库配置 CDN 与固定公共镜像间切换；线路切换只保留一个 URLSession task。任何镜像 IPA 必须匹配官方 source 或 GitHub Release API 的大小和 SHA-256，校验失败不得进入解压或签名。
+
 ## 从 AltForge 安装应用
 
 1. 用户从 source 或 Files 选择 IPA。
@@ -26,6 +28,12 @@
 6. 客户端更新 Core Data、active app 状态与 UI。
 
 部分失败规则：在设备安装确认前，不把应用写成成功安装；错误应保留底层原因。
+
+## iOS 数据目录启动
+
+- `ALTAppGroups` 只声明候选 App Group identifier；只有系统返回实际 container URL 时才能开始共享数据迁移。
+- 免费开发者或其他重签 profile 不授予 App Group 时，数据库和 Apps 缓存继续使用当前应用沙盒，启动不得因迁移失败而中止。
+- 数据库或 Apps 的标准化源、目标路径相同时禁止迁移、删除或目录替换；迁移标记保持未完成，以便未来取得有效 entitlement 后重试。
 
 ## Unicode 名称
 

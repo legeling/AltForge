@@ -64,6 +64,7 @@ xcodebuild build \
 - 使用脱敏测试账户与设备。
 - 执行 `TEST-002` 和受影响路径。
 - 不将凭据、UDID 或 profile 保存为 artifact。
+- 重签后的 Info.plist 仍含 App Group metadata 但系统不授予 container 时，首次启动必须保留沙盒数据库与 Apps 目录并进入主界面；获得有效 container 的相邻路径仍需完成一次迁移。
 
 ## Suite G：macOS DMG
 
@@ -90,8 +91,16 @@ xcodebuild build \
 - 遗留邮件插件未安装时入口隐藏；存在时只显示明确的清理文案。
 - 无历史账号时可手工输入；成功认证后账号进入最近使用列表，未勾选记住密码时重新选择账号不预填密码。
 - 勾选记住密码后只检查本机 Keychain，不检查 UserDefaults、日志或发布产物；忘记账号同时移除可选密码。
+- 打开认证窗口时账号与可选密码只读取一次 Keychain archive；切换多个账号不触发第二次读取，窗口结束后不保留 credential snapshot 或表单值。ad-hoc Debug 重建后的单次系统授权不冒充 Developer ID 签名行为。
 - 密码眼睛按钮在 secure/plain 间无损切换，Caps Lock 开关实时显示/隐藏提示，关闭窗口后 local event monitor 已释放。
 - 损坏、超限或不可访问的 Keychain archive fail closed，仍允许手工认证且不显示账号、密码或底层 Keychain 详情。
+- 登录窗口底部与操作按钮保持紧凑间距；Caps Lock 或 Keychain 警告显示、隐藏时窗口按可见内容扩缩，不残留隐藏行空白。
+- 登录窗口显示原生黄色最小化按钮，可收进 Dock 并恢复；绿色缩放按钮保持隐藏，最小化和恢复不清空输入。
+- 输入错误密码、触发认证握手失败或取消验证码：账号窗口在请求期间保持显示，失败后保留账号、密码和记住密码状态，恢复编辑并允许直接重试；错误正文与详情不出现中英混排。
+- 检查 `Dependencies/AltSign/Package.swift` 未定义 `MARKETPLACE`；macOS 构建必须编译并链接 AltSign 的 CoreCrypto/SRP 路径，避免 `GSAContext.start()` 在网络请求前固定失败。
+- 已验证账号仅在下拉列表右侧显示免费、个人开发者或组织/企业；未知类型不显示占位标识，旧版 archive 可读取并在下次团队查询后更新，标识不表示持久 session。
+- 混合证书列表中普通 Xcode/分发证书不得进入 revoke 路径；缓存仅在托管证书序列号一致时复用，替换旧 AltForge/AltStore 证书必须明确确认，取消后证书列表不变。
+- 同一设备连续触发安装时只保留一条认证/下载/签名链路并聚焦现有窗口；认证成功后阶段窗口持续可见，进度条左右边距一致，下载显示已下载量/总大小/实时速度/当前线路。手动切换自动、GitHub、配置 CDN或固定镜像时取消旧 task 且旧 completion 不得覆盖新线路；自动候选顺序与数量有界，IPA 大小或 SHA-256 不匹配必须失败且释放设备锁、KVO 和临时文件。
 
 ## Suite F：Windows AltServer
 

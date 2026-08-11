@@ -51,6 +51,7 @@ AltForge is an independent derivative of [AltStore](https://github.com/altstorei
 | **Unicode IPA support** | Reads UTF-8 and Info-ZIP Unicode Path metadata, includes bounded fallbacks for common legacy East Asian filename encodings, and writes UTF-8 ZIP paths. |
 | **Apple App ID compatibility** | Converts only the Apple App ID description to safe ASCII without changing the app's Unicode display name. |
 | **Developer teams** | Supports individual, organization, and free developer-team fallback in both client and AltServer installation paths. |
+| **Reliable desktop installs** | Shows transfer size, speed, source, signing, and device-install progress; deduplicates work per device and supports manual switching among SHA-256-verified GitHub, configured CDN, and mirror routes. |
 | **Maintenance fixes** | Prevents negative expiration-day displays and makes macOS error details selectable without discarding attributed formatting. |
 | **Build and documentation** | Uses one tag-driven workflow for bounded iOS, macOS, and Windows validation, packaging, and release, with a complete spec and change history under [`docs/`](docs/README.md). |
 
@@ -62,7 +63,7 @@ General compatibility fixes remain separate from branding where practical so the
   <tr>
     <td width="50%" valign="top">
       <strong>Install a release</strong><br><br>
-      Download AltServer for macOS or Windows, connect and trust the device, then choose <strong>Install AltForge</strong> from the AltServer menu.<br><br>
+      Download AltServer for macOS or Windows, connect and trust the device, then choose <strong>Install AltForge</strong> from the AltServer menu. The macOS server keeps one visible task per device, reports transfer size and speed, and lets users switch verified download routes.<br><br>
       <a href="https://github.com/legeling/AltForge/releases"><strong>Open GitHub Releases →</strong></a>
     </td>
     <td width="50%" valign="top">
