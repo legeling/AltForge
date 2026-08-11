@@ -74,6 +74,8 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
     override func viewDidLoad()
     {
         super.viewDidLoad()
+
+        AppLifecycleDiagnosticStore.shared.record(.myAppsOpening)
         
         // Allows us to intercept delegate callbacks.
         self.updatesDataSource.fetchedResultsController.delegate = self
@@ -120,11 +122,15 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         self.navigationItem.leftBarButtonItem = nil
         
         #endif
+
+        AppLifecycleDiagnosticStore.shared.record(.myAppsLoaded)
     }
     
     override func viewIsAppearing(_ animated: Bool)
     {
         super.viewIsAppearing(animated)
+
+        AppLifecycleDiagnosticStore.shared.record(.myAppsAppearing)
         
         // Ensure the button for each app reflects correct Patreon status.
         self.collectionView.reloadData()
@@ -136,6 +142,8 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         #endif
         
         self.updateFediverseInteractionsIfNeeded()
+
+        AppLifecycleDiagnosticStore.shared.record(.myAppsReady)
     }
     
     override func viewDidAppear(_ animated: Bool)
@@ -1099,7 +1107,28 @@ private extension MyAppsViewController
                 self.sideloadingProgressView.observedProgress = nil
                 self.sideloadingProgressView.setHidden(true, animated: true)
                 
-                switch Result(context.installedApp, context.error)
+                let result: Result<InstalledApp, Error>
+                if let installedApp = context.installedApp
+                {
+                    result = .success(installedApp)
+                }
+                else if let error = context.error
+                {
+                    result = .failure(error)
+                }
+                else
+                {
+                    let failureReason = NSLocalizedString("The installation ended before AltForge received a result.", comment: "Missing third-party IPA installation result")
+                    let error = OperationError.unknown(failureReason: failureReason)
+                    result = .failure(error)
+
+                    if let application = context.application
+                    {
+                        AppManager.shared.log(error, operation: .install, app: application)
+                    }
+                }
+
+                switch result
                 {
                 case .success(let app):
                     completion(.success(()))

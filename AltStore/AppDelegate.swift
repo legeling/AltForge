@@ -48,6 +48,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     {
         // Register default settings before doing anything else.
         UserDefaults.registerDefaults()
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.themeDidChange(_:)), name: .altThemeDidChange, object: nil)
+        AppLifecycleDiagnosticStore.shared.beginSession()
         
         DatabaseManager.shared.start { (error) in
             if let error = error
@@ -58,12 +60,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             {
                 print("Started DatabaseManager.")
                 AppManager.shared.recoverInterruptedOperations()
+                AppManager.shared.recoverUnexpectedTermination()
             }
         }
         
         AnalyticsManager.shared.start()
         
-        self.setTintColor()
+        application.applyAltTheme()
         self.prepareImageCache()
         
         ServerManager.shared.startDiscovering()
@@ -157,9 +160,9 @@ extension AppDelegate
 
 private extension AppDelegate
 {
-    func setTintColor()
+    @objc func themeDidChange(_ notification: Notification)
     {
-        self.window?.tintColor = .altPrimary
+        UIApplication.shared.applyAltTheme()
     }
     
     func prepareImageCache()
@@ -261,6 +264,26 @@ private extension AppDelegate
                 
             default: return false
             }
+        }
+    }
+}
+
+extension UIApplication
+{
+    func applyAltTheme()
+    {
+        let tintColor = UIColor.altPrimary
+        UINavigationBar.appearance().tintColor = tintColor
+        UITabBar.appearance().tintColor = tintColor
+
+        let windows = self.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+
+        for window in windows
+        {
+            window.tintColor = tintColor
+            (window.rootViewController as? TabBarController)?.applyTheme()
         }
     }
 }

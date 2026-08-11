@@ -40,31 +40,30 @@ class ErrorLogViewController: UITableViewController
     private var _exportedLogURL: URL?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #unavailable(iOS 26)
-        {
-            return .lightContent
-        }
-        else
-        {
-            // Since we've removed the colored nav bar on iOS 26
-            return .default
-        }
+        return .default
     }
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+
+        AppLifecycleDiagnosticStore.shared.record(.errorLogOpening)
+
+        self.tableView.backgroundColor = .systemGroupedBackground
+        self.tableView.tintColor = .altPrimary
         
         self.tableView.dataSource = self.dataSource
         self.tableView.prefetchDataSource = self.dataSource
         
-        self.exportLogButton.activityIndicatorView.color = .white
-        
+        self.exportLogButton.activityIndicatorView.color = .altPrimary
+
         if #unavailable(iOS 15)
         {
             // Assign just clearLogButton to hide export button.
             self.navigationItem.rightBarButtonItems = [self.clearLogButton]
         }
+
+        AppLifecycleDiagnosticStore.shared.record(.errorLogReady)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)

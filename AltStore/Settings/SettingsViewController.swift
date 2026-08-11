@@ -47,6 +47,7 @@ extension SettingsViewController
     fileprivate enum DisplayRow: Int, CaseIterable
     {
         case appIcon
+        case theme
         case language
     }
     
@@ -171,6 +172,7 @@ class SettingsViewController: UITableViewController
         navigationAppearance.shadowColor = nil
         navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
         navigationAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        self.navigationController?.navigationBar.barStyle = .default
         self.navigationController?.navigationBar.tintColor = .altPrimary
         self.navigationController?.navigationBar.standardAppearance = navigationAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationAppearance
@@ -214,6 +216,8 @@ class SettingsViewController: UITableViewController
     override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
+
+        AppLifecycleDiagnosticStore.shared.record(.settings)
         
         self.update()
     }
@@ -268,6 +272,7 @@ private extension SettingsViewController
     
     func prepare(_ settingsHeaderFooterView: SettingsHeaderFooterView, for section: Section, isHeader: Bool)
     {
+        settingsHeaderFooterView.button.tintColor = .altPrimary
         settingsHeaderFooterView.primaryLabel.isHidden = !isHeader
         settingsHeaderFooterView.secondaryLabel.isHidden = isHeader
         settingsHeaderFooterView.button.isHidden = true
@@ -332,7 +337,7 @@ private extension SettingsViewController
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Personalize your AltForge experience by choosing an alternate app icon.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Choose an app icon and theme color that fit your AltForge experience.", comment: "")
             }
             
             
@@ -723,14 +728,23 @@ extension SettingsViewController
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        cell.tintColor = .altPrimary
         
         let section = Section.allCases[indexPath.section]
         switch section
         {
         case .display:
             let row = DisplayRow.allCases[indexPath.row]
-            if row == .language
+            switch row
             {
+            case .appIcon:
+                break
+
+            case .theme:
+                cell.textLabel?.text = NSLocalizedString("Theme Color", comment: "Settings row for choosing the app theme color")
+                cell.detailTextLabel?.text = UserDefaults.standard.preferredTheme.localizedName
+
+            case .language:
                 cell.textLabel?.text = NSLocalizedString("Language", comment: "Settings row for choosing the app language")
 
                 let languageIdentifier = Bundle.main.preferredLocalizations.first ?? Bundle.main.developmentLocalization ?? "en"
@@ -886,6 +900,10 @@ extension SettingsViewController
             switch row
             {
             case .appIcon: break
+            case .theme:
+                let viewController = ThemeSelectionViewController(style: .insetGrouped)
+                self.navigationController?.pushViewController(viewController, animated: true)
+                self.tableView.deselectRow(at: indexPath, animated: true)
             case .language:
                 guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { break }
                 UIApplication.shared.open(settingsURL)
@@ -942,6 +960,96 @@ extension SettingsViewController
             
         case .account, .patreon, .instructions, .macDirtyCow: break
         }
+    }
+}
+
+private extension AltTheme
+{
+    var localizedName: String {
+        switch self
+        {
+        case .forgeRed: return NSLocalizedString("Forge Red", comment: "AltForge theme color name")
+        case .oceanBlue: return NSLocalizedString("Ocean Blue", comment: "AltForge theme color name")
+        case .indigo: return NSLocalizedString("Indigo", comment: "AltForge theme color name")
+        case .rose: return NSLocalizedString("Rose", comment: "AltForge theme color name")
+        }
+    }
+}
+
+private class ThemeSelectionViewController: UITableViewController
+{
+    private let reuseIdentifier = "ThemeCell"
+
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+
+        self.title = NSLocalizedString("Theme Color", comment: "Title for choosing the app theme color")
+        self.view.backgroundColor = .systemGroupedBackground
+        self.tableView.backgroundColor = .systemGroupedBackground
+        self.tableView.rowHeight = 52
+        self.applyTheme()
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return AltTheme.allCases.count
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?)
+    {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: self.traitCollection) == true else { return }
+        self.tableView.reloadData()
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.reuseIdentifier) ?? UITableViewCell(style: .default, reuseIdentifier: self.reuseIdentifier)
+        let theme = AltTheme.allCases[indexPath.row]
+
+        var configuration = cell.defaultContentConfiguration()
+        configuration.text = theme.localizedName
+        configuration.image = self.swatchImage(for: theme)
+        configuration.imageProperties.maximumSize = CGSize(width: 24, height: 24)
+        configuration.imageToTextPadding = 14
+        cell.contentConfiguration = configuration
+        cell.accessoryType = UserDefaults.standard.preferredTheme == theme ? .checkmark : .none
+        cell.tintColor = .altPrimary
+        cell.backgroundColor = .secondarySystemGroupedBackground
+        cell.accessibilityValue = UserDefaults.standard.preferredTheme == theme ? NSLocalizedString("Selected", comment: "Accessibility value for the selected theme color") : nil
+
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        let theme = AltTheme.allCases[indexPath.row]
+        UserDefaults.standard.preferredTheme = theme
+        NotificationCenter.default.post(name: .altThemeDidChange, object: theme)
+
+        self.applyTheme()
+        self.tableView.reloadData()
+        self.tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    private func applyTheme()
+    {
+        let tintColor = UIColor.altPrimary
+        self.view.tintColor = tintColor
+        self.navigationController?.navigationBar.tintColor = tintColor
+    }
+
+    private func swatchImage(for theme: AltTheme) -> UIImage
+    {
+        let size = CGSize(width: 24, height: 24)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            let rect = CGRect(origin: .zero, size: size).insetBy(dx: 1, dy: 1)
+            context.cgContext.setFillColor(theme.primaryColor.resolvedColor(with: self.traitCollection).cgColor)
+            context.cgContext.fillEllipse(in: rect)
+        }.withRenderingMode(.alwaysOriginal)
     }
 }
 

@@ -19,12 +19,17 @@ class RefreshAltStoreViewController: UIViewController
     var completionHandler: ((Result<Void, Error>) -> Void)?
     
     @IBOutlet private var placeholderView: RSTPlaceholderView!
+    @IBOutlet private var refreshButton: PillButton!
+    @IBOutlet private var cancelButton: UIButton!
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
 
         self.view.backgroundColor = .systemGroupedBackground
+        self.view.tintColor = .altPrimary
+        self.refreshButton.tintColor = .altPrimary
+        self.cancelButton.setTitleColor(.altPrimary, for: .normal)
         
         self.placeholderView.textLabel.isHidden = true
         

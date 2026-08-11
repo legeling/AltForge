@@ -1,6 +1,96 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Choose an app icon and theme color that fit your AltForge experience." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择适合您的 AltForge 应用图标和主题色。"
+          }
+        }
+      }
+    },
+    "Forge Red" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "锻造红"
+          }
+        }
+      }
+    },
+    "Indigo" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "靛蓝"
+          }
+        }
+      }
+    },
+    "Ocean Blue" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "海洋蓝"
+          }
+        }
+      }
+    },
+    "Rose" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "玫瑰红"
+          }
+        }
+      }
+    },
+    "Selected" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已选择"
+          }
+        }
+      }
+    },
+    "Theme Color" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主题色"
+          }
+        }
+      }
+    },
+    "AltForge closed unexpectedly while it was active." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 在前台运行时意外退出。"
+          }
+        }
+      }
+    },
+    "App Active" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 已进入前台"
+          }
+        }
+      }
+    },
     "Authentication Ready" : {
       "localizations" : {
         "zh-Hans" : {
@@ -101,6 +191,56 @@
         }
       }
     },
+    "Launching AltForge" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在启动 AltForge"
+          }
+        }
+      }
+    },
+    "My Apps Loaded" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我的 App 已加载"
+          }
+        }
+      }
+    },
+    "My Apps Ready" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我的 App 已就绪"
+          }
+        }
+      }
+    },
+    "Opening Error Log" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在打开错误日志"
+          }
+        }
+      }
+    },
+    "Opening My Apps" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在打开我的 App"
+          }
+        }
+      }
+    },
     "On-device" : {
       "localizations" : {
         "zh-Hans" : {
@@ -117,6 +257,66 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作轨迹"
+          }
+        }
+      }
+    },
+    "Error Log Ready" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误日志已就绪"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "Showing My Apps" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在显示我的 App"
+          }
+        }
+      }
+    },
+    "Sources" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "软件源"
+          }
+        }
+      }
+    },
+    "The installation ended before AltForge received a result." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装在 AltForge 收到结果前已结束。"
+          }
+        }
+      }
+    },
+    "Try the same action again. If AltForge closes again, copy this diagnostic report from the Error Log." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重试相同操作。如果 AltForge 再次退出，请从错误日志中复制这份诊断报告。"
           }
         }
       }

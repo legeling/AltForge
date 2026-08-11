@@ -20,6 +20,7 @@ extension LoggedError
         case backup
         case restore
         case enableJIT
+        case runtime
     }
 }
 
@@ -134,6 +135,7 @@ public extension LoggedError
         case .backup: return String(format: NSLocalizedString("Backup %@ Failed", bundle: Bundle(for: PatreonAPI.self), comment: ""), self.appName)
         case .restore: return String(format: NSLocalizedString("Restore %@ Failed", bundle: Bundle(for: PatreonAPI.self), comment: ""), self.appName)
         case .enableJIT: return String(format: NSLocalizedString("Enable JIT for %@ Failed", bundle: Bundle(for: PatreonAPI.self), comment: ""), self.appName)
+        case .runtime: return NSLocalizedString("AltForge Closed Unexpectedly", bundle: Bundle(for: PatreonAPI.self), comment: "")
         }
     }
 }

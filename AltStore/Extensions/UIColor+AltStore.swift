@@ -41,6 +41,24 @@ extension UIColor
             return color
         }
     }
+
+    var contrastingForegroundColor: UIColor {
+        return UIColor { traits in
+            let resolvedColor = self.resolvedColor(with: traits)
+            var red: CGFloat = 0
+            var green: CGFloat = 0
+            var blue: CGFloat = 0
+            guard resolvedColor.getRed(&red, green: &green, blue: &blue, alpha: nil) else { return .white }
+
+            func linearComponent(_ component: CGFloat) -> CGFloat
+            {
+                return component <= 0.04045 ? component / 12.92 : pow((component + 0.055) / 1.055, 2.4)
+            }
+
+            let luminance = 0.2126 * linearComponent(red) + 0.7152 * linearComponent(green) + 0.0722 * linearComponent(blue)
+            return luminance > 0.179 ? .black : .white
+        }
+    }
     
     var isTooBright: Bool {
         var saturation: CGFloat = 0

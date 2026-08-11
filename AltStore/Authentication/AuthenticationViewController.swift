@@ -39,7 +39,19 @@ class AuthenticationViewController: UIViewController
         super.viewDidLoad()
 
         self.view.backgroundColor = .systemGroupedBackground
+        self.view.tintColor = .altPrimary
         self.scrollView.indicatorStyle = .default
+
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationAppearance.configureWithOpaqueBackground()
+        navigationAppearance.backgroundColor = .systemGroupedBackground
+        navigationAppearance.shadowColor = nil
+        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        navigationAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        self.navigationController?.navigationBar.barStyle = .default
+        self.navigationController?.navigationBar.tintColor = .altPrimary
+        self.navigationController?.navigationBar.standardAppearance = navigationAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = navigationAppearance
 
         self.welcomeTitleLabel.textColor = .label
         self.welcomeSubtitleLabel.textColor = .secondaryLabel
@@ -57,9 +69,10 @@ class AuthenticationViewController: UIViewController
         self.passwordTextField.attributedPlaceholder = NSAttributedString(string: self.passwordTextField.placeholder ?? "",
                                                                           attributes: [.foregroundColor: UIColor.tertiaryLabel])
         self.signInButton.backgroundColor = .altPrimary
+        self.signInButton.setTitleColor(UIColor.altPrimary.contrastingForegroundColor, for: .normal)
         
         self.signInButton.activityIndicatorView.style = .medium
-        self.signInButton.activityIndicatorView.color = .white
+        self.signInButton.activityIndicatorView.color = .altPrimary.contrastingForegroundColor
         
         for view in [self.appleIDBackgroundView!, self.passwordBackgroundView!, self.signInButton!]
         {

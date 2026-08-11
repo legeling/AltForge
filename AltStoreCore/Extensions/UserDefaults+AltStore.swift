@@ -10,8 +10,20 @@ import Foundation
 
 import Roxas
 
+public enum AltTheme: String, CaseIterable, Sendable
+{
+    case forgeRed
+    case oceanBlue
+    case indigo
+    case rose
+
+    public static let defaultTheme: AltTheme = .forgeRed
+}
+
 public extension UserDefaults
 {
+    private static var preferredThemeKey: String { "preferredTheme" }
+
     static let shared: UserDefaults = {
         guard let appGroup = Bundle.main.altstoreAppGroup else { return .standard }
         
@@ -79,6 +91,19 @@ public extension UserDefaults
     @NSManaged var permissionCheckingDisabled: Bool
     @NSManaged var responseCachingDisabled: Bool
     @NSManaged var shouldManageInstalledApps: Bool
+
+    @nonobjc var preferredTheme: AltTheme {
+        get {
+            guard let rawValue = self.string(forKey: UserDefaults.preferredThemeKey) else {
+                return .defaultTheme
+            }
+
+            return AltTheme(rawValue: rawValue) ?? .defaultTheme
+        }
+        set {
+            self.set(newValue.rawValue, forKey: UserDefaults.preferredThemeKey)
+        }
+    }
     
     class func registerDefaults()
     {
@@ -136,6 +161,7 @@ public extension UserDefaults
             #keyPath(UserDefaults.permissionCheckingDisabled): permissionCheckingDisabled,
             #keyPath(UserDefaults._preferredAppSorting): preferredAppSorting.rawValue,
             #keyPath(UserDefaults.shouldManageInstalledApps): shouldManageInstalledApps,
+            UserDefaults.preferredThemeKey: AltTheme.defaultTheme.rawValue,
         ] as [String: Any]
         
         #if MARKETPLACE

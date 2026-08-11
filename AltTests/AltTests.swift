@@ -62,6 +62,54 @@ final class AltTests: XCTestCase
     {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+
+    func testALTApplicationIgnoresMalformedOptionalMetadata() throws
+    {
+        let appURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            .appendingPathExtension("app")
+        defer { try? FileManager.default.removeItem(at: appURL) }
+
+        try FileManager.default.createDirectory(at: appURL, withIntermediateDirectories: true)
+
+        let infoDictionary: [String: Any] = [
+            "CFBundleDisplayName": 42,
+            kCFBundleNameKey as String: "Malformed Metadata Fixture",
+            kCFBundleIdentifierKey as String: "com.legeling.AltForgeTests.MalformedMetadata",
+            "CFBundleShortVersionString": ["invalid"],
+            kCFBundleVersionKey as String: ["invalid"],
+            "MinimumOSVersion": ["invalid"],
+            "UIDeviceFamily": [["invalid": true]],
+            "CFBundleIcons": "invalid",
+            "CFBundleIconFiles": [42]
+        ]
+        let infoPlistURL = appURL.appendingPathComponent("Info.plist")
+        XCTAssertTrue((infoDictionary as NSDictionary).write(to: infoPlistURL, atomically: true))
+
+        let application = try XCTUnwrap(ALTApplication(fileURL: appURL))
+        XCTAssertEqual(application.name, "Malformed Metadata Fixture")
+        XCTAssertEqual(application.version, "1.0")
+        XCTAssertEqual(application.buildVersion, "1")
+        XCTAssertNil(application.icon)
+    }
+
+    func testThemePreferenceDefaultsAndRoundTrips()
+    {
+        let suiteName = "com.legeling.AltForgeTests.Theme.\(UUID().uuidString)"
+        let userDefaults = UserDefaults(suiteName: suiteName)!
+        defer { UserDefaults.standard.removePersistentDomain(forName: suiteName) }
+
+        XCTAssertEqual(userDefaults.preferredTheme, .forgeRed)
+
+        for theme in AltTheme.allCases
+        {
+            userDefaults.preferredTheme = theme
+            XCTAssertEqual(userDefaults.preferredTheme, theme)
+        }
+
+        userDefaults.set("unsupported-theme", forKey: "preferredTheme")
+        XCTAssertEqual(userDefaults.preferredTheme, .forgeRed)
+    }
 }
 
 // Helper Methods

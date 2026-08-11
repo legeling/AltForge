@@ -55,6 +55,8 @@ class InsetGroupTableViewCell: UITableViewCell
         
         self.addSubview(self.insetView, pinningEdgesWith: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15))
         self.sendSubviewToBack(self.insetView)
+
+        self.tintColor = .altPrimary
         
         NSLayoutConstraint.activate([self.separatorView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 30),
                                      self.separatorView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30),
@@ -139,4 +141,5 @@ private extension InsetGroupTableViewCell
             self.insetView.backgroundColor = .secondarySystemGroupedBackground
         }
     }
+
 }

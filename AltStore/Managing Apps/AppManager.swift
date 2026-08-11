@@ -58,8 +58,13 @@ private final class PendingAppOperationStore
 {
     static let shared = PendingAppOperationStore()
 
-    private let key = "com.legeling.AltForge.pendingAppOperations"
+    private let legacyKey = "com.legeling.AltForge.pendingAppOperations"
     private let lock = NSLock()
+
+    private var fileURL: URL {
+        let baseDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        return baseDirectory.appendingPathComponent("AltForge/Diagnostics/PendingAppOperations.json", isDirectory: false)
+    }
 
     private init()
     {
@@ -123,20 +128,43 @@ private final class PendingAppOperationStore
 
     private func load() -> [PendingAppOperation]
     {
-        guard let data = UserDefaults.standard.data(forKey: self.key) else { return [] }
-        return (try? Foundation.JSONDecoder().decode([PendingAppOperation].self, from: data)) ?? []
+        if let data = try? Data(contentsOf: self.fileURL),
+           let records = try? Foundation.JSONDecoder().decode([PendingAppOperation].self, from: data)
+        {
+            return records
+        }
+
+        guard let data = UserDefaults.standard.data(forKey: self.legacyKey),
+              let records = try? Foundation.JSONDecoder().decode([PendingAppOperation].self, from: data)
+        else { return [] }
+
+        self.save(records)
+        return records
     }
 
     private func save(_ records: [PendingAppOperation])
     {
         guard !records.isEmpty else {
-            UserDefaults.standard.removeObject(forKey: self.key)
+            try? FileManager.default.removeItem(at: self.fileURL)
+            UserDefaults.standard.removeObject(forKey: self.legacyKey)
             return
         }
 
-        if let data = try? JSONEncoder().encode(records)
+        do
         {
-            UserDefaults.standard.set(data, forKey: self.key)
+            let data = try JSONEncoder().encode(records)
+            try FileManager.default.createDirectory(at: self.fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try data.write(to: self.fileURL, options: .atomic)
+            UserDefaults.standard.removeObject(forKey: self.legacyKey)
+        }
+        catch
+        {
+            // UserDefaults remains a compatibility fallback if protected storage is temporarily unavailable.
+            if let data = try? JSONEncoder().encode(records)
+            {
+                try? FileManager.default.removeItem(at: self.fileURL)
+                UserDefaults.standard.set(data, forKey: self.legacyKey)
+            }
         }
     }
 
@@ -167,6 +195,169 @@ private final class PendingAppOperationStore
         }
 
         return userInfo
+    }
+}
+
+enum AppLifecycleDiagnosticCheckpoint: String, Codable
+{
+    case launching
+    case active
+    case browse
+    case sources
+    case myAppsOpening
+    case myAppsLoaded
+    case myAppsAppearing
+    case myAppsReady
+    case settings
+    case errorLogOpening
+    case errorLogReady
+
+    var localizedName: String {
+        switch self
+        {
+        case .launching: return NSLocalizedString("Launching AltForge", comment: "App lifecycle diagnostic checkpoint")
+        case .active: return NSLocalizedString("App Active", comment: "App lifecycle diagnostic checkpoint")
+        case .browse: return NSLocalizedString("Browse", comment: "App lifecycle diagnostic checkpoint")
+        case .sources: return NSLocalizedString("Sources", comment: "App lifecycle diagnostic checkpoint")
+        case .myAppsOpening: return NSLocalizedString("Opening My Apps", comment: "App lifecycle diagnostic checkpoint")
+        case .myAppsLoaded: return NSLocalizedString("My Apps Loaded", comment: "App lifecycle diagnostic checkpoint")
+        case .myAppsAppearing: return NSLocalizedString("Showing My Apps", comment: "App lifecycle diagnostic checkpoint")
+        case .myAppsReady: return NSLocalizedString("My Apps Ready", comment: "App lifecycle diagnostic checkpoint")
+        case .settings: return NSLocalizedString("Settings", comment: "App lifecycle diagnostic checkpoint")
+        case .errorLogOpening: return NSLocalizedString("Opening Error Log", comment: "App lifecycle diagnostic checkpoint")
+        case .errorLogReady: return NSLocalizedString("Error Log Ready", comment: "App lifecycle diagnostic checkpoint")
+        }
+    }
+}
+
+private struct AppLifecycleDiagnosticRecord: Codable
+{
+    let sessionID: String
+    let startedAt: Date
+    var updatedAt: Date
+    var isActive: Bool
+    var checkpoint: AppLifecycleDiagnosticCheckpoint
+}
+
+final class AppLifecycleDiagnosticStore
+{
+    static let shared = AppLifecycleDiagnosticStore()
+
+    private let lock = NSLock()
+
+    private var directoryURL: URL {
+        let baseDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        return baseDirectory.appendingPathComponent("AltForge/Diagnostics", isDirectory: true)
+    }
+
+    private var currentURL: URL {
+        return self.directoryURL.appendingPathComponent("CurrentSession.json", isDirectory: false)
+    }
+
+    private var interruptedURL: URL {
+        return self.directoryURL.appendingPathComponent("InterruptedSession.json", isDirectory: false)
+    }
+
+    private init()
+    {
+    }
+
+    func beginSession()
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        if let previous = self.load(from: self.currentURL), previous.isActive,
+           !FileManager.default.fileExists(atPath: self.interruptedURL.path)
+        {
+            self.save(previous, to: self.interruptedURL)
+        }
+
+        let record = AppLifecycleDiagnosticRecord(sessionID: UUID().uuidString,
+                                                  startedAt: Date(),
+                                                  updatedAt: Date(),
+                                                  isActive: false,
+                                                  checkpoint: .launching)
+        self.save(record, to: self.currentURL)
+    }
+
+    func markActive()
+    {
+        self.update(isActive: true, checkpoint: .active)
+    }
+
+    func markInactive()
+    {
+        self.update(isActive: false, checkpoint: nil)
+    }
+
+    func record(_ checkpoint: AppLifecycleDiagnosticCheckpoint)
+    {
+        self.update(isActive: nil, checkpoint: checkpoint)
+    }
+
+    fileprivate func interruptedRecord() -> (identifier: String, userInfo: [String: String])?
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        guard let record = self.load(from: self.interruptedURL) else { return nil }
+        let elapsed = max(0, record.updatedAt.timeIntervalSince(record.startedAt))
+        let trace = String(format: "+0.0s %@\n+%.1fs %@",
+                           AppLifecycleDiagnosticCheckpoint.launching.localizedName,
+                           elapsed,
+                           record.checkpoint.localizedName)
+        return (record.sessionID,
+                [ALTDiagnosticIDErrorKey: record.sessionID,
+                 ALTDiagnosticStageErrorKey: record.checkpoint.localizedName,
+                 ALTDiagnosticTraceErrorKey: trace])
+    }
+
+    fileprivate func finishInterruptedRecord(identifier: String)
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        guard self.load(from: self.interruptedURL)?.sessionID == identifier else { return }
+        try? FileManager.default.removeItem(at: self.interruptedURL)
+    }
+
+    private func update(isActive: Bool?, checkpoint: AppLifecycleDiagnosticCheckpoint?)
+    {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        guard var record = self.load(from: self.currentURL) else { return }
+        if let isActive
+        {
+            record.isActive = isActive
+        }
+        if let checkpoint
+        {
+            record.checkpoint = checkpoint
+        }
+        record.updatedAt = Date()
+        self.save(record, to: self.currentURL)
+    }
+
+    private func load(from url: URL) -> AppLifecycleDiagnosticRecord?
+    {
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return try? Foundation.JSONDecoder().decode(AppLifecycleDiagnosticRecord.self, from: data)
+    }
+
+    private func save(_ record: AppLifecycleDiagnosticRecord, to url: URL)
+    {
+        do
+        {
+            let data = try JSONEncoder().encode(record)
+            try FileManager.default.createDirectory(at: self.directoryURL, withIntermediateDirectories: true)
+            try data.write(to: url, options: .atomic)
+        }
+        catch
+        {
+            Logger.main.error("Failed to persist bounded app lifecycle diagnostics. \(error.localizedDescription, privacy: .public)")
+        }
     }
 }
 
@@ -267,6 +458,29 @@ extension AppManager
                 guard didSave else { return }
                 PendingAppOperationStore.shared.finish(identifier: record.identifier)
             }
+        }
+    }
+
+    func recoverUnexpectedTermination()
+    {
+        guard let record = AppLifecycleDiagnosticStore.shared.interruptedRecord() else { return }
+        guard PendingAppOperationStore.shared.all().isEmpty else {
+            // The operation recovery entry already contains a more useful stage trace.
+            AppLifecycleDiagnosticStore.shared.finishInterruptedRecord(identifier: record.identifier)
+            return
+        }
+
+        let description = NSLocalizedString("AltForge closed unexpectedly while it was active.", comment: "Unexpected app termination diagnostic")
+        let suggestion = NSLocalizedString("Try the same action again. If AltForge closes again, copy this diagnostic report from the Error Log.", comment: "Unexpected app termination recovery suggestion")
+        var userInfo: [String: Any] = [NSLocalizedDescriptionKey: description,
+                                      NSLocalizedRecoverySuggestionErrorKey: suggestion]
+        userInfo.merge(record.userInfo) { current, _ in current }
+
+        let error = NSError(domain: "com.legeling.AltForge.UnexpectedTermination", code: 1, userInfo: userInfo)
+        let app = AnyApp(name: "AltForge", bundleIdentifier: StoreApp.altstoreAppID, url: nil, storeApp: nil)
+        self.log(error, operation: .runtime, app: app) { didSave in
+            guard didSave else { return }
+            AppLifecycleDiagnosticStore.shared.finishInterruptedRecord(identifier: record.identifier)
         }
     }
 }
@@ -1587,6 +1801,7 @@ private extension AppManager
             case .update where installedApp.bundleIdentifier == StoreApp.altstoreAppID:
                 // AltStore will quit before installation finishes,
                 // so assume if we get this far the update will finish successfully.
+                AppLifecycleDiagnosticStore.shared.markInactive()
                 PendingAppOperationStore.shared.append(identifier: pendingIdentifier, stage: .completed)
                 PendingAppOperationStore.shared.finish(identifier: pendingIdentifier)
                 let event = AnalyticsManager.Event.updatedApp(installedApp)

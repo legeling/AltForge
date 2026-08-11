@@ -28,7 +28,7 @@ class InstructionsViewController: UIViewController
         self.view.backgroundColor = .systemGroupedBackground
         self.applySemanticTextColors(to: self.contentStackView)
         self.dismissButton.backgroundColor = .altPrimary
-        self.dismissButton.setTitleColor(.white, for: .normal)
+        self.dismissButton.setTitleColor(UIColor.altPrimary.contrastingForegroundColor, for: .normal)
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -36,6 +36,7 @@ class InstructionsViewController: UIViewController
         appearance.shadowColor = nil
         appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        self.navigationController?.navigationBar.barStyle = .default
         self.navigationController?.navigationBar.tintColor = .altPrimary
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance

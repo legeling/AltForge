@@ -47,6 +47,9 @@ class TabBarController: UITabBarController
     {
         super.viewDidLoad()
 
+        self.delegate = self
+        self.applyTheme()
+
         guard let viewControllers, viewControllers.count == Tab.allCases.count else { return }
 
         let browseNavigationController = viewControllers[Tab.browse.rawValue] as! UINavigationController
@@ -81,6 +84,46 @@ class TabBarController: UITabBarController
         #endif
     }
     
+    func applyTheme()
+    {
+        guard self.isViewLoaded else { return }
+
+        let tintColor = UIColor.altPrimary
+        self.view.tintColor = tintColor
+        self.tabBar.tintColor = tintColor
+
+        for case let navigationController as UINavigationController in self.viewControllers ?? []
+        {
+            navigationController.navigationBar.tintColor = tintColor
+        }
+
+        self.featuredViewController?.collectionView.reloadData()
+        self.sourcesViewController?.collectionView.reloadData()
+
+        if let myAppsNavigationController = self.viewControllers?[Tab.myApps.rawValue] as? UINavigationController,
+           let myAppsViewController = myAppsNavigationController.viewControllers.first as? MyAppsViewController,
+           myAppsViewController.isViewLoaded
+        {
+            myAppsViewController.collectionView.reloadData()
+        }
+
+        if let settingsNavigationController = self.viewControllers?[Tab.settings.rawValue] as? UINavigationController,
+           let settingsViewController = settingsNavigationController.viewControllers.first as? SettingsViewController,
+           settingsViewController.isViewLoaded
+        {
+            settingsViewController.view.tintColor = tintColor
+            settingsViewController.tableView.reloadData()
+        }
+
+        if #available(iOS 15, *)
+        {
+            let appearance = self.tabBar.standardAppearance
+            appearance.stackedLayoutAppearance.normal.badgeBackgroundColor = tintColor
+            self.tabBar.standardAppearance = appearance
+            self.tabBar.scrollEdgeAppearance = appearance
+        }
+    }
+
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
@@ -131,6 +174,26 @@ class TabBarController: UITabBarController
         }
         
         super.performSegue(withIdentifier: identifier, sender: sender)
+    }
+}
+
+extension TabBarController: UITabBarControllerDelegate
+{
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool
+    {
+        guard let index = tabBarController.viewControllers?.firstIndex(of: viewController),
+              let tab = Tab(rawValue: index)
+        else { return true }
+
+        switch tab
+        {
+        case .browse: AppLifecycleDiagnosticStore.shared.record(.browse)
+        case .sources: AppLifecycleDiagnosticStore.shared.record(.sources)
+        case .myApps: AppLifecycleDiagnosticStore.shared.record(.myAppsOpening)
+        case .settings: AppLifecycleDiagnosticStore.shared.record(.settings)
+        }
+
+        return true
     }
 }
 

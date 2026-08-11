@@ -493,7 +493,9 @@
                     <navigationItem key="navigationItem" title="Refresh AltForge" largeTitleDisplayMode="always" id="5nk-NR-jtV"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="cancelButton" destination="qua-VA-asJ" id="theme-cancel-outlet"/>
                         <outlet property="placeholderView" destination="fpO-Bf-gFY" id="q7d-au-d94"/>
+                        <outlet property="refreshButton" destination="xcg-hT-tDe" id="theme-refresh-outlet"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Chr-7g-qEw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

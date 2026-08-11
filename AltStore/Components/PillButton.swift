@@ -203,7 +203,7 @@ private extension PillButton
     {
         if self.progress == nil
         {
-            self.setTitleColor(.white, for: .normal)
+            self.setTitleColor(self.tintColor.contrastingForegroundColor, for: .normal)
             self.backgroundColor = self.tintColor
         }
         else

@@ -67,7 +67,7 @@ jobs:
           -scheme AltStore
           -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
 
-      - name: Test repository source identity
+      - name: Test iOS release regressions
         run: >-
           xcodebuild test
           -workspace AltStore.xcworkspace
@@ -79,6 +79,8 @@ jobs:
           CODE_SIGNING_ALLOWED=NO
           -only-testing:AltTests/AltTests/testSourceID
           -only-testing:AltTests/AltTests/testAltForgeSourceDeepLink
+          -only-testing:AltTests/AltTests/testALTApplicationIgnoresMalformedOptionalMetadata
+          -only-testing:AltTests/AltTests/testThemePreferenceDefaultsAndRoundTrips
 
       - name: Build unsigned iOS application
         env:

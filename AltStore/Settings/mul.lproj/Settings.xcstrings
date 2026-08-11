@@ -1,6 +1,42 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "theme-detail-label.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"Forge Red\"; ObjectID = \"theme-detail-label\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Forge Red"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "锻造红"
+          }
+        }
+      }
+    },
+    "theme-title-label.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"Theme Color\"; ObjectID = \"theme-title-label\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Theme Color"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主题色"
+          }
+        }
+      }
+    },
     "0uP-Cd-tNX.text" : {
       "comment" : "Class = \"UILabel\"; text = \"riley@altstore.io\"; ObjectID = \"0uP-Cd-tNX\";",
       "extractionState" : "extracted_with_value",

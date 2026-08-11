@@ -110,7 +110,7 @@ source = {
   "description" => "AltForge is a maintained AltStore Classic derivative with Simplified Chinese support.",
   "website" => repository_url,
   "iconURL" => icon_url,
-  "tintColor" => "#315952",
+  "tintColor" => "#8E1735",
   "apps" => [
     {
       "name" => "AltForge",
@@ -122,7 +122,7 @@ source = {
         "zh-Hans" => "通过 AltServer 安装、刷新和管理侧载应用。"
       },
       "iconURL" => icon_url,
-      "tintColor" => "#315952",
+      "tintColor" => "#8E1735",
       "category" => "utilities",
       "appPermissions" => {
         "entitlements" => [
