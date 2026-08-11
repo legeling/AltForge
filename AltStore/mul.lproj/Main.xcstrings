@@ -91,36 +91,6 @@
         }
       }
     },
-    "83Z-Ih-nOW.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"App IDs Description\"; ObjectID = \"83Z-Ih-nOW\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "App IDs Description"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリIDの詳細"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Descrição dos App IDs"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App ID 说明"
-          }
-        }
-      }
-    },
     "BsL-O2-UjD.text" : {
       "comment" : "Class = \"UILabel\"; text = \"Classic games in your pocket\"; ObjectID = \"BsL-O2-UjD\";",
       "extractionState" : "extracted_with_value",

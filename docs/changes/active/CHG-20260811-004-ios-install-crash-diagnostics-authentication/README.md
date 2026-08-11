@@ -10,7 +10,7 @@
 
 第二轮真机的 6 份系统报告中，最新两份 19:49 崩溃均为 `MyAppsViewController.viewIsAppearing(_:) -> update() -> UICollectionView.reconfigureItems(at:)` 触发 UIKit 内部断言和 `SIGABRT`。页面先 `reloadData()`、随后立即用动态 no-updates section 的旧 index path 执行 reconfigure；安装失败改变 fetched-results 状态后，该 index path 不再稳定。应用内错误日志无法捕获 Objective-C 断言，因此恢复记录只能说明进程退出时的最后操作阶段，不能替代系统 crash report。
 
-build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断言：`referenceSizeForFooterInSection` 为测量 App IDs footer，直接调用数据源方法并从 collection view 复用池 dequeue supplementary view；该对象并未作为本次 UIKit 请求的结果返回，新版 UIKit 在 `_updateVisibleCellsNow` 检查复用池时以 `SIGABRT` 退出。修复改用独立 XIB prototype 测量，真实 data source callback 才允许 dequeue。
+build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断言：`MyAppsViewController.referenceSizeForFooterInSection` 为测量已安装应用 footer，直接调用数据源方法并从 collection view 复用池 dequeue supplementary view；该对象并未作为本次 UIKit 请求的结果返回，新版 UIKit 在 `_updateVisibleCellsNow` 检查复用池时以 `SIGABRT` 退出。修复改用独立 XIB prototype 测量，真实 data source callback 才允许 dequeue。继续核对上游后发现 `AppIDsViewController.referenceSizeForHeaderInSection` 仍保留完全相同的越权 dequeue，已同步移植上游 `832e9fab`，避免用户从“我的 App”进入 App ID 列表后再次触发同类断言。
 
 ## 范围
 
@@ -20,6 +20,7 @@ build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断
 - AltSign 在读取 IPA `Info.plist` 的名称、bundle ID、版本、最低系统、设备族和图标元数据前验证实际 plist 类型，畸形可选字段降级或忽略而不是触发 Objective-C 异常。
 - “我的 App”出现时不再在 `reloadData()` 后 reconfigure 动态 index path；更新状态先计算再 reload，后续只直接更新已经可见的 no-updates cell，不改变 collection structure。
 - App IDs footer 从独立 XIB 注册和渲染；布局测量实例化独立 prototype，不得在 flow-layout size delegate 中调用 collection-view data source 方法或 dequeue reusable view。
+- App ID 列表 header 同样从独立 XIB 注册和测量，覆盖上游已经确认的第二处 iOS 18 collection-view assertion。
 - 验证阶段缺失 prepared app 时返回 `invalidApp`，不再泄漏无上下文的 `invalidParameters (1008)`。
 - 发布 IPA 不再携带维护者机器的静态设备或 Server 标识；AltForge Server 在针对目标设备签名时注入运行所需值，发布校验会拒绝包含这两项的产物。
 - 同版本真机阻断修复通过 tag CI 重建全部平台资产；现有公开 Release 原位覆盖 IPA、桌面端、metadata 和 checksum 后重新下载校验，不删除 Release，也不允许只替换 IPA。
@@ -38,6 +39,7 @@ build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断
 - Design：`DES-022`
 - Verification：`TEST-035`
 - Task：`T-024`
+- Upstream review：[`UPSTREAM-REVIEW.md`](UPSTREAM-REVIEW.md)
 
 ## 复杂度与资源
 
@@ -54,7 +56,7 @@ build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断
 - 让第三方 IPA 外层 operation 无结果结束，确认返回普通失败、不会触发 precondition，且下一次启动能从原子 journal 或前台 checkpoint 恢复一条日志。
 - 在浅色与深色模式检查设置、认证和错误日志，不得存在固定白色文字覆盖浅色系统背景。
 - 在 no-updates section 为 0/1 item、安装失败刚改变 fetched results、标签切换动画进行中三种状态重复进入“我的 App”，不得调用 stale index path reconfigure 或产生 UIKit assertion。
-- 静态门禁拒绝从 `referenceSizeForFooterInSection` 间接 dequeue supplementary view，并检查 footer 使用独立 prototype 测量。
+- 静态门禁拒绝 My Apps footer 与 App ID header 的 size delegate 间接 dequeue supplementary view，并检查两者使用独立 prototype 测量。
 - 第三方 IPA 的真实签名、设备发送与安装仍需在解锁真机上验证；Simulator 只能验证 UI、数据库和恢复路径。
 
 ## 已执行验证
@@ -71,6 +73,7 @@ build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断
 - 2026-08-11：移除 stale index-path reconfigure 并收敛 prepared-app 错误后，repository/release metadata/version contract、两份 Swift frontend parse、`git diff --check` 与完整无签名 `Release-iphoneos` generic device build 通过。build 11 真机报告已复制到任务临时目录分析，未提交设备标识或原始报告。
 - 2026-08-11：首次同 tag CI 因 hosted runner 没有预创建匹配名称的 Simulator 在测试前失败，公开资产未改动；取消剩余 job 后改为动态创建/清理 Simulator。第二次 run `31492541706` 的四个 jobs 全部通过，公开九项资产原位覆盖并重新下载校验；Release IPA 为 `2.4.0 (13)`，真机回归待用户执行。
 - 2026-08-11：build 13 真机的两份 21:05 系统报告均为 `_UICollectionViewSubviewManager removeAllDequeuedViewsWithEnumerator:` 触发的 UIKit assertion；代码定位到 footer 高度计算期间的越权 dequeue。已移植上游 `a9636a73` 的 iOS 18 修复，用独立 XIB prototype 测量并把 segue 动作移到 controller；repository/release/version contract、Swift parse、XML/JSON 解析和完整无签名 `Release-iphoneos` generic device build 通过，真机复测待执行。
+- 2026-08-11：继续核对上游 `classic` 后移植 `832e9fab` 的 App ID header 同类修复，并把两处禁止越权 dequeue 的要求加入 repository contract；repository/release/version contract、Storyboard/XIB XML、string catalog JSON 与完整无签名 `Release-iphoneos` generic device build 通过，真机验证仍待执行。
 
 ## 当前状态
 

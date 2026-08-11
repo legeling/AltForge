@@ -97,6 +97,10 @@ my_apps_controller = read(root, "AltStore/My Apps/MyAppsViewController.swift")
 assert(!my_apps_controller.include?("self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionFooter"), "My Apps layout sizing must not dequeue a supplementary view outside the collection-view data source callback")
 assert(my_apps_controller.include?("InstalledAppsCollectionFooterView.nib.instantiate(withOwner: nil)"), "My Apps footer sizing must use an independent prototype view")
 
+app_ids_controller = read(root, "AltStore/App IDs/AppIDsViewController.swift")
+assert(!app_ids_controller.include?("self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader"), "App IDs layout sizing must not dequeue a supplementary view outside the collection-view data source callback")
+assert(app_ids_controller.include?("AppIDsCollectionHeaderView.nib.instantiate(withOwner: nil)"), "App IDs header sizing must use an independent prototype view")
+
 ios_interface_files = Dir.glob(File.join(root, "AltStore/**/*.{storyboard,xib}"))
 ios_public_interface_values = ios_interface_files.flat_map do |path|
   File.read(path).scan(/\b(?:text|title|placeholder|toolTip|label|headerTitle|footerTitle)="([^"]*)"/).flatten
