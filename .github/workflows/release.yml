@@ -53,7 +53,30 @@ jobs:
           fetch-depth: 0
 
       - name: Select Xcode
-        run: sudo xcode-select --switch /Applications/Xcode_26.6.app
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_26.6.app
+          sudo xcodebuild -runFirstLaunch
+
+      - name: Prepare iOS simulator
+        id: simulator
+        shell: bash
+        run: |
+          runtime_identifier="$(xcrun simctl list runtimes --json | ruby -rjson -e '
+            runtimes = JSON.parse(STDIN.read).fetch("runtimes")
+            ios = runtimes.select { |runtime| runtime.fetch("identifier").include?(".iOS-") && runtime.fetch("isAvailable", false) }
+            selected = ios.max_by { |runtime| runtime.fetch("version").split(".").map(&:to_i) }
+            abort "No available iOS Simulator runtime" unless selected
+            puts selected.fetch("identifier")
+          ' )"
+          device_type_identifier="$(xcrun simctl list devicetypes --json | ruby -rjson -e '
+            types = JSON.parse(STDIN.read).fetch("devicetypes")
+            selected = types.find { |type| type.fetch("name") == "iPhone 17 Pro" }
+            selected ||= types.reverse.find { |type| type.fetch("name").start_with?("iPhone") }
+            abort "No available iPhone Simulator device type" unless selected
+            puts selected.fetch("identifier")
+          ' )"
+          udid="$(xcrun simctl create "AltForge Release Tests" "$device_type_identifier" "$runtime_identifier")"
+          echo "udid=$udid" >> "$GITHUB_OUTPUT"
 
       - name: Install CocoaPods dependencies
         run: |
@@ -73,7 +96,7 @@ jobs:
           -workspace AltStore.xcworkspace
           -scheme AltStore
           -configuration Debug
-          -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=latest"
+          -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}"
           -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
           -derivedDataPath "$RUNNER_TEMP/DerivedData-Tests"
           CODE_SIGNING_ALLOWED=NO
@@ -152,6 +175,10 @@ jobs:
             ${{ runner.temp }}/Artifacts/AltForge-AltServer-macOS.dmg
           if-no-files-found: error
           retention-days: 3
+
+      - name: Delete iOS simulator
+        if: always() && steps.simulator.outputs.udid != ''
+        run: xcrun simctl delete "${{ steps.simulator.outputs.udid }}"
 
   windows:
     needs: prepare

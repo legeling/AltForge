@@ -20,6 +20,7 @@
 - 验证阶段缺失 prepared app 时返回 `invalidApp`，不再泄漏无上下文的 `invalidParameters (1008)`。
 - 发布 IPA 不再携带维护者机器的静态设备或 Server 标识；AltForge Server 在针对目标设备签名时注入运行所需值，发布校验会拒绝包含这两项的产物。
 - 同版本真机阻断修复通过 tag CI 重建全部平台资产；现有公开 Release 原位覆盖 IPA、桌面端、metadata 和 checksum 后重新下载校验，不删除 Release，也不允许只替换 IPA。
+- Release Apple job 动态创建并清理任务专属 Simulator，不再依赖 hosted runner 是否预置名为 iPhone 17 Pro 的 device；缺少 runtime/device type 时在测试前明确失败。
 - 安装/刷新操作开始时只持久化有界、脱敏的操作摘要，正常完成后删除；下次启动发现未完成摘要时补写一条可见错误日志。
 - pending operation 使用 Application Support 下的原子 JSON journal，UserDefaults 仅作为存储不可用时的兼容 fallback；前台 session 额外保留一条 current/interrupted checkpoint，只有没有更具体的 pending operation 时才生成一条意外退出日志。
 - 为每次操作记录随机客户端诊断编号和最多 16 个关键阶段；失败日志持久化最后阶段与相对耗时轨迹，并可从错误菜单一次复制诊断报告。

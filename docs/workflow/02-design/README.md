@@ -103,6 +103,8 @@ Classic 版本必须使用未定义 `MARKETPLACE` 且包含 Apple 认证所需 c
 
 标签 preflight 先校验版本、release metadata contract 与 repository policy contract，再并行运行 Apple 测试/构建和 Win32 Windows AltServer 构建，最后汇总 source/checksum 并创建 Draft GitHub Release。Apple runner 使用与 `Podfile.lock` 一致的 CocoaPods 1.16.2；Windows runner 在 workspace 检出 `vcpkg.json` 指定的固定 vcpkg commit，避免依赖 hosted runner 的可变系统 checkout。任一平台失败时 publish job 不运行。产物先写入 runner 临时目录，不回写仓库。
 
+Apple job 不依赖 hosted image 预先创建某个固定名称的 Simulator。它从所选 Xcode 的可用 iOS runtime 中选择最高版本，优先使用 iPhone 17 Pro device type，创建任务专属 Simulator 并以 UDID 运行回归；无论成功或失败都删除该 Simulator。runtime 或 iPhone device type 不存在时 fail closed，不把跳过测试当作发布通过。
+
 维护者明确授权 force 更新已公开 tag 的紧急恢复是唯一例外：三个平台仍必须从新 tag commit 完整重建，publish job 不删除 Release，而是以 `--clobber` 原位替换九项受审资产。上传完成后重新下载 Release 并按新的 `SHA256SUMS.txt` 校验；不得仅替换 IPA，因为 source metadata 中的 build、size 和 SHA-256 必须同步变化。
 
 ### `DES-011` Windows AltServer

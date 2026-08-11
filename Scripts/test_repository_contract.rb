@@ -236,6 +236,9 @@ assert(workflow.scan("sha256sum --check SHA256SUMS.txt").length == 2, "release w
 assert(workflow.match?(/gh release create "\$GITHUB_REF_NAME".*?--repo "\$GITHUB_REPOSITORY"/m), "Draft creation must identify the repository after entering the artifact directory")
 assert(workflow.include?("testALTApplicationIgnoresMalformedOptionalMetadata"), "release CI must run the malformed IPA metadata regression")
 assert(workflow.include?("testThemePreferenceDefaultsAndRoundTrips"), "release CI must run the theme preference regression")
+assert(workflow.include?('xcrun simctl create "AltForge Release Tests"'), "release CI must create its own simulator instead of relying on runner image devices")
+assert(workflow.include?('platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}'), "release tests must target the simulator created by the workflow")
+assert(workflow.include?('if: always() && steps.simulator.outputs.udid !='), "release CI must clean up its temporary simulator after failures")
 
 dmg_packager = read(root, "Scripts/package_macos_dmg.sh")
 assert(dmg_packager.include?("hdiutil create"), "DMG packager must use the macOS disk image utility")
