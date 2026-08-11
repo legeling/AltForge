@@ -65,6 +65,7 @@
 - 2026-08-11：使用隔离的 DerivedData 和本地依赖缓存完成无签名 `Release-iphoneos` generic device build 与 `Release` macOS `arm64/x86_64` build；本地 IPA 结构、bundle identifier、版本和 executable 检查通过。当前代码的第三方 IPA 真机安装与恢复日志仍未验证，不能仅凭构建结果宣称 P0 已关闭。
 - 2026-08-11：从配对真机只读导出 19:49:00 与 19:49:02 两份 build 11 系统报告；两份 `lastExceptionBacktrace` 都定位到 `MyAppsViewController.update()` 的 `reconfigureItems(at:)`，异常类型为 UIKit assertion / `SIGABRT`。已移除该结构变更路径并加入 repository contract；新改动仍需重新完成 Release build 和真机往返验证。
 - 2026-08-11：移除 stale index-path reconfigure 并收敛 prepared-app 错误后，repository/release metadata/version contract、两份 Swift frontend parse、`git diff --check` 与完整无签名 `Release-iphoneos` generic device build 通过。build 11 真机报告已复制到任务临时目录分析，未提交设备标识或原始报告。
+- 2026-08-11：首次同 tag CI 因 hosted runner 没有预创建匹配名称的 Simulator 在测试前失败，公开资产未改动；取消剩余 job 后改为动态创建/清理 Simulator。第二次 run `31492541706` 的四个 jobs 全部通过，公开九项资产原位覆盖并重新下载校验；Release IPA 为 `2.4.0 (13)`，真机回归待用户执行。
 
 ## 当前状态
 
