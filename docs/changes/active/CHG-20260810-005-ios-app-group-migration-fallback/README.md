@@ -34,4 +34,4 @@
 
 ## 当前结果与残余风险
 
-源码修复和持久静态回归已加入。历史源码按新增 contract 验证会失败，当前源码通过；AltStore iOS Simulator Debug build 成功，临时 iOS 26.5 simulator 首次启动后进程持续存活并进入主界面/系统通知授权提示，没有出现数据库迁移错误。smoke wrapper 最后的可选 simulator `log show` 查询不受支持并返回 65，不影响此前已完成的进程与截图检查；临时 simulator、DerivedData 和截图均已清理。公开的 `v2.4.0` IPA 不包含此修复，必须构建新的 patch release 后才能替换用户已下载的产物。真实免费开发者重签设备仍需复测，因此 change 保持 `In progress`。
+源码修复和持久静态回归已加入。历史源码按新增 contract 验证会失败，当前源码通过；AltStore iOS Simulator Debug/Release build 成功，临时 iOS 26.5 simulator 首次启动后进程持续存活并进入主界面/系统通知授权提示，没有出现数据库迁移错误。smoke wrapper 最后的可选 simulator `log show` 查询不受支持并返回 65，不影响此前已完成的进程与截图检查；临时 simulator、DerivedData 和截图均已清理。修复后的 `v2.4.0` build 10 已通过 hosted Apple/Windows workflow、Draft 下载和 checksum/artifact 复核后重新公开。真实免费开发者重签设备仍需复测，因此 change 保持 `In progress`。
