@@ -46,6 +46,8 @@ ios_settings_storyboard = read(root, "AltStore/Settings/Base.lproj/Settings.stor
 ios_settings = read(root, "AltStore/Settings/SettingsViewController.swift")
 ios_info_plist = read(root, "AltStore/Info.plist")
 assert(!ios_info_plist.include?("<key>ALTVersion</key>"), "iOS settings version must not come from a stale ALTVersion override")
+assert(!ios_info_plist.include?("<key>ALTDeviceID</key>"), "the distributable iOS Info.plist must not contain a maintainer device identifier")
+assert(!ios_info_plist.include?("<key>ALTServerID</key>"), "the distributable iOS Info.plist must not contain a maintainer server identifier")
 assert(ios_info_plist.include?("<key>CFBundleName</key>\n\t<string>AltForge</string>"), "iOS system and crash-report identity must use AltForge")
 ios_project = read(root, "AltStore.xcodeproj/project.pbxproj")
 assert(ios_project.scan("EXECUTABLE_NAME = AltForge;").length == 2, "iOS Debug and Release executables must be named AltForge")
@@ -151,6 +153,11 @@ assert(read(root, "AltStore/AppDelegate.swift").include?("AppManager.shared.reco
 ios_my_apps = read(root, "AltStore/My Apps/MyAppsViewController.swift")
 assert(!ios_my_apps.include?("switch Result(context.installedApp, context.error)"), "third-party IPA completion must not precondition-crash when an operation ends without a result")
 assert(ios_my_apps.include?("The installation ended before AltForge received a result."), "missing third-party IPA results must become a handled error")
+my_apps_update = ios_my_apps[/func update\(\).*?func updateBadgeCount/m]
+assert(my_apps_update && !my_apps_update.include?("reconfigureItems"), "My Apps appearance updates must not reconfigure a stale collection-view index path")
+assert(my_apps_update&.include?("cellForItem(at: indexPath) as? NoUpdatesCollectionViewCell"), "My Apps must update the already-visible no-updates cell without mutating collection structure")
+verify_app = read(root, "AltStore/Operations/VerifyAppOperation.swift")
+assert(verify_app.include?("throw self.context.error ?? OperationError.invalidApp()"), "a missing prepared app must surface as a handled invalid-app error")
 
 ios_operation_contexts = read(root, "AltStore/Operations/OperationContexts.swift")
 %w[findingServer authenticating preparingApp verifyingApp preparingProfiles signingApp sendingApp installingApp refreshingApp].each do |stage|

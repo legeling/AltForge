@@ -63,7 +63,7 @@ class VerifyAppOperation: ResultOperation<Void>, @unchecked Sendable
             let appName = self.context.app?.name ?? NSLocalizedString("The app", comment: "")
             self.localizedFailure = String(format: NSLocalizedString("%@ could not be installed.", comment: ""), appName)
             
-            guard let app = self.context.app else { throw OperationError.invalidParameters }
+            guard let app = self.context.app else { throw self.context.error ?? OperationError.invalidApp() }
             
             Logger.sideload.notice("Verifying app \(self.context.bundleIdentifier, privacy: .public)...")
             

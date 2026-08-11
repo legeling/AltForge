@@ -132,10 +132,11 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
 
         AppLifecycleDiagnosticStore.shared.record(.myAppsAppearing)
         
-        // Ensure the button for each app reflects correct Patreon status.
+        // Ensure every cell reflects current Patreon and update state. Do not
+        // reconfigure an item while reloadData() is still reconciling sections.
+        self.updateUnsupportedUpdates()
+        self.updateBadgeCount()
         self.collectionView.reloadData()
-        
-        self.update()
         
         #if !MARKETPLACE
         self.fetchAppIDs()
@@ -211,17 +212,8 @@ private extension MyAppsViewController
             cell.blurView.backgroundColor = .altPrimary
             
             cell.button.addTarget(self, action: #selector(MyAppsViewController.showHiddenUpdatesAlert(_:)), for: .primaryActionTriggered)
-            
-            if !self.unsupportedUpdates.isEmpty
-            {
-                cell.textLabel.text = NSLocalizedString("Unsupported Updates Available", comment: "")
-                cell.button.isHidden = false
-            }
-            else
-            {
-                cell.textLabel.text = NSLocalizedString("No Updates Available", comment: "")
-                cell.button.isHidden = true
-            }
+
+            self.updateNoUpdatesCell(cell)
         }
         
         return dynamicDataSource
@@ -606,21 +598,25 @@ private extension MyAppsViewController
         // Reloading collection view when not visible can mess with cell margins.
         guard self.isViewLoaded && self.view.window != nil else { return }
         
-        if #available(iOS 15, *)
+        // Updating the visible cell directly avoids UICollectionView asserting
+        // when fetched results change during a tab transition.
+        guard !self.isCheckingForUpdates else { return }
+        let indexPath = IndexPath(row: 0, section: Section.noUpdates.rawValue)
+        guard let cell = self.collectionView.cellForItem(at: indexPath) as? NoUpdatesCollectionViewCell else { return }
+        self.updateNoUpdatesCell(cell)
+    }
+
+    func updateNoUpdatesCell(_ cell: NoUpdatesCollectionViewCell)
+    {
+        if !self.unsupportedUpdates.isEmpty
         {
-            // Don't reconfigureItems() while checking for updates to avoid incorrect UIRefreshControl animation.
-            // update() will be called again once we've finished checking.
-            if !self.isCheckingForUpdates
-            {
-                let indexPath = IndexPath(row: 0, section: Section.noUpdates.rawValue)
-                self.collectionView.reconfigureItems(at: [indexPath])
-            }
+            cell.textLabel.text = NSLocalizedString("Unsupported Updates Available", comment: "")
+            cell.button.isHidden = false
         }
         else
         {
-            // Might not work if already reloading collection view,
-            // but hopefully iOS 14 users won't notice...
-            self.collectionView.reloadSections(IndexSet([Section.noUpdates.rawValue]))
+            cell.textLabel.text = NSLocalizedString("No Updates Available", comment: "")
+            cell.button.isHidden = true
         }
     }
     

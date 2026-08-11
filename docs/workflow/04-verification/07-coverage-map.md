@@ -28,7 +28,7 @@
 | iOS main navigation | `FR-033` | `DES-019` | `TEST-032` | Repository contract、storyboard compile、iOS build 和临时 simulator 四标签检查通过；source 详情资讯手工 fixture 待补 | `T-021` |
 | iOS brand and settings | `FR-034` | `DES-020` | `TEST-033` | Repository contract、storyboard 编译、iOS build 和 iOS 26.5 深浅色 simulator 已覆盖图标、颜色、版本与归属；真机视觉矩阵待补 | `T-022` |
 | iOS public identity | `FR-035` | `DES-021` | `TEST-034` | Repository contract、iOS build/build-for-testing 和产物检查覆盖 bundle/executable/test host、Universal Mach-O 与公开资源 allowlist；系统 crash-report 标题待真机手工确认 | `T-023` |
-| iOS install crash, diagnostics and authentication | `FR-036` | `DES-022` | `TEST-035` | 第二轮真机反馈推翻首轮完成结论；固定白字、无结果 precondition、畸形 plist 类型访问、原子 operation journal 和前台 checkpoint 已纳入修复与回归，repository contract 与 iOS/macOS Release build 通过；runtime fixture、深浅色 UI 与第三方 IPA 真机 E2E 待验证 | `T-024` |
+| iOS install crash, diagnostics and authentication | `FR-036` | `DES-022` | `TEST-035` | build 11 真机报告进一步定位 My Apps stale index-path reconfigure 的 UIKit assertion；固定白字、无结果 precondition、畸形 plist、原子 journal、前台 checkpoint 与可见-cell 更新已纳入修复，repository contract 与 iOS/macOS Release build 通过；新构建真机往返、runtime fixture、深浅色 UI 与第三方 IPA E2E 待验证 | `T-024` |
 | iOS theme colors | `FR-037` | `DES-023` | `TEST-036` | Forge Red default、four-value preference/fallback、localized swatch picker、dynamic primary/source tint and release metadata are covered by XCTest/static contracts, resource parsing and a full Release-iphoneos build; light/dark visual matrix pending | `T-025` |
 
 ## 风险排序

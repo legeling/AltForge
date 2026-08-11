@@ -74,6 +74,10 @@ plutil -lint "$ipa_info" >/dev/null
 [[ "$(plutil -extract CFBundleIdentifier raw "$ipa_info")" == "com.legeling.AltForge" ]] || { echo "IPA bundle identifier is incorrect." >&2; exit 65; }
 [[ "$(plutil -extract CFBundleShortVersionString raw "$ipa_info")" == "$version" ]] || { echo "IPA version is incorrect." >&2; exit 65; }
 [[ "$(plutil -extract CFBundleVersion raw "$ipa_info")" == "$build_number" ]] || { echo "IPA build number is incorrect." >&2; exit 65; }
+if plutil -extract ALTDeviceID raw "$ipa_info" >/dev/null 2>&1 || plutil -extract ALTServerID raw "$ipa_info" >/dev/null 2>&1; then
+  echo "IPA contains a static device or server identifier." >&2
+  exit 65
+fi
 
 hdiutil verify "$dmg_path" >/dev/null
 mkdir -p "$mount_path"
