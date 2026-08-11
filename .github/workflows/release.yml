@@ -15,7 +15,7 @@ concurrency:
 jobs:
   prepare:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     outputs:
       version: ${{ steps.version.outputs.version }}
       vcpkg_baseline: ${{ steps.version.outputs.vcpkg_baseline }}
@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
       - name: Validate release tag
         id: version

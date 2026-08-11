@@ -26,6 +26,8 @@ assert(workflow_names == ["release.yml"], "only the tag-driven release workflow 
 assert(workflow.include?("tags:\n      - \"v*\""), "release workflow must remain tag-only")
 assert(!workflow.match?(/^\s*pull_request:/), "release workflow must not run for pull requests")
 assert(!workflow.match?(/^\s*branches:/), "release workflow must not run for branch pushes")
+prepare_job = workflow[/^  prepare:.*?^  apple:/m]
+assert(prepare_job&.include?("submodules: recursive"), "release prepare job must check out submodules before repository policy validation")
 assert(workflow.include?("--draft"), "release workflow must create a draft release")
 assert(workflow.include?("vcpkg_baseline: ${{ steps.version.outputs.vcpkg_baseline }}"), "prepare must expose the manifest vcpkg baseline")
 assert(workflow.include?("ref: ${{ needs.prepare.outputs.vcpkg_baseline }}"), "Windows must check out the manifest vcpkg baseline")
