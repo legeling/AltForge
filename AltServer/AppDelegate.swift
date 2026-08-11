@@ -55,11 +55,36 @@ private enum PreferredLanguage: String, CaseIterable
     }
 }
 
+private final class ActiveInstallation
+{
+    let authenticationController: AppleIDAuthenticationWindowController
+    let progressController: InstallationProgressWindowController
+
+    init(authenticationController: AppleIDAuthenticationWindowController, progressController: InstallationProgressWindowController)
+    {
+        self.authenticationController = authenticationController
+        self.progressController = progressController
+    }
+
+    func focus()
+    {
+        if let window = self.authenticationController.window, window.isVisible
+        {
+            window.makeKeyAndOrderFront(nil)
+        }
+        else
+        {
+            self.progressController.show()
+        }
+    }
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let pluginManager = PluginManager()
     private let appleIDCredentialStore = AppleIDCredentialStore()
+    private var activeInstallations = [String: ActiveInstallation]()
     private static let languagePreferenceKey = "AltForgePreferredLanguage"
     
     private var statusItem: NSStatusItem?
@@ -489,54 +514,154 @@ private extension AppDelegate
     
     func installApplication(at fileURL: URL?, to device: ALTDevice)
     {
+        if let activeInstallation = self.activeInstallations[device.identifier]
+        {
+            activeInstallation.focus()
+            return
+        }
+
         let authenticationController = AppleIDAuthenticationWindowController(credentialStore: self.appleIDCredentialStore)
-        guard let submission = authenticationController.runModal() else { return }
+        let downloadControl = ALTInstallationDownloadControl()
+        let progressController = InstallationProgressWindowController(deviceName: device.name, downloadControl: downloadControl)
+        let activeInstallation = ActiveInstallation(authenticationController: authenticationController, progressController: progressController)
+        self.activeInstallations[device.identifier] = activeInstallation
+        var didAuthenticate = false
 
-        ALTDeviceManager.shared.installApplication(
-            at: fileURL,
-            to: device,
-            appleID: submission.account,
-            password: submission.password,
-            authenticationCompletion: { [weak self] in
-                guard let self else { return }
+        func finishActiveInstallation()
+        {
+            guard self.activeInstallations[device.identifier] === activeInstallation else { return }
+            self.activeInstallations[device.identifier] = nil
+        }
 
-                do
-                {
-                    try self.appleIDCredentialStore.recordSuccessfulAuthentication(
-                        account: submission.account,
-                        password: submission.password,
-                        rememberPassword: submission.rememberPassword
-                    )
+        func notifyAccountSaveFailure()
+        {
+            let content = UNMutableNotificationContent()
+            content.title = NSLocalizedString("Account Could Not Be Saved", comment: "")
+            content.body = NSLocalizedString("The login succeeded, but AltForge Server could not update saved accounts in this Mac's Keychain.", comment: "")
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+            UNUserNotificationCenter.current().add(request)
+        }
+
+        authenticationController.runModal { [weak self, weak authenticationController] submission in
+            guard let self, let authenticationController else { return }
+
+            ALTDeviceManager.shared.installApplication(
+                at: fileURL,
+                to: device,
+                appleID: submission.account,
+                password: submission.password,
+                authenticationCompletion: {
+                    didAuthenticate = true
+
+                    do
+                    {
+                        try self.appleIDCredentialStore.recordSuccessfulAuthentication(
+                            account: submission.account,
+                            password: submission.password,
+                            rememberPassword: submission.rememberPassword
+                        )
+                    }
+                    catch
+                    {
+                        notifyAccountSaveFailure()
+                    }
+
+                    progressController.update(ALTInstallationProgressUpdate(stage: .fetchingTeam))
+                    progressController.show()
+                    authenticationController.authenticationDidSucceed()
+                },
+                teamCompletion: { team in
+                    let kind: AppleIDAccountKind
+                    switch team.type
+                    {
+                    case .free: kind = .free
+                    case .individual: kind = .individual
+                    case .organization: kind = .organization
+                    case .unknown: fallthrough
+                    @unknown default: kind = .unknown
+                    }
+
+                    guard kind != .unknown else { return }
+
+                    do
+                    {
+                        try self.appleIDCredentialStore.updateAccountKind(kind, for: submission.account)
+                    }
+                    catch
+                    {
+                        notifyAccountSaveFailure()
+                    }
+                },
+                downloadControl: downloadControl,
+                progressHandler: { update in
+                    progressController.update(update)
                 }
-                catch
+            ) { (result) in
+                switch result
                 {
+                case .success(let application):
+                    finishActiveInstallation()
+                    progressController.update(ALTInstallationProgressUpdate(stage: .completed, fractionCompleted: 1))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        progressController.closeProgressWindow()
+                    }
+
                     let content = UNMutableNotificationContent()
-                    content.title = NSLocalizedString("Account Could Not Be Saved", comment: "")
-                    content.body = NSLocalizedString("The login succeeded, but AltForge Server could not update saved accounts in this Mac's Keychain.", comment: "")
+                    content.title = NSLocalizedString("Installation Succeeded", comment: "")
+                    content.body = String(format: NSLocalizedString("%@ was successfully installed on %@.", comment: ""), application.name, device.name)
+
                     let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
                     UNUserNotificationCenter.current().add(request)
+
+                case .failure(OperationError.cancelled), .failure(ALTAppleAPIError.requiresTwoFactorAuthentication):
+                    progressController.closeProgressWindow()
+                    if didAuthenticate
+                    {
+                        finishActiveInstallation()
+                    }
+                    else
+                    {
+                        authenticationController.authenticationDidFail(message: nil)
+                    }
+
+                case .failure(let error):
+                    progressController.closeProgressWindow()
+                    if didAuthenticate
+                    {
+                        finishActiveInstallation()
+                        self.showErrorAlert(error: error)
+                    }
+                    else
+                    {
+                        let message = self.localizedAuthenticationFailure(for: error)
+                        authenticationController.authenticationDidFail(message: message)
+                    }
                 }
             }
-        ) { (result) in
-            switch result
-            {
-            case .success(let application):
-                let content = UNMutableNotificationContent()
-                content.title = NSLocalizedString("Installation Succeeded", comment: "")
-                content.body = String(format: NSLocalizedString("%@ was successfully installed on %@.", comment: ""), application.name, device.name)
-                
-                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-                UNUserNotificationCenter.current().add(request)
-                
-            case .failure(OperationError.cancelled), .failure(ALTAppleAPIError.requiresTwoFactorAuthentication):
-                // Ignore
-                break
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self.showErrorAlert(error: error)
-                }
-            }
+        }
+
+        if !didAuthenticate
+        {
+            finishActiveInstallation()
+        }
+    }
+
+    func localizedAuthenticationFailure(for error: Error) -> String
+    {
+        switch error
+        {
+        case ALTAppleAPIError.incorrectCredentials:
+            return NSLocalizedString("Your Apple ID or password is incorrect. Check your details and try again.", comment: "")
+        case ALTAppleAPIError.appSpecificPasswordRequired:
+            return NSLocalizedString("This Apple ID requires an app-specific password. Create one at appleid.apple.com and try again.", comment: "")
+        case ALTAppleAPIError.incorrectVerificationCode:
+            return NSLocalizedString("The verification code was incorrect. Try signing in again to request a new code.", comment: "")
+        case ALTAppleAPIError.authenticationHandshakeFailed:
+            return NSLocalizedString("AltForge Server could not complete the secure sign-in with Apple. Check your network and try again.", comment: "")
+        case ALTAppleAPIError.invalidAnisetteData:
+            return NSLocalizedString("AltForge Server could not verify this Mac with Apple. Check the date and time on your devices, then try again.", comment: "")
+        default:
+            return NSLocalizedString("AltForge Server could not sign in with Apple. Check your connection and try again.", comment: "")
         }
     }
     

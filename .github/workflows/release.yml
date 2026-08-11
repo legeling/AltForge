@@ -211,6 +211,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.prepare.outputs.version }}
+          ALT_FORGE_CDN_BASE_URL: ${{ vars.ALT_FORGE_CDN_BASE_URL }}
         shell: bash
         run: |
           previous_args=()
@@ -222,11 +223,17 @@ jobs:
             previous_args=(--previous-source "$RUNNER_TEMP/PreviousSource/apps.json")
           fi
 
+          cdn_args=()
+          if [[ -n "$ALT_FORGE_CDN_BASE_URL" ]]; then
+            cdn_args=(--cdn-base-url "$ALT_FORGE_CDN_BASE_URL")
+          fi
+
           ruby Scripts/generate_release_metadata.rb \
             --artifacts "$RUNNER_TEMP/Artifacts" \
             --version "$VERSION" \
             --build "$GITHUB_RUN_NUMBER" \
             --date "$(date -u +%Y-%m-%d)" \
+            "${cdn_args[@]}" \
             "${previous_args[@]}"
 
       - name: Create draft GitHub Release

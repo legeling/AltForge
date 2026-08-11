@@ -54,6 +54,7 @@ Dir.mktmpdir("altforge-release-contract-") do |artifacts|
     "--version", "9.8.7",
     "--build", "987",
     "--date", "2026-08-09",
+    "--cdn-base-url", "https://cdn.example.com/altforge",
     "--previous-source", previous_source_path
   ]
   stdout, stderr, status = run_generator(generator, arguments)
@@ -67,7 +68,15 @@ Dir.mktmpdir("altforge-release-contract-") do |artifacts|
   raise "unexpected version metadata" unless version.values_at("version", "buildVersion", "date") == ["9.8.7", "987", "2026-08-09"]
   expected_download_url = "https://github.com/legeling/AltForge/releases/download/v9.8.7/AltForge.ipa"
   raise "current version download URL is not tag-pinned" unless version.fetch("downloadURL") == expected_download_url
+  expected_cdn_url = "https://cdn.example.com/altforge/v9.8.7/AltForge.ipa"
+  raise "current version CDN mirror is invalid" unless version.fetch("downloadMirrors") == [expected_cdn_url]
   raise "version history was not preserved and de-duplicated" unless versions.map { |item| item.fetch("version") } == ["9.8.7", "9.8.6"]
+
+  invalid_cdn_arguments = arguments.dup
+  invalid_cdn_arguments[invalid_cdn_arguments.index("--cdn-base-url") + 1] = "http://user:password@cdn.example.com/altforge?token=secret"
+  _invalid_cdn_stdout, invalid_cdn_stderr, invalid_cdn_status = run_generator(generator, invalid_cdn_arguments)
+  raise "unsafe CDN base URL was accepted" if invalid_cdn_status.success?
+  raise "unsafe CDN error was unclear" unless invalid_cdn_stderr.include?("HTTPS URL")
 
   previous_source.fetch("apps").fetch(0)["versions"] = 25.times.map do |index|
     {

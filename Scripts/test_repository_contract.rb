@@ -125,6 +125,15 @@ assert(authentication_ui.include?('checkboxWithTitle: NSLocalizedString("Remembe
 assert(authentication_ui.include?('systemSymbolName: symbolName'), "Apple ID authentication must provide password visibility controls")
 assert(authentication_ui.include?("NSEvent.addLocalMonitorForEvents(matching: .flagsChanged)"), "Apple ID authentication must monitor Caps Lock")
 assert(authentication_ui.include?('NSLocalizedString("Caps Lock is on."'), "Apple ID authentication must warn when Caps Lock is enabled")
+assert(authentication_ui.include?("runModal(submissionHandler:"), "Apple ID authentication must remain open while a sign-in attempt runs")
+assert(authentication_ui.include?("authenticationDidFail(message:"), "Apple ID authentication must restore the editable form after failure")
+assert(authentication_ui.include?("self.submissionHandler?(submission)"), "Apple ID authentication must submit without closing the window")
+assert(authentication_ui.include?(".miniaturizable"), "Apple ID authentication must allow users to minimize the window")
+assert(!authentication_ui.include?("standardWindowButton(.miniaturizeButton)?.isHidden = true"), "Apple ID authentication must keep the native minimize control visible")
+assert(authentication_ui.include?("if let localizedKind = account.kind.localizedName"), "saved Apple ID picker must display verified team types")
+assert(!authentication_ui.include?("accountKindBadge"), "verified team types must not consume space in the editable account row")
+assert(!authentication_ui.include?("Account Type Pending"), "unverified legacy account types must be omitted instead of shown as pending")
+assert(app_delegate.include?("localizedAuthenticationFailure(for:"), "Apple ID authentication failures must use localized inline feedback")
 
 verification_ui = read(root, "AltServer/AppleIDVerificationWindowController.swift")
 assert(verification_ui.include?("verificationCodeLength = 6"), "Apple ID verification must require a six-digit code")
@@ -138,7 +147,13 @@ assert(credential_store.include?(".afterFirstUnlockThisDeviceOnly"), "Apple ID c
 assert(credential_store.include?("maximumAccounts = 8"), "saved Apple ID history must remain bounded")
 assert(credential_store.include?("maximumArchiveSize = 64 * 1024"), "saved credential archive must have a size bound")
 assert(!credential_store.include?("UserDefaults"), "Apple ID credentials must not fall back to UserDefaults")
+assert(credential_store.include?("func credentialSnapshot() throws -> [AppleIDSavedCredential]"), "saved accounts and passwords must be returned by one bounded Keychain archive read")
+assert(credential_store.include?("updateAccountKind"), "saved Apple ID accounts must persist the last verified team type")
+assert(authentication_ui.include?("self.credentialStore.credentialSnapshot()"), "the authentication window must load saved credentials with one Keychain request")
+assert(!authentication_ui.include?("self.credentialStore.password(for:"), "selecting a saved account must not trigger a second Keychain request")
+assert(authentication_ui.include?("self.savedCredentials.removeAll(keepingCapacity: false)"), "the authentication window must release its credential snapshot when the modal session ends")
 assert(app_delegate.include?("recordSuccessfulAuthentication"), "credentials must only be recorded after authentication succeeds")
+assert(app_delegate.include?("teamCompletion:"), "verified Apple ID team types must be recorded after team lookup")
 
 installation_manager = read(root, "AltServer/Devices/ALTDeviceManager+Installation.swift")
 authentication_result = installation_manager.index("let (account, session) = try result.get()")
@@ -146,6 +161,39 @@ credential_callback = installation_manager.index("authenticationCompletion()")
 assert(authentication_result && credential_callback && credential_callback > authentication_result, "credential persistence must run only after successful Apple authentication")
 assert(installation_manager.include?("AppleIDVerificationWindowController()"), "Apple ID two-factor authentication must use the dedicated verification window")
 assert(!installation_manager.include?("securityCodeTextField"), "Apple ID verification must not retain the obsolete shared security-code field")
+assert(installation_manager.include?("githubReleaseMirrorPrefixes"), "AltForge release downloads must provide bounded GitHub mirror fallback")
+assert(installation_manager.include?("fetchReleaseAssetIntegrity"), "mirrored release downloads must obtain trusted GitHub asset integrity metadata")
+assert(installation_manager.include?("try self.sha256(of: fileURL) == integrity.sha256"), "mirrored release downloads must verify the GitHub SHA-256 digest")
+assert(installation_manager.include?("configuration.timeoutIntervalForRequest = 45"), "release requests must use a bounded idle timeout")
+assert(installation_manager.include?("configuration.timeoutIntervalForResource = 600"), "release downloads must use a bounded resource timeout")
+assert(installation_manager.include?("var downloadMirrors: [URL]?"), "official source metadata must support repository-configured CDN mirrors")
+assert(installation_manager.include?("configuredMirrorURLs.prefix(4)"), "configured CDN mirror fan-out must remain bounded")
+assert(installation_manager.include?("downloadControl.setSelectionHandler"), "download source selection must restart the active transfer")
+assert(installation_manager.include?("task?.cancel()"), "manual source switching must cancel the previous transfer")
+assert(installation_manager.include?("bytesPerSecond"), "release downloads must report live transfer speed")
+
+installation_progress = read(root, "AltServer/InstallationProgressWindowController.swift")
+assert(installation_progress.include?("case downloading"), "macOS installation progress must expose the download stage")
+assert(installation_progress.include?("fractionCompleted"), "macOS installation progress must expose determinate transfer progress")
+assert(installation_progress.include?("ByteCountFormatter"), "download progress must format transferred and total bytes")
+assert(installation_progress.include?("ALTInstallationDownloadControl"), "download progress must expose a bounded source selector")
+assert(installation_progress.include?("self.progressIndicator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24)"), "the progress bar must use symmetric horizontal margins")
+assert(app_delegate.include?("activeInstallations[device.identifier]"), "macOS installation must deduplicate work by device identifier")
+assert(app_delegate.include?("activeInstallation.focus()"), "a duplicate installation request must focus the existing operation")
+certificate_flow = installation_manager[/func fetchCertificate\(.*?\n    func prepareAllProvisioningProfiles/m]
+assert(certificate_flow, "macOS certificate flow could not be inspected")
+assert(certificate_flow.include?('machineName.hasPrefix("AltForge") || machineName.hasPrefix("AltStore")'), "certificate replacement must be limited to AltForge-managed certificates")
+assert(!certificate_flow.include?("altstoreCertificate ?? certificates.first"), "certificate replacement must never fall back to an unrelated Xcode certificate")
+assert(certificate_flow.include?('addCertificate(machineName: "AltForge"'), "new macOS signing certificates must use the AltForge owner label")
+assert(certificate_flow.include?("confirmReplacement(of: certificate)"), "managed certificate replacement must require explicit consent")
+
+altsign_package = read(root, "Dependencies/AltSign/Package.swift")
+assert(!altsign_package.include?('.define("MARKETPLACE")'), "Classic AltServer authentication must not compile AltSign with SRP cryptography disabled")
+
+release_generator = read(root, "Scripts/generate_release_metadata.rb")
+assert(release_generator.include?('parser.on("--cdn-base-url URL")'), "release metadata generation must accept an explicit CDN base URL")
+assert(release_generator.include?('current_version["downloadMirrors"]'), "release metadata must publish the configured CDN mirror")
+assert(workflow.include?("ALT_FORGE_CDN_BASE_URL"), "release workflow must pass the repository CDN variable to metadata generation")
 
 plugin_manager = read(root, "AltServer/Plugin/PluginManager.swift")
 assert(plugin_manager.include?('NSLocalizedString("Remove Legacy Mail Plug-in"'), "legacy Mail plug-in action needs a clear title")
@@ -173,9 +221,16 @@ app_icon_catalog.fetch("images").each do |entry|
 end
 
 desktop_strings = JSON.parse(read(root, "AltServer/Resources/Localizable.xcstrings")).fetch("strings")
-%w[AltForge\ Server Account Account\ Could\ Not\ Be\ Saved Apple\ ID\ Account Caps\ Lock\ is\ on. Forget\ Account Hide\ Password Remember\ password Saved\ accounts\ are\ unavailable.\ You\ can\ still\ sign\ in. Saved\ passwords\ are\ stored\ in\ this\ Mac's\ Keychain. Show\ Password Sign\ in\ with\ Apple\ ID Check\ for\ Updates… Remove\ Plug-in USB Wi-Fi].each do |key|
+%w[AltForge\ Server Account Account\ Could\ Not\ Be\ Saved Apple\ ID\ Account Apple\ ID\ Verified Caps\ Lock\ is\ on. Downloading\ AltForge Forget\ Account Free\ Account Hide\ Password Individual\ Developer Installation\ Complete Installation\ Progress Organization\ /\ Enterprise Remember\ password Replace\ AltForge\ Certificate Saved\ accounts\ are\ unavailable.\ You\ can\ still\ sign\ in. Saved\ passwords\ are\ stored\ in\ this\ Mac's\ Keychain. Show\ Password Sign\ in\ with\ Apple\ ID Signing\ AltForge Check\ for\ Updates… Remove\ Plug-in USB Wi-Fi].each do |key|
   localized_key = key.gsub('\\ ', ' ')
   assert(desktop_strings.dig(localized_key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese desktop string: #{localized_key}")
+end
+["Automatic (Recommended)", "Current source: %@", "Downloading the verified IPA from the selected mirror…", "GitHub (Official)", "The selected download sources could not download AltForge."].each do |key|
+  assert(desktop_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese download string: #{key}")
+end
+altsign_error_source = read(root, "Dependencies/AltSign/AltSign/Categories/NSError+ALTErrors.m")
+altsign_error_source.scan(/NSLocalizedString\(@"((?:\\.|[^"\\])*)"/).flatten.uniq.each do |key|
+  assert(desktop_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese AltSign error string: #{key}")
 end
 ["Launch at Login (On)", "Launch at Login (Off)", "Launch at Login (Requires Approval)", "Unable to Change Launch at Login", "Restart Required", "Restart Now"].each do |key|
   assert(desktop_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese launch-at-login state: #{key}")
@@ -290,7 +345,10 @@ assert(bluesky_api.include?(classic_federation_guard + "\n        throw URLError
 assert(app_manager.include?("#if !MARKETPLACE\n        // Avoid loading interaction records when federation is unavailable."), "Classic launch must not schedule federation update operations")
 assert(user_defaults.include?("#if MARKETPLACE\n    @NSManaged var fediverseInteractionsDisabled: Bool\n    #else\n    var fediverseInteractionsDisabled: Bool { true }"), "Classic UI must keep federation interactions disabled")
 
-assert(read(root, "AltStoreCore/Model/DatabaseManager.swift").include?("let storeBuildVersion = localApp.buildVersion"), "AltForge build version must be persisted for update comparisons")
+database_manager = read(root, "AltStoreCore/Model/DatabaseManager.swift")
+assert(database_manager.include?("let storeBuildVersion = localApp.buildVersion"), "AltForge build version must be persisted for update comparisons")
+assert(database_manager.include?("UserDefaults.shared.requiresAppGroupMigration && FileManager.default.altstoreSharedDirectory != nil"), "app-group migration must require access to the actual shared container")
+assert(database_manager.include?("previousAppsDirectoryURL.standardizedFileURL != appsDirectoryURL.standardizedFileURL"), "app-group migration must never replace the Apps directory with itself")
 assert(read(root, "AltStoreCore/Model/Source.swift").include?('source.name = "AltForge"'), "offline source identity must be AltForge")
 assert(read(root, "AltStoreCore/Model/StoreApp.swift").include?('app.name = "AltForge"'), "offline app identity must be AltForge")
 

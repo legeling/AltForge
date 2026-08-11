@@ -448,8 +448,9 @@ private extension DatabaseManager
     
     func migrateDatabaseToAppGroupIfNeeded(completion: @escaping (Result<Void, Error>) -> Void)
     {
-        // Only migrate if we haven't migrated yet and there's a valid AltStore app group.
-        guard UserDefaults.shared.requiresAppGroupMigration && Bundle.main.altstoreAppGroup != nil else { return completion(.success(())) }
+        // Re-signed builds can retain app-group metadata without receiving access to
+        // the corresponding container. In that case, keep using the app sandbox.
+        guard UserDefaults.shared.requiresAppGroupMigration && FileManager.default.altstoreSharedDirectory != nil else { return completion(.success(())) }
 
         func finish(_ result: Result<Void, Error>)
         {
@@ -467,6 +468,12 @@ private extension DatabaseManager
         
         let previousAppsDirectoryURL = InstalledApp.legacyAppsDirectoryURL
         let appsDirectoryURL = InstalledApp.appsDirectoryURL
+
+        // Never replace a fallback directory with itself if container resolution
+        // changes between the entitlement check and URL construction.
+        guard previousDatabaseURL.standardizedFileURL != databaseURL.standardizedFileURL,
+              previousAppsDirectoryURL.standardizedFileURL != appsDirectoryURL.standardizedFileURL
+        else { return completion(.success(())) }
         
         let databaseIntent = NSFileAccessIntent.writingIntent(with: databaseURL, options: [.forReplacing])
         let appsIntent = NSFileAccessIntent.writingIntent(with: appsDirectoryURL, options: [.forReplacing])

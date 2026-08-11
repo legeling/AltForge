@@ -5,6 +5,7 @@ require "date"
 require "fileutils"
 require "json"
 require "optparse"
+require "uri"
 
 MAX_VERSION_HISTORY = 20
 
@@ -15,6 +16,7 @@ OptionParser.new do |parser|
   parser.on("--build BUILD") { |value| options[:build] = value }
   parser.on("--date DATE") { |value| options[:date] = value }
   parser.on("--previous-source PATH") { |value| options[:previous_source] = value }
+  parser.on("--cdn-base-url URL") { |value| options[:cdn_base_url] = value }
 end.parse!
 
 required = %i[artifacts version build date]
@@ -54,6 +56,19 @@ current_version = {
   "sha256" => Digest::SHA256.file(ipa_path).hexdigest,
   "minOSVersion" => "17.4"
 }
+
+if options[:cdn_base_url]
+  begin
+    cdn_base_url = URI.parse(options[:cdn_base_url])
+  rescue URI::InvalidURIError
+    abort("CDN base URL must be a valid HTTPS URL")
+  end
+  valid_cdn_url = cdn_base_url.is_a?(URI::HTTPS) && cdn_base_url.host && !cdn_base_url.host.empty? && cdn_base_url.userinfo.nil? && cdn_base_url.query.nil? && cdn_base_url.fragment.nil?
+  abort("CDN base URL must be a valid HTTPS URL without credentials, query, or fragment") unless valid_cdn_url
+
+  base = options[:cdn_base_url].sub(%r{/+\z}, "")
+  current_version["downloadMirrors"] = ["#{base}/v#{options[:version]}/AltForge.ipa"]
+end
 
 previous_versions = []
 if options[:previous_source]

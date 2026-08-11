@@ -17,12 +17,362 @@
         }
       }
     },
+    "%@ of %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ of %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已下载 %1$@ / %2$@"
+          }
+        }
+      }
+    },
+    "%@ of %@ at %@/s" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ of %2$@ at %3$@/s"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已下载 %1$@ / %2$@，%3$@/秒"
+          }
+        }
+      }
+    },
     "AltForge Server" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "AltForge Server"
+          }
+        }
+      }
+    },
+    "AltForge was successfully installed on %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge was successfully installed on %1$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 已成功安装到 %1$@。"
+          }
+        }
+      }
+    },
+    "Apple ID Verified" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID 已验证"
+          }
+        }
+      }
+    },
+    "Automatic (Recommended)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动（推荐）"
+          }
+        }
+      }
+    },
+    "CDN (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CDN (%1$@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CDN（%1$@）"
+          }
+        }
+      }
+    },
+    "Checking the AltForge signing certificate…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在检查 AltForge 签名证书…"
+          }
+        }
+      }
+    },
+    "Checking your developer account…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在检查你的开发者账号…"
+          }
+        }
+      }
+    },
+    "Configured CDN" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已配置 CDN"
+          }
+        }
+      }
+    },
+    "Current source: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current source: %1$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前线路：%1$@"
+          }
+        }
+      }
+    },
+    "Downloading AltForge" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在下载 AltForge"
+          }
+        }
+      }
+    },
+    "Downloading the IPA from the AltForge GitHub Release…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在从 AltForge GitHub Release 下载 IPA…"
+          }
+        }
+      }
+    },
+    "Downloading the verified IPA from the selected mirror…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在从所选镜像下载经过完整性校验的 IPA…"
+          }
+        }
+      }
+    },
+    "GitHub (Official)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub（官方）"
+          }
+        }
+      }
+    },
+    "Installation Complete" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装完成"
+          }
+        }
+      }
+    },
+    "Installation Progress" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装进度"
+          }
+        }
+      }
+    },
+    "Installing AltForge" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在安装 AltForge"
+          }
+        }
+      }
+    },
+    "Mirror %d" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mirror %1$d"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "镜像 %1$d"
+          }
+        }
+      }
+    },
+    "Mirror %d (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mirror %1$d (%2$@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "镜像 %1$d（%2$@）"
+          }
+        }
+      }
+    },
+    "Preparing %@ for installation…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing %1$@ for installation…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在为安装准备 %1$@…"
+          }
+        }
+      }
+    },
+    "Preparing AltForge" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备 AltForge"
+          }
+        }
+      }
+    },
+    "Preparing Device" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备设备"
+          }
+        }
+      }
+    },
+    "Preparing Signing" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备签名"
+          }
+        }
+      }
+    },
+    "Reading the IPA and preparing provisioning profiles…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在读取 IPA 并准备描述文件…"
+          }
+        }
+      }
+    },
+    "Registering %@ with your developer account…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registering %1$@ with your developer account…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在将 %1$@ 注册到你的开发者账号…"
+          }
+        }
+      }
+    },
+    "Sending and installing AltForge on %@…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending and installing AltForge on %1$@…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在向 %1$@ 发送并安装 AltForge…"
+          }
+        }
+      }
+    },
+    "Signing AltForge" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在签名 AltForge"
+          }
+        }
+      }
+    },
+    "Signing the app for your device…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在为你的设备签名 App…"
+          }
+        }
+      }
+    },
+    "The selected download sources could not download AltForge." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选下载线路均无法下载 AltForge。"
           }
         }
       }
@@ -2011,6 +2361,426 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "任务在 %@ 秒后超时。"
+          }
+        }
+      }
+    },
+    "The app is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 无效。"
+          }
+        }
+      }
+    },
+    "The provided .ipa does not contain an app bundle." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 .ipa 不包含 App 包。"
+          }
+        }
+      }
+    },
+    "The provided app is missing its Info.plist." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 App 缺少 Info.plist。"
+          }
+        }
+      }
+    },
+    "Could not find matching provisioning profile." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到匹配的描述文件。"
+          }
+        }
+      }
+    },
+    "The provided parameters are invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的参数无效。"
+          }
+        }
+      }
+    },
+    "Your Apple ID or password is incorrect." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID 或密码不正确。"
+          }
+        }
+      }
+    },
+    "You are not a member of any development teams." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你不是任何开发者团队的成员。"
+          }
+        }
+      }
+    },
+    "An app-specific password is required. You can create one at appleid.apple.com." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要使用 App 专用密码。你可以前往 appleid.apple.com 创建。"
+          }
+        }
+      }
+    },
+    "This device's UDID is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备的 UDID 无效。"
+          }
+        }
+      }
+    },
+    "This device is already registered with this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备已注册到该团队。"
+          }
+        }
+      }
+    },
+    "The certificate request is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "证书请求无效。"
+          }
+        }
+      }
+    },
+    "There is no certificate with the requested serial number for this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此团队中没有与请求序列号匹配的证书。"
+          }
+        }
+      }
+    },
+    "The name “%@” contains invalid characters." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名称“%@”包含无效字符。"
+          }
+        }
+      }
+    },
+    "The name of this app contains invalid characters." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 App 的名称包含无效字符。"
+          }
+        }
+      }
+    },
+    "The bundle identifier for this app is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 App 的 Bundle Identifier 无效。"
+          }
+        }
+      }
+    },
+    "The bundle identifier for this app has already been registered." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 App 的 Bundle Identifier 已被注册。"
+          }
+        }
+      }
+    },
+    "There is no App ID with the requested identifier on this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此团队中没有与请求标识符匹配的 App ID。"
+          }
+        }
+      }
+    },
+    "You may only register 10 App IDs every 7 days." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每 7 天最多只能注册 10 个 App ID。"
+          }
+        }
+      }
+    },
+    "The provided app group is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 App Group 无效。"
+          }
+        }
+      }
+    },
+    "App group does not exist" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Group 不存在"
+          }
+        }
+      }
+    },
+    "The identifier for the requested provisioning profile is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求的描述文件标识符无效。"
+          }
+        }
+      }
+    },
+    "There is no provisioning profile with the requested identifier on this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此团队中没有与请求标识符匹配的描述文件。"
+          }
+        }
+      }
+    },
+    "This account requires signing in with two-factor authentication." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此账号需要使用双重认证登录。"
+          }
+        }
+      }
+    },
+    "Incorrect verification code." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证码不正确。"
+          }
+        }
+      }
+    },
+    "Failed to perform authentication handshake with server." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法与 Apple 服务器完成安全认证握手。"
+          }
+        }
+      }
+    },
+    "Please make sure you entered both your Apple ID and password correctly and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确认 Apple ID 和密码输入正确，然后重试。"
+          }
+        }
+      }
+    },
+    "Make sure this computer's date & time matches your iOS device and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确认这台电脑与 iOS 设备的日期和时间一致，然后重试。"
+          }
+        }
+      }
+    },
+    "Make sure your computer's date & time matches your iOS device and try again. You may need to re-install AltStore with AltServer if the problem persists." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确认电脑与 iOS 设备的日期和时间一致，然后重试。如果问题持续存在，可能需要通过 AltServer 重新安装 AltStore。"
+          }
+        }
+      }
+    },
+    "Signing In…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在登录…"
+          }
+        }
+      }
+    },
+    "Your Apple ID or password is incorrect. Check your details and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID 或密码不正确，请检查后重试。"
+          }
+        }
+      }
+    },
+    "This Apple ID requires an app-specific password. Create one at appleid.apple.com and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 Apple ID 需要使用 App 专用密码。请前往 appleid.apple.com 创建后重试。"
+          }
+        }
+      }
+    },
+    "The verification code was incorrect. Try signing in again to request a new code." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证码不正确，请重新登录以获取新验证码。"
+          }
+        }
+      }
+    },
+    "AltForge Server could not complete the secure sign-in with Apple. Check your network and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 无法完成 Apple 安全登录，请检查网络后重试。"
+          }
+        }
+      }
+    },
+    "AltForge Server could not verify this Mac with Apple. Check the date and time on your devices, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 无法通过 Apple 验证这台 Mac，请检查设备日期和时间后重试。"
+          }
+        }
+      }
+    },
+    "AltForge Server could not sign in with Apple. Check your connection and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 无法登录 Apple，请检查网络连接后重试。"
+          }
+        }
+      }
+    },
+    "Free Account" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费账号"
+          }
+        }
+      }
+    },
+    "Individual Developer" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "个人开发者"
+          }
+        }
+      }
+    },
+    "Organization / Enterprise" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "组织/企业开发者"
+          }
+        }
+      }
+    },
+    "Replace an existing AltForge development certificate?" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "替换现有的 AltForge 开发证书？"
+          }
+        }
+      }
+    },
+    "AltForge development certificate" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 开发证书"
+          }
+        }
+      }
+    },
+    "AltForge Server cannot access the private key for “%@” in the “%@” team. Replacing this AltForge-managed certificate may stop apps installed by another AltForge or AltStore Server until they are reinstalled. Unrelated Xcode and distribution certificates will not be changed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 无法访问“%1$@”在“%2$@”团队中的私钥。替换这张由 AltForge 管理的证书，可能导致由其他 AltForge 或 AltStore Server 安装的 App 无法运行，直到重新安装。不会更改无关的 Xcode 开发证书或分发证书。"
+          }
+        }
+      }
+    },
+    "Replace AltForge Certificate" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "替换 AltForge 证书"
           }
         }
       }

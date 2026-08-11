@@ -8,11 +8,41 @@
 import Foundation
 import KeychainAccess
 
+enum AppleIDAccountKind: String
+{
+    case unknown
+    case free
+    case individual
+    case organization
+
+    var localizedName: String? {
+        switch self
+        {
+        case .unknown: return nil
+        case .free: return NSLocalizedString("Free Account", comment: "")
+        case .individual: return NSLocalizedString("Individual Developer", comment: "")
+        case .organization: return NSLocalizedString("Organization / Enterprise", comment: "")
+        }
+    }
+}
+
+struct AppleIDSavedAccount
+{
+    let identifier: String
+    let kind: AppleIDAccountKind
+}
+
+struct AppleIDSavedCredential
+{
+    let account: AppleIDSavedAccount
+    let password: String?
+}
+
 protocol AppleIDCredentialStoring: AnyObject
 {
-    func accounts() throws -> [String]
-    func password(for account: String) throws -> String?
+    func credentialSnapshot() throws -> [AppleIDSavedCredential]
     func recordSuccessfulAuthentication(account: String, password: String, rememberPassword: Bool) throws
+    func updateAccountKind(_ kind: AppleIDAccountKind, for account: String) throws
     func removeAccount(_ account: String) throws
 }
 
@@ -28,6 +58,7 @@ final class AppleIDCredentialStore: AppleIDCredentialStoring
     {
         let account: String
         let password: String?
+        var accountKind: String?
     }
 
     private enum StoreError: Error
@@ -46,15 +77,14 @@ final class AppleIDCredentialStore: AppleIDCredentialStoring
     private let keychain = Keychain(service: "com.legeling.AltForge.AltServer.AppleIDCredentials")
         .accessibility(.afterFirstUnlockThisDeviceOnly)
 
-    func accounts() throws -> [String]
+    func credentialSnapshot() throws -> [AppleIDSavedCredential]
     {
-        try self.loadArchive().credentials.map(\.account)
-    }
-
-    func password(for account: String) throws -> String?
-    {
-        let credentials = try self.loadArchive().credentials
-        return credentials.first(where: { $0.account.compare(account, options: .caseInsensitive) == .orderedSame })?.password
+        try self.loadArchive().credentials.map {
+            AppleIDSavedCredential(
+                account: AppleIDSavedAccount(identifier: $0.account, kind: AppleIDAccountKind(rawValue: $0.accountKind ?? "") ?? .unknown),
+                password: $0.password
+            )
+        }
     }
 
     func recordSuccessfulAuthentication(account: String, password: String, rememberPassword: Bool) throws
@@ -65,8 +95,9 @@ final class AppleIDCredentialStore: AppleIDCredentialStoring
         }
 
         var credentials = try self.loadArchive().credentials
+        let previousKind = credentials.first(where: { $0.account.compare(account, options: .caseInsensitive) == .orderedSame })?.accountKind
         credentials.removeAll(where: { $0.account.compare(account, options: .caseInsensitive) == .orderedSame })
-        credentials.insert(Credential(account: account, password: rememberPassword ? password : nil), at: 0)
+        credentials.insert(Credential(account: account, password: rememberPassword ? password : nil, accountKind: previousKind), at: 0)
 
         if credentials.count > Self.maximumAccounts
         {
@@ -74,6 +105,30 @@ final class AppleIDCredentialStore: AppleIDCredentialStoring
         }
 
         try self.save(CredentialArchive(version: Self.archiveVersion, credentials: credentials))
+    }
+
+    func updateAccountKind(_ kind: AppleIDAccountKind, for account: String) throws
+    {
+        guard kind != .unknown, let account = self.validatedAccount(account) else
+        {
+            throw StoreError.invalidCredential
+        }
+
+        var archive = try self.loadArchive()
+        if let index = archive.credentials.firstIndex(where: { $0.account.compare(account, options: .caseInsensitive) == .orderedSame })
+        {
+            archive.credentials[index].accountKind = kind.rawValue
+        }
+        else
+        {
+            archive.credentials.insert(Credential(account: account, password: nil, accountKind: kind.rawValue), at: 0)
+            if archive.credentials.count > Self.maximumAccounts
+            {
+                archive.credentials.removeLast(archive.credentials.count - Self.maximumAccounts)
+            }
+        }
+
+        try self.save(archive)
     }
 
     func removeAccount(_ account: String) throws

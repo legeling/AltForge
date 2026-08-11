@@ -31,11 +31,16 @@ final class AppleIDAuthenticationWindowController: NSWindowController
     private let rememberPasswordButton = NSButton(checkboxWithTitle: NSLocalizedString("Remember password", comment: ""), target: nil, action: nil)
     private let capsLockWarningLabel = NSTextField(labelWithString: NSLocalizedString("Caps Lock is on.", comment: ""))
     private let storageWarningLabel = NSTextField(wrappingLabelWithString: NSLocalizedString("Saved accounts are unavailable. You can still sign in.", comment: ""))
+    private let authenticationErrorLabel = NSTextField(wrappingLabelWithString: "")
+    private let progressIndicator = NSProgressIndicator()
+    private let cancelButton = NSButton(title: NSLocalizedString("Cancel", comment: ""), target: nil, action: nil)
     private let continueButton = NSButton(title: NSLocalizedString("Continue", comment: ""), target: nil, action: nil)
-    private var savedAccounts = [String]()
+    private var savedAccounts = [AppleIDSavedAccount]()
+    private var savedCredentials = [AppleIDSavedCredential]()
     private var loadedAccount: String?
     private var capsLockMonitor: Any?
-    private var submission: Submission?
+    private var submissionHandler: ((Submission) -> Void)?
+    private var isAuthenticating = false
     private var isPasswordVisible = false
     private weak var contentStackView: NSStackView?
 
@@ -45,7 +50,7 @@ final class AppleIDAuthenticationWindowController: NSWindowController
 
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 350),
-            styleMask: [.titled, .closable],
+            styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
         )
@@ -65,14 +70,23 @@ final class AppleIDAuthenticationWindowController: NSWindowController
         fatalError("init(coder:) has not been implemented")
     }
 
-    func runModal() -> Submission?
+    func runModal(submissionHandler: @escaping (Submission) -> Void)
     {
-        guard let window = self.window else { return nil }
+        guard let window = self.window else { return }
 
-        self.submission = nil
+        self.submissionHandler = submissionHandler
+        self.authenticationErrorLabel.isHidden = true
+        self.setAuthenticating(false)
         self.updateCapsLockWarning(with: NSEvent.modifierFlags)
         self.startMonitoringCapsLock()
-        defer { self.stopMonitoringCapsLock() }
+        defer {
+            self.stopMonitoringCapsLock()
+            self.submissionHandler = nil
+            self.savedCredentials.removeAll(keepingCapacity: false)
+            self.savedAccounts.removeAll(keepingCapacity: false)
+            self.accountTextField.stringValue = ""
+            self.setPassword("")
+        }
 
         window.center()
         window.makeKeyAndOrderFront(nil)
@@ -96,9 +110,25 @@ final class AppleIDAuthenticationWindowController: NSWindowController
             window.makeFirstResponder(self.securePasswordTextField)
         }
 
-        let response = NSApplication.shared.runModal(for: window)
+        NSApplication.shared.runModal(for: window)
         window.orderOut(nil)
-        return response == .OK ? self.submission : nil
+    }
+
+    func authenticationDidSucceed()
+    {
+        guard self.isAuthenticating else { return }
+        NSApplication.shared.stopModal(withCode: .OK)
+    }
+
+    func authenticationDidFail(message: String?)
+    {
+        guard self.isAuthenticating else { return }
+
+        self.authenticationErrorLabel.stringValue = message ?? ""
+        self.authenticationErrorLabel.isHidden = message == nil
+        self.setAuthenticating(false)
+        self.resizeWindowToFitContent()
+        self.window?.makeFirstResponder(self.isPasswordVisible ? self.visiblePasswordTextField : self.securePasswordTextField)
     }
 }
 
@@ -115,7 +145,6 @@ private extension AppleIDAuthenticationWindowController
 
         let contentView = NSView()
         window.contentView = contentView
-        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
         window.standardWindowButton(.zoomButton)?.isHidden = true
 
         let iconView = NSImageView(image: NSApplication.shared.applicationIconImage)
@@ -216,8 +245,20 @@ private extension AppleIDAuthenticationWindowController
         self.storageWarningLabel.maximumNumberOfLines = 2
         self.storageWarningLabel.isHidden = true
 
-        let cancelButton = NSButton(title: NSLocalizedString("Cancel", comment: ""), target: self, action: #selector(self.cancel(_:)))
-        cancelButton.keyEquivalent = "\u{1b}"
+        self.authenticationErrorLabel.textColor = .systemRed
+        self.authenticationErrorLabel.font = .systemFont(ofSize: NSFont.smallSystemFontSize, weight: .medium)
+        self.authenticationErrorLabel.maximumNumberOfLines = 3
+        self.authenticationErrorLabel.isHidden = true
+
+        self.progressIndicator.style = .spinning
+        self.progressIndicator.controlSize = .small
+        self.progressIndicator.isIndeterminate = true
+        self.progressIndicator.isDisplayedWhenStopped = false
+        self.progressIndicator.isHidden = true
+
+        self.cancelButton.target = self
+        self.cancelButton.action = #selector(self.cancel(_:))
+        self.cancelButton.keyEquivalent = "\u{1b}"
 
         self.continueButton.target = self
         self.continueButton.action = #selector(self.continueAuthentication(_:))
@@ -225,7 +266,7 @@ private extension AppleIDAuthenticationWindowController
         self.continueButton.isEnabled = false
 
         let buttonSpacer = NSView()
-        let buttonRow = NSStackView(views: [buttonSpacer, cancelButton, self.continueButton])
+        let buttonRow = NSStackView(views: [self.progressIndicator, buttonSpacer, self.cancelButton, self.continueButton])
         buttonRow.orientation = .horizontal
         buttonRow.alignment = .centerY
         buttonRow.spacing = 8
@@ -241,6 +282,7 @@ private extension AppleIDAuthenticationWindowController
             self.rememberPasswordButton,
             keychainLabel,
             self.storageWarningLabel,
+            self.authenticationErrorLabel,
             buttonRow
         ])
         stackView.orientation = .vertical
@@ -289,8 +331,11 @@ private extension AppleIDAuthenticationWindowController
             self.visiblePasswordTextField.bottomAnchor.constraint(equalTo: passwordFieldContainer.bottomAnchor),
             keychainLabel.widthAnchor.constraint(equalTo: stackView.widthAnchor),
             self.storageWarningLabel.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+            self.authenticationErrorLabel.widthAnchor.constraint(equalTo: stackView.widthAnchor),
             buttonRow.widthAnchor.constraint(equalTo: stackView.widthAnchor),
-            cancelButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 88),
+            self.progressIndicator.widthAnchor.constraint(equalToConstant: 16),
+            self.progressIndicator.heightAnchor.constraint(equalToConstant: 16),
+            self.cancelButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 88),
             self.continueButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 88)
         ])
 
@@ -314,7 +359,8 @@ private extension AppleIDAuthenticationWindowController
     {
         do
         {
-            self.savedAccounts = try self.credentialStore.accounts()
+            self.savedCredentials = try self.credentialStore.credentialSnapshot()
+            self.savedAccounts = self.savedCredentials.map(\.account)
             self.accountPickerButton.isEnabled = !self.savedAccounts.isEmpty
             self.storageWarningLabel.isHidden = true
 
@@ -325,6 +371,7 @@ private extension AppleIDAuthenticationWindowController
         }
         catch
         {
+            self.savedCredentials = []
             self.savedAccounts = []
             self.loadedAccount = nil
             self.accountPickerButton.isEnabled = false
@@ -335,24 +382,17 @@ private extension AppleIDAuthenticationWindowController
         self.resizeWindowToFitContent()
     }
 
-    func selectSavedAccount(_ account: String)
+    func selectSavedAccount(_ account: AppleIDSavedAccount)
     {
-        self.loadedAccount = account
-        self.accountTextField.stringValue = account
+        self.loadedAccount = account.identifier
+        self.accountTextField.stringValue = account.identifier
 
-        do
-        {
-            let password = try self.credentialStore.password(for: account) ?? ""
-            self.setPassword(password)
-            self.rememberPasswordButton.state = password.isEmpty ? .off : .on
-            self.storageWarningLabel.isHidden = true
-        }
-        catch
-        {
-            self.setPassword("")
-            self.rememberPasswordButton.state = .off
-            self.storageWarningLabel.isHidden = false
-        }
+        let password = self.savedCredentials.first(where: {
+            $0.account.identifier.compare(account.identifier, options: .caseInsensitive) == .orderedSame
+        })?.password ?? ""
+        self.setPassword(password)
+        self.rememberPasswordButton.state = password.isEmpty ? .off : .on
+        self.storageWarningLabel.isHidden = true
 
         self.forgetAccountButton.isEnabled = true
         self.updateValidation()
@@ -369,8 +409,9 @@ private extension AppleIDAuthenticationWindowController
     {
         let account = self.accountTextField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let password = self.password
-        self.continueButton.isEnabled = !account.isEmpty && account.count <= Self.maximumAccountLength && !password.isEmpty && password.count <= Self.maximumPasswordLength
-        self.forgetAccountButton.isEnabled = self.savedAccounts.contains(where: { $0.compare(account, options: .caseInsensitive) == .orderedSame })
+        self.continueButton.isEnabled = !self.isAuthenticating && !account.isEmpty && account.count <= Self.maximumAccountLength && !password.isEmpty && password.count <= Self.maximumPasswordLength
+        self.forgetAccountButton.isEnabled = !self.isAuthenticating && self.savedAccounts.contains(where: { $0.identifier.compare(account, options: .caseInsensitive) == .orderedSame })
+        self.accountPickerButton.isEnabled = !self.isAuthenticating && !self.savedAccounts.isEmpty
     }
 
     func updateCapsLockWarning(with modifierFlags: NSEvent.ModifierFlags)
@@ -407,13 +448,47 @@ private extension AppleIDAuthenticationWindowController
         self.passwordVisibilityButton.toolTip = title
     }
 
+    func setAuthenticating(_ isAuthenticating: Bool)
+    {
+        self.isAuthenticating = isAuthenticating
+        self.accountTextField.isEnabled = !isAuthenticating
+        self.securePasswordTextField.isEnabled = !isAuthenticating
+        self.visiblePasswordTextField.isEnabled = !isAuthenticating
+        self.passwordVisibilityButton.isEnabled = !isAuthenticating
+        self.rememberPasswordButton.isEnabled = !isAuthenticating
+        self.cancelButton.isEnabled = !isAuthenticating
+        self.window?.standardWindowButton(.closeButton)?.isEnabled = !isAuthenticating
+        self.continueButton.title = isAuthenticating ? NSLocalizedString("Signing In…", comment: "") : NSLocalizedString("Continue", comment: "")
+
+        if isAuthenticating
+        {
+            self.progressIndicator.isHidden = false
+            self.progressIndicator.startAnimation(nil)
+        }
+        else
+        {
+            self.progressIndicator.stopAnimation(nil)
+            self.progressIndicator.isHidden = true
+        }
+
+        self.updateValidation()
+    }
+
     func resizeWindowToFitContent()
     {
-        guard let window = self.window, let contentStackView = self.contentStackView else { return }
+        guard let window = self.window,
+              let contentView = window.contentView,
+              let contentStackView = self.contentStackView,
+              let bottomView = contentStackView.arrangedSubviews.last
+        else { return }
 
-        window.contentView?.layoutSubtreeIfNeeded()
-        let contentHeight = ceil(contentStackView.fittingSize.height) + 48
-        let height = max(330, contentHeight)
+        contentView.layoutSubtreeIfNeeded()
+
+        // NSStackView's fitting size can include space reserved by hidden warning rows.
+        // Measure the visible bottom row instead so the window keeps a compact footer.
+        let currentHeight = window.contentLayoutRect.height
+        let bottomEdge = bottomView.convert(bottomView.bounds, to: contentView).minY
+        let height = max(300, ceil(currentHeight - bottomEdge + 22))
         guard abs(window.contentLayoutRect.height - height) > 0.5 else { return }
         window.setContentSize(NSSize(width: 480, height: height))
     }
@@ -447,20 +522,50 @@ private extension AppleIDAuthenticationWindowController
         let selectedAccount = self.accountTextField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         for (index, account) in self.savedAccounts.enumerated()
         {
-            let button = NSButton(title: account, target: self, action: #selector(self.selectAccountFromPicker(_:)))
-            let isSelected = account.compare(selectedAccount, options: .caseInsensitive) == .orderedSame
+            let button = NSButton(title: "", target: self, action: #selector(self.selectAccountFromPicker(_:)))
+            let isSelected = account.identifier.compare(selectedAccount, options: .caseInsensitive) == .orderedSame
             let symbolName = isSelected ? "checkmark.circle.fill" : "person.crop.circle"
             button.image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)
             button.imagePosition = .imageLeading
-            button.imageHugsTitle = true
             button.alignment = .left
             button.bezelStyle = .inline
             button.isBordered = false
             button.tag = index
             button.translatesAutoresizingMaskIntoConstraints = false
+
+            let accountLabel = NSTextField(labelWithString: account.identifier)
+            accountLabel.lineBreakMode = .byTruncatingMiddle
+            accountLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+            let rowViews: [NSView]
+            if let localizedKind = account.kind.localizedName
+            {
+                let kindLabel = NSTextField(labelWithString: localizedKind)
+                kindLabel.font = .systemFont(ofSize: NSFont.smallSystemFontSize, weight: .semibold)
+                kindLabel.textColor = .controlAccentColor
+                kindLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+                rowViews = [accountLabel, kindLabel]
+            }
+            else
+            {
+                rowViews = [accountLabel]
+            }
+
+            let rowContent = NSStackView(views: rowViews)
+            rowContent.orientation = .horizontal
+            rowContent.alignment = .centerY
+            rowContent.spacing = 10
+            rowContent.translatesAutoresizingMaskIntoConstraints = false
+            button.addSubview(rowContent)
+            NSLayoutConstraint.activate([
+                rowContent.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 28),
+                rowContent.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -8),
+                rowContent.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+            ])
+
             stackView.addArrangedSubview(button)
             button.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
-            button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 34).isActive = true
         }
 
         contentView.addSubview(stackView)
@@ -471,8 +576,8 @@ private extension AppleIDAuthenticationWindowController
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
         ])
 
-        let width = max(260, self.accountFieldContainer.bounds.width)
-        let height = 44 + (self.savedAccounts.count * 34)
+        let width = max(340, self.accountFieldContainer.bounds.width)
+        let height = 44 + (self.savedAccounts.count * 38)
         contentViewController.preferredContentSize = NSSize(width: width, height: CGFloat(height))
         self.accountPickerPopover.contentViewController = contentViewController
         self.accountPickerPopover.behavior = .transient
@@ -502,11 +607,11 @@ private extension AppleIDAuthenticationWindowController
     @objc func forgetSelectedAccount(_ sender: NSButton)
     {
         let account = self.accountTextField.stringValue
-        guard let savedAccount = self.savedAccounts.first(where: { $0.compare(account, options: .caseInsensitive) == .orderedSame }) else { return }
+        guard let savedAccount = self.savedAccounts.first(where: { $0.identifier.compare(account, options: .caseInsensitive) == .orderedSame }) else { return }
 
         do
         {
-            try self.credentialStore.removeAccount(savedAccount)
+            try self.credentialStore.removeAccount(savedAccount.identifier)
             self.loadSavedAccounts()
 
             if self.savedAccounts.isEmpty
@@ -535,12 +640,21 @@ private extension AppleIDAuthenticationWindowController
               !password.isEmpty, password.count <= Self.maximumPasswordLength
         else { return }
 
-        self.submission = Submission(account: account, password: password, rememberPassword: self.rememberPasswordButton.state == .on)
-        NSApplication.shared.stopModal(withCode: .OK)
+        let submission = Submission(account: account, password: password, rememberPassword: self.rememberPasswordButton.state == .on)
+        self.authenticationErrorLabel.isHidden = true
+        self.setAuthenticating(true)
+        self.resizeWindowToFitContent()
+        self.submissionHandler?(submission)
     }
 
     @objc func cancel(_ sender: NSButton)
     {
+        guard !self.isAuthenticating else
+        {
+            NSSound.beep()
+            return
+        }
+
         NSApplication.shared.stopModal(withCode: .cancel)
     }
 }
@@ -549,6 +663,12 @@ extension AppleIDAuthenticationWindowController: NSWindowDelegate
 {
     func windowShouldClose(_ sender: NSWindow) -> Bool
     {
+        guard !self.isAuthenticating else
+        {
+            NSSound.beep()
+            return false
+        }
+
         NSApplication.shared.abortModal()
         return true
     }

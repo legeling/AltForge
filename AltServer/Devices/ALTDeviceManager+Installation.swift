@@ -7,22 +7,45 @@
 //
 
 import Cocoa
-import UserNotifications
+import CryptoKit
 
 let altstoreSourceURL = URL(string: "https://github.com/legeling/AltForge/releases/latest/download/apps.json")!
 let altstoreBundleID = "com.legeling.AltForge"
 
 private let appGroupsSemaphore = DispatchSemaphore(value: 1)
 private let developerDiskManager = DeveloperDiskManager()
+private let githubReleaseMirrorPrefixes = [
+    "https://gh-proxy.com/",
+    "https://ghproxy.net/"
+]
+
+private struct ReleaseDownloadCandidate
+{
+    let source: ALTInstallationDownloadSource
+    let url: URL
+    let usesMirror: Bool
+}
 
 private let session: URLSession = {
     let configuration = URLSessionConfiguration.default
     configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
     configuration.urlCache = nil
+    configuration.timeoutIntervalForRequest = 45
+    configuration.timeoutIntervalForResource = 600
     
     let session = URLSession(configuration: configuration)
     return session
 }()
+
+private final class ProgressObservationHolder
+{
+    var observation: NSKeyValueObservation?
+
+    deinit
+    {
+        self.observation?.invalidate()
+    }
+}
 
 extension OperationError
 {
@@ -69,6 +92,9 @@ private extension ALTDeviceManager
             {
                 var version: String
                 var downloadURL: URL
+                var size: Int64?
+                var sha256: String?
+                var downloadMirrors: [URL]?
                 
                 var minimumOSVersion: OperatingSystemVersion? {
                     return self.minOSVersion.map { OperatingSystemVersion(string: $0) }
@@ -87,11 +113,45 @@ private extension ALTDeviceManager
         
         var apps: [App]
     }
+
+    struct GitHubRelease: Decodable
+    {
+        struct Asset: Decodable
+        {
+            var name: String
+            var size: Int64
+            var digest: String?
+            var downloadURL: URL
+
+            private enum CodingKeys: String, CodingKey
+            {
+                case name
+                case size
+                case digest
+                case downloadURL = "browser_download_url"
+            }
+        }
+
+        var assets: [Asset]
+    }
+
+    struct ReleaseAssetIntegrity
+    {
+        let sha256: String
+        let size: Int64
+    }
+
+    struct ReleaseDownloadDescriptor
+    {
+        let officialURL: URL
+        let integrity: ReleaseAssetIntegrity?
+        let configuredMirrorURLs: [URL]
+    }
 }
 
 extension ALTDeviceManager
 {
-    func installApplication(at ipaFileURL: URL?, to altDevice: ALTDevice, appleID: String, password: String, authenticationCompletion: @escaping () -> Void, completion: @escaping (Result<ALTApplication, Error>) -> Void)
+    func installApplication(at ipaFileURL: URL?, to altDevice: ALTDevice, appleID: String, password: String, authenticationCompletion: @escaping () -> Void, teamCompletion: @escaping (ALTTeam) -> Void, downloadControl: ALTInstallationDownloadControl, progressHandler: @escaping (ALTInstallationProgressUpdate) -> Void, completion: @escaping (Result<ALTApplication, Error>) -> Void)
     {
         let destinationDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         
@@ -127,29 +187,51 @@ extension ALTDeviceManager
                     do
                     {
                         let (account, session) = try result.get()
-                        authenticationCompletion()
+                        if Thread.isMainThread
+                        {
+                            authenticationCompletion()
+                        }
+                        else
+                        {
+                            DispatchQueue.main.sync {
+                                authenticationCompletion()
+                            }
+                        }
+
+                        progressHandler(ALTInstallationProgressUpdate(stage: .fetchingTeam))
                         
                         self.fetchTeam(for: account, session: session) { (result) in
                             do
                             {
                                 let team = try result.get()
+
+                                if Thread.isMainThread
+                                {
+                                    teamCompletion(team)
+                                }
+                                else
+                                {
+                                    DispatchQueue.main.sync {
+                                        teamCompletion(team)
+                                    }
+                                }
+
+                                progressHandler(ALTInstallationProgressUpdate(stage: .registeringDevice))
                                 
                                 self.register(altDevice, team: team, session: session) { (result) in
                                     do
                                     {
                                         let device = try result.get()
                                         device.osVersion = altDevice.osVersion
+
+                                        progressHandler(ALTInstallationProgressUpdate(stage: .preparingCertificate))
                                         
                                         self.fetchCertificate(for: team, session: session) { (result) in
                                             do
                                             {
                                                 let certificate = try result.get()
-                                                
-                                                if ipaFileURL == nil
-                                                {
-                                                    // Show alert before downloading remote .ipa.
-                                                    self.showInstallationAlert(appName: NSLocalizedString("AltForge", comment: ""), deviceName: altDevice.name)
-                                                }
+
+                                                progressHandler(ALTInstallationProgressUpdate(stage: .preparingDevice))
                                                 
                                                 self.prepare(device) { (result) in
                                                     switch result
@@ -159,21 +241,17 @@ extension ALTDeviceManager
                                                         fallthrough // Continue installing app even if we couldn't install Developer disk image.
                                                     
                                                     case .success:
-                                                        self.downloadApp(from: ipaFileURL, for: altDevice) { (result) in
+                                                        self.downloadApp(from: ipaFileURL, for: altDevice, downloadControl: downloadControl, progressHandler: progressHandler) { (result) in
                                                             do
                                                             {
                                                                 let fileURL = try result.get()
+
+                                                                progressHandler(ALTInstallationProgressUpdate(stage: .preparingApplication))
                                                                 
                                                                 try FileManager.default.createDirectory(at: destinationDirectoryURL, withIntermediateDirectories: true, attributes: nil)
                                                                 
                                                                 let appBundleURL = try FileManager.default.unzipAppBundle(at: fileURL, toDirectory: destinationDirectoryURL)
                                                                 guard let application = ALTApplication(fileURL: appBundleURL) else { throw ALTError(.invalidApp) }
-                                                                
-                                                                if ipaFileURL != nil
-                                                                {
-                                                                    // Show alert after "downloading" local .ipa.
-                                                                    self.showInstallationAlert(appName: application.name, deviceName: altDevice.name)
-                                                                }
                                                                 
                                                                 appName = application.name
                                                                 
@@ -189,7 +267,7 @@ extension ALTDeviceManager
                                                                             {
                                                                                 let profiles = try result.get()
                                                                                 
-                                                                                self.install(application, to: device, team: team, certificate: certificate, profiles: profiles) { (result) in
+                                                                                self.install(application, to: device, team: team, certificate: certificate, profiles: profiles, progressHandler: progressHandler) { (result) in
                                                                                     finish(result.map { application })
                                                                                 }
                                                                             }
@@ -266,44 +344,391 @@ private extension ALTDeviceManager
 
 private extension ALTDeviceManager
 {
-    func downloadApp(from url: URL?, for device: ALTDevice, completionHandler: @escaping (Result<URL, Error>) -> Void)
+    func downloadApp(from url: URL?, for device: ALTDevice, downloadControl: ALTInstallationDownloadControl, progressHandler: @escaping (ALTInstallationProgressUpdate) -> Void, completionHandler: @escaping (Result<URL, Error>) -> Void)
     {
         if let url, url.isFileURL
         {
             return completionHandler(.success(url))
         }
         
-        self.fetchAltStoreDownloadURL(for: device) { result in
+        self.fetchAltStoreDownload(for: device) { result in
             switch result
             {
-            case .failure(let error): completionHandler(.failure(error))
-            case .success(let url):
-                let downloadTask = URLSession.shared.downloadTask(with: url) { (fileURL, response, error) in
-                    do
-                    {
-                        if let response = response as? HTTPURLResponse
-                        {
-                            guard response.statusCode != 404 else { throw CocoaError(.fileNoSuchFile, userInfo: [NSURLErrorKey: url]) }
-                        }
-                        
-                        let (fileURL, _) = try Result((fileURL, response), error).get()
-                        completionHandler(.success(fileURL))
-                        
-                        do { try FileManager.default.removeItem(at: fileURL) }
-                        catch { print("Failed to remove downloaded .ipa.", error) }
-                    }
-                    catch
-                    {
-                        completionHandler(.failure(error))
+            case .failure(let error):
+                completionHandler(.failure(error))
+
+            case .success(let descriptor):
+                if let integrity = descriptor.integrity
+                {
+                    let candidates = self.releaseDownloadCandidates(for: descriptor, allowMirrors: true)
+                    self.downloadReleaseAsset(candidates: candidates, integrity: integrity, downloadControl: downloadControl, progressHandler: progressHandler, completionHandler: completionHandler)
+                }
+                else
+                {
+                    self.fetchReleaseAssetIntegrity(for: descriptor.officialURL) { integrityResult in
+                        let integrity = try? integrityResult.get()
+                        let candidates = self.releaseDownloadCandidates(for: descriptor, allowMirrors: integrity != nil)
+                        self.downloadReleaseAsset(candidates: candidates, integrity: integrity, downloadControl: downloadControl, progressHandler: progressHandler, completionHandler: completionHandler)
                     }
                 }
-                
-                downloadTask.resume()
             }
         }
     }
+
+    func releaseDownloadCandidates(for descriptor: ReleaseDownloadDescriptor, allowMirrors: Bool) -> [ReleaseDownloadCandidate]
+    {
+        let officialURL = descriptor.officialURL
+        let githubSource = ALTInstallationDownloadSource(identifier: "github", title: NSLocalizedString("GitHub (Official)", comment: ""))
+        var candidates = [ReleaseDownloadCandidate(source: githubSource, url: officialURL, usesMirror: false)]
+        guard allowMirrors, self.isOfficialReleaseURL(officialURL) else { return candidates }
+
+        let configuredCandidates = descriptor.configuredMirrorURLs.prefix(4).enumerated().compactMap { index, url -> ReleaseDownloadCandidate? in
+            guard self.isValidConfiguredMirrorURL(url), url != officialURL else { return nil }
+            let host = url.host ?? NSLocalizedString("Configured CDN", comment: "")
+            let title = String(format: NSLocalizedString("CDN (%@)", comment: ""), host)
+            let source = ALTInstallationDownloadSource(identifier: "cdn-\(index)", title: title)
+            return ReleaseDownloadCandidate(source: source, url: url, usesMirror: true)
+        }
+
+        let publicMirrorCandidates = githubReleaseMirrorPrefixes.enumerated().compactMap { index, prefix -> ReleaseDownloadCandidate? in
+            guard let url = URL(string: prefix + officialURL.absoluteString) else { return nil }
+            let host = url.host ?? String(format: NSLocalizedString("Mirror %d", comment: ""), index + 1)
+            let title = String(format: NSLocalizedString("Mirror %d (%@)", comment: ""), index + 1, host)
+            let source = ALTInstallationDownloadSource(identifier: "mirror-\(index)", title: title)
+            return ReleaseDownloadCandidate(source: source, url: url, usesMirror: true)
+        }
+
+        // A repository-configured CDN is preferred in automatic mode, while GitHub remains the canonical source.
+        candidates = configuredCandidates + candidates + publicMirrorCandidates
+        return candidates
+    }
+
+    func isOfficialReleaseURL(_ url: URL) -> Bool
+    {
+        url.scheme?.lowercased() == "https" &&
+        url.host?.lowercased() == "github.com" &&
+        url.path.hasPrefix("/legeling/AltForge/releases/download/")
+    }
+
+    func isValidConfiguredMirrorURL(_ url: URL) -> Bool
+    {
+        url.scheme?.lowercased() == "https" &&
+        url.host != nil &&
+        url.user == nil &&
+        url.password == nil &&
+        url.fragment == nil
+    }
+
+    func fetchReleaseAssetIntegrity(for downloadURL: URL, completionHandler: @escaping (Result<ReleaseAssetIntegrity, Error>) -> Void)
+    {
+        let pathComponents = downloadURL.pathComponents.filter { $0 != "/" }
+        guard downloadURL.scheme == "https",
+              downloadURL.host?.lowercased() == "github.com",
+              pathComponents.count == 6,
+              pathComponents[0] == "legeling",
+              pathComponents[1] == "AltForge",
+              pathComponents[2] == "releases",
+              pathComponents[3] == "download"
+        else
+        {
+            let error = CocoaError(.fileReadUnsupportedScheme, userInfo: [NSURLErrorKey: downloadURL])
+            return completionHandler(.failure(error))
+        }
+
+        let tag = pathComponents[4]
+        let assetName = pathComponents[5]
+        guard let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+              let metadataURL = URL(string: "https://api.github.com/repos/legeling/AltForge/releases/tags/\(encodedTag)")
+        else
+        {
+            return completionHandler(.failure(CocoaError(.fileReadInvalidFileName)))
+        }
+
+        var request = URLRequest(url: metadataURL)
+        request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+        request.setValue("AltForge-Server", forHTTPHeaderField: "User-Agent")
+        request.timeoutInterval = 20
+
+        session.dataTask(with: request) { data, response, error in
+            do
+            {
+                if let response = response as? HTTPURLResponse
+                {
+                    guard response.statusCode == 200 else {
+                        throw CocoaError(.fileReadUnknown, userInfo: [NSURLErrorKey: metadataURL])
+                    }
+                }
+
+                let (data, _) = try Result((data, response), error).get()
+                guard data.count <= 1024 * 1024 else { throw CocoaError(.fileReadTooLarge) }
+
+                let release = try Foundation.JSONDecoder().decode(GitHubRelease.self, from: data)
+                guard let asset = release.assets.first(where: { $0.name == assetName && $0.downloadURL == downloadURL }),
+                      asset.size > 0,
+                      let digest = asset.digest?.lowercased(),
+                      digest.hasPrefix("sha256:")
+                else
+                {
+                    throw CocoaError(.fileReadCorruptFile, userInfo: [NSURLErrorKey: metadataURL])
+                }
+
+                let sha256 = String(digest.dropFirst("sha256:".count))
+                guard sha256.count == 64, sha256.allSatisfy({ $0.isHexDigit }) else {
+                    throw CocoaError(.fileReadCorruptFile, userInfo: [NSURLErrorKey: metadataURL])
+                }
+
+                completionHandler(.success(ReleaseAssetIntegrity(sha256: sha256, size: asset.size)))
+            }
+            catch
+            {
+                completionHandler(.failure(error))
+            }
+        }.resume()
+    }
+
+    func downloadReleaseAsset(candidates: [ReleaseDownloadCandidate], integrity: ReleaseAssetIntegrity?, downloadControl: ALTInstallationDownloadControl, progressHandler: @escaping (ALTInstallationProgressUpdate) -> Void, completionHandler: @escaping (Result<URL, Error>) -> Void)
+    {
+        let automaticSource = ALTInstallationDownloadSource(identifier: "automatic", title: NSLocalizedString("Automatic (Recommended)", comment: ""))
+        let availableSources = [automaticSource] + candidates.map(\.source)
+        let stateLock = NSLock()
+        var generation = 0
+        var isFinished = false
+        var currentTask: URLSessionDownloadTask?
+        var currentObservation: NSKeyValueObservation?
+
+        func isCurrent(_ expectedGeneration: Int) -> Bool
+        {
+            stateLock.lock()
+            defer { stateLock.unlock() }
+            return !isFinished && generation == expectedGeneration
+        }
+
+        func finish(_ result: Result<URL, Error>, expectedGeneration: Int)
+        {
+            stateLock.lock()
+            guard !isFinished, generation == expectedGeneration else
+            {
+                stateLock.unlock()
+                return
+            }
+            isFinished = true
+            generation += 1
+            let task = currentTask
+            let observation = currentObservation
+            currentTask = nil
+            currentObservation = nil
+            stateLock.unlock()
+
+            observation?.invalidate()
+            task?.cancel()
+            downloadControl.finish()
+            completionHandler(result)
+        }
+
+        func attempt(_ sequence: [ReleaseDownloadCandidate], index: Int, expectedGeneration: Int, previousError: Error? = nil)
+        {
+            guard isCurrent(expectedGeneration) else { return }
+            guard sequence.indices.contains(index) else
+            {
+                let error = previousError ?? CocoaError(.fileNoSuchFile)
+                let failure = NSLocalizedString("The selected download sources could not download AltForge.", comment: "")
+                return finish(.failure((error as NSError).withLocalizedFailure(failure)), expectedGeneration: expectedGeneration)
+            }
+
+            let candidate = sequence[index]
+            progressHandler(ALTInstallationProgressUpdate(
+                stage: .downloading,
+                fractionCompleted: 0,
+                usesMirror: candidate.usesMirror,
+                completedBytes: 0,
+                totalBytes: integrity?.size,
+                downloadSourceTitle: candidate.source.title
+            ))
+
+            var request = URLRequest(url: candidate.url)
+            request.timeoutInterval = 45
+            var downloadTask: URLSessionDownloadTask!
+            downloadTask = session.downloadTask(with: request) { fileURL, response, error in
+                guard isCurrent(expectedGeneration) else { return }
+
+                stateLock.lock()
+                guard !isFinished, generation == expectedGeneration, currentTask === downloadTask else
+                {
+                    stateLock.unlock()
+                    return
+                }
+                let completedObservation = currentObservation
+                currentTask = nil
+                currentObservation = nil
+                stateLock.unlock()
+                completedObservation?.invalidate()
+
+                do
+                {
+                    if let response = response as? HTTPURLResponse
+                    {
+                        guard (200..<300).contains(response.statusCode) else {
+                            throw CocoaError(.fileReadUnknown, userInfo: [NSURLErrorKey: candidate.url])
+                        }
+                    }
+
+                    let (fileURL, _) = try Result((fileURL, response), error).get()
+                    defer { try? FileManager.default.removeItem(at: fileURL) }
+
+                    if let integrity
+                    {
+                        let fileSize = try fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize.map(Int64.init) ?? -1
+                        guard fileSize == integrity.size,
+                              try self.sha256(of: fileURL) == integrity.sha256
+                        else
+                        {
+                            throw CocoaError(.fileReadCorruptFile, userInfo: [NSURLErrorKey: candidate.url])
+                        }
+                    }
+
+                    guard isCurrent(expectedGeneration) else { return }
+                    progressHandler(ALTInstallationProgressUpdate(
+                        stage: .downloading,
+                        fractionCompleted: 1,
+                        usesMirror: candidate.usesMirror,
+                        completedBytes: integrity?.size,
+                        totalBytes: integrity?.size,
+                        downloadSourceTitle: candidate.source.title
+                    ))
+                    finish(.success(fileURL), expectedGeneration: expectedGeneration)
+                }
+                catch
+                {
+                    guard isCurrent(expectedGeneration) else { return }
+                    attempt(sequence, index: index + 1, expectedGeneration: expectedGeneration, previousError: error)
+                }
+            }
+
+            let speedLock = NSLock()
+            let startedAt = ProcessInfo.processInfo.systemUptime
+            var lastSampleTime = startedAt
+            var lastCompletedBytes: Int64 = 0
+            var smoothedBytesPerSecond: Double?
+            let observation = downloadTask.progress.observe(\.completedUnitCount, options: [.initial, .new]) { progress, _ in
+                guard isCurrent(expectedGeneration) else { return }
+
+                let completedBytes = max(progress.completedUnitCount, 0)
+                let totalBytes = integrity?.size ?? (progress.totalUnitCount > 0 ? progress.totalUnitCount : nil)
+                let now = ProcessInfo.processInfo.systemUptime
+
+                speedLock.lock()
+                let elapsed = now - lastSampleTime
+                if elapsed >= 0.25
+                {
+                    let transferred = max(completedBytes - lastCompletedBytes, 0)
+                    let currentSpeed = Double(transferred) / elapsed
+                    smoothedBytesPerSecond = smoothedBytesPerSecond.map { ($0 * 0.7) + (currentSpeed * 0.3) } ?? currentSpeed
+                    lastSampleTime = now
+                    lastCompletedBytes = completedBytes
+                }
+                let averageSpeed = now > startedAt ? Double(completedBytes) / (now - startedAt) : nil
+                let bytesPerSecond = smoothedBytesPerSecond ?? averageSpeed
+                speedLock.unlock()
+
+                let fractionCompleted = totalBytes.flatMap { $0 > 0 ? min(Double(completedBytes) / Double($0), 1) : nil }
+                progressHandler(ALTInstallationProgressUpdate(
+                    stage: .downloading,
+                    fractionCompleted: fractionCompleted,
+                    usesMirror: candidate.usesMirror,
+                    completedBytes: completedBytes,
+                    totalBytes: totalBytes,
+                    bytesPerSecond: bytesPerSecond,
+                    downloadSourceTitle: candidate.source.title
+                ))
+            }
+
+            stateLock.lock()
+            guard !isFinished, generation == expectedGeneration else
+            {
+                stateLock.unlock()
+                observation.invalidate()
+                downloadTask.cancel()
+                return
+            }
+            currentTask = downloadTask
+            currentObservation = observation
+            stateLock.unlock()
+            downloadTask.resume()
+        }
+
+        func start(_ selectedIdentifier: String)
+        {
+            let sequence = selectedIdentifier == automaticSource.identifier
+                ? candidates
+                : candidates.filter { $0.source.identifier == selectedIdentifier }
+
+            stateLock.lock()
+            guard !isFinished else
+            {
+                stateLock.unlock()
+                return
+            }
+            generation += 1
+            let expectedGeneration = generation
+            let task = currentTask
+            let observation = currentObservation
+            currentTask = nil
+            currentObservation = nil
+            stateLock.unlock()
+
+            observation?.invalidate()
+            task?.cancel()
+            downloadControl.configure(sources: availableSources, selectedIdentifier: selectedIdentifier)
+            attempt(sequence, index: 0, expectedGeneration: expectedGeneration)
+        }
+
+        downloadControl.setSelectionHandler { identifier in
+            start(identifier)
+        }
+        start(automaticSource.identifier)
+    }
+
+    func sha256(of fileURL: URL) throws -> String
+    {
+        let fileHandle = try FileHandle(forReadingFrom: fileURL)
+        defer { try? fileHandle.close() }
+
+        var hasher = SHA256()
+        while true
+        {
+            let data = try fileHandle.read(upToCount: 1024 * 1024) ?? Data()
+            guard !data.isEmpty else { break }
+            hasher.update(data: data)
+        }
+
+        return hasher.finalize().map { String(format: "%02x", $0) }.joined()
+    }
     
-    func fetchAltStoreDownloadURL(for device: ALTDevice, completion: @escaping (Result<URL, Error>) -> Void)
+    func releaseDownloadDescriptor(for version: Source.App.Version) -> ReleaseDownloadDescriptor
+    {
+        let normalizedSHA256 = version.sha256?.lowercased()
+        let integrity: ReleaseAssetIntegrity?
+        if let size = version.size,
+           size > 0,
+           let normalizedSHA256,
+           normalizedSHA256.count == 64,
+           normalizedSHA256.allSatisfy({ $0.isHexDigit })
+        {
+            integrity = ReleaseAssetIntegrity(sha256: normalizedSHA256, size: size)
+        }
+        else
+        {
+            integrity = nil
+        }
+
+        return ReleaseDownloadDescriptor(
+            officialURL: version.downloadURL,
+            integrity: integrity,
+            configuredMirrorURLs: Array((version.downloadMirrors ?? []).prefix(4))
+        )
+    }
+
+    func fetchAltStoreDownload(for device: ALTDevice, completion: @escaping (Result<ReleaseDownloadDescriptor, Error>) -> Void)
     {
         let dataTask = session.dataTask(with: altstoreSourceURL) { (data, response, error) in
             
@@ -311,10 +736,11 @@ private extension ALTDeviceManager
             {
                 if let response = response as? HTTPURLResponse
                 {
-                    guard response.statusCode != 404 else { throw CocoaError(.fileNoSuchFile, userInfo: [NSURLErrorKey: altstoreSourceURL]) }
+                    guard (200..<300).contains(response.statusCode) else { throw CocoaError(.fileNoSuchFile, userInfo: [NSURLErrorKey: altstoreSourceURL]) }
                 }
                 
                 let (data, _) = try Result((data, response), error).get()
+                guard data.count <= 1024 * 1024 else { throw CocoaError(.fileReadTooLarge) }
                 let source = try Foundation.JSONDecoder().decode(Source.self, from: data)
                 
                 guard let altstore = source.apps.first(where: { $0.bundleIdentifier == altstoreBundleID }) else {
@@ -346,7 +772,7 @@ private extension ALTDeviceManager
                 
                 guard latestSupportedVersion.version != latestVersion.version else {
                     // The newest version is also the newest compatible version, so return its downloadURL.
-                    return completion(.success(latestVersion.downloadURL))
+                    return completion(.success(self.releaseDownloadDescriptor(for: latestVersion)))
                 }
                 
                 DispatchQueue.main.async {
@@ -365,7 +791,7 @@ private extension ALTDeviceManager
                     let index = alert.runModal()
                     if index == .alertFirstButtonReturn
                     {
-                        completion(.success(latestSupportedVersion.downloadURL))
+                        completion(.success(self.releaseDownloadDescriptor(for: latestSupportedVersion)))
                     }
                     else
                     {
@@ -455,62 +881,83 @@ private extension ALTDeviceManager
                 let certificateFileURL = FileManager.default.certificatesDirectory.appendingPathComponent(team.identifier + ".p12")
                 try FileManager.default.createDirectory(at: FileManager.default.certificatesDirectory, withIntermediateDirectories: true, attributes: nil)
                 
-                var isCancelled = false
-                
-                // Check if there is another AltStore certificate, which means AltStore has been installed with this Apple ID before.
-                let altstoreCertificate = certificates.first { $0.machineName?.starts(with: "AltStore") == true }
-                if let previousCertificate = altstoreCertificate
+                // Only certificates explicitly created by AltForge (or legacy AltStore builds) are managed here.
+                let managedCertificates = certificates.filter { certificate in
+                    guard let machineName = certificate.machineName else { return false }
+                    return machineName.hasPrefix("AltForge") || machineName.hasPrefix("AltStore")
+                }
+
+                if FileManager.default.fileExists(atPath: certificateFileURL.path),
+                   let data = try? Data(contentsOf: certificateFileURL)
                 {
-                    if FileManager.default.fileExists(atPath: certificateFileURL.path),
-                       let data = try? Data(contentsOf: certificateFileURL),
-                       let certificate = ALTCertificate(p12Data: data, password: previousCertificate.machineIdentifier)
+                    for previousCertificate in managedCertificates
                     {
-                        // Manually set machineIdentifier so we can encrypt + embed certificate if needed.
-                        certificate.machineIdentifier = previousCertificate.machineIdentifier
+                        guard let machineIdentifier = previousCertificate.machineIdentifier,
+                              let certificate = ALTCertificate(p12Data: data, password: machineIdentifier),
+                              certificate.serialNumber == previousCertificate.serialNumber
+                        else { continue }
+
+                        // Restore the server-side identifier used to encrypt the embedded certificate.
+                        certificate.machineIdentifier = machineIdentifier
                         return completionHandler(.success(certificate))
                     }
-                                        
-                    DispatchQueue.main.sync {
-                        let alert = NSAlert()
-                        alert.messageText = NSLocalizedString("Multiple AltForge Servers Not Supported", comment: "")
-                        alert.informativeText = NSLocalizedString("Please use the same AltForge Server you previously used with this Apple ID, or apps installed with another server may stop working.\n\nAre you sure you want to continue?", comment: "")
-                        
-                        alert.addButton(withTitle: NSLocalizedString("Continue", comment: ""))
-                        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
-                        
-                        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-                        
-                        let buttonIndex = alert.runModal()
-                        if buttonIndex == NSApplication.ModalResponse.alertSecondButtonReturn
-                        {
-                            isCancelled = true
-                        }
-                    }
-                    
-                    guard !isCancelled else { return completionHandler(.failure(OperationError(.cancelled))) }
                 }
-                
+
+                func confirmReplacement(of certificate: ALTCertificate) -> Bool
+                {
+                    var shouldReplace = false
+
+                    func presentAlert()
+                    {
+                        let alert = NSAlert()
+                        alert.messageText = NSLocalizedString("Replace an existing AltForge development certificate?", comment: "")
+                        let certificateName = certificate.machineName ?? NSLocalizedString("AltForge development certificate", comment: "")
+                        alert.informativeText = String(
+                            format: NSLocalizedString("AltForge Server cannot access the private key for “%@” in the “%@” team. Replacing this AltForge-managed certificate may stop apps installed by another AltForge or AltStore Server until they are reinstalled. Unrelated Xcode and distribution certificates will not be changed.", comment: ""),
+                            certificateName,
+                            team.name
+                        )
+
+                        alert.addButton(withTitle: NSLocalizedString("Replace AltForge Certificate", comment: ""))
+                        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+
+                        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+                        shouldReplace = alert.runModal() == .alertFirstButtonReturn
+                    }
+
+                    if Thread.isMainThread
+                    {
+                        presentAlert()
+                    }
+                    else
+                    {
+                        DispatchQueue.main.sync(execute: presentAlert)
+                    }
+
+                    return shouldReplace
+                }
+
                 func addCertificate()
                 {
-                    ALTAppleAPI.shared.addCertificate(machineName: "AltStore", to: team, session: session) { (certificate, error) in
+                    ALTAppleAPI.shared.addCertificate(machineName: "AltForge", to: team, session: session) { (certificate, error) in
                         do
                         {
                             let certificate = try Result(certificate, error).get()
                             guard let privateKey = certificate.privateKey else { throw OperationError(.missingPrivateKey) }
-                            
+
                             ALTAppleAPI.shared.fetchCertificates(for: team, session: session) { (certificates, error) in
                                 do
                                 {
                                     let certificates = try Result(certificates, error).get()
-                                    
+
                                     guard let certificate = certificates.first(where: { $0.serialNumber == certificate.serialNumber }) else {
                                         throw OperationError(.missingCertificate)
                                     }
-                                    
+
                                     certificate.privateKey = privateKey
-                                    
+
                                     completionHandler(.success(certificate))
-                                    
+
                                     if let machineIdentifier = certificate.machineIdentifier,
                                        let encryptedData = certificate.encryptedP12Data(withPassword: machineIdentifier)
                                     {
@@ -531,35 +978,11 @@ private extension ALTDeviceManager
                         }
                     }
                 }
-                
-                if let certificate = altstoreCertificate ?? certificates.first
-                {
-                    if team.type != .free
-                    {
-                        DispatchQueue.main.sync {
-                            let alert = NSAlert()
-                            alert.messageText = NSLocalizedString("Installing this app will revoke your iOS development certificate.", comment: "")
-                            alert.informativeText = NSLocalizedString("""
-    This will not affect apps you've submitted to the App Store, but may cause apps you've installed to your devices with Xcode to stop working until you reinstall them.
 
-    To prevent this from happening, feel free to try again with another Apple ID.
-    """, comment: "")
-                            
-                            alert.addButton(withTitle: NSLocalizedString("Continue", comment: ""))
-                            alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
-                            
-                            NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-                            
-                            let buttonIndex = alert.runModal()
-                            if buttonIndex == NSApplication.ModalResponse.alertSecondButtonReturn
-                            {
-                                isCancelled = true
-                            }
-                        }
-                        
-                        guard !isCancelled else { return completionHandler(.failure(OperationError(.cancelled))) }
-                    }
-                    
+                if let certificate = managedCertificates.first
+                {
+                    guard confirmReplacement(of: certificate) else { return completionHandler(.failure(OperationError(.cancelled))) }
+
                     ALTAppleAPI.shared.revoke(certificate, for: team, session: session) { (success, error) in
                         do
                         {
@@ -888,7 +1311,7 @@ private extension ALTDeviceManager
         }
     }
     
-    func install(_ application: ALTApplication, to device: ALTDevice, team: ALTTeam, certificate: ALTCertificate, profiles: [String: ALTProvisioningProfile], completionHandler: @escaping (Result<Void, Error>) -> Void)
+    func install(_ application: ALTApplication, to device: ALTDevice, team: ALTTeam, certificate: ALTCertificate, profiles: [String: ALTProvisioningProfile], progressHandler: @escaping (ALTInstallationProgressUpdate) -> Void, completionHandler: @escaping (Result<Void, Error>) -> Void)
     {
         func prepare(_ bundle: Bundle, additionalInfoDictionaryValues: [String: Any] = [:]) throws
         {
@@ -965,14 +1388,24 @@ private extension ALTDeviceManager
                 }
                 
                 let resigner = ALTSigner(team: team, certificate: certificate)
+                progressHandler(ALTInstallationProgressUpdate(stage: .signing))
                 resigner.signApp(at: application.fileURL, provisioningProfiles: Array(profiles.values)) { (success, error) in
                     do
                     {
                         try Result(success, error).get()
                         
                         let activeProfiles: Set<String>? = (team.type == .free && application.isAltStoreApp) ? Set(profiles.values.map(\.bundleIdentifier)) : nil
-                        ALTDeviceManager.shared.installApp(at: application.fileURL, toDeviceWithUDID: device.identifier, activeProvisioningProfiles: activeProfiles) { (success, error) in
+                        progressHandler(ALTInstallationProgressUpdate(stage: .installing))
+
+                        let observationHolder = ProgressObservationHolder()
+                        let progress = ALTDeviceManager.shared.installApp(at: application.fileURL, toDeviceWithUDID: device.identifier, activeProvisioningProfiles: activeProfiles) { (success, error) in
+                            observationHolder.observation?.invalidate()
+                            observationHolder.observation = nil
                             completionHandler(Result(success, error))
+                        }
+
+                        observationHolder.observation = progress.observe(\.fractionCompleted, options: [.initial, .new]) { progress, _ in
+                            progressHandler(ALTInstallationProgressUpdate(stage: .installing, fractionCompleted: progress.fractionCompleted))
                         }
                     }
                     catch
@@ -990,13 +1423,4 @@ private extension ALTDeviceManager
         }
     }
     
-    func showInstallationAlert(appName: String, deviceName: String)
-    {
-        let content = UNMutableNotificationContent()
-        content.title = String(format: NSLocalizedString("Installing %@ to %@...", comment: ""), appName, deviceName)
-        content.body = NSLocalizedString("This may take a few seconds.", comment: "")
-        
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-        UNUserNotificationCenter.current().add(request)
-    }
 }
