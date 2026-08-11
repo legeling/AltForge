@@ -283,7 +283,10 @@ extension UIApplication
         for window in windows
         {
             window.tintColor = tintColor
-            (window.rootViewController as? TabBarController)?.applyTheme()
+
+            let rootViewController = window.rootViewController
+            let tabBarController = (rootViewController as? TabBarController) ?? rootViewController?.children.first(where: { $0 is TabBarController }) as? TabBarController
+            tabBarController?.applyTheme()
         }
     }
 }

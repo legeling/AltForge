@@ -31,8 +31,8 @@
 | `T-021` 收敛 iOS 主导航资讯页 | Done | `FR-033`; `DES-019`; `TEST-032` | 主导航仅保留四个核心标签并默认进入浏览，source 资讯兼容不变，contract/build/simulator UI 通过 |
 | `T-022` 收敛 iOS 品牌、配色与设置身份 | Done with device gap | `FR-034`; `DES-020`; `TEST-033` | 系统 tab 图标、官方 tint、动态设置配色、bundle 版本、本仓库入口与上游致谢已通过 contract/build/深浅色 simulator UI；真机视觉矩阵待补 |
 | `T-023` 修复 iOS 公开身份和 crash-report 名称 | Done with system UI gap | `FR-035`; `DES-021`; `TEST-034` | bundle/executable/test host、公开资源 allowlist、iOS build/build-for-testing 与产物 Mach-O 检查通过；系统 crash-report 标题待真机手工确认 |
-| `T-024` 修复 iOS 安装中断崩溃、恢复日志与认证说明 | In progress / second device regression | `FR-036`; `DES-022`; `TEST-035` | 第二轮真机反馈确认仍有浅色不可读、安装退出和空日志；固定白字、无结果 precondition、畸形 plist、原子 journal 与前台 checkpoint 修复已实现，iOS/macOS Release build 通过，runtime fixture 和第三方 IPA 真机复测待完成 |
-| `T-025` 增加 iOS 主题色选择 | In progress / visual matrix pending | `FR-037`; `DES-023`; `TEST-036` | 默认锻造红、四主题持久化、设置色板、动态导航/标签/官方来源 tint 和双语 contract 已实现；Release-iphoneos build 通过，深浅色真机矩阵待完成 |
+| `T-024` 修复 iOS 安装中断崩溃、恢复日志与认证说明 | In progress / third device regression | `FR-036`; `DES-022`; `TEST-035` | build 13 系统报告定位 footer 越权 dequeue，已移植上游 iOS 18 独立 prototype 修复；repository contract 与完整 iOS Release build 通过，runtime fixture 和第三方 IPA 真机复测待完成 |
+| `T-025` 增加 iOS 主题色选择 | In progress / visual matrix pending | `FR-037`; `DES-023`; `TEST-036` | 默认锻造红、四主题持久化、设置色板、Launch child 即时刷新路径、动态导航/标签/官方来源 tint 和双语 contract 已实现；Release-iphoneos build 通过，深浅色真机矩阵待完成 |
 
 ## Analyze 门禁结果
 

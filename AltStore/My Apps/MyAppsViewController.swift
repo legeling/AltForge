@@ -94,6 +94,7 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         self.collectionView.register(UpdatesCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "UpdatesHeader")
         self.collectionView.register(InstalledAppsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ActiveAppsHeader")
         self.collectionView.register(InstalledAppsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "InactiveAppsHeader")
+        self.collectionView.register(InstalledAppsCollectionFooterView.nib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "InstalledAppsFooter")
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(MyAppsViewController.checkForUpdates(_:)), for: .primaryActionTriggered)
@@ -1208,6 +1209,46 @@ private extension MyAppsViewController
         
         cell.bannerView.iconImageView.isIndicatingActivity = false
     }
+
+    func configureAppIDsFooterView(_ footerView: InstalledAppsCollectionFooterView)
+    {
+        guard let team = DatabaseManager.shared.activeTeam() else { return }
+
+        footerView.button.setTitle(NSLocalizedString("View App IDs", comment: "Button for opening the registered App IDs list"), for: .normal)
+
+        switch team.type
+        {
+        case .free:
+            let registeredAppIDs = team.appIDs.count
+            let maximumAppIDCount = 10
+            let remainingAppIDs = max(maximumAppIDCount - registeredAppIDs, 0)
+
+            if remainingAppIDs == 1
+            {
+                footerView.textLabel.text = NSLocalizedString("1 App ID Remaining", comment: "")
+            }
+            else
+            {
+                footerView.textLabel.text = String(format: NSLocalizedString("%@ App IDs Remaining", comment: ""), NSNumber(value: remainingAppIDs))
+            }
+
+            footerView.textLabel.isHidden = false
+
+        case .individual, .organization, .unknown:
+            footerView.textLabel.isHidden = true
+
+        @unknown default:
+            footerView.textLabel.isHidden = true
+        }
+
+        footerView.button.removeTarget(nil, action: nil, for: .primaryActionTriggered)
+        footerView.button.addTarget(self, action: #selector(MyAppsViewController.showAppIDs(_:)), for: .primaryActionTriggered)
+    }
+
+    @objc func showAppIDs(_ sender: UIButton)
+    {
+        self.performSegue(withIdentifier: "showAppIDs", sender: sender)
+    }
     
     func removeAppExtensions(from application: ALTApplication, completion: @escaping (Result<Void, Error>) -> Void)
     {
@@ -1914,31 +1955,7 @@ extension MyAppsViewController
             
         case .activeApps, .inactiveApps:
             let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "InstalledAppsFooter", for: indexPath) as! InstalledAppsCollectionFooterView
-            
-            guard let team = DatabaseManager.shared.activeTeam() else { return footerView }
-            switch team.type
-            {
-            case .free:
-                let registeredAppIDs = team.appIDs.count
-                
-                let maximumAppIDCount = 10
-                let remainingAppIDs = max(maximumAppIDCount - registeredAppIDs, 0)
-                
-                if remainingAppIDs == 1
-                {
-                    footerView.textLabel.text = String(format: NSLocalizedString("1 App ID Remaining", comment: ""))
-                }
-                else
-                {
-                    footerView.textLabel.text = String(format: NSLocalizedString("%@ App IDs Remaining", comment: ""), NSNumber(value: remainingAppIDs))
-                }
-                
-                footerView.textLabel.isHidden = false
-                
-            case .individual, .organization, .unknown: footerView.textLabel.isHidden = true
-            @unknown default: break
-            }
-            
+            self.configureAppIDsFooterView(footerView)
             return footerView
         }
     }
@@ -2263,10 +2280,10 @@ extension MyAppsViewController: UICollectionViewDelegateFlowLayout
         func appIDsFooterSize() -> CGSize
         {
             guard let _ = DatabaseManager.shared.activeTeam() else { return .zero }
-            
-            let indexPath = IndexPath(row: 0, section: section.rawValue)
-            let footerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionFooter, at: indexPath) as! InstalledAppsCollectionFooterView
-                        
+
+            let footerView = InstalledAppsCollectionFooterView.nib.instantiate(withOwner: nil).first as! InstalledAppsCollectionFooterView
+            self.configureAppIDsFooterView(footerView)
+
             let size = footerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height),
                                                           withHorizontalFittingPriority: .required,
                                                           verticalFittingPriority: .fittingSizeLevel)

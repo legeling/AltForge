@@ -354,6 +354,8 @@
 		BFF7C920257844FA00E55F36 /* ALTPluginService.m in Sources */ = {isa = PBXBuildFile; fileRef = BF5C5FCE237DF69100EDD0C6 /* ALTPluginService.m */; };
 		BFF7C9342578492100E55F36 /* ALTAnisetteData.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB49AA823834CF900D542D9 /* ALTAnisetteData.m */; };
 		D50107EC2ADF2E1A0069F2A1 /* AddSourceTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50107EB2ADF2E1A0069F2A1 /* AddSourceTextFieldCell.swift */; };
+		D504F5BB2CE566FE00AD3760 /* InstalledAppsCollectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D504F5BA2CE566F900AD3760 /* InstalledAppsCollectionFooterView.swift */; };
+		D504F5BD2CE5671700AD3760 /* InstalledAppsCollectionFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D504F5BC2CE5671700AD3760 /* InstalledAppsCollectionFooterView.xib */; };
 		D50652562BA358C50055ABBE /* Task+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FB7A202AA284ED00EF863D /* Task+Timeout.swift */; };
 		D5066FC22F1394600055B38A /* AltStore20ToAltStore21.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = D5066FC12F1394600055B38A /* AltStore20ToAltStore21.xcmappingmodel */; };
 		D5084CCC2B1EA80100C02160 /* FeaturedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5084CCB2B1EA80100C02160 /* FeaturedComponents.swift */; };
@@ -1059,6 +1061,8 @@
 		BFF7EC4C25081E9300BDE521 /* AltStore 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AltStore 8.xcdatamodel"; sourceTree = "<group>"; };
 		BFFCFA45248835530077BFCE /* AltDaemon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AltDaemon.entitlements; sourceTree = "<group>"; };
 		D50107EB2ADF2E1A0069F2A1 /* AddSourceTextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSourceTextFieldCell.swift; sourceTree = "<group>"; };
+		D504F5BA2CE566F900AD3760 /* InstalledAppsCollectionFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstalledAppsCollectionFooterView.swift; sourceTree = "<group>"; };
+		D504F5BC2CE5671700AD3760 /* InstalledAppsCollectionFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InstalledAppsCollectionFooterView.xib; sourceTree = "<group>"; };
 		D5066FC02F1393DA0055B38A /* AltStore 21.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AltStore 21.xcdatamodel"; sourceTree = "<group>"; };
 		D5066FC12F1394600055B38A /* AltStore20ToAltStore21.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = AltStore20ToAltStore21.xcmappingmodel; sourceTree = "<group>"; };
 		D5084CCB2B1EA80100C02160 /* FeaturedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedComponents.swift; sourceTree = "<group>"; };
@@ -1948,6 +1952,8 @@
 				BFB4323E22DE852000B7F8BC /* UpdateCollectionViewCell.xib */,
 				BFC57A6D2416FC5D00EB891E /* InstalledAppsCollectionHeaderView.swift */,
 				BFC57A6F2416FC7600EB891E /* InstalledAppsCollectionHeaderView.xib */,
+				D504F5BA2CE566F900AD3760 /* InstalledAppsCollectionFooterView.swift */,
+				D504F5BC2CE5671700AD3760 /* InstalledAppsCollectionFooterView.xib */,
 			);
 			path = "My Apps";
 			sourceTree = "<group>";
@@ -3079,6 +3085,7 @@
 				D56D21422B7D9C41007641C5 /* AltIcons.plist in Resources */,
 				BF770E6922BD57DD002A40FE /* Silence.m4a in Resources */,
 				BFD247772284B9A700981D42 /* Assets.xcassets in Resources */,
+				D504F5BD2CE5671700AD3760 /* InstalledAppsCollectionFooterView.xib in Resources */,
 				D5784E3F2CC2E67B00DAC00E /* AltMarketplace.cer in Resources */,
 				D551D03A2EE8C57D00027F33 /* AboutPatreonHeaderView.xib in Resources */,
 				BFB6B22423187A3D0022A802 /* NewsCollectionViewCell.xib in Resources */,
@@ -3544,6 +3551,7 @@
 				BFA8172B23C5633D001B5953 /* FetchAnisetteDataOperation.swift in Sources */,
 				D552B1D82A042A740066216F /* AppPermissionsCard.swift in Sources */,
 				BFD6B03322DFF20800B86064 /* MyAppsComponents.swift in Sources */,
+				D504F5BB2CE566FE00AD3760 /* InstalledAppsCollectionFooterView.swift in Sources */,
 				BF41B808233433C100C593A3 /* LoadingState.swift in Sources */,
 				BFF0B69A2322D7D0007A79E1 /* UIScreen+CompactHeight.swift in Sources */,
 				D5ACE84528E3B8450021CAB9 /* ClearAppCacheOperation.swift in Sources */,

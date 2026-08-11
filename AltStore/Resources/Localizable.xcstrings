@@ -10582,6 +10582,28 @@
         }
       }
     },
+    "View App IDs" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリIDを表示"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visualizar App IDs"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看 App ID"
+          }
+        }
+      }
+    },
     "View Error" : {
       "localizations" : {
         "ja" : {

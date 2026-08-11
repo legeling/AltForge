@@ -91,6 +91,11 @@ assert(theme_colors.include?("UserDefaults.standard.preferredTheme.primaryColor"
 assert(theme_colors.include?("UserDefaults.standard.preferredTheme.sourceTintColor"), "the official source tint must resolve from the selected theme")
 assert(read(root, "AltStore/Extensions/UIColor+AltStore.swift").include?("var contrastingForegroundColor: UIColor"), "filled theme controls must derive a readable foreground color")
 assert(read(root, "AltStore/AppDelegate.swift").include?("NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.themeDidChange"), "theme changes must refresh active application chrome")
+assert(read(root, "AltStore/AppDelegate.swift").include?("rootViewController?.children.first(where: { $0 is TabBarController })"), "runtime theme changes must reach the child tab controller hosted by LaunchViewController")
+
+my_apps_controller = read(root, "AltStore/My Apps/MyAppsViewController.swift")
+assert(!my_apps_controller.include?("self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionFooter"), "My Apps layout sizing must not dequeue a supplementary view outside the collection-view data source callback")
+assert(my_apps_controller.include?("InstalledAppsCollectionFooterView.nib.instantiate(withOwner: nil)"), "My Apps footer sizing must use an independent prototype view")
 
 ios_interface_files = Dir.glob(File.join(root, "AltStore/**/*.{storyboard,xib}"))
 ios_public_interface_values = ios_interface_files.flat_map do |path|

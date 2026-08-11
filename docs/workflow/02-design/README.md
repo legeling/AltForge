@@ -211,6 +211,8 @@ Apple ID 认证成功后关闭凭据窗口，并立即显示独立原生进度�
 
 设置页不在 `UITableViewDelegate.willDisplay` 中递归修改任意子视图；页面背景、导航、已知 label、cell 和 separator 使用 UIKit 语义色，避免对 UIKit 私有视图发送未支持 selector。认证 storyboard 同样使用 `systemGroupedBackground`、`secondarySystemGroupedBackground`、`label`、`secondaryLabel`、`tertiaryLabel` 和 AltForge `Primary`，并把凭据用途说明放在表单之后的固定间距，而不是压到超长页面底部。
 
+My Apps 的 collection supplementary view 只能在 UIKit 的 data source callback 中 dequeue。Flow-layout 尺寸计算使用独立 XIB prototype，不得为了 Auto Layout 测量而直接调用 `viewForSupplementaryElementOfKind`；否则新版 UIKit 会发现有复用对象未被返回并主动断言退出。
+
 `AuthenticationOperation.fetchTeam` 保留现有确定性顺序：优先复用仍存在的 active team，否则依次选择 individual、organization、free 和首个未知团队；设置页从持久化 active team 显示实际名称、Apple ID 和本地化账号类型，不从 GitHub 仓库或维护者身份推断 Apple developer team。
 
 AppManager 在操作进入队列前创建值快照，并把最多 20 条 pending operation 原子写入 Application Support 下的 JSON journal；UserDefaults 只在受保护存储暂时不可用时作为兼容 fallback。每条记录带随机客户端诊断编号，以及最多 16 个 `{relative date, stage, bounded detail}` 事件；阶段只覆盖查找 Server、认证、准备/验证 App、准备描述文件、签名、发送、设备安装、刷新和终态，不记录进度回调的每个百分比。detail 最长 120 个字符，允许值只有 USB/Wi-Fi/本机连接类别与 Apple 团队类别。失败时把诊断编号、最后一个非终态阶段和相对耗时轨迹作为 `NSError.userInfo` 字符串写入既有 `LoggedError`，不修改 Core Data schema 或 Server Protocol；错误详情可查看这些字段，复制操作输出一个有界诊断报告。
@@ -222,6 +224,8 @@ App lifecycle 另以两个固定大小的原子 JSON 保存 current/interrupted 
 ### `DES-023` iOS 动态主题色
 
 `AltTheme` 位于 AltStoreCore 的既有 UserDefaults 扩展边界，使用四个稳定 raw value，并由 `preferredTheme` 负责默认值、持久化和非法值回退。`UIColor.altPrimary` 与 `altSourceTint` 从当前偏好按深浅模式动态生成，不再把一次性 asset lookup 当作运行时主题真相；颜色 asset 与 Release metadata 只保留锻造红默认/兼容值。
+
+应用 window root 是 `LaunchViewController`，主 tab 是其直接 child。主题通知更新 window tint 后必须定位该 child 并调用 `TabBarController.applyTheme()`，使当前导航、标签栏、徽标和已加载内容立即刷新；不能只对 root 做类型转换。
 
 设置页在现有 Display 静态分组加入一行，并 push 原生 inset-grouped table。每个候选使用固定 24 point 圆形色板、文本和 checkmark，不新增第三方 UI。选择后写偏好并发送进程内通知；UIApplication 只更新已知 window、navigation bar 和 tab bar，Settings 自己 reload data，不递归遍历 UIKit 私有层级。官方 source 和自身 app 继续通过 `effectiveTintColor` 强制取动态 `altSourceTint`，第三方 metadata tint 路径不变。集合和窗口数量均有系统上限，本功能不新增网络或磁盘文件。
 

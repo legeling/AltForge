@@ -271,66 +271,6 @@
         }
       }
     },
-    "LLv-8I-6Of.text" : {
-      "comment" : "Class = \"UILabel\"; text = \"5/10 App IDs\"; ObjectID = \"LLv-8I-6Of\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "5/10 App IDs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "5/10個のアプリID"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "5/10 App IDs"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "5/10 个 App ID"
-          }
-        }
-      }
-    },
-    "NHb-0F-cHZ.normalTitle" : {
-      "comment" : "Class = \"UIButton\"; normalTitle = \"View App IDs\"; ObjectID = \"NHb-0F-cHZ\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "View App IDs"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリIDを表示"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Visualizar App IDs"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查看 App ID"
-          }
-        }
-      }
-    },
     "obM-TM-y2E.text" : {
       "comment" : "Class = \"UILabel\"; text = \"What's New\"; ObjectID = \"obM-TM-y2E\";",
       "extractionState" : "extracted_with_value",

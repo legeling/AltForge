@@ -9,6 +9,7 @@ iOS 客户端的 `Primary`、`SourceTint` 和部分 storyboard 预览值仍固�
 - 默认主题色改为与 AltForge 图标一致的“锻造红”；页面背景继续使用 UIKit 语义背景色，不把主题色铺满页面。
 - 在设置的“显示”分组加入原生主题色选择页，提供锻造红、海洋蓝、靛蓝和玫瑰红色板，并显示当前勾选状态。
 - 主题偏好写入应用 `UserDefaults`，未知或旧值稳定回退到锻造红；选择后立即更新窗口、导航栏、标签栏、徽标和当前设置界面，重启后继续生效。
+- 运行时刷新必须穿过实际的 `LaunchViewController -> TabBarController` containment；不能假设 window root 本身就是 tab controller，否则选择只会持久化、界面要到重启才更新。
 - 官方 AltForge source/app tint 从当前主题动态解析；Release metadata 使用默认锻造红，第三方 source/app 仍保留自己的 tint。
 - 新增英文与简体中文文案、偏好 round-trip XCTest 和 repository contract。
 
@@ -39,6 +40,7 @@ iOS 客户端的 `Primary`、`SourceTint` 和部分 storyboard 预览值仍固�
 - 2026-08-11：`ruby Scripts/test_repository_contract.rb`、`ruby Scripts/test_release_metadata.rb` 和 `ruby Scripts/check_release_version.rb --tag v2.4.0` 通过。
 - 2026-08-11：受影响 Swift 文件通过 frontend parse；所有 iOS/AltStoreCore string catalog 和颜色 catalog 通过 JSON 解析，Settings/Main/Authentication storyboard 通过 XML 解析，`git diff --check` 通过。
 - 2026-08-11：使用隔离的 DerivedData 和复制的 Swift Package cache 完成无签名 `Release-iphoneos` generic device build；产物成功封装为本地 IPA，并通过 ZIP、bundle identifier、版本和 executable 检查。构建发现并修复诊断 journal 对 `JSONDecoder` 的类型歧义。未打开或操作 Simulator。
+- 2026-08-11：build 13 真机确认主题偏好可持久化但不会立即刷新。根因是主题应用逻辑只尝试把 window root 转为 `TabBarController`，而本项目 root 实际为 `LaunchViewController`。已改为同时解析其直接 child；repository contract、Swift parse 和完整无签名 `Release-iphoneos` generic device build 通过，真机即时切换待复测。
 
 ## 当前状态
 

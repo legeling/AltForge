@@ -46,8 +46,8 @@
 | `TEST-032` iOS 四标签主导航与来源资讯兼容 | `FR-033` | Static/Build/Simulator | repository contract、storyboard compile 与 iOS Simulator build 通过；临时 iPhone 17 Pro 上默认进入浏览且底栏仅显示浏览、软件源、我的 App、设置，来源资讯兼容由 static/build 覆盖 |
 | `TEST-033` iOS 品牌与设置语义色 | `FR-034` | Static/Build/Simulator UI | repository contract、iOS build 和 iOS 26.5 深浅色 Simulator 通过；真机视觉矩阵待执行 |
 | `TEST-034` iOS 公开身份 | `FR-035` | Static/Build/Manual System UI | bundle/executable/test host 与公开资源扫描通过；系统 crash-report 标题待真机确认 |
-| `TEST-035` iOS 安装崩溃、恢复日志与认证说明 | `FR-036` | Static/Build/Simulator/Manual E2E | crash report 根因、repository contract、iOS build、工作原理 UI 和 6 轮标签切换通过且无新 crash；恢复日志 runtime 与第三方 IPA 真机安装待执行 |
-| `TEST-036` iOS 主题色选择 | `FR-037` | Unit/Static/Build/Simulator UI | 偏好 XCTest、动态颜色与设置色板 repository contract、Swift/XML/JSON 解析和完整 Release-iphoneos build 通过；四主题深浅色切换和重启持久化待执行 |
+| `TEST-035` iOS 安装崩溃、恢复日志与认证说明 | `FR-036` | Static/Build/Simulator/Manual E2E | build 13 系统报告定位 footer 越权 dequeue，已移植上游 iOS 18 独立 prototype 修复；repository contract、Swift/XML/JSON 和完整 iOS Release build 通过，恢复日志 runtime 与第三方 IPA 真机安装待执行 |
+| `TEST-036` iOS 主题色选择 | `FR-037` | Unit/Static/Build/Simulator UI | 偏好 XCTest、动态颜色与设置色板 repository contract、Launch child 刷新路径、Swift/XML/JSON 解析和完整 Release-iphoneos build 通过；四主题深浅色即时切换和重启持久化待执行 |
 
 ## 首批高价值失败测试
 
