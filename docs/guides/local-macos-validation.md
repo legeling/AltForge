@@ -34,7 +34,7 @@ Scripts/package_macos_dmg.sh \
   --ad-hoc-sign
 ```
 
-`--ad-hoc-sign` 只修改 DMG 内的临时副本并密封完整 App bundle，方便当前 Mac 启动和验证登录项；它不提供 Developer ID 身份或 notarization。打包脚本的时间和磁盘成本均与 App bundle 总字节数近似线性，临时 staging 在结束或失败时自动清理。
+`--ad-hoc-sign` 只修改 DMG 内的临时副本并密封完整 App bundle，方便当前 Mac 启动和验证登录项；它不提供 Developer ID 身份或 notarization。打包脚本先配置可写中间映像的 Finder 元数据，再转换为压缩映像；时间和磁盘成本均与 App bundle 总字节数近似线性，临时 staging 与任务挂载在结束或失败时自动清理。
 
 验证结束后删除本次创建的 DerivedData；不要按进程名称终止其他构建：
 
@@ -53,6 +53,7 @@ find "${TMPDIR:-/tmp}/AltForge-LocalDMG-DerivedData" -depth -delete
 ## 功能验证清单
 
 - DMG 能正常挂载，包含 `AltForge Server.app` 和指向 `/Applications` 的快捷方式。
+- DMG 首次打开使用约 520 × 300 pt 的紧凑窗口，隐藏工具栏、状态栏和路径栏，两个 88 pt 图标左右对齐，不出现接近全屏的大块空白。
 - `AltForge Server.app` 的 bundle identifier 为 `com.legeling.AltForge.AltServer`，版本与根目录 `VERSION` 一致。
 - 菜单栏进程可启动和正常退出，没有重复实例或遗留挂载点。
 - 连接并信任 iPhone/iPad 后，**Install AltForge** 能进入设备与 Apple ID 流程。
