@@ -13,6 +13,84 @@ typealias ServerConnectionManager = ConnectionManager<ServerRequestHandler>
 private let connectionManager = ConnectionManager(requestHandler: ServerRequestHandler(),
                                                   connectionHandlers: [WirelessConnectionHandler(), WiredConnectionHandler()])
 
+private final class InstallationResponseCoordinator
+{
+    typealias CompletionHandler = (Result<Void, ALTServerError>) -> Void
+
+    private let connection: Connection
+    private let completionHandler: CompletionHandler
+    private let queue = DispatchQueue(label: "com.altforge.ConnectionManager.installResponseQueue", qos: .default)
+
+    private var isSending = false
+    private var pendingProgress: Double?
+    private var terminalResult: Result<Void, ALTServerError>?
+    private var didFinish = false
+
+    init(connection: Connection, completionHandler: @escaping CompletionHandler)
+    {
+        self.connection = connection
+        self.completionHandler = completionHandler
+    }
+
+    func reportProgress(_ progress: Double)
+    {
+        self.queue.async {
+            guard progress.isFinite, !self.didFinish, self.terminalResult == nil else { return }
+
+            // Installation completion is sent exactly once through finish(_:).
+            // Keeping progress below 1 prevents a KVO update from racing that
+            // terminal response on the same connection.
+            let boundedProgress = min(max(progress, 0), 0.99)
+            self.pendingProgress = max(self.pendingProgress ?? 0, boundedProgress)
+            self.sendNext()
+        }
+    }
+
+    func finish(_ result: Result<Void, ALTServerError>)
+    {
+        self.queue.async {
+            guard !self.didFinish, self.terminalResult == nil else { return }
+
+            // A terminal response supersedes queued progress, but waits for any
+            // response already being written before using the connection.
+            self.pendingProgress = nil
+            self.terminalResult = result
+            self.sendNext()
+        }
+    }
+
+    private func sendNext()
+    {
+        dispatchPrecondition(condition: .onQueue(self.queue))
+        guard !self.isSending, !self.didFinish else { return }
+
+        if let terminalResult = self.terminalResult
+        {
+            self.didFinish = true
+            self.completionHandler(terminalResult)
+            return
+        }
+
+        guard let progress = self.pendingProgress else { return }
+        self.pendingProgress = nil
+        self.isSending = true
+
+        let response = InstallationProgressResponse(progress: progress)
+        self.connection.send(response) { result in
+            self.queue.async {
+                self.isSending = false
+
+                if case .failure(let error) = result, self.terminalResult == nil
+                {
+                    self.terminalResult = .failure(error)
+                }
+
+                self.sendNext()
+            }
+        }
+    }
+}
+
 extension ServerConnectionManager
 {
     static var shared: ConnectionManager {
@@ -215,41 +293,28 @@ private extension RequestHandler
 
     func installApp(at fileURL: URL, toDeviceWithUDID udid: String, activeProvisioningProfiles: Set<String>?, connection: Connection, completionHandler: @escaping (Result<Void, ALTServerError>) -> Void)
     {
-        let serialQueue = DispatchQueue(label: "com.altstore.ConnectionManager.installQueue", qos: .default)
-        var isSending = false
-        
         var observation: NSKeyValueObservation?
+        let responseCoordinator = InstallationResponseCoordinator(connection: connection, completionHandler: completionHandler)
         
         let progress = ALTDeviceManager.shared.installApp(at: fileURL, toDeviceWithUDID: udid, activeProvisioningProfiles: activeProvisioningProfiles) { (success, error) in
             print("Installed app with result:", error == nil ? "Success" : error!.localizedDescription)
+
+            observation?.invalidate()
+            observation = nil
             
             if let error = error.map({ ALTServerError($0) })
             {
-                completionHandler(.failure(error))
+                responseCoordinator.finish(.failure(error))
             }
             else
             {
-                completionHandler(.success(()))
+                responseCoordinator.finish(.success(()))
             }
-            
-            observation?.invalidate()
-            observation = nil
         }
         
         observation = progress.observe(\.fractionCompleted, changeHandler: { (progress, change) in
-            serialQueue.async {
-                guard !isSending else { return }
-                isSending = true
-                
-                print("Progress:", progress.fractionCompleted)
-                let response = InstallationProgressResponse(progress: progress.fractionCompleted)
-                
-                connection.send(response) { (result) in
-                    serialQueue.async {
-                        isSending = false
-                    }
-                }
-            }
+            print("Progress:", progress.fractionCompleted)
+            responseCoordinator.reportProgress(progress.fractionCompleted)
         })
     }
 }

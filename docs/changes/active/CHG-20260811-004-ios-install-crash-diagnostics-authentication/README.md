@@ -16,6 +16,8 @@ build 15 已不再在“我的 App”退出，但同一第三方 IPA 在“正�
 
 build 16 补齐 `arm64_32` 后，同一微信 IPA 仍在“正在签名 App”退出，说明前一修复只消除了第一个 native fault。继续审计真实签名调用链发现 `ALTSigner` 的 entitlement 回调直接 `return entitlements.UTF8String`：只要 ldid 发现未进入 provisioning map 的嵌套 bundle，Objective-C `nil` 就会再次以 `NULL` 构造 `std::string`，C++ `catch` 无法捕获由此产生的 `SIGSEGV`。同时 `ALTProgress` 丢弃了 ldid 已提供的 bundle、Mach-O 和架构名称，因此恢复日志只能停在笼统阶段。上游 [AltStore #229](https://github.com/altstoreio/AltStore/issues/229) 明确 Apple Watch companion 重签仍未支持；Classic 路径应从工作副本移除 `Watch/`，而不是尝试用 iPhone 主 App entitlement 签名。
 
+build 17 已在真机完成微信安装且不再退出，但设备主屏幕出现应用后，iOS 端仍保持安装进度，退出 AltForge 后“我的 App”没有该应用。代码审计确认 AltForge Server 的 KVO progress 和最终 completion 会从两条异步路径向同一 `Connection` 写响应；若设备完成时仍有 progress 在途，最终 `1.0` 响应会与其竞争，客户端永远等不到 terminal response，因而不会设置 `refreshedDate`、结束 operation 或保存 `InstalledApp`。修复必须在 Server 使用单一串行发送状态机，而不是在客户端用超时猜测设备是否已安装。
+
 ## 范围
 
 - 删除设置 cell 的高风险递归改色回调，改用系统语义色和已有 outlet 配色。
@@ -26,6 +28,8 @@ build 16 补齐 `arm64_32` 后，同一微信 IPA 仍在“正在签名 App”�
 - `ALTSigner` 对文件系统路径、嵌套 bundle UTF-8 和 prepared entitlement 逐项判空，失败转 `runtime_error`；不再从 Objective-C `nil` 构造 `std::string`。
 - iPhone 重签副本在修改 Info.plist 前移除上游未支持的顶层 `Watch/` companion，原始 IPA 不变；签名器仍能安全识别包内其他 `arm64_32` fixture。
 - 把 ldid bundle/Mach-O/architecture checkpoint 以最多四段相对路径写入当前签名事件；连续 checkpoint 原位替换，保留既有 16 阶段历史，拒绝控制字符、父目录和绝对路径前缀。
+- AltForge Server 将安装 progress 与 terminal success/failure 收敛到单一串行 response coordinator；普通进度允许合并，terminal 必须覆盖尚未发送的进度并等待在途写入结束后唯一发送，禁止并发写同一 framed connection。
+- iOS 安装端验证 progress 为有限非负数，以 `>= 1.0` 识别完成，并把最新连接类别与百分比原位更新到有界诊断轨迹，避免安装回调丢失时仍只显示笼统阶段。
 - Apple Release CI 使用 watchOS SDK 生成最小 `arm64_32` 可执行文件完成真实 ldid 签名，并验证未知 CPU type 安全失败；fixture 和产物使用任务临时目录且退出时清理。
 - “我的 App”出现时不再在 `reloadData()` 后 reconfigure 动态 index path；更新状态先计算再 reload，后续只直接更新已经可见的 no-updates cell，不改变 collection structure。
 - App IDs footer 从独立 XIB 注册和渲染；布局测量实例化独立 prototype，不得在 flow-layout size delegate 中调用 collection-view data source 方法或 dequeue reusable view。
@@ -52,7 +56,7 @@ build 16 补齐 `arm64_32` 后，同一微信 IPA 仍在“正在签名 App”�
 
 ## 复杂度与资源
 
-操作恢复记录最多保留 20 条，每条最多 16 个事件、detail 最多 120 字符。append/replace 为 `O(k + e)`，`k <= 20`、`e <= 16`；每次 bundle/Mach-O checkpoint 只原子重写一份上限为常数的小型 JSON，不为普通资源逐项写入。前台 session 只保留 current 与 interrupted 两条固定大小记录。持久化数据只包含操作类型、应用名、bundle ID、客户端诊断编号、时间、预定义 UI checkpoint、USB/Wi-Fi/本机类别、团队类别，以及清理后的最多四段 bundle 相对路径与 CPU 架构；不包含 Apple ID、密码、验证码、团队 ID、Server 名称/ID、证书/profile、设备 ID 或 IPA/下载绝对路径。Watch 检查为 `O(1)` 路径查询，删除成本由 Watch 目录大小线性约束；架构选择为每个 Mach-O slice `O(1)`，不增加扫描或签名轮数。错误记录仍通过单个 Core Data background context 写入，不修改 schema/Server Protocol，不新增网络请求、端口、长期进程或无界缓存。
+操作恢复记录最多保留 20 条，每条最多 16 个事件、detail 最多 120 字符。append/replace 为 `O(k + e)`，`k <= 20`、`e <= 16`；签名与设备安装的连续 checkpoint 原位替换，只原子重写一份上限为常数的小型 JSON。前台 session 只保留 current 与 interrupted 两条固定大小记录。持久化数据只包含操作类型、应用名、bundle ID、客户端诊断编号、时间、预定义 UI checkpoint、USB/Wi-Fi/本机类别、团队类别、安装百分比，以及清理后的最多四段 bundle 相对路径与 CPU 架构；不包含 Apple ID、密码、验证码、团队 ID、Server 名称/ID、证书/profile、设备 ID 或 IPA/下载绝对路径。Server response coordinator 只保留一个 pending progress、一个 terminal result 和一个在途标记，空间 `O(1)`；progress 高频更新只覆盖 pending 值，不产生无界队列。Watch 检查为 `O(1)` 路径查询，删除成本由 Watch 目录大小线性约束；架构选择为每个 Mach-O slice `O(1)`。错误记录仍通过单个 Core Data background context 写入，不修改 schema/Server Protocol，不新增网络请求、端口、长期进程或无界缓存。
 
 ## 验证计划
 
@@ -65,6 +69,7 @@ build 16 补齐 `arm64_32` 后，同一微信 IPA 仍在“正在签名 App”�
 - 使用 watchOS SDK 生成最小 `arm64_32` Mach-O，确认 ldid 完成签名并报告正确架构；篡改 CPU type 后确认返回可捕获错误而不是信号崩溃。
 - 构造含顶层 `Watch/Companion.app` 的工作副本，确认签名前只删除该副本的 Watch 目录且重复执行幂等；确认绝对输入只留下末四段 bundle/可执行文件/架构，控制字符和父目录不进入日志。
 - 静态和 build 门禁确认 entitlement/path 判空、bundle/Mach-O progress handler 以及 Swift 桥接签名均有效；签名 checkpoint 更新不得把认证、准备描述文件等较早阶段挤出 16 事件上限。
+- 用可控 connection fixture 交错触发 progress send 与 terminal completion，确认 framed response 不并发、terminal 不丢失且只回调一次；客户端对 `1.0`、大于 `1.0`、NaN 和负数分别完成或安全失败。
 - 让第三方 IPA 外层 operation 无结果结束，确认返回普通失败、不会触发 precondition，且下一次启动能从原子 journal 或前台 checkpoint 恢复一条日志。
 - 在浅色与深色模式检查设置、认证和错误日志，不得存在固定白色文字覆盖浅色系统背景。
 - 在 no-updates section 为 0/1 item、安装失败刚改变 fetched results、标签切换动画进行中三种状态重复进入“我的 App”，不得调用 stale index path reconfigure 或产生 UIKit assertion。
@@ -90,9 +95,11 @@ build 16 补齐 `arm64_32` 后，同一微信 IPA 仍在“正在签名 App”�
 
 - 2026-08-12：build 16 真机反馈确认同一微信 IPA 仍在签名阶段导致进程退出，且旧日志没有签名对象。代码审计定位 `ALTSigner` 第二处 nullable entitlement 到 `std::string` 的信号崩溃路径，并确认上游不支持 Watch companion 重签；已实现工作副本 Watch 移除、所有跨语言字符串判空、脱敏 bundle/架构 checkpoint 和连续签名事件替换。repository contract、ldid architecture compatibility、完整无签名 iOS Simulator build，以及 Watch 移除与签名 detail 脱敏两个定向 XCTest 均通过；真机安装尚未通过。
 
+- 2026-08-12：build 17 真机已完成微信设备安装且没有进程退出，但客户端进度未终止、“我的 App”未保存记录。定位为 Server progress KVO 与 terminal completion 并发写同一 connection 的响应竞争；已实现有界串行 response coordinator、客户端 terminal progress 健壮识别和安装百分比诊断。Repository/release metadata contract、两个 Swift 文件语法解析、macOS AltForge Server Debug build 和 iOS Simulator AltForge Debug build 通过；可控 connection 并发 fixture 与 build 18 真机闭环仍待验证。
+
 ## 当前状态
 
-签名崩溃修复正在验证，change 保持 active。build 16 已证明只补 `arm64_32` 不足；第二处 native null、Watch companion 边界和签名对象日志已在代码中修复，自动化和完整 build 已通过，但真实第三方 IPA 的完整签名、发送、安装及失败日志可见性仍由 `ISSUE-20260811-002` 跟踪。在同一微信 IPA 真机回归完成前，不宣称安装链路已经修复，也不公开新的替换 Release。经维护者明确授权，可先由 tag workflow 生成 Draft 和校验和供设备验证。
+签名崩溃已经由 build 17 真机验证不再复现，安装完成响应竞争已在代码中修复，change 保持 active。维护者已明确授权保留 `2.4.0` 并由 tag workflow 重建全平台产物、原位覆盖公开 Release；真实第三方 IPA 的进度关闭、“我的 App”落库和重启持久性仍由 `ISSUE-20260811-002` 在新构建上验证。在同一微信 IPA 完成端到端回归前，不把 P0 标记为完成。
 
 ## 回滚
 

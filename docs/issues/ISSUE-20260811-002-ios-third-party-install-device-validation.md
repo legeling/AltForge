@@ -14,6 +14,8 @@
 
 Simulator 不能执行 Apple 账号团队签名、provisioning、设备发送或 installation proxy，因此不能据此确认第三方 IPA 已经成功安装。首轮 Release 已通过 AltForge Server 写入配对真机，但它不包含第二轮修复；验证过程中不得记录账号、设备标识、证书、profile 或 IPA 路径。
 
+build 17 已能把同一微信 IPA 安装到设备且不再退出，证明签名崩溃路径已经跨过；但 AltForge 内的进度仍不结束，退出后“我的 App”没有写入该应用。根因是 macOS Server 同时从 KVO progress 和 device completion 两条路径向同一连接发送 framed response，terminal `1.0` 可能与在途 progress 竞争而丢失。当前修复将两类响应串行化，并记录最新安装百分比；只有新构建真机确认进度结束且重启后应用仍在“我的 App”，本 issue 才能关闭。
+
 ## 完成条件
 
 1. 使用脱敏测试 Apple ID 和已解锁真机，从文件导入一个结构有效且来源可信的第三方 IPA。
@@ -23,6 +25,7 @@ Simulator 不能执行 Apple 账号团队签名、provisioning、设备发送或
 5. 验证失败后没有半安装 App、遗留备份、无限进度、重复队列或未释放的临时文件；重试可以正常开始。
 6. 用畸形可选 plist 字段 fixture 和“operation 无结果结束”fixture 验证两条路径都返回普通错误而不终止进程；浅色模式下设置、认证和错误日志所有正文均可读。
 7. 安装失败后连续进入“我的 App”至少 10 次，覆盖 0/1 个 no-updates item 与标签切换动画；不得出现 `reconfigureItems` assertion，系统 crash report 数量不得增加。
+8. 安装成功时确认 Server 的 progress/terminal response 串行且 terminal 只发送一次；设备主屏幕出现应用后，客户端进度必须结束，重启 AltForge 后“我的 App”仍存在对应记录并可刷新。
 
 ## 回滚与风险
 

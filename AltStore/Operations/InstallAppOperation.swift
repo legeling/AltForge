@@ -225,16 +225,26 @@ private extension InstallAppOperation
                 switch response
                 {
                 case .installationProgress(let response):
-                    Logger.sideload.debug("Installing \(self.context.resignedApp?.bundleIdentifier ?? self.context.bundleIdentifier, privacy: .public)... \((response.progress * 100).rounded())%")
+                    guard response.progress.isFinite, response.progress >= 0 else
+                    {
+                        completionHandler(.failure(ALTServerError(.invalidResponse)))
+                        return
+                    }
+
+                    let fractionCompleted = min(response.progress, 1.0)
+                    let percentCompleted = Int((fractionCompleted * 100).rounded())
+                    let connectionName = connection.server.connectionType.localizedDiagnosticName
+                    self.context.recordDiagnostic(.installingApp, detail: "\(connectionName) / \(percentCompleted)%")
+                    Logger.sideload.debug("Installing \(self.context.resignedApp?.bundleIdentifier ?? self.context.bundleIdentifier, privacy: .public)... \(percentCompleted)%")
                     
-                    if response.progress == 1.0
+                    if fractionCompleted >= 1.0
                     {
                         self.progress.completedUnitCount = self.progress.totalUnitCount
                         completionHandler(.success(()))
                     }
                     else
                     {
-                        self.progress.completedUnitCount = Int64(response.progress * 100)
+                        self.progress.completedUnitCount = Int64(percentCompleted)
                         self.receive(from: connection, completionHandler: completionHandler)
                     }
                     

@@ -105,7 +105,7 @@ private final class PendingAppOperationStore
         guard events.last?.stage != stage || events.last?.detail != boundedDetail else { return }
 
         let event = PendingAppOperationEvent(date: Date(), stage: stage, detail: boundedDetail)
-        if stage == .signingApp, events.last?.stage == .signingApp
+        if (stage == .signingApp || stage == .installingApp), events.last?.stage == stage
         {
             events[events.count - 1] = event
         }

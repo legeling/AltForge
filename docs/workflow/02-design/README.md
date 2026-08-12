@@ -221,6 +221,8 @@ AppManager 在操作进入队列前创建值快照，并把最多 20 条 pending
 
 App lifecycle 另以两个固定大小的原子 JSON 保存 current/interrupted foreground session，只记录随机 session ID、时间、active 状态和预定义页面 checkpoint。若启动时同时存在 pending operation，则只生成更具体的 operation recovery 日志并消费 session 记录；只有没有 pending operation 时才生成一条 runtime 意外退出日志。第三方 IPA completion 显式区分 success/error/missing-result，missing-result 转普通 `OperationError`；AltSign 对所有来自 IPA `Info.plist` 的可选字符串、字典和数组元素先做类型验证，畸形字段不得进入 Objective-C 异常路径。
 
+AltForge Server 的设备安装 KVO progress 与 terminal success/failure 共用单一串行 response coordinator，不允许两条异步路径同时写入 framed connection。Coordinator 最多保留一个 pending progress、一个 terminal result 和一个在途标记；普通进度只合并为最新值，terminal 覆盖未发送进度并等待在途 frame 完成后唯一回调外层 completion，因此空间和排队成本均为 `O(1)`。非终态进度限制在 `0...0.99`，只由外层 completion 发送最终 `1.0`；iOS 客户端拒绝 NaN 和负值，并把有限的 `>= 1.0` 视为完成。只有收到该终态响应后，operation 才结束并保存 `InstalledApp`；不使用超时猜测设备安装成功，也不修改 Server Protocol schema。
+
 成功完成后消费 pending record；失败时必须先把正常错误日志保存成功再消费，保存失败则保留到下次启动。应用下次在数据库启动成功后读取遗留记录并生成一次 `LoggedError`，只在日志落库成功后删除记录，说明上次进程在结果落库前结束。记录允许 App 名称、bundle ID 和上述脱敏相对签名对象，但不包含 Apple ID、密码、验证码、UDID、团队 ID、Server 名称/ID、证书、profile 内容或文件 URL。错误关系解析仅允许永久 object ID，并通过 throwing `existingObject(with:)` 查询；temporary ID 或已删除对象使用 `AnyApp` 快照。单次 append/replace 为 `O(k + e)`，`k <= 20`、`e <= 16`，总持久化空间有固定上限；Watch 检查和移除为一次 `O(1)` 路径查询与受该目录大小约束的文件删除，签名 checkpoint I/O 与 Mach-O 数量线性相关且不增加资源扫描。架构识别保持每个 Mach-O slice `O(1)`。不新增网络 I/O、后台进程或跨端协议字段。
 
 ### `DES-023` iOS 动态主题色
