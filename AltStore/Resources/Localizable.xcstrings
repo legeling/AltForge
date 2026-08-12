@@ -361,6 +361,26 @@
         }
       }
     },
+    "Main App Bundle" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主应用包"
+          }
+        }
+      }
+    },
+    "Removed unsupported Apple Watch components" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已移除不受支持的 Apple Watch 组件"
+          }
+        }
+      }
+    },
     "Sending App" : {
       "localizations" : {
         "zh-Hans" : {

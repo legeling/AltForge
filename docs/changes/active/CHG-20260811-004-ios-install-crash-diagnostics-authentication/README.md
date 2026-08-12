@@ -14,6 +14,8 @@ build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断
 
 build 15 已不再在“我的 App”退出，但同一第三方 IPA 在“正在签名 App”阶段中断。对应真机系统报告为 `EXC_BAD_ACCESS / SIGSEGV`，触发线程从 `_platform_strlen` 进入 `std::string(char const *)` 和 `ldid::Allocate`。报告可以确认 ldid 遇到了未映射 CPU type，并把 progress 架构名称留为 `NULL`，随后隐式构造 `std::string` 而崩溃；结合大型 iOS App 常见的 Watch 嵌套程序，缺失映射最符合 Apple Watch `arm64_32`，但仍需用同一 IPA 真机复测确认。设备安装实际尚未开始。
 
+build 16 补齐 `arm64_32` 后，同一微信 IPA 仍在“正在签名 App”退出，说明前一修复只消除了第一个 native fault。继续审计真实签名调用链发现 `ALTSigner` 的 entitlement 回调直接 `return entitlements.UTF8String`：只要 ldid 发现未进入 provisioning map 的嵌套 bundle，Objective-C `nil` 就会再次以 `NULL` 构造 `std::string`，C++ `catch` 无法捕获由此产生的 `SIGSEGV`。同时 `ALTProgress` 丢弃了 ldid 已提供的 bundle、Mach-O 和架构名称，因此恢复日志只能停在笼统阶段。上游 [AltStore #229](https://github.com/altstoreio/AltStore/issues/229) 明确 Apple Watch companion 重签仍未支持；Classic 路径应从工作副本移除 `Watch/`，而不是尝试用 iPhone 主 App entitlement 签名。
+
 ## 范围
 
 - 删除设置 cell 的高风险递归改色回调，改用系统语义色和已有 outlet 配色。
@@ -21,6 +23,9 @@ build 15 已不再在“我的 App”退出，但同一第三方 IPA 在“正�
 - 第三方 IPA 完成回调不再通过可触发 `preconditionFailure` 的可选值构造 `Result`；缺失结果转成可记录、可展示的普通安装错误。
 - AltSign 在读取 IPA `Info.plist` 的名称、bundle ID、版本、最低系统、设备族和图标元数据前验证实际 plist 类型，畸形可选字段降级或忽略而不是触发 Objective-C 异常。
 - ldid 识别 Apple Watch `arm64_32` CPU type，使用与 ARM slice 一致的对齐并提供非空 progress 名称；其他未知 CPU type 在写回前抛出 `ALTSigner` 可捕获的错误，不再产生空指针崩溃。
+- `ALTSigner` 对文件系统路径、嵌套 bundle UTF-8 和 prepared entitlement 逐项判空，失败转 `runtime_error`；不再从 Objective-C `nil` 构造 `std::string`。
+- iPhone 重签副本在修改 Info.plist 前移除上游未支持的顶层 `Watch/` companion，原始 IPA 不变；签名器仍能安全识别包内其他 `arm64_32` fixture。
+- 把 ldid bundle/Mach-O/architecture checkpoint 以最多四段相对路径写入当前签名事件；连续 checkpoint 原位替换，保留既有 16 阶段历史，拒绝控制字符、父目录和绝对路径前缀。
 - Apple Release CI 使用 watchOS SDK 生成最小 `arm64_32` 可执行文件完成真实 ldid 签名，并验证未知 CPU type 安全失败；fixture 和产物使用任务临时目录且退出时清理。
 - “我的 App”出现时不再在 `reloadData()` 后 reconfigure 动态 index path；更新状态先计算再 reload，后续只直接更新已经可见的 no-updates cell，不改变 collection structure。
 - App IDs footer 从独立 XIB 注册和渲染；布局测量实例化独立 prototype，不得在 flow-layout size delegate 中调用 collection-view data source 方法或 dequeue reusable view。
@@ -47,7 +52,7 @@ build 15 已不再在“我的 App”退出，但同一第三方 IPA 在“正�
 
 ## 复杂度与资源
 
-操作恢复记录最多保留 20 条，每条最多 16 个事件、detail 最多 120 字符。append 为 `O(k + e)`，`k <= 20`、`e <= 16`；每次更新只原子重写一份上限为常数的小型 JSON。前台 session 只保留 current 与 interrupted 两条固定大小记录。持久化数据只包含操作类型、应用名、bundle ID、客户端诊断编号、时间、预定义 UI checkpoint、USB/Wi-Fi/本机类别和团队类别，不包含 Apple ID、密码、验证码、团队 ID、Server 名称/ID、证书/profile、设备 ID 或 IPA/下载路径。架构选择为每个 Mach-O slice `O(1)`，不增加文件扫描、签名轮数或常驻内存。错误记录仍通过单个 Core Data background context 写入，不修改 schema/Server Protocol，不新增网络请求、端口、长期进程或无界缓存。
+操作恢复记录最多保留 20 条，每条最多 16 个事件、detail 最多 120 字符。append/replace 为 `O(k + e)`，`k <= 20`、`e <= 16`；每次 bundle/Mach-O checkpoint 只原子重写一份上限为常数的小型 JSON，不为普通资源逐项写入。前台 session 只保留 current 与 interrupted 两条固定大小记录。持久化数据只包含操作类型、应用名、bundle ID、客户端诊断编号、时间、预定义 UI checkpoint、USB/Wi-Fi/本机类别、团队类别，以及清理后的最多四段 bundle 相对路径与 CPU 架构；不包含 Apple ID、密码、验证码、团队 ID、Server 名称/ID、证书/profile、设备 ID 或 IPA/下载绝对路径。Watch 检查为 `O(1)` 路径查询，删除成本由 Watch 目录大小线性约束；架构选择为每个 Mach-O slice `O(1)`，不增加扫描或签名轮数。错误记录仍通过单个 Core Data background context 写入，不修改 schema/Server Protocol，不新增网络请求、端口、长期进程或无界缓存。
 
 ## 验证计划
 
@@ -58,6 +63,8 @@ build 15 已不再在“我的 App”退出，但同一第三方 IPA 在“正�
 - 模拟遗留未完成操作记录后重启，确认错误日志出现一次且记录被消费。
 - 构造包含错误 plist 类型的最小 `.app` fixture，确认 `ALTApplication` 不抛异常且对可选元数据安全降级。
 - 使用 watchOS SDK 生成最小 `arm64_32` Mach-O，确认 ldid 完成签名并报告正确架构；篡改 CPU type 后确认返回可捕获错误而不是信号崩溃。
+- 构造含顶层 `Watch/Companion.app` 的工作副本，确认签名前只删除该副本的 Watch 目录且重复执行幂等；确认绝对输入只留下末四段 bundle/可执行文件/架构，控制字符和父目录不进入日志。
+- 静态和 build 门禁确认 entitlement/path 判空、bundle/Mach-O progress handler 以及 Swift 桥接签名均有效；签名 checkpoint 更新不得把认证、准备描述文件等较早阶段挤出 16 事件上限。
 - 让第三方 IPA 外层 operation 无结果结束，确认返回普通失败、不会触发 precondition，且下一次启动能从原子 journal 或前台 checkpoint 恢复一条日志。
 - 在浅色与深色模式检查设置、认证和错误日志，不得存在固定白色文字覆盖浅色系统背景。
 - 在 no-updates section 为 0/1 item、安装失败刚改变 fetched results、标签切换动画进行中三种状态重复进入“我的 App”，不得调用 stale index path reconfigure 或产生 UIKit assertion。
@@ -81,9 +88,11 @@ build 15 已不再在“我的 App”退出，但同一第三方 IPA 在“正�
 - 2026-08-11：继续核对上游 `classic` 后移植 `832e9fab` 的 App ID header 同类修复，并把两处禁止越权 dequeue 的要求加入 repository contract；repository/release/version contract、Storyboard/XIB XML、string catalog JSON 与完整无签名 `Release-iphoneos` generic device build 通过，真机验证仍待执行。
 - 2026-08-12：只读导出 build 15 对应真机系统报告，确认异常为 `EXC_BAD_ACCESS / SIGSEGV`，首个业务栈为 `ldid::Allocate`，并排除当次 Jetsam。补充 `CPU_TYPE_ARM64_32` 架构与未知 CPU 安全失败后，`Scripts/test_ldid_architecture_compatibility.sh` 对真实最小 watchOS `arm64_32` Mach-O 签名及未知 CPU fixture 均通过；repository contract、diff check 与完整无签名 `Release-iphoneos` generic device build 通过。同一微信 IPA 真机安装仍待执行。
 
+- 2026-08-12：build 16 真机反馈确认同一微信 IPA 仍在签名阶段导致进程退出，且旧日志没有签名对象。代码审计定位 `ALTSigner` 第二处 nullable entitlement 到 `std::string` 的信号崩溃路径，并确认上游不支持 Watch companion 重签；已实现工作副本 Watch 移除、所有跨语言字符串判空、脱敏 bundle/架构 checkpoint 和连续签名事件替换。repository contract、ldid architecture compatibility、完整无签名 iOS Simulator build，以及 Watch 移除与签名 detail 脱敏两个定向 XCTest 均通过；真机安装尚未通过。
+
 ## 当前状态
 
-签名崩溃修复正在验证，change 保持 active。build 15 的真机证据已定位，最小架构回归和完整 iOS build 已通过，但真实第三方 IPA 的完整签名、发送、安装及失败日志可见性仍由 `ISSUE-20260811-002` 跟踪；在同一微信 IPA 真机回归完成前，不宣称安装链路已经修复，也不公开新的替换 Release。经维护者明确授权，可先由 tag workflow 生成 Draft 和校验和供设备验证。
+签名崩溃修复正在验证，change 保持 active。build 16 已证明只补 `arm64_32` 不足；第二处 native null、Watch companion 边界和签名对象日志已在代码中修复，自动化和完整 build 已通过，但真实第三方 IPA 的完整签名、发送、安装及失败日志可见性仍由 `ISSUE-20260811-002` 跟踪。在同一微信 IPA 真机回归完成前，不宣称安装链路已经修复，也不公开新的替换 Release。经维护者明确授权，可先由 tag workflow 生成 Draft 和校验和供设备验证。
 
 ## 回滚
 

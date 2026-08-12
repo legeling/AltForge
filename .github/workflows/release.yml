@@ -106,6 +106,8 @@ jobs:
           -only-testing:AltTests/AltTests/testSourceID
           -only-testing:AltTests/AltTests/testAltForgeSourceDeepLink
           -only-testing:AltTests/AltTests/testALTApplicationIgnoresMalformedOptionalMetadata
+          -only-testing:AltTests/AltTests/testUnsupportedAppleWatchBundleIsRemovedBeforeSigning
+          -only-testing:AltTests/AltTests/testSigningDiagnosticDetailIsRelativeAndBounded
           -only-testing:AltTests/AltTests/testThemePreferenceDefaultsAndRoundTrips
 
       - name: Build unsigned iOS application

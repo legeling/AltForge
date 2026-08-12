@@ -93,6 +93,33 @@ final class AltTests: XCTestCase
         XCTAssertNil(application.icon)
     }
 
+    func testUnsupportedAppleWatchBundleIsRemovedBeforeSigning() throws
+    {
+        let appURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            .appendingPathExtension("app")
+        defer { try? FileManager.default.removeItem(at: appURL) }
+
+        let watchAppURL = appURL
+            .appendingPathComponent("Watch", isDirectory: true)
+            .appendingPathComponent("Companion.app", isDirectory: true)
+        try FileManager.default.createDirectory(at: watchAppURL, withIntermediateDirectories: true)
+
+        XCTAssertTrue(try removeUnsupportedAppleWatchBundle(from: appURL))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: watchAppURL.path))
+        XCTAssertFalse(try removeUnsupportedAppleWatchBundle(from: appURL))
+    }
+
+    func testSigningDiagnosticDetailIsRelativeAndBounded()
+    {
+        let rawValue = "/private/var/mobile/Payload/WeChat.app/Frameworks/Example.framework/Example (arm64)\n"
+        let detail = sanitizedSigningDiagnosticDetail(rawValue)
+
+        XCTAssertEqual(detail, "WeChat.app/Frameworks/Example.framework/Example (arm64)")
+        XCTAssertFalse(detail?.contains("/private/var/mobile") == true)
+        XCTAssertEqual(sanitizedSigningDiagnosticDetail("*"), NSLocalizedString("Main App Bundle", comment: "Signing diagnostic detail"))
+    }
+
     func testThemePreferenceDefaultsAndRoundTrips()
     {
         let suiteName = "com.legeling.AltForgeTests.Theme.\(UUID().uuidString)"

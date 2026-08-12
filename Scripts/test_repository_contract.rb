@@ -105,6 +105,10 @@ ldid_source = read(root, "Dependencies/AltSign/Dependencies/ldid/ldid.cpp")
 assert(ldid_source.include?("#define CPU_TYPE_ARM64_32"), "ldid must recognize Apple Watch arm64_32 Mach-O binaries")
 assert(ldid_source.include?('arch = "arm64_32"'), "ldid signing progress must name the arm64_32 architecture without constructing a string from NULL")
 assert(ldid_source.include?("unsupported CPU type:"), "ldid must reject unknown CPU types with a catchable error instead of crashing")
+alt_signer = read(root, "Dependencies/AltSign/AltSign/Signing/ALTSigner.mm")
+assert(!alt_signer.include?("return entitlements.UTF8String;"), "AltSign must not construct std::string from nullable Objective-C entitlement bytes")
+assert(alt_signer.include?("embedded bundle is missing prepared entitlements or a provisioning profile"), "AltSign must turn missing embedded-bundle entitlements into a catchable error")
+assert(alt_signer.include?("progressHandler(detail)"), "AltSign must expose bounded bundle and Mach-O signing checkpoints")
 release_workflow = read(root, ".github/workflows/release.yml")
 assert(release_workflow.include?("bash Scripts/test_ldid_architecture_compatibility.sh"), "Apple release CI must exercise ldid architecture compatibility")
 
@@ -157,6 +161,7 @@ assert(ios_app_manager.include?('values = [context.server?.connectionType.locali
 assert(ios_app_manager.include?("recoverInterruptedOperations"), "interrupted iOS operations must become visible after relaunch")
 assert(ios_app_manager.include?("PendingAppOperations.json"), "pending iOS operations must use an atomic on-disk journal")
 assert(ios_app_manager.include?("try data.write(to: self.fileURL, options: .atomic)"), "pending iOS operation journal writes must be atomic")
+assert(ios_app_manager.include?("if stage == .signingApp, events.last?.stage == .signingApp"), "signing checkpoints must replace the latest signing event instead of evicting the bounded stage history")
 assert(ios_app_manager.include?("recoverUnexpectedTermination"), "unexpected foreground termination must become visible after relaunch")
 assert(ios_app_manager.include?("CurrentSession.json") && ios_app_manager.include?("InterruptedSession.json"), "app lifecycle recovery must retain bounded current and interrupted session records")
 assert(ios_app_manager.include?("guard didSave else { return }"), "interrupted operation records must remain pending until the recovery log saves")
@@ -174,6 +179,9 @@ assert(my_apps_update && !my_apps_update.include?("reconfigureItems"), "My Apps 
 assert(my_apps_update&.include?("cellForItem(at: indexPath) as? NoUpdatesCollectionViewCell"), "My Apps must update the already-visible no-updates cell without mutating collection structure")
 verify_app = read(root, "AltStore/Operations/VerifyAppOperation.swift")
 assert(verify_app.include?("throw self.context.error ?? OperationError.invalidApp()"), "a missing prepared app must surface as a handled invalid-app error")
+resign_app = read(root, "AltStore/Operations/ResignAppOperation.swift")
+assert(resign_app.include?("removeUnsupportedAppleWatchBundle(from: appBundleURL)"), "unsupported Apple Watch companion bundles must be removed before iPhone app signing")
+assert(resign_app.include?("sanitizedSigningDiagnosticDetail"), "signing checkpoints must be sanitized before entering persistent diagnostics")
 
 ios_operation_contexts = read(root, "AltStore/Operations/OperationContexts.swift")
 %w[findingServer authenticating preparingApp verifyingApp preparingProfiles signingApp sendingApp installingApp refreshingApp].each do |stage|
@@ -183,10 +191,11 @@ ios_error_log = read(root, "AltStore/Settings/Error Log/ErrorLogViewController.s
 assert(ios_error_log.include?('NSLocalizedString("Copy Diagnostic Report"'), "error log must expose the bounded diagnostic report action")
 assert(ios_error_log.include?("ALTDiagnosticTraceErrorKey"), "copied error reports must include the operation trace")
 diagnostic_detail_calls = Dir.glob(File.join(root, "AltStore/**/*.swift")).flat_map { |path| File.readlines(path).grep(/recordDiagnostic\(\..*detail:/) }
-assert(diagnostic_detail_calls.all? { |line| line.include?("localizedDiagnosticName") || line.include?("authenticationDiagnosticDetail") }, "diagnostic details must remain on the connection/team-category allowlist")
+allowed_diagnostic_details = ["localizedDiagnosticName", "authenticationDiagnosticDetail", "recordDiagnostic(.signingApp, detail: detail)", "Removed unsupported Apple Watch components"]
+assert(diagnostic_detail_calls.all? { |line| allowed_diagnostic_details.any? { |value| line.include?(value) } }, "diagnostic details must remain on the connection/team/signing allowlist")
 
 ios_strings = JSON.parse(read(root, "AltStore/Resources/Localizable.xcstrings")).fetch("strings")
-["Authentication Ready", "Authenticating Apple ID", "Diagnostic ID", "Failure Stage", "Operation Trace", "Copy Diagnostic Report", "AltForge closed unexpectedly while it was active.", "The installation ended before AltForge received a result.", "Theme Color", "Forge Red", "Ocean Blue", "Indigo", "Rose", "Selected"].each do |key|
+["Authentication Ready", "Authenticating Apple ID", "Diagnostic ID", "Failure Stage", "Operation Trace", "Copy Diagnostic Report", "AltForge closed unexpectedly while it was active.", "The installation ended before AltForge received a result.", "Main App Bundle", "Removed unsupported Apple Watch components", "Theme Color", "Forge Red", "Ocean Blue", "Indigo", "Rose", "Selected"].each do |key|
   assert(ios_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese diagnostic string: #{key}")
 end
 

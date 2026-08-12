@@ -104,7 +104,15 @@ private final class PendingAppOperationStore
         var events = records[index].events ?? []
         guard events.last?.stage != stage || events.last?.detail != boundedDetail else { return }
 
-        events.append(PendingAppOperationEvent(date: Date(), stage: stage, detail: boundedDetail))
+        let event = PendingAppOperationEvent(date: Date(), stage: stage, detail: boundedDetail)
+        if stage == .signingApp, events.last?.stage == .signingApp
+        {
+            events[events.count - 1] = event
+        }
+        else
+        {
+            events.append(event)
+        }
         records[index].events = Array(events.suffix(PendingAppOperation.maximumEventCount))
         self.save(records)
     }

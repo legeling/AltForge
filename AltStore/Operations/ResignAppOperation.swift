@@ -12,6 +12,46 @@ import Roxas
 import AltStoreCore
 import AltSign
 
+func removeUnsupportedAppleWatchBundle(from appBundleURL: URL, fileManager: FileManager = .default) throws -> Bool
+{
+    let watchURL = appBundleURL.appendingPathComponent("Watch", isDirectory: true)
+    guard fileManager.fileExists(atPath: watchURL.path) else { return false }
+
+    try fileManager.removeItem(at: watchURL)
+    return true
+}
+
+func sanitizedSigningDiagnosticDetail(_ rawValue: String) -> String?
+{
+    var value = rawValue
+        .replacingOccurrences(of: "\\", with: "/")
+        .unicodeScalars
+        .filter { !CharacterSet.controlCharacters.contains($0) }
+        .map(String.init)
+        .joined()
+
+    if value == "*"
+    {
+        return NSLocalizedString("Main App Bundle", comment: "Signing diagnostic detail")
+    }
+
+    if value.hasSuffix("*")
+    {
+        value.removeLast()
+    }
+
+    let components = value
+        .split(separator: "/", omittingEmptySubsequences: true)
+        .map(String.init)
+        .filter { $0 != "." && $0 != ".." }
+    guard !components.isEmpty else { return nil }
+
+    // ldid paths are relative to the app bundle. Keeping only the trailing
+    // components prevents accidental disclosure if a future caller passes an
+    // absolute path while retaining the bundle, executable, and architecture.
+    return components.suffix(4).joined(separator: "/")
+}
+
 @objc(ResignAppOperation)
 class ResignAppOperation: ResultOperation<ALTApplication>, @unchecked Sendable
 {
@@ -158,6 +198,12 @@ private extension ResignAppOperation
             {
                 let appBundleURL = self.context.temporaryDirectory.appendingPathComponent("App.app")
                 try FileManager.default.copyItem(at: fileURL, to: appBundleURL)
+
+                if try removeUnsupportedAppleWatchBundle(from: appBundleURL)
+                {
+                    self.context.recordDiagnostic(.preparingApp, detail: NSLocalizedString("Removed unsupported Apple Watch components", comment: "App operation diagnostic detail"))
+                    Logger.sideload.notice("Removed unsupported Apple Watch components before signing.")
+                }
                 
                 // Become current so we can observe progress from unzipAppBundle().
                 progress.becomeCurrent(withPendingUnitCount: 1)
@@ -253,7 +299,10 @@ private extension ResignAppOperation
     func resignAppBundle(at fileURL: URL, team: ALTTeam, certificate: ALTCertificate, profiles: [ALTProvisioningProfile], completionHandler: @escaping (Result<URL, Error>) -> Void) -> Progress
     {
         let signer = ALTSigner(team: team, certificate: certificate)
-        let progress = signer.signApp(at: fileURL, provisioningProfiles: profiles) { (success, error) in
+        let progress = signer.signApp(at: fileURL, provisioningProfiles: profiles, progressHandler: { rawDetail in
+            guard let detail = sanitizedSigningDiagnosticDetail(rawDetail) else { return }
+            self.context.recordDiagnostic(.signingApp, detail: detail)
+        }) { (success, error) in
             do
             {
                 try Result(success, error).get()
