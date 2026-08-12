@@ -57,6 +57,9 @@ jobs:
           sudo xcode-select --switch /Applications/Xcode_26.6.app
           sudo xcodebuild -runFirstLaunch
 
+      - name: Validate ldid architecture compatibility
+        run: bash Scripts/test_ldid_architecture_compatibility.sh
+
       - name: Prepare iOS simulator
         id: simulator
         shell: bash

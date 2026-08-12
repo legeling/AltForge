@@ -213,13 +213,15 @@ Apple ID 认证成功后关闭凭据窗口，并立即显示独立原生进度�
 
 My Apps 的 collection supplementary view 只能在 UIKit 的 data source callback 中 dequeue。Flow-layout 尺寸计算使用独立 XIB prototype，不得为了 Auto Layout 测量而直接调用 `viewForSupplementaryElementOfKind`；否则新版 UIKit 会发现有复用对象未被返回并主动断言退出。
 
+签名继续由 `Dependencies/AltSign` 的 ldid 层处理。架构映射覆盖 iOS 主程序的 `arm64` 与 Apple Watch 嵌套可执行文件的 `arm64_32`，两者使用既有 16 KiB 对齐；每个已识别架构必须向 progress 提供非空名称。未来遇到未识别 CPU type 时，在分配和写回 Mach-O 前抛出可由 `ALTSigner` 捕获的 `runtime_error`，不得把空指针隐式转换为 `std::string`。回归使用 Xcode watchOS SDK 生成最小 `arm64_32` 可执行文件并执行真实 ldid 签名，同时篡改一份 CPU type 验证未知架构安全失败；fixture 和编译产物只存在任务临时目录并在退出时删除。
+
 `AuthenticationOperation.fetchTeam` 保留现有确定性顺序：优先复用仍存在的 active team，否则依次选择 individual、organization、free 和首个未知团队；设置页从持久化 active team 显示实际名称、Apple ID 和本地化账号类型，不从 GitHub 仓库或维护者身份推断 Apple developer team。
 
 AppManager 在操作进入队列前创建值快照，并把最多 20 条 pending operation 原子写入 Application Support 下的 JSON journal；UserDefaults 只在受保护存储暂时不可用时作为兼容 fallback。每条记录带随机客户端诊断编号，以及最多 16 个 `{relative date, stage, bounded detail}` 事件；阶段只覆盖查找 Server、认证、准备/验证 App、准备描述文件、签名、发送、设备安装、刷新和终态，不记录进度回调的每个百分比。detail 最长 120 个字符，允许值只有 USB/Wi-Fi/本机连接类别与 Apple 团队类别。失败时把诊断编号、最后一个非终态阶段和相对耗时轨迹作为 `NSError.userInfo` 字符串写入既有 `LoggedError`，不修改 Core Data schema 或 Server Protocol；错误详情可查看这些字段，复制操作输出一个有界诊断报告。
 
 App lifecycle 另以两个固定大小的原子 JSON 保存 current/interrupted foreground session，只记录随机 session ID、时间、active 状态和预定义页面 checkpoint。若启动时同时存在 pending operation，则只生成更具体的 operation recovery 日志并消费 session 记录；只有没有 pending operation 时才生成一条 runtime 意外退出日志。第三方 IPA completion 显式区分 success/error/missing-result，missing-result 转普通 `OperationError`；AltSign 对所有来自 IPA `Info.plist` 的可选字符串、字典和数组元素先做类型验证，畸形字段不得进入 Objective-C 异常路径。
 
-成功完成后消费 pending record；失败时必须先把正常错误日志保存成功再消费，保存失败则保留到下次启动。应用下次在数据库启动成功后读取遗留记录并生成一次 `LoggedError`，只在日志落库成功后删除记录，说明上次进程在结果落库前结束。记录允许 App 名称和 bundle ID，但不包含 Apple ID、密码、验证码、UDID、团队 ID、Server 名称/ID、证书、profile 内容或文件 URL。错误关系解析仅允许永久 object ID，并通过 throwing `existingObject(with:)` 查询；temporary ID 或已删除对象使用 `AnyApp` 快照。单次 append 为 `O(k + e)`，`k <= 20`、`e <= 16`，总持久化空间有固定上限；不新增网络 I/O、后台进程或跨端协议字段。
+成功完成后消费 pending record；失败时必须先把正常错误日志保存成功再消费，保存失败则保留到下次启动。应用下次在数据库启动成功后读取遗留记录并生成一次 `LoggedError`，只在日志落库成功后删除记录，说明上次进程在结果落库前结束。记录允许 App 名称和 bundle ID，但不包含 Apple ID、密码、验证码、UDID、团队 ID、Server 名称/ID、证书、profile 内容或文件 URL。错误关系解析仅允许永久 object ID，并通过 throwing `existingObject(with:)` 查询；temporary ID 或已删除对象使用 `AnyApp` 快照。单次 append 为 `O(k + e)`，`k <= 20`、`e <= 16`，总持久化空间有固定上限；架构识别保持每个 Mach-O slice `O(1)`，整体签名扫描和 I/O 复杂度不变。不新增网络 I/O、后台进程或跨端协议字段。
 
 ### `DES-023` iOS 动态主题色
 

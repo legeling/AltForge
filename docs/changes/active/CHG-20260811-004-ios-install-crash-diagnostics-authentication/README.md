@@ -12,12 +12,16 @@
 
 build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断言：`MyAppsViewController.referenceSizeForFooterInSection` 为测量已安装应用 footer，直接调用数据源方法并从 collection view 复用池 dequeue supplementary view；该对象并未作为本次 UIKit 请求的结果返回，新版 UIKit 在 `_updateVisibleCellsNow` 检查复用池时以 `SIGABRT` 退出。修复改用独立 XIB prototype 测量，真实 data source callback 才允许 dequeue。继续核对上游后发现 `AppIDsViewController.referenceSizeForHeaderInSection` 仍保留完全相同的越权 dequeue，已同步移植上游 `832e9fab`，避免用户从“我的 App”进入 App ID 列表后再次触发同类断言。
 
+build 15 已不再在“我的 App”退出，但同一第三方 IPA 在“正在签名 App”阶段中断。对应真机系统报告为 `EXC_BAD_ACCESS / SIGSEGV`，触发线程从 `_platform_strlen` 进入 `std::string(char const *)` 和 `ldid::Allocate`。报告可以确认 ldid 遇到了未映射 CPU type，并把 progress 架构名称留为 `NULL`，随后隐式构造 `std::string` 而崩溃；结合大型 iOS App 常见的 Watch 嵌套程序，缺失映射最符合 Apple Watch `arm64_32`，但仍需用同一 IPA 真机复测确认。设备安装实际尚未开始。
+
 ## 范围
 
 - 删除设置 cell 的高风险递归改色回调，改用系统语义色和已有 outlet 配色。
 - 把设置 Storyboard 中残留的固定白色文字和 tint 改成 `label`/`secondaryLabel` 系统语义色；认证导航栏也使用动态背景、标题和品牌 tint，不在运行时递归遍历 UIKit 私有层级。
 - 第三方 IPA 完成回调不再通过可触发 `preconditionFailure` 的可选值构造 `Result`；缺失结果转成可记录、可展示的普通安装错误。
 - AltSign 在读取 IPA `Info.plist` 的名称、bundle ID、版本、最低系统、设备族和图标元数据前验证实际 plist 类型，畸形可选字段降级或忽略而不是触发 Objective-C 异常。
+- ldid 识别 Apple Watch `arm64_32` CPU type，使用与 ARM slice 一致的对齐并提供非空 progress 名称；其他未知 CPU type 在写回前抛出 `ALTSigner` 可捕获的错误，不再产生空指针崩溃。
+- Apple Release CI 使用 watchOS SDK 生成最小 `arm64_32` 可执行文件完成真实 ldid 签名，并验证未知 CPU type 安全失败；fixture 和产物使用任务临时目录且退出时清理。
 - “我的 App”出现时不再在 `reloadData()` 后 reconfigure 动态 index path；更新状态先计算再 reload，后续只直接更新已经可见的 no-updates cell，不改变 collection structure。
 - App IDs footer 从独立 XIB 注册和渲染；布局测量实例化独立 prototype，不得在 flow-layout size delegate 中调用 collection-view data source 方法或 dequeue reusable view。
 - App ID 列表 header 同样从独立 XIB 注册和测量，覆盖上游已经确认的第二处 iOS 18 collection-view assertion。
@@ -43,7 +47,7 @@ build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断
 
 ## 复杂度与资源
 
-操作恢复记录最多保留 20 条，每条最多 16 个事件、detail 最多 120 字符。append 为 `O(k + e)`，`k <= 20`、`e <= 16`；每次更新只原子重写一份上限为常数的小型 JSON。前台 session 只保留 current 与 interrupted 两条固定大小记录。持久化数据只包含操作类型、应用名、bundle ID、客户端诊断编号、时间、预定义 UI checkpoint、USB/Wi-Fi/本机类别和团队类别，不包含 Apple ID、密码、验证码、团队 ID、Server 名称/ID、证书/profile、设备 ID 或 IPA/下载路径。错误记录仍通过单个 Core Data background context 写入，不修改 schema/Server Protocol，不新增网络请求、端口、长期进程或无界缓存。
+操作恢复记录最多保留 20 条，每条最多 16 个事件、detail 最多 120 字符。append 为 `O(k + e)`，`k <= 20`、`e <= 16`；每次更新只原子重写一份上限为常数的小型 JSON。前台 session 只保留 current 与 interrupted 两条固定大小记录。持久化数据只包含操作类型、应用名、bundle ID、客户端诊断编号、时间、预定义 UI checkpoint、USB/Wi-Fi/本机类别和团队类别，不包含 Apple ID、密码、验证码、团队 ID、Server 名称/ID、证书/profile、设备 ID 或 IPA/下载路径。架构选择为每个 Mach-O slice `O(1)`，不增加文件扫描、签名轮数或常驻内存。错误记录仍通过单个 Core Data background context 写入，不修改 schema/Server Protocol，不新增网络请求、端口、长期进程或无界缓存。
 
 ## 验证计划
 
@@ -53,6 +57,7 @@ build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断
 - 构建 iOS Simulator target，并在相同 Simulator 反复执行“设置 -> 我的 App -> 设置”切换。
 - 模拟遗留未完成操作记录后重启，确认错误日志出现一次且记录被消费。
 - 构造包含错误 plist 类型的最小 `.app` fixture，确认 `ALTApplication` 不抛异常且对可选元数据安全降级。
+- 使用 watchOS SDK 生成最小 `arm64_32` Mach-O，确认 ldid 完成签名并报告正确架构；篡改 CPU type 后确认返回可捕获错误而不是信号崩溃。
 - 让第三方 IPA 外层 operation 无结果结束，确认返回普通失败、不会触发 precondition，且下一次启动能从原子 journal 或前台 checkpoint 恢复一条日志。
 - 在浅色与深色模式检查设置、认证和错误日志，不得存在固定白色文字覆盖浅色系统背景。
 - 在 no-updates section 为 0/1 item、安装失败刚改变 fetched results、标签切换动画进行中三种状态重复进入“我的 App”，不得调用 stale index path reconfigure 或产生 UIKit assertion。
@@ -74,10 +79,11 @@ build 13 真机报告确认移除 reconfigure 后仍有第二个独立 UIKit 断
 - 2026-08-11：首次同 tag CI 因 hosted runner 没有预创建匹配名称的 Simulator 在测试前失败，公开资产未改动；取消剩余 job 后改为动态创建/清理 Simulator。第二次 run `31492541706` 的四个 jobs 全部通过，公开九项资产原位覆盖并重新下载校验；Release IPA 为 `2.4.0 (13)`，真机回归待用户执行。
 - 2026-08-11：build 13 真机的两份 21:05 系统报告均为 `_UICollectionViewSubviewManager removeAllDequeuedViewsWithEnumerator:` 触发的 UIKit assertion；代码定位到 footer 高度计算期间的越权 dequeue。已移植上游 `a9636a73` 的 iOS 18 修复，用独立 XIB prototype 测量并把 segue 动作移到 controller；repository/release/version contract、Swift parse、XML/JSON 解析和完整无签名 `Release-iphoneos` generic device build 通过，真机复测待执行。
 - 2026-08-11：继续核对上游 `classic` 后移植 `832e9fab` 的 App ID header 同类修复，并把两处禁止越权 dequeue 的要求加入 repository contract；repository/release/version contract、Storyboard/XIB XML、string catalog JSON 与完整无签名 `Release-iphoneos` generic device build 通过，真机验证仍待执行。
+- 2026-08-12：只读导出 build 15 对应真机系统报告，确认异常为 `EXC_BAD_ACCESS / SIGSEGV`，首个业务栈为 `ldid::Allocate`，并排除当次 Jetsam。补充 `CPU_TYPE_ARM64_32` 架构与未知 CPU 安全失败后，`Scripts/test_ldid_architecture_compatibility.sh` 对真实最小 watchOS `arm64_32` Mach-O 签名及未知 CPU fixture 均通过；repository contract、diff check 与完整无签名 `Release-iphoneos` generic device build 通过。同一微信 IPA 真机安装仍待执行。
 
 ## 当前状态
 
-第二轮修复正在验证，change 保持 active。真实第三方 IPA 签名、发送、安装及失败日志可见性由 `ISSUE-20260811-002` 跟踪；在浅色真机视觉、畸形 fixture、无结果完成、意外终止恢复和第三方 IPA 真机回归完成前，不宣称安装链路已经修复，也不公开新的替换 Release。经维护者明确授权，可先由 tag workflow 生成 Draft 和校验和供设备验证。
+签名崩溃修复正在验证，change 保持 active。build 15 的真机证据已定位，最小架构回归和完整 iOS build 已通过，但真实第三方 IPA 的完整签名、发送、安装及失败日志可见性仍由 `ISSUE-20260811-002` 跟踪；在同一微信 IPA 真机回归完成前，不宣称安装链路已经修复，也不公开新的替换 Release。经维护者明确授权，可先由 tag workflow 生成 Draft 和校验和供设备验证。
 
 ## 回滚
 

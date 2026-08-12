@@ -101,6 +101,13 @@ app_ids_controller = read(root, "AltStore/App IDs/AppIDsViewController.swift")
 assert(!app_ids_controller.include?("self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader"), "App IDs layout sizing must not dequeue a supplementary view outside the collection-view data source callback")
 assert(app_ids_controller.include?("AppIDsCollectionHeaderView.nib.instantiate(withOwner: nil)"), "App IDs header sizing must use an independent prototype view")
 
+ldid_source = read(root, "Dependencies/AltSign/Dependencies/ldid/ldid.cpp")
+assert(ldid_source.include?("#define CPU_TYPE_ARM64_32"), "ldid must recognize Apple Watch arm64_32 Mach-O binaries")
+assert(ldid_source.include?('arch = "arm64_32"'), "ldid signing progress must name the arm64_32 architecture without constructing a string from NULL")
+assert(ldid_source.include?("unsupported CPU type:"), "ldid must reject unknown CPU types with a catchable error instead of crashing")
+release_workflow = read(root, ".github/workflows/release.yml")
+assert(release_workflow.include?("bash Scripts/test_ldid_architecture_compatibility.sh"), "Apple release CI must exercise ldid architecture compatibility")
+
 ios_interface_files = Dir.glob(File.join(root, "AltStore/**/*.{storyboard,xib}"))
 ios_public_interface_values = ios_interface_files.flat_map do |path|
   File.read(path).scan(/\b(?:text|title|placeholder|toolTip|label|headerTitle|footerTitle)="([^"]*)"/).flatten
