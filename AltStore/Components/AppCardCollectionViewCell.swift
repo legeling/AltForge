@@ -327,7 +327,8 @@ extension AppCardCollectionViewCell
         // Otherwise, cell reuse can mess up some cached values.
         self.bannerView.button.isIndicatingActivity = false
         
-        self.bannerView.tintColor = storeApp.tintColor
+        let tintColor = storeApp.effectiveTintColor ?? .altPrimary
+        self.bannerView.tintColor = tintColor
         self.bannerView.configure(for: storeApp, showSourceIcon: showSourceIcon)
         
         self.bannerView.subtitleLabel.numberOfLines = 1
@@ -348,7 +349,7 @@ extension AppCardCollectionViewCell
         if let federatedItem = storeApp.federatedItem
         {
             self.fediverseInteractionsView.isHidden = false
-            self.fediverseInteractionsView.tintColor = storeApp.tintColor
+            self.fediverseInteractionsView.tintColor = tintColor
             self.fediverseInteractionsView.shareHandler = { [weak sharingViewController] _ in sharingViewController }
             self.fediverseInteractionsView.presentingViewController = sharingViewController
             self.fediverseInteractionsView.configure(with: federatedItem)

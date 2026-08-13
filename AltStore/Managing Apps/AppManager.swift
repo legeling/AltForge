@@ -1644,6 +1644,7 @@ private extension AppManager
             {
                 PendingAppOperationStore.shared.append(identifier: identifier, stage: stage, detail: detail)
             }
+            group.updateInstallationStatus(stage, detail: detail)
         }
         
         if let viewController = presentingViewController
@@ -1801,6 +1802,7 @@ private extension AppManager
         let pendingIdentifier = appOperation.pendingRecord.identifier
         context.diagnosticHandler = { stage, detail in
             PendingAppOperationStore.shared.append(identifier: pendingIdentifier, stage: stage, detail: detail)
+            group.updateInstallationStatus(stage, detail: detail)
         }
         
         context.beginInstallationHandler = { (installedApp) in
@@ -2113,6 +2115,7 @@ private extension AppManager
         let pendingIdentifier = operation.pendingRecord.identifier
         context.diagnosticHandler = { stage, detail in
             PendingAppOperationStore.shared.append(identifier: pendingIdentifier, stage: stage, detail: detail)
+            group.updateInstallationStatus(stage, detail: detail)
         }
         context.app = ALTApplication(fileURL: app.fileURL)
         

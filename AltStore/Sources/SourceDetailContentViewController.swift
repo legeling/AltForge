@@ -219,7 +219,8 @@ private extension SourceDetailContentViewController
         dataSource.predicate = StoreApp.visibleAppsPredicate
         dataSource.cellConfigurationHandler = { [weak self] (cell, storeApp, indexPath) in
             let cell = cell as! AppBannerCollectionViewCell
-            cell.tintColor = storeApp.tintColor
+            let tintColor = storeApp.effectiveTintColor ?? .altPrimary
+            cell.tintColor = tintColor
             
             // For some reason, setting cell.layoutMargins = .zero does not update cell.contentView.layoutMargins.
             cell.layoutMargins = .zero
@@ -228,7 +229,7 @@ private extension SourceDetailContentViewController
             cell.bannerView.button.isIndicatingActivity = false
             cell.bannerView.configure(for: storeApp, showSourceIcon: false)
             
-            cell.bannerView.button.tintColor = storeApp.tintColor
+            cell.bannerView.button.tintColor = tintColor
             cell.bannerView.button.addTarget(self, action: #selector(SourceDetailContentViewController.performAppAction(_:)), for: .primaryActionTriggered)
             
             cell.bannerView.iconImageView.image = nil
@@ -360,7 +361,7 @@ extension SourceDetailContentViewController
             if let externalURL = newsItem.externalURL
             {
                 let safariViewController = SFSafariViewController(url: externalURL)
-                safariViewController.preferredControlTintColor = newsItem.tintColor
+                safariViewController.preferredControlTintColor = newsItem.effectiveTintColor
                 self.present(safariViewController, animated: true, completion: nil)
             }
             else if let storeApp = newsItem.storeApp

@@ -63,12 +63,30 @@ class PatchViewController: UIViewController
         super.viewDidLoad()
         
         self.isModalInPresentation = true
+
+        self.view.backgroundColor = .systemGroupedBackground
+        self.view.tintColor = .altPrimary
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemGroupedBackground
+        appearance.shadowColor = nil
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        self.navigationController?.navigationBar.barStyle = .default
+        self.navigationController?.navigationBar.tintColor = .altPrimary
+        self.navigationController?.navigationBar.standardAppearance = appearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         
         self.placeholderView.stackView.spacing = 20
-        self.placeholderView.textLabel.textColor = .white
+        self.placeholderView.textLabel.textColor = .label
         
         self.placeholderView.detailTextLabel.textAlignment = .left
-        self.placeholderView.detailTextLabel.textColor = UIColor.white.withAlphaComponent(0.6)
+        self.placeholderView.detailTextLabel.textColor = .secondaryLabel
+        self.taskDescriptionLabel.textColor = .secondaryLabel
+        self.pillButton.backgroundColor = .clear
+        self.pillButton.tintColor = .altPrimary
+        self.cancelBarButtonItem.tintColor = .altPrimary
+        self.cancelButton.setTitleColor(.altPrimary, for: .normal)
         
         self.buttonHandler = { [weak self] in
             self?.startProcess()

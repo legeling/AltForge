@@ -173,7 +173,7 @@ extension AppContentViewController
 {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
     {
-        cell.tintColor = self.app.tintColor
+        cell.tintColor = self.app.effectiveTintColor ?? .altPrimary
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat

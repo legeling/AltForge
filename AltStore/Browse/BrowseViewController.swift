@@ -269,7 +269,7 @@ private extension BrowseViewController
             cell.bannerView.button.activityIndicatorView.style = .medium
             cell.bannerView.button.activityIndicatorView.color = .white
             
-            let tintColor = app.tintColor ?? .altPrimary
+            let tintColor = app.effectiveTintColor ?? .altPrimary
             cell.tintColor = tintColor
         }
         dataSource.prefetchHandler = { (storeApp, indexPath, completionHandler) -> Foundation.Operation? in

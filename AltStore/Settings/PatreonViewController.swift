@@ -34,7 +34,7 @@ class PatreonViewController: UICollectionViewController
     private var prototypeAboutHeader: AboutPatreonHeaderView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return .default
     }
     
     override func viewDidLoad()
@@ -43,7 +43,10 @@ class PatreonViewController: UICollectionViewController
         
         let aboutHeaderNib = UINib(nibName: "AboutPatreonHeaderView", bundle: nil)
         self.prototypeAboutHeader = aboutHeaderNib.instantiate(withOwner: nil, options: nil)[0] as? AboutPatreonHeaderView
-        
+
+        self.collectionView.backgroundColor = .systemGroupedBackground
+        self.collectionView.indicatorStyle = .default
+        self.view.tintColor = .altPrimary
         self.collectionView.dataSource = self.dataSource
         
         self.collectionView.register(aboutHeaderNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "AboutHeader")
@@ -54,19 +57,14 @@ class PatreonViewController: UICollectionViewController
         NotificationCenter.default.addObserver(self, selector: #selector(PatreonViewController.didUpdatePatrons(_:)), name: AppManager.didUpdatePatronsNotification, object: nil)
         #endif
         
-        if #available(iOS 26, *)
-        {
-            let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithDefaultBackground()
-            appearance.shadowColor = nil
-            appearance.titleTextAttributes = textAttributes
-            appearance.largeTitleTextAttributes = textAttributes
-            
-            self.navigationItem.standardAppearance = appearance
-            self.navigationItem.scrollEdgeAppearance = appearance
-        }
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemGroupedBackground
+        appearance.shadowColor = nil
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        self.navigationItem.standardAppearance = appearance
+        self.navigationItem.scrollEdgeAppearance = appearance
         
         self.update()
     }
@@ -189,11 +187,11 @@ private extension PatreonViewController
                 let font = UIFont.systemFont(ofSize: 16)
                 
                 let attributedText = NSMutableAttributedString(string: isPatronText, attributes: [.font: font,
-                                                                                                  .foregroundColor: UIColor.white])
+                                                                                                  .foregroundColor: UIColor.label])
                 
                 let boldedName = NSAttributedString(string: account.firstName ?? account.name,
                                                     attributes: [.font: UIFont.boldSystemFont(ofSize: font.pointSize),
-                                                                 .foregroundColor: UIColor.white])
+                                                                 .foregroundColor: UIColor.label])
                 attributedText.insert(boldedName, at: 4)
                 
                 headerView.textView.attributedText = attributedText

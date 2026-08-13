@@ -54,7 +54,7 @@ class JoinPatreonViewController: UIViewController
         let continueButton = UIBarButtonItem(title: NSLocalizedString("Continue", comment: ""), style: .done, target: self, action: #selector(JoinPatreonViewController.joinPatreon))
         self.navigationItem.rightBarButtonItem = continueButton
         
-        self.navigationController?.navigationBar.tintColor = self.$storeApp.tintColor
+        self.navigationController?.navigationBar.tintColor = self.$storeApp.effectiveTintColor ?? .altPrimary
         
         if let sheetController = self.navigationController?.sheetPresentationController
         {

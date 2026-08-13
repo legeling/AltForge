@@ -113,7 +113,12 @@ public extension NewsItem
     }
     
     var effectiveTintColor: UIColor {
-        return self.tintColor ?? self.storeApp?.tintColor ?? self.source?.effectiveTintColor ?? .altPrimary
+        if self.sourceIdentifier == Source.altStoreIdentifier || self.source?.identifier == Source.altStoreIdentifier || self.storeApp?.bundleIdentifier == StoreApp.altstoreAppID
+        {
+            return .altSourceTint
+        }
+
+        return self.tintColor ?? self.storeApp?.effectiveTintColor ?? self.source?.effectiveTintColor ?? .altPrimary
     }
     
     var shareURL: URL? {

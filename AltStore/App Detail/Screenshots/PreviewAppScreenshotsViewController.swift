@@ -36,7 +36,7 @@ class PreviewAppScreenshotsViewController: UICollectionViewController
     {
         super.viewDidLoad()
         
-        let tintColor = self.app.tintColor ?? .altPrimary
+        let tintColor = self.app.effectiveTintColor ?? .altPrimary
         self.navigationController?.view.tintColor = tintColor
         
         self.view.backgroundColor = .systemBackground
@@ -80,7 +80,7 @@ class PreviewAppScreenshotsViewController: UICollectionViewController
         // Doesn't inherit navigation tint color on iOS 26
         if #available(iOS 26, *)
         {
-            let tintColor = self.app.tintColor ?? .altPrimary
+            let tintColor = self.app.effectiveTintColor ?? .altPrimary
             self.navigationItem.rightBarButtonItem?.tintColor = tintColor
         }
     }

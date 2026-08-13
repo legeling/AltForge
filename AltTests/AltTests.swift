@@ -93,6 +93,15 @@ final class AltTests: XCTestCase
         XCTAssertNil(application.icon)
     }
 
+    func testHealthKitCapabilityMapping()
+    {
+        XCTAssertEqual(ALTEntitlement(feature: .healthKit), .healthKit)
+        XCTAssertEqual(ALTFeature(entitlement: .healthKit), .healthKit)
+
+        let healthKitAccess = ALTEntitlement(rawValue: "com.apple.developer.healthkit.access")
+        XCTAssertNil(ALTFeature(entitlement: healthKitAccess))
+    }
+
     func testUnsupportedAppleWatchBundleIsRemovedBeforeSigning() throws
     {
         let appURL = FileManager.default.temporaryDirectory

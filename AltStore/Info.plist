@@ -31,6 +31,25 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
 	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>AppIcon_Blueprint</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Blueprint</string></dict>
+			<key>AppIcon_Ceramic</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Ceramic</string></dict>
+			<key>AppIcon_Coral</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Coral</string></dict>
+			<key>AppIcon_Frost</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Frost</string></dict>
+			<key>AppIcon_Glass</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Glass</string></dict>
+			<key>AppIcon_Neon</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Neon</string></dict>
+			<key>AppIcon_Paper</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Paper</string></dict>
+			<key>AppIcon_Titanium</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Titanium</string></dict>
+		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
 			<key>NSAppIconComplementingColorNames</key>
@@ -49,6 +68,20 @@
 				<key>CFBundleIconName</key>
 				<string>AppIcon_Coral</string>
 			</dict>
+			<key>AppIcon_Frost</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Frost</string></dict>
+			<key>AppIcon_Paper</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Paper</string></dict>
+			<key>AppIcon_Neon</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Neon</string></dict>
+			<key>AppIcon_Blueprint</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Blueprint</string></dict>
+			<key>AppIcon_Ceramic</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Ceramic</string></dict>
+			<key>AppIcon_Glass</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Glass</string></dict>
+			<key>AppIcon_Titanium</key>
+			<dict><key>CFBundleIconName</key><string>AppIcon_Titanium</string></dict>
 		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>

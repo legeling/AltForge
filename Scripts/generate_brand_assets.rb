@@ -9,6 +9,9 @@ ROOT = File.expand_path("..", __dir__)
 BRAND_ROOT = File.join(ROOT, "docs/assets/brand")
 APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon.png")
 CORAL_APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon-coral.png")
+TITANIUM_APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon-titanium.png")
+GLASS_APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon-glass.png")
+CERAMIC_APP_ICON = File.join(BRAND_ROOT, "altforge-app-icon-ceramic.png")
 TEMPLATE_ICON = File.join(BRAND_ROOT, "altforge-template-icon.png")
 MENU_BAR_CROP_SIZE = 780
 
@@ -68,6 +71,9 @@ end
 
 abort("Missing brand source: #{APP_ICON}") unless File.file?(APP_ICON)
 abort("Missing brand source: #{CORAL_APP_ICON}") unless File.file?(CORAL_APP_ICON)
+[TITANIUM_APP_ICON, GLASS_APP_ICON, CERAMIC_APP_ICON].each do |source|
+  abort("Missing dimensional icon source: #{source}") unless File.file?(source)
+end
 abort("Missing template source: #{TEMPLATE_ICON}") unless File.file?(TEMPLATE_ICON)
 
 resize_png(APP_ICON, File.join(ROOT, "AltStore/Resources/AppIcon.icon/Assets/AltForge.png"), 1024)
@@ -75,6 +81,10 @@ resize_png(APP_ICON, File.join(ROOT, "AltStore/Resources/Icons.xcassets/Raw/AppI
 resize_png(APP_ICON, File.join(ROOT, "AltStore/Resources/Icons.xcassets/Raw/AppIcon.imageset/AltForgeIconDark.png"), 1024)
 resize_png(CORAL_APP_ICON, File.join(ROOT, "AltStore/Resources/AppIcon_Coral.icon/Assets/AltForgeCoral.png"), 1024)
 resize_png(CORAL_APP_ICON, File.join(ROOT, "AltStore/Resources/Icons.xcassets/Raw/AppIcon_Coral.imageset/AltForgeCoralIcon.png"), 1024)
+run!("swift", File.join(ROOT, "Scripts/generate_altforge_app_icons.swift"))
+resize_png(TITANIUM_APP_ICON, File.join(ROOT, "AltStore/Resources/AppIcon_Titanium.icon/Assets/AltForgeTitanium.png"), 1024)
+resize_png(GLASS_APP_ICON, File.join(ROOT, "AltStore/Resources/AppIcon_Glass.icon/Assets/AltForgeGlass.png"), 1024)
+resize_png(CERAMIC_APP_ICON, File.join(ROOT, "AltStore/Resources/AppIcon_Ceramic.icon/Assets/AltForgeCeramic.png"), 1024)
 
 mac_icons = {
   "Icon@16.png" => 16,

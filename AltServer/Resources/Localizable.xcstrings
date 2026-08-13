@@ -104,7 +104,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "发行版本"
+            "value" : "发布版本"
           }
         }
       }
@@ -248,7 +248,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在从 AltForge GitHub Release 下载 IPA…"
+            "value" : "正在从 AltForge GitHub 发布页下载 IPA…"
           }
         }
       }
@@ -694,7 +694,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开 Releases"
+            "value" : "打开发布页面"
           }
         }
       }
@@ -922,7 +922,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "软件源 JSON 中不存在捆绑包 ID 为“%@”的 App。"
+            "value" : "软件源 JSON 中不存在 Bundle ID 为“%@”的 App。"
           }
         }
       }
@@ -1290,7 +1290,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有已连接的设备"
+            "value" : "暂无已连接设备"
           }
         }
       }
@@ -1300,7 +1300,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有已侧载的 App"
+            "value" : "暂无已侧载 App"
           }
         }
       }
@@ -1310,7 +1310,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好"
+            "value" : "确定"
           }
         }
       }
@@ -1580,7 +1580,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "是否改为下载与你的设备兼容的最后一个版本？"
+            "value" : "是否改为下载与你的设备兼容的最新版本？"
           }
         }
       }
@@ -2466,7 +2466,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "提供的 .ipa 不包含 App 包。"
+            "value" : "提供的 IPA 不包含 App 包。"
           }
         }
       }
@@ -2596,7 +2596,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此 App 的 Bundle Identifier 无效。"
+            "value" : "此 App 的 Bundle ID 无效。"
           }
         }
       }
@@ -2606,7 +2606,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此 App 的 Bundle Identifier 已被注册。"
+            "value" : "此 App 的 Bundle ID 已被注册。"
           }
         }
       }

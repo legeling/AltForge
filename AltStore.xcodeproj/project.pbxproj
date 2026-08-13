@@ -18,6 +18,13 @@
 		A17F00000000000000000003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000013 /* Localizable.xcstrings */; };
 		A17F00000000000000000004 /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000015 /* AppShortcuts.xcstrings */; };
 		A17F00000000000000000005 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000016 /* InfoPlist.xcstrings */; };
+		A17F10000000000000000001 /* AppIcon_Frost.icon in Resources */ = {isa = PBXBuildFile; fileRef = A17F10000000000000000011 /* AppIcon_Frost.icon */; };
+		A17F10000000000000000002 /* AppIcon_Paper.icon in Resources */ = {isa = PBXBuildFile; fileRef = A17F10000000000000000012 /* AppIcon_Paper.icon */; };
+		A17F10000000000000000003 /* AppIcon_Neon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A17F10000000000000000013 /* AppIcon_Neon.icon */; };
+		A17F10000000000000000004 /* AppIcon_Blueprint.icon in Resources */ = {isa = PBXBuildFile; fileRef = A17F10000000000000000014 /* AppIcon_Blueprint.icon */; };
+		A17F10000000000000000005 /* AppIcon_Titanium.icon in Resources */ = {isa = PBXBuildFile; fileRef = A17F10000000000000000015 /* AppIcon_Titanium.icon */; };
+		A17F10000000000000000006 /* AppIcon_Glass.icon in Resources */ = {isa = PBXBuildFile; fileRef = A17F10000000000000000016 /* AppIcon_Glass.icon */; };
+		A17F10000000000000000007 /* AppIcon_Ceramic.icon in Resources */ = {isa = PBXBuildFile; fileRef = A17F10000000000000000017 /* AppIcon_Ceramic.icon */; };
 		820059C32F36BBAA00C22365 /* SafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820059C22F36BBAA00C22365 /* SafariActivity.swift */; };
 		825DAD9E2F0C329C00E0EDF1 /* FediverseLikesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825DAD9D2F0C329C00E0EDF1 /* FediverseLikesView.swift */; };
 		82BBB9342F185B33005A472E /* AppIcon_Coral.icon in Resources */ = {isa = PBXBuildFile; fileRef = 82BBB9332F185B33005A472E /* AppIcon_Coral.icon */; };
@@ -720,6 +727,13 @@
 		A17F00000000000000000014 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000015 /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000016 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		A17F10000000000000000011 /* AppIcon_Frost.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Frost.icon; sourceTree = "<group>"; };
+		A17F10000000000000000012 /* AppIcon_Paper.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Paper.icon; sourceTree = "<group>"; };
+		A17F10000000000000000013 /* AppIcon_Neon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Neon.icon; sourceTree = "<group>"; };
+		A17F10000000000000000014 /* AppIcon_Blueprint.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Blueprint.icon; sourceTree = "<group>"; };
+		A17F10000000000000000015 /* AppIcon_Titanium.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Titanium.icon; sourceTree = "<group>"; };
+		A17F10000000000000000016 /* AppIcon_Glass.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Glass.icon; sourceTree = "<group>"; };
+		A17F10000000000000000017 /* AppIcon_Ceramic.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Ceramic.icon; sourceTree = "<group>"; };
 		11611D46F8A7C8B928E8156B /* Pods-AltServer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AltServer.debug.xcconfig"; path = "Target Support Files/Pods-AltServer/Pods-AltServer.debug.xcconfig"; sourceTree = "<group>"; };
 		589BA531D903B28F292063E5 /* Pods-AltServer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AltServer.release.xcconfig"; path = "Target Support Files/Pods-AltServer/Pods-AltServer.release.xcconfig"; sourceTree = "<group>"; };
 		820059C22F36BBAA00C22365 /* SafariActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariActivity.swift; sourceTree = "<group>"; };
@@ -2148,6 +2162,13 @@
 				D50F7FF02C5BFEE70064F7CE /* PrivacyInfo.xcprivacy */,
 				D5784E3E2CC2E67B00DAC00E /* AltMarketplace.cer */,
 				82CB1FB22EBABB0100C8E822 /* AppIcon.icon */,
+				A17F10000000000000000011 /* AppIcon_Frost.icon */,
+				A17F10000000000000000012 /* AppIcon_Paper.icon */,
+				A17F10000000000000000013 /* AppIcon_Neon.icon */,
+				A17F10000000000000000014 /* AppIcon_Blueprint.icon */,
+				A17F10000000000000000015 /* AppIcon_Titanium.icon */,
+				A17F10000000000000000016 /* AppIcon_Glass.icon */,
+				A17F10000000000000000017 /* AppIcon_Ceramic.icon */,
 				D5B15D422ECE664000F8E797 /* Localizable.xcstrings */,
 				82BBB9332F185B33005A472E /* AppIcon_Coral.icon */,
 			);
@@ -3079,6 +3100,13 @@
 				D59162AD29BA616A005CBF47 /* SourceHeaderView.xib in Resources */,
 				D56091892EEA2DD60090FEDF /* Settings.storyboard in Resources */,
 				82BBB9342F185B33005A472E /* AppIcon_Coral.icon in Resources */,
+				A17F10000000000000000001 /* AppIcon_Frost.icon in Resources */,
+				A17F10000000000000000002 /* AppIcon_Paper.icon in Resources */,
+				A17F10000000000000000003 /* AppIcon_Neon.icon in Resources */,
+				A17F10000000000000000004 /* AppIcon_Blueprint.icon in Resources */,
+				A17F10000000000000000005 /* AppIcon_Titanium.icon in Resources */,
+				A17F10000000000000000006 /* AppIcon_Glass.icon in Resources */,
+				A17F10000000000000000007 /* AppIcon_Ceramic.icon in Resources */,
 				D5144BA82B8684EF00738A5C /* Icons.xcassets in Resources */,
 				82CB1FB32EBABB0100C8E822 /* AppIcon.icon in Resources */,
 				D57DF638271E32F000677701 /* PatchApp.storyboard in Resources */,
@@ -3933,7 +3961,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_MODULE_NAME = AltServer;
 				EXECUTABLE_NAME = "AltForge Server";
@@ -3988,7 +4016,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_MODULE_NAME = AltServer;
 				EXECUTABLE_NAME = "AltForge Server";
@@ -4358,7 +4386,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -4422,7 +4450,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_CPLUSPLUSFLAGS = (

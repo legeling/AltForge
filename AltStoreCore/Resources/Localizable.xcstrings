@@ -156,7 +156,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 收到了来自 AltServer 的无效请求。"
+            "value" : "%@ 收到了来自 AltForge Server 的无效请求。"
           }
         }
       }
@@ -228,7 +228,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 无法连接到 Mail 插件。"
+            "value" : "AltForge Server 无法连接到“邮件”插件。"
           }
         }
       }
@@ -250,7 +250,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 无法与 AltStore 建立连接。"
+            "value" : "AltForge Server 无法与 AltForge 建立连接。"
           }
         }
       }
@@ -272,7 +272,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 无法与 %@ 建立安全连接。"
+            "value" : "AltForge Server 无法与 %@ 建立安全连接。"
           }
         }
       }
@@ -294,7 +294,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 找不到此设备。"
+            "value" : "AltForge Server 找不到此设备。"
           }
         }
       }
@@ -316,7 +316,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 无法向此设备写入数据。"
+            "value" : "AltForge Server 无法向此设备写入数据。"
           }
         }
       }
@@ -338,7 +338,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 不支持此请求。"
+            "value" : "AltForge Server 不支持此请求。"
           }
         }
       }
@@ -360,7 +360,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 收到了无效请求。"
+            "value" : "AltForge Server 收到了无效请求。"
           }
         }
       }
@@ -382,7 +382,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 收到了来自 %@ 的无效响应。"
+            "value" : "AltForge Server 收到了来自 %@ 的无效响应。"
           }
         }
       }
@@ -404,7 +404,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 发送了无效响应。"
+            "value" : "AltForge Server 发送了无效响应。"
           }
         }
       }
@@ -426,7 +426,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltServer 与 %@ 的连接超时。"
+            "value" : "AltForge Server 与 %@ 的连接超时。"
           }
         }
       }
@@ -448,7 +448,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltStore 收到了来自 AltServer 的未知响应。"
+            "value" : "AltForge 收到了来自 AltForge Server 的未知响应。"
           }
         }
       }
@@ -470,7 +470,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法保存 AltStore 的数据库。"
+            "value" : "无法保存 AltForge 的数据库。"
           }
         }
       }
@@ -492,7 +492,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "移除应用时发生错误。"
+            "value" : "移除 App 时出错。"
           }
         }
       }
@@ -514,7 +514,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "安装应用时发生错误。"
+            "value" : "安装 App 时出错。"
           }
         }
       }
@@ -580,7 +580,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "至少一个应用"
+            "value" : "至少一个 App"
           }
         }
       }
@@ -668,7 +668,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "找不到配置描述文件"
+            "value" : "找不到描述文件"
           }
         }
       }
@@ -1152,7 +1152,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请确保 Mail 正在运行，并已在 Mail 的偏好设置中启用插件。"
+            "value" : "请确保“邮件”正在运行，并已在“邮件”设置中启用插件。"
           }
         }
       }
@@ -1218,7 +1218,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "姓名"
+            "value" : "名称"
           }
         }
       }
@@ -1260,7 +1260,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "通知"
+            "value" : "提示"
           }
         },
         "pt-BR" : {
@@ -1404,7 +1404,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请停用一个侧载应用后再安装其他应用。\n\n如果设备运行 iOS 13.5 或更高版本，请确保已在“设置 > iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App。"
+            "value" : "请停用一个已侧载 App，然后再安装其他 App。\n\n如果设备运行 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App。"
           }
         }
       }
@@ -1426,7 +1426,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请使用 AltStore 停用一个侧载应用后再安装其他应用。\n\n如果设备运行 iOS 13.5 或更高版本，请确保已在“设置 > iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App，以免它们被错误计入此限制。"
+            "value" : "请使用 AltForge 停用一个已侧载 App，然后再安装其他 App。\n\n如果设备运行 iOS 13.5 或更高版本，请确保已在“设置”>“iTunes 与 App Store”中关闭“卸载未使用的 App”，然后安装或删除所有已卸载的 App，以免它们被错误计入此限制。"
           }
         }
       }
@@ -1646,7 +1646,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "应用的格式无效。"
+            "value" : "App 格式无效。"
           }
         }
       }
@@ -1712,7 +1712,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "与 AltServer 的连接已断开。"
+            "value" : "与 AltForge Server 的连接已断开。"
           }
         }
       }
@@ -1872,7 +1872,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请求的应用"
+            "value" : "请求的 App"
           }
         }
       }
@@ -2158,7 +2158,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用非开发者 Apple ID 时，最多只能激活 3 个应用。"
+            "value" : "使用非开发者 Apple ID 最多只能激活 3 个 App。"
           }
         }
       }
@@ -2202,7 +2202,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "您的设备必须运行 iOS 12.2 或更高版本才能安装 AltStore。"
+            "value" : "您的设备必须运行 iOS 12.2 或更高版本才能安装 AltForge。"
           }
         }
       }

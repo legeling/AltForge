@@ -15,7 +15,17 @@ class LicensesViewController: UIViewController
     @IBOutlet private var textView: UITextView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return .default
+    }
+
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+
+        self.view.backgroundColor = .systemGroupedBackground
+        self.textView.backgroundColor = .systemGroupedBackground
+        self.textView.textColor = .label
+        self.textView.indicatorStyle = .default
     }
     
     override func viewWillAppear(_ animated: Bool)

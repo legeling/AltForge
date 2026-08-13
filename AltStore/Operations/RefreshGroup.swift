@@ -14,6 +14,8 @@ import AltSign
 
 class RefreshGroup: NSObject
 {
+    typealias InstallationStatusHandler = (_ stage: AppOperationDiagnosticStage, _ detail: String?) -> Void
+
     let context: AuthenticatedOperationContext
     let progress = Progress.discreteProgress(totalUnitCount: 0)
     
@@ -27,6 +29,8 @@ class RefreshGroup: NSObject
     private(set) var _contexts = Set<NSManagedObjectContext>()
     
     private var isFinished = false
+    private var installationStatus: (stage: AppOperationDiagnosticStage, detail: String?)?
+    private var installationStatusHandler: InstallationStatusHandler?
     
     private let dispatchGroup = DispatchGroup()
     private var operations: [Foundation.Operation] = []
@@ -77,6 +81,24 @@ class RefreshGroup: NSObject
     func cancel()
     {
         self.operations.forEach { $0.cancel() }
+    }
+
+    func updateInstallationStatus(_ stage: AppOperationDiagnosticStage, detail: String?)
+    {
+        let boundedDetail = detail.map { String($0.prefix(120)) }
+        DispatchQueue.main.async {
+            self.installationStatus = (stage, boundedDetail)
+            self.installationStatusHandler?(stage, boundedDetail)
+        }
+    }
+
+    func setInstallationStatusHandler(_ handler: @escaping InstallationStatusHandler)
+    {
+        DispatchQueue.main.async {
+            self.installationStatusHandler = handler
+            guard let status = self.installationStatus else { return }
+            handler(status.stage, status.detail)
+        }
     }
 }
 

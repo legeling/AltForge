@@ -1,6 +1,96 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "AltForge Blueprint" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 蓝图"
+          }
+        }
+      }
+    },
+    "AltForge Ceramic" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 陶瓷珐琅"
+          }
+        }
+      }
+    },
+    "AltForge Coral" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 珊瑚"
+          }
+        }
+      }
+    },
+    "AltForge Frost" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 冰霜"
+          }
+        }
+      }
+    },
+    "AltForge Glass" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 光学玻璃"
+          }
+        }
+      }
+    },
+    "AltForge Neon" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 霓虹"
+          }
+        }
+      }
+    },
+    "AltForge Paper" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 纸白"
+          }
+        }
+      }
+    },
+    "AltForge Titanium" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 钛金属"
+          }
+        }
+      }
+    },
+    "Applying…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在应用…"
+          }
+        }
+      }
+    },
     "Choose an app icon and theme color that fit your AltForge experience." : {
       "localizations" : {
         "zh-Hans" : {
@@ -686,7 +776,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ App IDs 剩余"
+            "value" : "剩余 %@ 个 App ID"
           }
         }
       }
@@ -1056,7 +1146,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ 需要 %2$@ App IDs，但需要 %3$@。"
+            "value" : "%1$@ 需要 %2$@ 个 App ID，但当前%3$@。"
           }
         }
       }
@@ -1078,7 +1168,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 需要源未指定的附加权限。"
+            "value" : "%@ 需要软件源未声明的附加权限。"
           }
         }
       }
@@ -1100,7 +1190,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 需要积极的赞助才能安装。"
+            "value" : "%@ 需要有效的赞助才能安装。"
           }
         }
       }
@@ -1200,7 +1290,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 不支持的可用更新"
+            "value" : "有 %@ 个不支持的更新"
           }
         }
       }
@@ -1398,7 +1488,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 App ID 剩余"
+            "value" : "剩余 1 个 App ID"
           }
         }
       }
@@ -1530,7 +1620,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "标识符为“%@”的源已存在"
+            "value" : "标识符为“%@”的软件源已存在"
           }
         }
       }
@@ -1662,7 +1752,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "积极的"
+            "value" : "已激活"
           }
         }
       }
@@ -1750,7 +1840,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "添加更多源"
+            "value" : "添加更多软件源"
           }
         }
       }
@@ -1773,6 +1863,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "添加软件源"
+          }
+        }
+      }
+    },
+    "Add sources to see new and updated apps, categories, and featured picks here." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加软件源后，这里会显示新增和更新、类别与精选 App。"
           }
         }
       }
@@ -1860,7 +1960,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "所有源均已成功添加。"
+            "value" : "所有软件源均已成功添加。"
           }
         }
       }
@@ -2003,7 +2103,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltForge 没有这些权利的详细信息。"
+            "value" : "AltForge 没有这些授权项的详细信息。"
           }
         }
       }
@@ -2047,7 +2147,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltForge 新闻"
+            "value" : "AltForge 资讯"
           }
         }
       }
@@ -2091,7 +2191,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltForge 无法使用现有签名证书，因此必须创建一个新证书。这将导致使用现有证书安装的任何应用过期 - 包括 AltForge。\n\n为了防止 AltForge 提前过期，请立即刷新应用。刷新完成后，AltForge 将退出。"
+            "value" : "AltForge 无法使用现有签名证书，因此必须创建一个新证书。这将导致使用现有证书安装的所有 App 提前过期，其中也包括 AltForge。\n\n为了防止 AltForge 提前过期，请立即刷新 App。刷新完成后，AltForge 将退出。"
           }
         }
       }
@@ -2113,7 +2213,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltForge 将在 24 小时后过期。打开应用并刷新以防止其过期。"
+            "value" : "AltForge 将在 24 小时后过期。请打开 App 并刷新，避免其过期。"
           }
         }
       }
@@ -2333,7 +2433,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "应用包含扩展"
+            "value" : "App 包含扩展"
           }
         }
       }
@@ -2487,7 +2587,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "批准"
+            "value" : "允许"
           }
         }
       }
@@ -2780,7 +2880,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "桥账户"
+            "value" : "桥接账户"
           }
         }
       }
@@ -3044,7 +3144,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "收藏"
+            "value" : "软件源合集"
           }
         }
       }
@@ -3111,6 +3211,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "确认安装"
+          }
+        }
+      }
+    },
+    "Check your software sources, then try refreshing again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查软件源，然后重新刷新。"
           }
         }
       }
@@ -3418,7 +3528,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法加载喜欢"
+            "value" : "无法加载点赞"
           }
         }
       }
@@ -3528,7 +3638,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "制作人员"
+            "value" : "致谢"
           }
         }
       }
@@ -3550,7 +3660,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "定制赞助"
+            "value" : "自定义赞助"
           }
         }
       }
@@ -3798,7 +3908,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在下载 iOS 固件..."
+            "value" : "正在下载 iOS 固件…"
           }
         }
       }
@@ -3842,7 +3952,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 AltForge 安装的每个应用和应用扩展都必须向 Apple 注册 App ID。\n\n付费开发者账户的 App IDs 永不过期，并且您可以创建的数量没有限制。"
+            "value" : "使用 AltForge 安装的每个 App 和 App 扩展都必须向 Apple 注册一个 App ID。\n\n付费开发者账户的 App ID 永不过期，创建数量也不受限制。"
           }
         }
       }
@@ -3864,7 +3974,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 AltForge 安装的每个应用和应用扩展都必须向 Apple 注册 App ID。 Apple 将非开发人员 Apple ID 限制为一次最多 10 个 App IDs。\n\n**App IDs 无法删除**，但它们会在一星期后过期。所有活动应用过期后，AltForge 都会自动续订 App IDs。"
+            "value" : "使用 AltForge 安装的每个 App 和 App 扩展都必须向 Apple 注册一个 App ID。非开发者 Apple ID 同时最多可注册 10 个 App ID。\n\n**App ID 无法删除**，但会在一周后过期。App ID 过期后，AltForge 会自动为所有已激活 App 续期。"
           }
         }
       }
@@ -3952,7 +4062,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在下面输入源的 URL，或添加推荐的源之一。"
+            "value" : "在下方输入软件源 URL，或添加一个推荐软件源。"
           }
         }
       }
@@ -3974,7 +4084,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "权利是授予对某些系统服务（包括潜在敏感信息）的访问权限的附加权限。"
+            "value" : "授权项是访问特定系统服务所需的附加权限，其中可能涉及敏感信息。"
           }
         }
       }
@@ -4018,7 +4128,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "加载顾客时出错"
+            "value" : "加载赞助者失败"
           }
         }
       }
@@ -4106,7 +4216,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "于"
+            "value" : "剩余有效期"
           }
         }
       }
@@ -4128,7 +4238,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "于 %@ 到期"
+            "value" : "剩余有效期 %@"
           }
         }
       }
@@ -4150,7 +4260,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在 %@ 中过期。"
+            "value" : "剩余有效期 %@。"
           }
         }
       }
@@ -4216,7 +4326,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "备份失败 %@"
+            "value" : "备份 %@ 失败"
           }
         }
       }
@@ -4304,7 +4414,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "安装失败 %@"
+            "value" : "安装 %@ 失败"
           }
         }
       }
@@ -4370,7 +4480,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "刷新失败 %@"
+            "value" : "刷新 %@ 失败"
           }
         }
       }
@@ -4436,7 +4546,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "刷新失败 AltForge"
+            "value" : "刷新 AltForge 失败"
           }
         }
       }
@@ -4634,7 +4744,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "特色应用"
+            "value" : "精选 App"
           }
         }
       }
@@ -4656,7 +4766,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "完成于 %@"
+            "value" : "预计 %@ 后完成"
           }
         }
       }
@@ -4744,7 +4854,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "为了保护您的利益，请删除源并卸载"
+            "value" : "为了保护您的安全，请删除该软件源并卸载"
           }
         }
       }
@@ -4766,7 +4876,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "自由的"
+            "value" : "免费"
           }
         }
       }
@@ -4832,7 +4942,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "嘿，\n\n你是最好的。您的账户已成功关联，因此您现在可以访问我们的 Patreon 专属应用。您可以在“浏览”选项卡中找到它们。\n\n感谢大家的支持。享受！\nRiley 和 Shane"
+            "value" : "您好：\n\n您的账户已成功关联，现在可以访问 Patreon 专属 App。您可以在“浏览”页面中找到它们。\n\n感谢您的支持，祝您使用愉快！\nRiley 和 Shane"
           }
         }
       }
@@ -4854,7 +4964,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "嘿，\n\n你是最好的。您的账户已成功关联，因此您现在可以访问我们所有应用的测试版。您可以在“浏览”选项卡中找到它们。\n\n感谢大家的支持。享受！\nRiley 和 Shane"
+            "value" : "您好：\n\n您的账户已成功关联，现在可以访问所有 App 的测试版。您可以在“浏览”页面中找到它们。\n\n感谢您的支持，祝您使用愉快！\nRiley 和 Shane"
           }
         }
       }
@@ -4876,7 +4986,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "嘿大家，\n\n您可以通过在 Patreon 上向我们捐款来支持我们应用的未来开发。作为回报，您将可以访问我们应用的测试版，并成为第一批尝试最新功能的人。\n\n感谢大家的支持💜\nRiley 和 Shane"
+            "value" : "大家好：\n\n您可以在 Patreon 上赞助我们，以支持 App 的后续开发。作为回报，您将获得 App 测试版的访问权限，并可优先体验最新功能。\n\n感谢您的支持 💜\nRiley 和 Shane"
           }
         }
       }
@@ -4986,7 +5096,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无效"
+            "value" : "未激活"
           }
         }
       }
@@ -5096,7 +5206,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无论如何安装"
+            "value" : "仍要安装"
           }
         }
       }
@@ -5184,7 +5294,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在安装 %@ 占位符..."
+            "value" : "正在安装 %@ 占位 App…"
           }
         }
       }
@@ -5206,7 +5316,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在安装 %@..."
+            "value" : "正在安装 %@…"
           }
         }
       }
@@ -5228,7 +5338,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在安装..."
+            "value" : "正在安装…"
           }
         }
       }
@@ -5383,7 +5493,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "物品"
+            "value" : "项目"
           }
         }
       }
@@ -5525,7 +5635,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最后更新： %@"
+            "value" : "最后更新：%@"
           }
         }
       }
@@ -5569,7 +5679,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "类似"
+            "value" : "点赞"
           }
         }
       }
@@ -5591,7 +5701,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "喜欢"
+            "value" : "已点赞"
           }
         }
       }
@@ -5613,7 +5723,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "喜欢"
+            "value" : "点赞"
           }
         }
       }
@@ -5657,7 +5767,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "喜欢该商品"
+            "value" : "为此项目点赞"
           }
         }
       }
@@ -5711,7 +5821,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "液体玻璃"
+            "value" : "液态玻璃"
           }
         }
       }
@@ -5733,7 +5843,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在加载..."
+            "value" : "正在加载…"
           }
         }
       }
@@ -5755,7 +5865,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "加载中..."
+            "value" : "加载中…"
           }
         }
       }
@@ -5877,6 +5987,16 @@
         }
       }
     },
+    "Manage Sources" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理软件源"
+          }
+        }
+      }
+    },
     "Mastodon" : {
       "localizations" : {
         "ja" : {
@@ -5938,7 +6058,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更多的"
+            "value" : "更多"
           }
         }
       }
@@ -5960,7 +6080,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "从不"
+            "value" : "从未"
           }
         }
       }
@@ -6026,7 +6146,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "新闻快讯"
+            "value" : "资讯提醒"
           }
         }
       }
@@ -6048,7 +6168,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有活动的应用需要刷新。"
+            "value" : "暂无需要刷新的已激活 App。"
           }
         }
       }
@@ -6070,7 +6190,17 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有应用"
+            "value" : "暂无 App"
+          }
+        }
+      }
+    },
+    "No Apps to Browse" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂无可浏览的 App"
           }
         }
       }
@@ -6114,7 +6244,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "还没有喜欢"
+            "value" : "暂无点赞"
           }
         }
       }
@@ -6136,7 +6266,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有刷新尝试"
+            "value" : "暂无刷新记录"
           }
         }
       }
@@ -6186,7 +6316,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "非开发人员 Apple ID 仅限于 3 个活动应用和应用扩展，并且“%1$@”包含 %2$@ %3$@。请选择要停用的应用。"
+            "value" : "非开发者 Apple ID 最多只能激活 3 个 App 和 App 扩展，而“%1$@”包含 %2$@ %3$@。请选择一个 App 停用。"
           }
         }
       }
@@ -6318,7 +6448,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "非开发者 Apple ID 每周只能创建 10 个 App IDs。"
+            "value" : "非开发者 Apple ID 每周最多只能创建 10 个 App ID。"
           }
         }
       }
@@ -6538,7 +6668,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开占位符"
+            "value" : "打开占位 App"
           }
         }
       }
@@ -6605,7 +6735,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "其他权利"
+            "value" : "其他授权项"
           }
         }
       }
@@ -6627,7 +6757,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "补丁占位符"
+            "value" : "修补占位 App"
           }
         }
       }
@@ -6671,7 +6801,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在修补占位符应用..."
+            "value" : "正在修补占位 App…"
           }
         }
       }
@@ -6693,7 +6823,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "帕特里翁"
+            "value" : "PATREON"
           }
         }
       }
@@ -6715,7 +6845,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Patreon 检测到账户"
+            "value" : "检测到 Patreon 账户"
           }
         }
       }
@@ -6935,7 +7065,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "赞助 %@ 一个月"
+            "value" : "每月赞助 %@"
           }
         }
       }
@@ -7222,7 +7352,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已刷新的 App"
+            "value" : "已刷新 App"
           }
         }
       }
@@ -7244,7 +7374,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "清爽"
+            "value" : "正在刷新"
           }
         }
       }
@@ -7420,7 +7550,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "删除源"
+            "value" : "删除软件源"
           }
         }
       }
@@ -7486,7 +7616,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "审核权限"
+            "value" : "查看权限"
           }
         }
       }
@@ -7574,7 +7704,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "显示所有喜欢的"
+            "value" : "显示全部点赞"
           }
         }
       }
@@ -7596,7 +7726,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "旁载"
+            "value" : "侧载"
           }
         }
       }
@@ -7640,7 +7770,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用社交网络账户登录..."
+            "value" : "使用社交网络账户登录…"
           }
         }
       }
@@ -7706,7 +7836,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用您的社交网络账户登录，以喜欢 AltForge 中的应用、更新和新闻项目。"
+            "value" : "使用您的社交网络账户登录，即可为 AltForge 中的 App、更新和资讯点赞。"
           }
         }
       }
@@ -7728,7 +7858,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "登录方式..."
+            "value" : "登录方式…"
           }
         }
       }
@@ -7860,7 +7990,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "排序依据..."
+            "value" : "排序方式…"
           }
         }
       }
@@ -7904,7 +8034,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "特别感谢..."
+            "value" : "特别感谢…"
           }
         }
       }
@@ -8086,7 +8216,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "点击可查看源错误。"
+            "value" : "点击查看软件源错误。"
           }
         }
       }
@@ -8108,7 +8238,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "科技事物"
+            "value" : "技术选项"
           }
         }
       }
@@ -8246,7 +8376,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 的构建版本与源指定的构建版本不匹配。"
+            "value" : "%@ 的构建版本与软件源中指定的构建版本不匹配。"
           }
         }
       }
@@ -8268,7 +8398,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 的捆绑包 ID 与源指定的不匹配。"
+            "value" : "%@ 的 Bundle ID 与软件源中指定的不匹配。"
           }
         }
       }
@@ -8422,7 +8552,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法删除默认的 AltForge 源。"
+            "value" : "无法删除 AltForge 默认软件源。"
           }
         }
       }
@@ -8642,7 +8772,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 的市场 ID 与源指定的不匹配。"
+            "value" : "%@ 的 Marketplace ID 与软件源中指定的不匹配。"
           }
         }
       }
@@ -8928,7 +9058,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 的 SHA-256 哈希值与源指定的哈希值不匹配。"
+            "value" : "%@ 的 SHA-256 哈希值与软件源中指定的哈希值不匹配。"
           }
         }
       }
@@ -9000,7 +9130,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "软件源“%1$@”包含 %2$@ 和 %3$@。"
+            "value" : "软件源“%1$@”中，%3$@存在%2$@。"
           }
         }
       }
@@ -9138,7 +9268,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ 的版本与源指定的版本不匹配。"
+            "value" : "%@ 的版本与软件源中指定的版本不匹配。"
           }
         }
       }
@@ -9160,7 +9290,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有 AltForge 源。"
+            "value" : "没有可用的 AltForge 软件源。"
           }
         }
       }
@@ -9430,7 +9560,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这将允许您喜欢 AltForge 中的应用。"
+            "value" : "这样您就可以为 AltForge 中的 App 点赞。"
           }
         }
       }
@@ -9804,7 +9934,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法获取新闻"
+            "value" : "无法获取资讯"
           }
         }
       }
@@ -9892,7 +10022,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法喜欢应用"
+            "value" : "无法为 App 点赞"
           }
         }
       }
@@ -9914,7 +10044,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法加载特色源"
+            "value" : "无法加载精选软件源"
           }
         }
       }
@@ -9959,7 +10089,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法解析 URL 后的 Patreon。"
+            "value" : "无法解析 Patreon 帖子 URL。"
           }
         }
       }
@@ -10025,7 +10155,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法刷新“%@”源"
+            "value" : "无法刷新软件源“%@”"
           }
         }
       }
@@ -10047,7 +10177,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法刷新 %@ 源"
+            "value" : "无法刷新 %@ 个软件源"
           }
         }
       }
@@ -10069,7 +10199,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法刷新存储"
+            "value" : "无法刷新软件源"
           }
         }
       }
@@ -10091,7 +10221,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法删除源"
+            "value" : "无法删除软件源"
           }
         }
       }
@@ -10135,7 +10265,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法不同于 %@"
+            "value" : "无法取消点赞 %@"
           }
         }
       }
@@ -10201,7 +10331,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "软件源未知"
+            "value" : "未知软件源"
           }
         }
       }
@@ -10223,7 +10353,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "与"
+            "value" : "取消点赞"
           }
         }
       }
@@ -10267,7 +10397,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不喜欢该商品"
+            "value" : "取消对此项目的点赞"
           }
         }
       }
@@ -10289,7 +10419,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "取消链接 %@"
+            "value" : "取消关联 %@"
           }
         }
       }
@@ -10355,7 +10485,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不支持的可用更新"
+            "value" : "有不支持的更新"
           }
         }
       }
@@ -10377,7 +10507,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不支持的可用更新"
+            "value" : "有不支持的更新"
           }
         }
       }
@@ -10663,7 +10793,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "查看喜欢"
+            "value" : "查看点赞"
           }
         }
       }
@@ -10773,7 +10903,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "什么是非活动应用？"
+            "value" : "什么是未激活 App？"
           }
         }
       }
@@ -10817,7 +10947,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "虽然 AltStore 2.0 仍处于测试阶段，但在源更新之前，您可以选择忽略此警告，后果自负。"
+            "value" : "在软件源更新之前，您可以选择忽略此警告，但需自行承担风险。"
           }
         }
       }
@@ -10993,7 +11123,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "您在 7 天内注册的 App IDs 数量不得超过 10 个。"
+            "value" : "您在 7 天内最多只能注册 10 个 App ID。"
           }
         }
       }
@@ -11125,7 +11255,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "退出后，您将无法再对应用、更新和新闻项目进行点赞。"
+            "value" : "退出后，您将无法再为 App、更新和资讯点赞。"
           }
         }
       }
@@ -11462,6 +11592,136 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 意外退出。"
+          }
+        }
+      }
+    },
+    "Cancel Installation" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消安装"
+          }
+        }
+      }
+    },
+    "Downloading IPA" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在下载 IPA"
+          }
+        }
+      }
+    },
+    "Installing %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在安装 %@"
+          }
+        }
+      }
+    },
+    "Installing App" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在安装 App"
+          }
+        }
+      }
+    },
+    "Keep and Sign Extensions" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保留并签名扩展"
+          }
+        }
+      }
+    },
+    "Reading IPA" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在读取 IPA"
+          }
+        }
+      }
+    },
+    "Remove Extensions (Recommended)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "剔除扩展（推荐）"
+          }
+        }
+      }
+    },
+    "Removing extensions is recommended for free Apple IDs. It usually does not affect the app's main features, but widgets, share actions, notifications, or other extension-only features may be unavailable. Keeping them signs every extension and may exceed the active-app or weekly App ID limit, causing installation to fail." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费 Apple ID 建议剔除扩展。通常不会影响 App 的主要功能，但小组件、分享操作、通知或其他仅由扩展提供的功能可能不可用。保留后需要逐个签名，可能超过活跃 App 或每周 App ID 限额并导致安装失败。"
+          }
+        }
+      }
+    },
+    "Reviewing App Extensions" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在检查 App 扩展"
+          }
+        }
+      }
+    },
+    "Sign App Extensions?" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是否签名 App 扩展？"
+          }
+        }
+      }
+    },
+    "Unpacking IPA" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在解包 IPA"
+          }
+        }
+      }
+    },
+    "and %@ more" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以及另外 %@ 个"
+          }
+        }
+      }
+    },
+    "App: %@\nExtensions found: %@\n%@\n\n%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App：%1$@\n检测到扩展插件：%2$@ 个\n%3$@\n\n%4$@"
           }
         }
       }

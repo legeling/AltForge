@@ -25,6 +25,7 @@ class SettingsHeaderFooterView: UITableViewHeaderFooterView
         self.primaryLabel.textColor = .secondaryLabel
         self.secondaryLabel.textColor = .secondaryLabel
         self.button.tintColor = .altPrimary
+        self.button.setTitleColor(.altPrimary, for: .normal)
         
         self.contentView.layoutMargins = .zero
         self.contentView.preservesSuperviewLayoutMargins = true

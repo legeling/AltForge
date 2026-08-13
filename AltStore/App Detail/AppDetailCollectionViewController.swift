@@ -135,7 +135,7 @@ class AppDetailCollectionViewController: UICollectionViewController
                 }
                 
                 let helpButton = UIButton(primaryAction: action)
-                let customAccessory = UICellAccessory.customView(configuration: .init(customView: helpButton, placement: .trailing(), tintColor: self?.app.tintColor ?? .altPrimary))
+                let customAccessory = UICellAccessory.customView(configuration: .init(customView: helpButton, placement: .trailing(), tintColor: self?.app.effectiveTintColor ?? .altPrimary))
                 headerView.accessories = [customAccessory]
             }
                         
@@ -208,7 +208,7 @@ private extension AppDetailCollectionViewController
             cell.contentConfiguration = UIHostingConfiguration {
                 AppPermissionsCard(title: String(localized: "Privacy"),
                                    description: String(format: NSLocalizedString("%@ may request access to the following:", comment: "App privacy permissions description"), self.app.name),
-                                   tintColor: Color(uiColor: self.app.tintColor ?? .altPrimary),
+                                   tintColor: Color(uiColor: self.app.effectiveTintColor ?? .altPrimary),
                                    permissions: self.privacyPermissions)
             }
             .margins(.horizontal, 0)
@@ -234,7 +234,7 @@ private extension AppDetailCollectionViewController
         let dataSource = RSTCompositeCollectionViewDataSource(dataSources: [knownEntitlementsDataSource, unknownEntitlementsDataSource])
         dataSource.cellConfigurationHandler = { [weak self] (cell, appPermission, _) in
             let cell = cell as! UICollectionViewListCell
-            let tintColor = self?.app.tintColor ?? .altPrimary
+            let tintColor = self?.app.effectiveTintColor ?? .altPrimary
             
             var content = cell.defaultContentConfiguration()
             content.text = appPermission.localizedDisplayName

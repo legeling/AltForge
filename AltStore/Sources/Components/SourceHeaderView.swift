@@ -15,6 +15,8 @@ import NukeExtensions
 
 class SourceHeaderView: RSTNibView
 {
+    private weak var source: Source?
+
     @IBOutlet private(set) var titleLabel: UILabel!
     @IBOutlet private(set) var subtitleLabel: UILabel!
     @IBOutlet private(set) var iconImageView: UIImageView!
@@ -60,6 +62,7 @@ class SourceHeaderView: RSTNibView
         
         self.websiteButtonContainerView.clipsToBounds = true
         self.websiteButtonContainerView.layer.cornerRadius = 14 // 22 - inset (8)
+        NotificationCenter.default.addObserver(self, selector: #selector(SourceHeaderView.themeDidChange), name: .altThemeDidChange, object: nil)
     }
     
     override func layoutSubviews()
@@ -81,6 +84,7 @@ extension SourceHeaderView
 {
     func configure(for source: Source)
     {
+        self.source = source
         self.titleLabel.text = source.name
         self.subtitleLabel.text = source.subtitle
         
@@ -108,5 +112,10 @@ extension SourceHeaderView
             case .success: self.iconImageView.backgroundColor = .white // In case icon has transparent background.
             }
         }
+    }
+
+    @objc private func themeDidChange()
+    {
+        self.websiteImageView.tintColor = self.source?.effectiveTintColor ?? .altPrimary
     }
 }

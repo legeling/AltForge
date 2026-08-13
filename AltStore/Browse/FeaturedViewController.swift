@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 import AltStoreCore
 import Roxas
@@ -57,6 +58,9 @@ extension FeaturedViewController
 
 class FeaturedViewController: UICollectionViewController
 {
+    private lazy var contentLayout = Self.makeLayout()
+    private lazy var emptyLayout = Self.makeEmptyLayout()
+
     private lazy var dataSource = self.makeDataSource()
     private lazy var recentlyUpdatedDataSource = self.makeRecentlyUpdatedDataSource()
     private lazy var categoriesDataSource = self.makeCategoriesDataSource()
@@ -66,6 +70,14 @@ class FeaturedViewController: UICollectionViewController
     private var searchBrowseViewController: BrowseViewController!
     
     private var updateFediverseInteractionsResult: Result<Void, Error>?
+    private var cancellables = Set<AnyCancellable>()
+    private var isShowingEmptyState = false
+
+    private lazy var emptyStateView = RSTPlaceholderView(frame: .zero)
+    private lazy var manageSourcesButton = UIButton(type: .system, primaryAction: UIAction(title: NSLocalizedString("Manage Sources", comment: "Browse empty-state action")) { [weak self] _ in
+        guard let self, let tabBarController = self.tabBarController as? TabBarController else { return }
+        tabBarController.presentSourcesRoot()
+    })
     
     override func viewDidLoad()
     {
@@ -73,8 +85,7 @@ class FeaturedViewController: UICollectionViewController
         
         self.title = NSLocalizedString("Browse", comment: "")
         
-        let layout = Self.makeLayout()
-        self.collectionView.collectionViewLayout = layout
+        self.collectionView.collectionViewLayout = self.contentLayout
         
         self.dataSource.proxy = self
         self.collectionView.dataSource = self.dataSource
@@ -91,6 +102,8 @@ class FeaturedViewController: UICollectionViewController
         self.collectionView.backgroundColor = .altBackground
         self.collectionView.directionalLayoutMargins.leading = 20
         self.collectionView.directionalLayoutMargins.trailing = 20
+
+        self.prepareEmptyState()
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         self.searchBrowseViewController = storyboard.instantiateViewController(identifier: "browseViewController") { coder in
@@ -112,6 +125,26 @@ class FeaturedViewController: UICollectionViewController
         self.navigationItem.hidesSearchBarWhenScrolling = true
         
         self.navigationItem.largeTitleDisplayMode = .always
+
+        AppManager.shared.$updateSourcesResult
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                DispatchQueue.main.async {
+                    self?.updateEmptyState()
+                }
+            }
+            .store(in: &self.cancellables)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(FeaturedViewController.browseContentDidChange),
+                                               name: .NSManagedObjectContextObjectsDidChange,
+                                               object: DatabaseManager.shared.viewContext)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(FeaturedViewController.browseThemeDidChange),
+                                               name: .altThemeDidChange,
+                                               object: nil)
+
+        self.updateEmptyState()
     }
     
     override func viewIsAppearing(_ animated: Bool)
@@ -119,6 +152,7 @@ class FeaturedViewController: UICollectionViewController
         super.viewIsAppearing(animated)
         
         self.updateFediverseInteractionsIfNeeded()
+        self.updateEmptyState()
     }
     
     override func viewDidAppear(_ animated: Bool) 
@@ -126,6 +160,122 @@ class FeaturedViewController: UICollectionViewController
         super.viewDidAppear(animated)
         
         self.navigationController?.navigationBar.tintColor = .altPrimary
+    }
+}
+
+private extension FeaturedViewController
+{
+    func prepareEmptyState()
+    {
+        let backgroundView = UIView(frame: .zero)
+        backgroundView.backgroundColor = .altBackground
+        self.collectionView.backgroundView = backgroundView
+
+        self.emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+        self.emptyStateView.textLabel.text = NSLocalizedString("No Apps to Browse", comment: "Browse empty-state title")
+        self.emptyStateView.textLabel.textColor = .label
+        self.emptyStateView.textLabel.font = UIFontMetrics(forTextStyle: .title3).scaledFont(for: .systemFont(ofSize: 20, weight: .semibold))
+        self.emptyStateView.textLabel.adjustsFontForContentSizeCategory = true
+        self.emptyStateView.textLabel.accessibilityTraits.insert(.header)
+        self.emptyStateView.detailTextLabel.text = NSLocalizedString("Add sources to see new and updated apps, categories, and featured picks here.", comment: "Browse empty-state explanation")
+        self.emptyStateView.detailTextLabel.textColor = .secondaryLabel
+        self.emptyStateView.detailTextLabel.font = .preferredFont(forTextStyle: .body)
+        self.emptyStateView.detailTextLabel.adjustsFontForContentSizeCategory = true
+        self.emptyStateView.detailTextLabel.textAlignment = .center
+        self.emptyStateView.imageView.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 30, weight: .medium)
+        self.emptyStateView.imageView.image = UIImage(systemName: "square.stack.3d.up")
+        self.emptyStateView.imageView.tintColor = .altPrimary
+        self.emptyStateView.imageView.isHidden = false
+        self.emptyStateView.imageView.isAccessibilityElement = false
+        self.emptyStateView.stackView.spacing = 14
+        self.emptyStateView.stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 24, leading: 32, bottom: 24, trailing: 32)
+        self.emptyStateView.stackView.isLayoutMarginsRelativeArrangement = true
+
+        var configuration = UIButton.Configuration.borderedProminent()
+        configuration.baseBackgroundColor = .altPrimary
+        configuration.baseForegroundColor = UIColor.altPrimary.contrastingForegroundColor
+        configuration.cornerStyle = .medium
+        self.manageSourcesButton.configuration = configuration
+        self.manageSourcesButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+        self.manageSourcesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        self.emptyStateView.stackView.addArrangedSubview(self.manageSourcesButton)
+
+        backgroundView.addSubview(self.emptyStateView)
+        NSLayoutConstraint.activate([
+            self.emptyStateView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor),
+            self.emptyStateView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor),
+            self.emptyStateView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor, constant: -20)
+        ])
+    }
+
+    func updateEmptyState()
+    {
+        let isEmpty = self.dataSource.itemCount == 0
+        if self.isShowingEmptyState != isEmpty
+        {
+            self.isShowingEmptyState = isEmpty
+
+            let layout = isEmpty ? self.emptyLayout : self.contentLayout
+            UIView.performWithoutAnimation {
+                self.collectionView.setCollectionViewLayout(layout, animated: false)
+            }
+        }
+
+        self.emptyStateView.isHidden = !isEmpty
+        self.collectionView.alwaysBounceVertical = !isEmpty
+
+        guard isEmpty else { return }
+
+        switch AppManager.shared.updateSourcesResult
+        {
+        case nil:
+            self.emptyStateView.textLabel.isHidden = true
+            self.emptyStateView.detailTextLabel.text = NSLocalizedString("Loading...", comment: "")
+            self.emptyStateView.activityIndicatorView.startAnimating()
+            self.emptyStateView.imageView.isHidden = true
+            self.manageSourcesButton.isHidden = true
+
+        case .failure:
+            self.emptyStateView.textLabel.isHidden = false
+            self.emptyStateView.textLabel.text = NSLocalizedString("Unable to Fetch Apps", comment: "")
+            self.emptyStateView.detailTextLabel.text = NSLocalizedString("Check your software sources, then try refreshing again.", comment: "Browse load failure guidance")
+            self.emptyStateView.activityIndicatorView.stopAnimating()
+            self.emptyStateView.imageView.image = UIImage(systemName: "exclamationmark.triangle")
+            self.emptyStateView.imageView.tintColor = .systemYellow
+            self.emptyStateView.imageView.isHidden = false
+            self.manageSourcesButton.isHidden = false
+
+        case .success:
+            self.emptyStateView.textLabel.isHidden = false
+            self.emptyStateView.textLabel.text = NSLocalizedString("No Apps to Browse", comment: "Browse empty-state title")
+            self.emptyStateView.detailTextLabel.text = NSLocalizedString("Add sources to see new and updated apps, categories, and featured picks here.", comment: "Browse empty-state explanation")
+            self.emptyStateView.activityIndicatorView.stopAnimating()
+            self.emptyStateView.imageView.image = UIImage(systemName: "square.stack.3d.up")
+            self.emptyStateView.imageView.tintColor = .altPrimary
+            self.emptyStateView.imageView.isHidden = false
+            self.manageSourcesButton.isHidden = false
+        }
+    }
+
+    @objc func browseContentDidChange(_ notification: Notification)
+    {
+        DispatchQueue.main.async {
+            self.updateEmptyState()
+        }
+    }
+
+    @objc func browseThemeDidChange()
+    {
+        self.collectionView.backgroundColor = .altBackground
+        self.collectionView.backgroundView?.backgroundColor = .altBackground
+        self.navigationController?.navigationBar.tintColor = .altPrimary
+
+        var configuration = self.manageSourcesButton.configuration ?? .borderedProminent()
+        configuration.baseBackgroundColor = .altPrimary
+        configuration.baseForegroundColor = UIColor.altPrimary.contrastingForegroundColor
+        self.manageSourcesButton.configuration = configuration
+
+        self.updateEmptyState()
     }
 }
 
@@ -225,6 +375,21 @@ private extension FeaturedViewController
         
         return layout
     }
+
+    class func makeEmptyLayout() -> UICollectionViewCompositionalLayout
+    {
+        let layout = UICollectionViewCompositionalLayout { _, _ in
+            // Composite data sources retain their structural sections when empty.
+            // A header-free layout prevents those empty section titles from showing
+            // through the collection view's placeholder background.
+            let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(1.0))
+            let item = NSCollectionLayoutItem(layoutSize: size)
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: size, subitems: [item])
+            return NSCollectionLayoutSection(group: group)
+        }
+
+        return layout
+    }
     
     func makeDataSource() -> RSTCompositeCollectionViewPrefetchingDataSource<StoreApp, UIImage>
     {
@@ -253,7 +418,7 @@ private extension FeaturedViewController
         dataSource.liveFetchLimit = 10 // Show 10 most recently updated apps
         dataSource.cellConfigurationHandler = { cell, storeApp, indexPath in
             let cell = cell as! AppBannerCollectionViewCell
-            cell.tintColor = storeApp.tintColor
+            cell.tintColor = storeApp.effectiveTintColor ?? .altPrimary
             cell.contentView.preservesSuperviewLayoutMargins = false
             cell.contentView.layoutMargins = .zero
             

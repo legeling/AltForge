@@ -10,6 +10,8 @@ Windows AltServer 已进入源码、CI 和 Release contract，但当前开发机
 
 七次 hosted Windows build 暴露并逐步收敛了可复现性问题：第一次使用 runner 系统 vcpkg；`v2.4.0` 前六次标签构建依次发现所选 vcpkg revision 已移除 `cpprestsdk`、Apple `mDNSResponder-2881.0.25` Windows stub 未定义 `LOG_ERR`、完整 solution 缺少 `dirent` include/OpenSSL compatibility opt-in/`NOMINMAX`、两处连接代码仍直接依赖 Windows `min` macro、vcpkg 中 zlib 1.3.2 已将 Windows import/runtime 名改为 `z.lib`/`z.dll`，以及自定义 install root 下 MSBuild 不会自动链接 `cpprest_2_10.lib`。第七次 Windows job 已在 `windows-2025` runner 完成固定依赖恢复、Win32 Release link 和 ZIP 打包；剩余缺口是 Windows 10/11 真实设备 smoke test。
 
+桌面分发与安装器主题的 50 条开放报告与逐条处置见 [`upstream/topics/06-desktop-distribution.md`](upstream/topics/06-desktop-distribution.md)。
+
 ## 完成条件
 
 - GitHub `windows-2025` CI 完成固定依赖恢复、Win32 Release build 和 ZIP runtime contract。

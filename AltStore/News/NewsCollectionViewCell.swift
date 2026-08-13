@@ -11,6 +11,8 @@ import AltStoreCore
 
 class NewsCollectionViewCell: UICollectionViewCell
 {
+    private weak var newsItem: NewsItem?
+
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var captionLabel: UILabel!
     @IBOutlet var imageView: UIImageView!
@@ -34,17 +36,25 @@ class NewsCollectionViewCell: UICollectionViewCell
         self.imageView.clipsToBounds = true
         
         self.fediverseInteractionsView.layoutMargins = .zero
+        NotificationCenter.default.addObserver(self, selector: #selector(NewsCollectionViewCell.themeDidChange), name: .altThemeDidChange, object: nil)
     }
     
     func configure(with newsItem: NewsItem)
     {
+        self.newsItem = newsItem
         self.titleLabel.text = newsItem.title
         self.captionLabel.text = newsItem.caption
-        self.contentBackgroundView.backgroundColor = newsItem.effectiveTintColor
-        
-        // Set text color to default iOS text color if tintColor is undefined
-        let textColor = newsItem.tintColor != nil ? UIColor.white : UIColor.label
+        let tintColor = newsItem.effectiveTintColor
+        self.contentBackgroundView.backgroundColor = tintColor
+
+        let textColor = tintColor.contrastingForegroundColor
         self.titleLabel.textColor = textColor
         self.captionLabel.textColor = textColor
+    }
+
+    @objc private func themeDidChange()
+    {
+        guard let newsItem else { return }
+        self.configure(with: newsItem)
     }
 }

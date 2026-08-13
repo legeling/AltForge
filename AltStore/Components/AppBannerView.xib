@@ -113,7 +113,7 @@
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="900" horizontalCompressionResistancePriority="900" placeholderIntrinsicWidth="77" placeholderIntrinsicHeight="31" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVx-3G-dcu" customClass="PillButton" customModule="AltStore" customModuleProvider="target">
                             <rect key="frame" x="282" y="28.5" width="77" height="31"/>
-                            <color key="backgroundColor" red="0.22352941179999999" green="0.4941176471" blue="0.39607843139999999" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" secondItem="tVx-3G-dcu" secondAttribute="height" priority="999" id="Vbk-VH-5eU"/>
                                 <constraint firstAttribute="height" constant="31" id="Zwh-yQ-GTu"/>

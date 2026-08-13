@@ -122,6 +122,7 @@ class SourceDetailViewController: HeaderContentViewController<SourceHeaderView, 
         
         self.update()
         self.preparePipeline()
+        NotificationCenter.default.addObserver(self, selector: #selector(SourceDetailViewController.themeDidChange), name: .altThemeDidChange, object: nil)
     }
     
     override func viewDidLayoutSubviews()
@@ -329,6 +330,12 @@ class SourceDetailViewController: HeaderContentViewController<SourceHeaderView, 
         let safariViewController = SFSafariViewController(url: websiteURL)
         safariViewController.preferredControlTintColor = self.source.effectiveTintColor ?? .altPrimary
         self.present(safariViewController, animated: true, completion: nil)
+    }
+
+    @objc private func themeDidChange()
+    {
+        self.tintColor = self.source.effectiveTintColor ?? .altPrimary
+        self.update()
     }
 }
 

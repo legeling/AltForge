@@ -16,6 +16,18 @@
 - 直接合并相关上游 PR 会夹带 Pods、硬编码 SDK 路径等无关内容。
 - 未推送的 submodule commit 或 dirty submodule 无法被 CI 和其他维护者复现。
 
+## 上游证据
+
+最后核对：2026-08-11。
+
+- [AltStore #1692](https://github.com/altstoreio/AltStore/issues/1692) 仍为 Open，报告 nested plug-in 签名后应用启动崩溃，最后更新 2026-06-29。
+- [AltStore #1660](https://github.com/altstoreio/AltStore/issues/1660) 仍为 Open，报告特定 IPA 触发 `ldid` assertion，最后更新 2025-11-06。
+- [AltStore #199](https://github.com/altstoreio/AltStore/issues/199) 仍为 Open，报告企业团队被识别为免费团队，最后更新 2026-04-30。
+
+这些问题不证明根因与当前 AltSign gitlink 完全相同，但覆盖了相同的签名格式、嵌套代码和团队能力边界，因此保留为回归输入与实机矩阵依据。
+
+IPA、签名和归档主题的 81 条开放报告与逐条处置见 [`upstream/topics/02-ipa-signing-and-packaging.md`](upstream/topics/02-ipa-signing-and-packaging.md)。
+
 ## 解决标准
 
 1. 在 `legeling/AltSign` 创建可追踪的 Classic 分支，以已验证的上游 Classic commit 为基线。

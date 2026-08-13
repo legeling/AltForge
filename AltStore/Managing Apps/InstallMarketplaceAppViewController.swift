@@ -92,7 +92,7 @@ class InstallMarketplaceAppViewController: UICollectionViewController
             self.title = NSLocalizedString("Confirm Installation", comment: "")
         }
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .systemBackground
         
         self.navigationController?.isModalInPresentation = true
         
@@ -146,7 +146,7 @@ private extension InstallMarketplaceAppViewController
         case .open(let app):
             guard let storeApp = app.storeApp, let marketplaceID = storeApp.marketplaceID else { break } //TOOD: Should InstalledApp have it's own reference to marketplaceID?
             action = .launch(marketplaceID)
-            tintColor = storeApp.tintColor
+            tintColor = storeApp.effectiveTintColor
             appName = storeApp.name
             
         case .install(let storeApp):
@@ -165,7 +165,7 @@ private extension InstallMarketplaceAppViewController
                 bundleID = storeApp.bundleIdentifier
             }
             
-            tintColor = storeApp.tintColor
+            tintColor = storeApp.effectiveTintColor
             appName = storeApp.name
             
             //TODO: Do accounts matter?
@@ -207,7 +207,7 @@ private extension InstallMarketplaceAppViewController
                 bundleID = storeApp.bundleIdentifier
             }
             
-            tintColor = storeApp.tintColor
+            tintColor = storeApp.effectiveTintColor
             appName = storeApp.name
             
             guard let downloadURL = URL.installURL(for: adpURL) else { throw OperationError.unknown(failureReason: NSLocalizedString("Invalid ADP update URL.", comment: "")) }

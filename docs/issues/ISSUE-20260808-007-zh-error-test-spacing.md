@@ -14,6 +14,8 @@
 - 错误结构化字段仍存在，但完整测试无法作为简体中文回归门禁。
 - 直接给中文翻译加前导空格会污染 UI，不能作为修复。
 
+iOS 运行时、UI 与本地化主题的 59 条开放报告与逐条处置见 [`upstream/topics/08-ios-runtime-ui-and-localization.md`](upstream/topics/08-ios-runtime-ui-and-localization.md)。
+
 ## 解决标准
 
 明确错误描述的跨 locale 契约，并让 `ALTLocalizedError`、`ALTWrappedError`、`CodableError` 与测试使用同一连接规则；在英文和 `zh-Hans` simulator 上运行完整 `AltTests` 均通过。

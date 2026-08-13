@@ -22,6 +22,9 @@ build 17 已在真机完成微信安装且不再退出，但设备主屏幕出�
 
 - 删除设置 cell 的高风险递归改色回调，改用系统语义色和已有 outlet 配色。
 - 把设置 Storyboard 中残留的固定白色文字和 tint 改成 `label`/`secondaryLabel` 系统语义色；认证导航栏也使用动态背景、标题和品牌 tint，不在运行时递归遍历 UIKit 私有层级。
+- 设置主页、主题、应用图标、许可证、刷新记录、错误日志和兼容账号页面统一使用系统语义背景、前景、分隔线及滚动条；移除强制深色状态/导航栏，应用图标切换完成后再刷新主题色勾选，并统一使用简体中文术语“侧载”。
+- 官方 AltForge source/app/news 及应用详情统一通过动态 `effectiveTintColor` 解析当前主题，不再直接显示 Release metadata 的旧红/绿色；可复用 banner、资讯、来源 header 和详情页监听主题变化。权限确认、补丁、添加来源及通用详情页面改用系统语义色和当前主题，红/绿/黄仅保留给失败、删除、成功、有效期与警告状态。
+- “我的 App”和 App ID 卡片的简体中文到期标签使用完整的“剩余有效期”，不再把英文分段布局翻译成缺少谓语的“于”；浏览页明确只聚合第三方 source 的新增和更新、类别与精选 App，官方 source-only 时以可操作空状态替代三个空标题。
 - 第三方 IPA 完成回调不再通过可触发 `preconditionFailure` 的可选值构造 `Result`；缺失结果转成可记录、可展示的普通安装错误。
 - AltSign 在读取 IPA `Info.plist` 的名称、bundle ID、版本、最低系统、设备族和图标元数据前验证实际 plist 类型，畸形可选字段降级或忽略而不是触发 Objective-C 异常。
 - ldid 识别 Apple Watch `arm64_32` CPU type，使用与 ARM slice 一致的对齐并提供非空 progress 名称；其他未知 CPU type 在写回前抛出 `ALTSigner` 可捕获的错误，不再产生空指针崩溃。
@@ -30,6 +33,8 @@ build 17 已在真机完成微信安装且不再退出，但设备主屏幕出�
 - 把 ldid bundle/Mach-O/architecture checkpoint 以最多四段相对路径写入当前签名事件；连续 checkpoint 原位替换，保留既有 16 阶段历史，拒绝控制字符、父目录和绝对路径前缀。
 - AltForge Server 将安装 progress 与 terminal success/failure 收敛到单一串行 response coordinator；普通进度允许合并，terminal 必须覆盖尚未发送的进度并等待在途写入结束后唯一发送，禁止并发写同一 framed connection。
 - iOS 安装端验证 progress 为有限非负数，以 `>= 1.0` 识别完成，并把最新连接类别与百分比原位更新到有界诊断轨迹，避免安装回调丢失时仍只显示笼统阶段。
+- “我的 App”在手工导入 IPA 时展示固定高度状态带，持续显示 App 名称、总百分比、当前阶段和最新有界 detail；安装结束后释放 KVO 并恢复布局/导入状态。
+- 检测到 App Extensions 时列出数量和最多四个名称，要求用户在“剔除扩展（推荐）”与“保留并签名扩展”之间明确选择；双语说明主要功能、扩展功能与免费账号限额取舍。
 - Apple Release CI 使用 watchOS SDK 生成最小 `arm64_32` 可执行文件完成真实 ldid 签名，并验证未知 CPU type 安全失败；fixture 和产物使用任务临时目录且退出时清理。
 - “我的 App”出现时不再在 `reloadData()` 后 reconfigure 动态 index path；更新状态先计算再 reload，后续只直接更新已经可见的 no-updates cell，不改变 collection structure。
 - App IDs footer 从独立 XIB 注册和渲染；布局测量实例化独立 prototype，不得在 flow-layout size delegate 中调用 collection-view data source 方法或 dequeue reusable view。
@@ -45,6 +50,10 @@ build 17 已在真机完成微信安装且不再退出，但设备主屏幕出�
 - StoreApp 安装成功后安全解析目标 context 中的关系，不对 temporary object ID 调用 `object(with:)`。
 - 认证页改用系统分组背景、语义文字色和品牌强调色，收紧说明区域间距；登录说明明确 Apple developer team 会从账号返回的团队中自动选择并在设置中显示。
 - “工作原理”同时说明 USB/Wi-Fi、Apple 团队签名、免费账号七天有效期和刷新条件。
+- 全量复核 App、Widget、Core、Backup 与 Server 的简体中文，修正点赞、激活状态、软件源、授权项、刷新状态、App ID 限额、遗留品牌及中文语序等机器直译；仓库维护的 13 份 string catalog 由静态门禁检查非空翻译和格式占位符一致性。
+- 浏览内容为空时切换到不生成 supplementary header 的专用布局，避免“新增和更新/类别/精选”空分区标题透过空状态；内容重新出现时恢复完整聚合布局。
+- 浏览空状态的“管理软件源”使用至少 44pt 的系统按钮并回到软件源列表根页面；空状态图标、按钮和背景监听主题通知即时更新，无障碍朗读忽略装饰图标并把标题标记为 heading。
+- 应用图标扩展为九款：标准、珊瑚、冰霜、纸白、霓虹、蓝图以及可选的钛金属、光学玻璃、陶瓷珐琅；图标切换不再锁死并 reload 整个列表，而是即时显示目标行进度，完成后只重配旧/新两行并提供成功或失败触感反馈。
 
 ## 映射
 
@@ -96,10 +105,18 @@ build 17 已在真机完成微信安装且不再退出，但设备主屏幕出�
 - 2026-08-12：build 16 真机反馈确认同一微信 IPA 仍在签名阶段导致进程退出，且旧日志没有签名对象。代码审计定位 `ALTSigner` 第二处 nullable entitlement 到 `std::string` 的信号崩溃路径，并确认上游不支持 Watch companion 重签；已实现工作副本 Watch 移除、所有跨语言字符串判空、脱敏 bundle/架构 checkpoint 和连续签名事件替换。repository contract、ldid architecture compatibility、完整无签名 iOS Simulator build，以及 Watch 移除与签名 detail 脱敏两个定向 XCTest 均通过；真机安装尚未通过。
 
 - 2026-08-12：build 17 真机已完成微信设备安装且没有进程退出，但客户端进度未终止、“我的 App”未保存记录。定位为 Server progress KVO 与 terminal completion 并发写同一 connection 的响应竞争；已实现有界串行 response coordinator、客户端 terminal progress 健壮识别和安装百分比诊断。Repository/release metadata contract、两个 Swift 文件语法解析、macOS AltForge Server Debug build 和 iOS Simulator AltForge Debug build 通过；可控 connection 并发 fixture 与 build 18 真机闭环仍待验证。
+- 2026-08-12：手工 IPA 导入新增 0...100% 总进度、App 名称、当前操作阶段和有界详情状态带；含 App Extensions 时显示数量及最多四个名称，并明确提供取消、推荐剔除、保留签名三种选择。Repository/release metadata contract、string catalog JSON、相关 Swift 语法解析、diff check 和完整无签名 iOS Simulator Debug build 通过；含真实 extensions 的双路径签名与设备安装仍待真机验证。
+- 2026-08-12：用户反馈设置及应用图标子页仍存在固定白色，撤回此前完整深浅色结论。已把设置主页、主题、应用图标、许可证、刷新记录、错误日志和兼容账号资源迁移到系统语义色，移除白色滚动条/强制深色系统栏，图标变更 completion 后刷新勾选，并统一使用简体中文术语“侧载”。Repository/release metadata contract、控件级固定颜色扫描、三个 storyboard/XIB XML、两个 string catalog JSON、六个相关 Swift 文件语法解析和完整无签名 iOS Simulator Debug build 通过；未启动 Simulator，完整深浅色运行时矩阵仍待执行。
+- 2026-08-12：继续审计非主题红/绿后，修复官方 app/source/news 卡片与应用详情直接读取 Release metadata tint 的旁路，并让已加载 banner、资讯、来源 header 和详情在主题通知后重配；权限确认、补丁、添加来源、启动页与通用详情改为系统语义色。Repository/release metadata contract、XML/JSON 解析、`git diff --check` 和完整无签名 Debug iOS Simulator generic build 通过；仅保留删除/失败、成功/有效期和警告语义色，四主题深浅色运行时视觉矩阵仍待执行。
+- 2026-08-12：修正“Expires in”分段布局的简体中文为完整“剩余有效期”，同步覆盖“我的 App”、App ID 与无障碍句子；仅有会被浏览过滤的 AltForge 自身时，浏览页以“暂无可浏览的 App”和“管理软件源”替代空的新增/类别/精选标题。Repository/release metadata contract、string catalog JSON、`git diff --check` 和当前 iPhone 17 Pro Simulator Debug build/安装/启动通过；第三方 source 聚合 fixture 待补。
+- 2026-08-12：复现浏览空状态与三个空分区标题重叠，改为内容/空状态互斥的 compositional layout，并提高空状态标题及图标在浅色模式下的对比度。Repository/release metadata contract、`git diff --check`、iPhone 17 Pro Simulator Debug build、安装、深浅色截图检查通过；真实第三方 source 从空布局恢复聚合内容仍待 fixture 验证。
+- 2026-08-12：继续收敛浏览空状态操作：管理按钮固定为可访问触控高度并明确回到软件源列表根页面，主题切换即时刷新空状态背景、图标和按钮，无障碍层级排除装饰图标。Repository/release metadata contract、相关 Swift 语法解析、string catalog JSON、`git diff --check` 和 iPhone 17 Pro Simulator Debug build 均通过；安装启动后完成深浅色截图检查，标题、正文、按钮及底栏对比度正常。按钮导航由静态契约覆盖，真实点击及第三方 source 内容恢复仍待受控 UI fixture。
+- 2026-08-13：应用图标由两款扩展为六款，新增冰霜、纸白、霓虹和蓝图四种基于正式品牌模板的扁平样式及可重复生成脚本；切换交互改为目标行即时进度、旧/新两行局部更新和触感确认，不再锁死或 reload 整个列表。Repository/release metadata contract、四份 Icon Composer JSON、Info/AltIcons plist、string catalog、Swift 语法、1024px RGB 无 alpha 静态检查、`git diff --check` 和 iPhone 17 Pro Simulator Debug build 均通过；`Assets.car` 确认包含五款 alternate icon 的 1024px opaque rendition，六款逐一实际切换手感仍待人工复核。
+- 2026-08-13：继续落盘钛金属、光学玻璃和陶瓷珐琅三款非扁平备选，保留 1024px RGB 无 alpha 的权威源图，并由统一品牌脚本复制到 Icon Composer bundle。默认图标仍保持扁平；三款材质风格仅作为用户主动选择的 alternate icon。
 
 ## 当前状态
 
-签名崩溃已经由 build 17 真机验证不再复现，安装完成响应竞争已在代码中修复，change 保持 active。维护者已明确授权保留 `2.4.0` 并由 tag workflow 重建全平台产物、原位覆盖公开 Release；真实第三方 IPA 的进度关闭、“我的 App”落库和重启持久性仍由 `ISSUE-20260811-002` 在新构建上验证。在同一微信 IPA 完成端到端回归前，不把 P0 标记为完成。
+签名崩溃已经由 build 17 真机验证不再复现，安装完成响应竞争已在代码中修复，change 保持 active。后续改进按独立版本序列发布为 `2.4.1`；真实第三方 IPA 的进度关闭、“我的 App”落库和重启持久性仍由 `ISSUE-20260811-002` 在新构建上验证。在同一微信 IPA 完成端到端回归前，不把 P0 标记为完成。
 
 ## 回滚
 

@@ -76,7 +76,7 @@ Unicode 处理分两层：
 
 ### `DES-006` 本地化
 
-项目继续使用 Xcode string catalog、storyboard localization 和 `NSLocalizedString`。简体中文资源与英文源文案共用现有 key；代码中的品牌字符串和 bundle/source identity 通过 `Bundle`、常量或 model 统一提供，避免散落硬编码。
+项目继续使用 Xcode string catalog、storyboard localization 和 `NSLocalizedString`。简体中文资源与英文源文案共用现有 key；代码中的品牌字符串和 bundle/source identity 通过 `Bundle`、常量或 model 统一提供，避免散落硬编码。Repository contract 解析仓库维护的 13 份 App、Widget、Core、Backup 与 Server catalog，线性检查简体中文完整性与格式占位符多重集，并锁定“已激活/未激活”“点赞/取消点赞”“软件源”“授权项”等关键术语；扫描成本为 `O(s + b)`，其中 `s` 为条目数、`b` 为字符串总字节数，不增加运行时开销。
 
 ### `DES-007` Source 与更新
 
@@ -193,13 +193,17 @@ Apple ID 认证成功后关闭凭据窗口，并立即显示独立原生进度�
 
 资讯仍是 AltStore source 格式的一部分，因此不修改 `NewsItem`、Core Data model、source decoder 或来源详情页面。这样第三方 source 继续兼容，用户仍可在具体来源中查看有上下文的公告，同时避免一个内容重复且价值较低的全局聚合页。启动只实例化四个主导航 controller，时间与额外空间均为 `O(1)`；source 同步复杂度不变。
 
+浏览页不是官方资讯或 Release 列表，而是第三方 source 的发现层：按最近更新、类别和各 source 精选关系读取现有 Core Data 对象，并继续排除 AltForge 自身以避免把当前客户端当作可重复安装的商店内容。聚合结果为零时用单个 `RSTPlaceholderView` 覆盖空分区标题，明确说明内容来自软件源，并通过“管理软件源”切换到来源标签；加载中和失败分别显示进度或恢复提示。空状态判断读取 composite data source 的 `itemCount`，每次 source 合并或页面出现执行 `O(1)` 判断，不增加网络请求、数据复制或持久化。
+
 ### `DES-020` iOS 品牌与设置语义颜色
 
 主 tab 在 `TabBarController` 统一覆盖 storyboard 的历史图片，分别使用 bag、source stack、app grid 和 gear 的 SF Symbols，并提供 selected variant。图标表达功能而非品牌，因此不复用 App 图标或上游自定义 SVG。
 
 官方来源色与交互强调色分离：`Primary` 用于交互强调，`SourceTint` 是对大面积卡片降低亮度后的 token。官方 source ID 与 AltForge bundle ID 在展示层强制使用 `SourceTint`，避免本地 Core Data 缓存或旧 Release metadata 改变官方品牌色；第三方 source/app 仍尊重自己的 tint。`DES-023` 在此 token 边界上加入用户主题解析，并让 Release metadata 使用默认锻造红作为兼容值。
 
-设置 controller 使用 `systemGroupedBackground`、`secondarySystemGroupedBackground`、`label`、`secondaryLabel` 和 `separator`，不再用旧青色作为整页背景。版本只读取 bundle 的 `CFBundleShortVersionString`，确保与 Xcode/release contract 的 2.4.0 真相一致。Credits 将 AltForge Contributors 标为维护者，同时保留 Riley Testut 和 Caroline Moore 的上游贡献归属；项目 GitHub、Issue 和隐私仍归本仓库。所有操作均为固定规模 UI 配置，不新增 I/O 或网络请求。
+设置 controller 使用 `systemGroupedBackground`、`secondarySystemGroupedBackground`、`label`、`secondaryLabel` 和 `separator`，不再用旧青色作为整页背景。版本只读取 bundle 的 `CFBundleShortVersionString`，确保与 Xcode/release contract 的当前版本真相一致。Credits 将 AltForge Contributors 标为维护者，同时保留 Riley Testut 和 Caroline Moore 的上游贡献归属；项目 GitHub、Issue 和隐私仍归本仓库。所有操作均为固定规模 UI 配置，不新增 I/O 或网络请求。
+
+设置的 storyboard/XIB 只允许在 system color 资源定义中保留设计期 fallback，不允许控件自身使用固定白色/黑色。主页、许可证、刷新记录、错误日志、兼容账号和应用图标页面统一使用系统分组背景；导航标题、正文、次要说明、分隔线及高亮分别使用 `label`、`secondaryLabel`、`separator` 和 `tertiarySystemFill`。应用图标列表使用原生 inset-grouped cell、主题色 checkmark 和语义按下态；调用 `setAlternateIconName` 后只在目标行显示原生 activity indicator，不禁用 collection。回调后扫描当前可见 cell 并通过 `reconfigureItems` 更新旧/新两行，避免 `reloadData` 引起整页重建和滚动位置变化，同时用选择及成功/失败触感补足异步反馈。图标清单固定为九项，回调扫描时间为 `O(visible icon count)`、额外空间为 `O(visible icon count)`，上限均为九；不新增缓存或网络请求。冰霜、纸白、霓虹和蓝图由仓库脚本从正式透明品牌模板确定性生成 1024px 无 alpha PNG；钛金属、光学玻璃和陶瓷珐琅保留项目自有 1024px 权威源图，并由统一品牌脚本确定性复制到 Icon Composer bundle。
 
 ### `DES-021` iOS 公开身份与内部兼容边界
 
@@ -217,6 +221,10 @@ My Apps 的 collection supplementary view 只能在 UIKit 的 data source callba
 
 `AuthenticationOperation.fetchTeam` 保留现有确定性顺序：优先复用仍存在的 active team，否则依次选择 individual、organization、free 和首个未知团队；设置页从持久化 active team 显示实际名称、Apple ID 和本地化账号类型，不从 GitHub 仓库或维护者身份推断 Apple developer team。
 
+手工导入 IPA 时，“我的 App”顶部使用 92 point 稳定高度的非卡片状态带，通过 `Progress` KVO 显示整体百分比，通过 `RefreshGroup` 的主线程状态回调显示当前阶段和有界详情。状态带只持有一个 KVO token 和最新阶段，更新为 `O(1)`；安装结束后释放 observation、恢复 collection inset 并重新开放导入按钮，不生成进度历史或后台轮询。
+
+解包后如果 `ALTApplication.appExtensions` 非空，以名称排序并最多展示前四项，用户在继续前必须显式选择剔除或保留并签名。剔除为免费账号的默认推荐动作，但同时披露可能失去小组件、分享、通知等扩展功能；保留会为每个 extension 创建 App ID/profile 并占用相应限额。剔除仅作用于本次解压工作副本和 `SC_Info/Manifest.plist` 中的 `PlugIns/` 复制路径，原 IPA 不变；处理成本与 extension 数量及目录大小线性相关，不引入新依赖。
+
 AppManager 在操作进入队列前创建值快照，并把最多 20 条 pending operation 原子写入 Application Support 下的 JSON journal；UserDefaults 只在受保护存储暂时不可用时作为兼容 fallback。每条记录带随机客户端诊断编号，以及最多 16 个 `{relative date, stage, bounded detail}` 事件；阶段只覆盖查找 Server、认证、准备/验证 App、准备描述文件、签名、发送、设备安装、刷新和终态，不记录进度回调的每个百分比。detail 最长 120 个字符，允许 USB/Wi-Fi/本机连接类别、Apple 团队类别、已移除的 Watch 组件类别，以及 ldid 提供并经控制字符、父目录和前导路径清理后的最多四段 bundle 相对路径与架构。连续签名 checkpoint 替换最后一条签名事件，不挤占 16 阶段历史；只记录 bundle/Mach-O checkpoint，不为普通资源逐项落盘。失败时把诊断编号、最后一个非终态阶段和相对耗时轨迹作为 `NSError.userInfo` 字符串写入既有 `LoggedError`，不修改 Core Data schema 或 Server Protocol；错误详情可查看这些字段，复制操作输出一个有界诊断报告。
 
 App lifecycle 另以两个固定大小的原子 JSON 保存 current/interrupted foreground session，只记录随机 session ID、时间、active 状态和预定义页面 checkpoint。若启动时同时存在 pending operation，则只生成更具体的 operation recovery 日志并消费 session 记录；只有没有 pending operation 时才生成一条 runtime 意外退出日志。第三方 IPA completion 显式区分 success/error/missing-result，missing-result 转普通 `OperationError`；AltSign 对所有来自 IPA `Info.plist` 的可选字符串、字典和数组元素先做类型验证，畸形字段不得进入 Objective-C 异常路径。
@@ -231,7 +239,9 @@ AltForge Server 的设备安装 KVO progress 与 terminal success/failure 共用
 
 应用 window root 是 `LaunchViewController`，主 tab 是其直接 child。主题通知更新 window tint 后必须定位该 child 并调用 `TabBarController.applyTheme()`，使当前导航、标签栏、徽标和已加载内容立即刷新；不能只对 root 做类型转换。
 
-设置页在现有 Display 静态分组加入一行，并 push 原生 inset-grouped table。每个候选使用固定 24 point 圆形色板、文本和 checkmark，不新增第三方 UI。选择后写偏好并发送进程内通知；UIApplication 只更新已知 window、navigation bar 和 tab bar，Settings 自己 reload data，不递归遍历 UIKit 私有层级。官方 source 和自身 app 继续通过 `effectiveTintColor` 强制取动态 `altSourceTint`，第三方 metadata tint 路径不变。集合和窗口数量均有系统上限，本功能不新增网络或磁盘文件。
+设置页在现有 Display 静态分组加入一行，并 push 原生 inset-grouped table。每个候选使用固定 24 point 圆形色板、文本和 checkmark，不新增第三方 UI。选择后写偏好并发送进程内通知；UIApplication 只更新已知 window、navigation bar 和 tab bar，Settings 自己 reload data，不递归遍历 UIKit 私有层级。
+
+`effectiveTintColor` 是 source、app 和 news 的统一展示策略：官方 source ID、AltForge bundle ID 及其资讯强制返回动态 `altSourceTint`，避免 Core Data 缓存或旧 Release metadata 的红色继续污染已选择的蓝色、靛蓝或玫瑰主题；第三方 metadata tint 路径保持不变。可复用的 banner、news cell 与 source header 监听主题通知并只重配当前对象，App 详情重载可见内容；权限确认、补丁页、添加来源、通用详情背景和文本改用 UIKit 系统语义色，交互控件使用 `altPrimary`。红、绿、黄只用于删除/失败、成功/有效期和警告状态。一次主题变化只遍历系统有界的已加载 window 和可见 view/cell，时间为 `O(v)`、额外空间为 `O(1)`；不新增网络、磁盘 I/O 或后台进程。
 
 ## 可选目标与边界
 

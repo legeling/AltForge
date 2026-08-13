@@ -273,6 +273,7 @@ private extension SettingsViewController
     func prepare(_ settingsHeaderFooterView: SettingsHeaderFooterView, for section: Section, isHeader: Bool)
     {
         settingsHeaderFooterView.button.tintColor = .altPrimary
+        settingsHeaderFooterView.button.setTitleColor(.altPrimary, for: .normal)
         settingsHeaderFooterView.primaryLabel.isHidden = !isHeader
         settingsHeaderFooterView.secondaryLabel.isHidden = isHeader
         settingsHeaderFooterView.button.isHidden = true
@@ -987,21 +988,19 @@ private class ThemeSelectionViewController: UITableViewController
         self.title = NSLocalizedString("Theme Color", comment: "Title for choosing the app theme color")
         self.view.backgroundColor = .systemGroupedBackground
         self.tableView.backgroundColor = .systemGroupedBackground
+        self.tableView.separatorColor = .separator
+        self.tableView.indicatorStyle = .default
         self.tableView.rowHeight = 52
+
+        self.registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: ThemeSelectionViewController, _) in
+            self.tableView.reloadData()
+        }
         self.applyTheme()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return AltTheme.allCases.count
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?)
-    {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: self.traitCollection) == true else { return }
-        self.tableView.reloadData()
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
@@ -1011,6 +1010,7 @@ private class ThemeSelectionViewController: UITableViewController
 
         var configuration = cell.defaultContentConfiguration()
         configuration.text = theme.localizedName
+        configuration.textProperties.color = .label
         configuration.image = self.swatchImage(for: theme)
         configuration.imageProperties.maximumSize = CGSize(width: 24, height: 24)
         configuration.imageToTextPadding = 14
@@ -1018,6 +1018,11 @@ private class ThemeSelectionViewController: UITableViewController
         cell.accessoryType = UserDefaults.standard.preferredTheme == theme ? .checkmark : .none
         cell.tintColor = .altPrimary
         cell.backgroundColor = .secondarySystemGroupedBackground
+        cell.selectedBackgroundView = {
+            let view = UIView()
+            view.backgroundColor = .tertiarySystemFill
+            return view
+        }()
         cell.accessibilityValue = UserDefaults.standard.preferredTheme == theme ? NSLocalizedString("Selected", comment: "Accessibility value for the selected theme color") : nil
 
         return cell

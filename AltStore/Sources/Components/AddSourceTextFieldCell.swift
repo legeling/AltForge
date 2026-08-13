@@ -34,17 +34,7 @@ class AddSourceTextFieldCell: UICollectionViewCell
         self.textField.spellCheckingType = .no
         self.textField.enablesReturnKeyAutomatically = true
         self.textField.tintColor = .altPrimary
-        self.textField.textColor = UIColor { traits in
-            if traits.userInterfaceStyle == .dark
-            {
-                //TODO: Change once we update UIColor.altPrimary to match 2.0 icon.
-                return UIColor(resource: .gradientTop)
-            }
-            else
-            {
-                return UIColor.altPrimary
-            }
-        }
+        self.textField.textColor = .label
         
         let blurEffect = UIBlurEffect(style: .systemChromeMaterial)
         self.backgroundEffectView = UIVisualEffectView(effect: blurEffect)
@@ -62,6 +52,7 @@ class AddSourceTextFieldCell: UICollectionViewCell
         super.init(frame: frame)
         
         self.contentView.preservesSuperviewLayoutMargins = true
+        NotificationCenter.default.addObserver(self, selector: #selector(AddSourceTextFieldCell.themeDidChange), name: .altThemeDidChange, object: nil)
         
         self.backgroundEffectView.contentView.addSubview(self.imageView)
         self.backgroundEffectView.contentView.addSubview(self.textField)
@@ -95,5 +86,13 @@ class AddSourceTextFieldCell: UICollectionViewCell
         super.layoutSubviews()
         
         self.backgroundEffectView.layer.cornerRadius = self.backgroundEffectView.bounds.midY
+    }
+
+    @objc private func themeDidChange()
+    {
+        let tintColor = UIColor.altPrimary
+        self.textField.tintColor = tintColor
+        self.backgroundEffectView.backgroundColor = tintColor
+        self.imageView.tintColor = tintColor
     }
 }

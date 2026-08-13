@@ -199,6 +199,18 @@ extension TabBarController: UITabBarControllerDelegate
 
 extension TabBarController
 {
+    func presentSourcesRoot()
+    {
+        self.loadViewIfNeeded()
+
+        if let navigationController = self.viewControllers?[Tab.sources.rawValue] as? UINavigationController
+        {
+            navigationController.popToRootViewController(animated: false)
+        }
+
+        self.selectedIndex = Tab.sources.rawValue
+    }
+
     @objc func presentSources(_ sender: Any)
     {
         if let presentedViewController = self.presentedViewController

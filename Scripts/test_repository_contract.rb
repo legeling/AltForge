@@ -71,12 +71,54 @@ assert(ios_settings.include?("ThemeSelectionViewController"), "iOS settings must
 assert(ios_settings.include?("UIGraphicsImageRenderer"), "theme choices must include visual color swatches")
 assert(!ios_settings.include?("willDisplay cell:"), "iOS settings must not recursively recolor UIKit cell internals during display")
 assert(!ios_settings.include?("applyDynamicColors"), "the crash-prone recursive settings recoloring helper must not return")
-assert(!ios_settings_storyboard.match?(/<color key="(?:textColor|tintColor)" (?:white="1"|red="1" green="1" blue="1")/), "iOS settings must not keep fixed white text or tint colors on a dynamic light background")
+settings_header_xib = read(root, "AltStore/Settings/SettingsHeaderFooterView.xib")
+patreon_header_xib = read(root, "AltStore/Settings/Base.lproj/AboutPatreonHeaderView.xib")
+[ios_settings_storyboard, settings_header_xib, patreon_header_xib].each do |resource|
+  assert(!resource.match?(/<color key="(?:textColor|titleColor|tintColor|backgroundColor|separatorColor)" (?:white=|red=)/), "iOS settings surfaces must not keep fixed keyed colors")
+  assert(!resource.include?('indicatorStyle="white"') && !resource.include?('barStyle="black"'), "iOS settings surfaces must let system chrome follow light and dark appearance")
+end
+ios_app_icons = read(root, "AltStore/Settings/AltAppIconsViewController.swift")
+assert(!ios_app_icons.match?(/\.(?:white|black)\b/), "the app-icon picker must not hard-code light-only foregrounds or backgrounds")
+assert(ios_app_icons.include?(".systemGroupedBackground") && ios_app_icons.include?(".secondarySystemGroupedBackground") && ios_app_icons.include?(".label") && ios_app_icons.include?(".secondaryLabel"), "the app-icon picker must use system semantic surfaces and text")
+assert(ios_app_icons.include?("setAlternateIconName") && ios_app_icons.include?("affectedIconNames") && ios_app_icons.include?("collectionView.reconfigureItems"), "the app-icon picker must refresh the old and new checkmarks after the system icon change completes")
+assert(!ios_app_icons.include?("collectionView.isUserInteractionEnabled = false") && !ios_app_icons.include?("collectionView.reloadData()"), "app-icon switching must not freeze or rebuild the entire picker")
+assert(ios_app_icons.include?("pendingIconName") && ios_app_icons.include?("collectionView.reconfigureItems") && ios_app_icons.include?("UISelectionFeedbackGenerator"), "app-icon switching must expose immediate bounded feedback and update only affected rows")
+alternate_icons = read(root, "AltStore/Resources/AltIcons.plist")
+alternate_icon_names = %w[AppIcon AppIcon_Coral AppIcon_Frost AppIcon_Paper AppIcon_Neon AppIcon_Blueprint AppIcon_Titanium AppIcon_Glass AppIcon_Ceramic]
+alternate_icon_names.each do |icon_name|
+  assert(alternate_icons.include?(icon_name), "alternate icon manifest is missing #{icon_name}")
+end
+info_plist = read(root, "AltStore/Info.plist")
+alternate_icon_names.drop(1).each do |icon_name|
+  assert(info_plist.scan("<string>#{icon_name}</string>").length >= 2, "#{icon_name} must be declared for both iPhone and iPad")
+end
+%w[Frost Paper Neon Blueprint Titanium Glass Ceramic].each do |variant|
+  icon_directory = File.join(root, "AltStore/Resources/AppIcon_#{variant}.icon")
+  icon_manifest = JSON.parse(File.read(File.join(icon_directory, "icon.json")))
+  image_name = "AltForge#{variant}.png"
+  assert(icon_manifest.dig("groups", 0, "layers", 0, "image-name") == image_name, "AppIcon_#{variant} must reference its generated brand asset")
+
+  png = File.binread(File.join(icon_directory, "Assets", image_name))
+  width, height = png.byteslice(16, 8).unpack("NN")
+  color_type = png.getbyte(25)
+  assert(width == 1024 && height == 1024 && color_type == 2, "AppIcon_#{variant} must be a 1024px RGB PNG without alpha")
+end
+assert(File.exist?(File.join(root, "Scripts/generate_altforge_app_icons.swift")), "alternate brand icons must remain reproducibly generated")
+brand_generator = read(root, "Scripts/generate_brand_assets.rb")
+%w[Titanium Glass Ceramic].each do |variant|
+  source_name = "altforge-app-icon-#{variant.downcase}.png"
+  assert(File.exist?(File.join(root, "docs/assets/brand", source_name)), "#{variant} must retain its authoritative brand source")
+  assert(brand_generator.include?("AppIcon_#{variant}.icon/Assets/AltForge#{variant}.png"), "the brand generator must reproduce AppIcon_#{variant}")
+end
 settings_background = JSON.parse(read(root, "AltStore/Resources/Assets.xcassets/Colors/SettingsBackground.colorset/Contents.json"))
 settings_components = settings_background.fetch("colors").map { |entry| entry.fetch("color").fetch("components") }
 assert(settings_components.all? { |components| components.values_at("red", "green", "blue").all? { |value| value.to_f.between?(0.0, 1.0) } }, "settings background components must be normalized sRGB values")
 assert(settings_background.fetch("colors").length == 2, "settings background must provide light and dark appearances")
 assert(read(root, "AltStoreCore/Model/Source.swift").include?("return .altSourceTint"), "the official source must ignore stale release tint metadata")
+store_app_model = read(root, "AltStoreCore/Model/StoreApp.swift")
+assert(store_app_model.include?("self.bundleIdentifier == StoreApp.altstoreAppID ? .altSourceTint : self.tintColor"), "the official app must resolve its card tint from the selected theme")
+news_item_model = read(root, "AltStoreCore/Model/NewsItem.swift")
+assert(news_item_model.include?("self.sourceIdentifier == Source.altStoreIdentifier") && news_item_model.include?("return .altSourceTint"), "official news must resolve its background from the selected theme")
 source_tint = JSON.parse(read(root, "AltStoreCore/Resources/Colors.xcassets/SourceTint.colorset/Contents.json"))
 assert(source_tint.fetch("colors").length == 2, "official source tint must provide light and dark appearances")
 primary_tint = JSON.parse(read(root, "AltStoreCore/Resources/Colors.xcassets/Primary.colorset/Contents.json"))
@@ -93,9 +135,98 @@ assert(read(root, "AltStore/Extensions/UIColor+AltStore.swift").include?("var co
 assert(read(root, "AltStore/AppDelegate.swift").include?("NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.themeDidChange"), "theme changes must refresh active application chrome")
 assert(read(root, "AltStore/AppDelegate.swift").include?("rootViewController?.children.first(where: { $0 is TabBarController })"), "runtime theme changes must reach the child tab controller hosted by LaunchViewController")
 
+theme_surface_paths = [
+  "AltStore/App Detail/AppViewController.swift",
+  "AltStore/App Detail/AppContentViewController.swift",
+  "AltStore/App Detail/AppDetailCollectionViewController.swift",
+  "AltStore/Browse/BrowseViewController.swift",
+  "AltStore/Browse/FeaturedViewController.swift",
+  "AltStore/Components/AppCardCollectionViewCell.swift",
+  "AltStore/News/NewsViewController.swift",
+  "AltStore/Sources/SourceDetailContentViewController.swift"
+]
+theme_surface_paths.each do |path|
+  surface = read(root, path)
+  assert(!surface.match?(/\b(?:app|storeApp|newsItem)\.tintColor\b/), "#{path} must use effective theme-aware metadata colors")
+end
+
+app_banner = read(root, "AltStore/Components/AppBannerView.swift")
+assert(app_banner.include?("name: .altThemeDidChange") && app_banner.include?("configuredStoreApp?.effectiveTintColor"), "visible app and source banners must update immediately after theme changes")
+review_permissions = read(root, "AltStore/Permissions/ReviewPermissionsViewController.swift")
+assert(!review_permissions.match?(/gradient(?:Top|Bottom)|darkButtonBackground|overrideUserInterfaceStyle = \.dark/), "permission review must not force the legacy green dark-only presentation")
+assert(review_permissions.include?(".systemGroupedBackground") && review_permissions.include?(".secondarySystemGroupedBackground") && review_permissions.include?(".altPrimary"), "permission review must use semantic surfaces and the selected theme")
+add_source_text_field = read(root, "AltStore/Sources/Components/AddSourceTextFieldCell.swift")
+assert(!add_source_text_field.include?(".gradientTop"), "the add-source field must not restore the legacy green accent in dark mode")
+
 my_apps_controller = read(root, "AltStore/My Apps/MyAppsViewController.swift")
 assert(!my_apps_controller.include?("self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionFooter"), "My Apps layout sizing must not dequeue a supplementary view outside the collection-view data source callback")
 assert(my_apps_controller.include?("InstalledAppsCollectionFooterView.nib.instantiate(withOwner: nil)"), "My Apps footer sizing must use an independent prototype view")
+
+localizable_catalog = JSON.parse(read(root, "AltStore/Resources/Localizable.xcstrings"))
+expires_in_zh = localizable_catalog.dig("strings", "Expires in", "localizations", "zh-Hans", "stringUnit", "value")
+assert(expires_in_zh == "剩余有效期", "the split expiration label must be a complete Simplified Chinese phrase")
+
+localization_catalogs = [
+  "AltBackup/Resources/Localizable.xcstrings",
+  "AltServer/Resources/Localizable.xcstrings",
+  "AltServer/mul.lproj/Main.xcstrings",
+  "AltStore/Authentication/mul.lproj/Authentication.xcstrings",
+  "AltStore/Resources/Localizable.xcstrings",
+  "AltStore/Resources/InfoPlist.xcstrings",
+  "AltStore/Resources/AppShortcuts.xcstrings",
+  "AltStore/Settings/mul.lproj/AboutPatreonHeaderView.xcstrings",
+  "AltStore/Settings/mul.lproj/Settings.xcstrings",
+  "AltStore/Sources/mul.lproj/Sources.xcstrings",
+  "AltStore/mul.lproj/Main.xcstrings",
+  "AltStoreCore/Resources/Localizable.xcstrings",
+  "AltWidget/Resources/Localizable.xcstrings"
+]
+placeholder_pattern = /%(?:\d+\$)?(?:lld|ld|d|@)|%[A-Za-z][A-Za-z0-9_]*|\$\{[^}]+\}/
+normalize_placeholder = ->(placeholder) { placeholder.sub(/%\d+\$/, "%") }
+localization_catalogs.each do |path|
+  catalog = JSON.parse(read(root, path))
+  catalog.fetch("strings").each do |key, entry|
+    translation = entry.dig("localizations", "zh-Hans", "stringUnit", "value")
+    assert(translation && !translation.empty?, "missing Simplified Chinese localization for #{key.inspect} in #{path}")
+
+    source = entry.dig("localizations", "en", "stringUnit", "value") || key
+    source_placeholders = source.scan(placeholder_pattern).map(&normalize_placeholder).sort
+    translated_placeholders = translation.scan(placeholder_pattern).map(&normalize_placeholder).sort
+    assert(source_placeholders == translated_placeholders, "Simplified Chinese placeholders do not match for #{key.inspect} in #{path}")
+  end
+end
+
+expected_zh_terms = {
+  "Active" => "已激活",
+  "Inactive" => "未激活",
+  "Free" => "免费",
+  "Like" => "点赞",
+  "Liked" => "已点赞",
+  "Likes" => "点赞",
+  "Unlike" => "取消点赞",
+  "Refreshing" => "正在刷新",
+  "Collections" => "软件源合集",
+  "TECHY THINGS" => "技术选项",
+  "Other Entitlements" => "其他授权项"
+}
+expected_zh_terms.each do |key, expected|
+  actual = localizable_catalog.dig("strings", key, "localizations", "zh-Hans", "stringUnit", "value")
+  assert(actual == expected, "Simplified Chinese localization for #{key.inspect} must be #{expected.inspect}")
+end
+
+app_shortcuts_catalog = JSON.parse(read(root, "AltStore/Resources/AppShortcuts.xcstrings"))
+refresh_shortcut_zh = app_shortcuts_catalog.dig("strings", "Refresh ${applicationName}", "localizations", "zh-Hans", "stringUnit", "value")
+assert(refresh_shortcut_zh == "刷新 ${applicationName}", "the primary Simplified Chinese App Shortcut phrase must use natural word order")
+
+featured_controller = read(root, "AltStore/Browse/FeaturedViewController.swift")
+assert(featured_controller.include?("No Apps to Browse") && featured_controller.include?("Manage Sources"), "an empty Browse tab must explain the source-driven catalog and offer a source action")
+assert(featured_controller.include?("self.dataSource.itemCount == 0") && featured_controller.include?("self.emptyStateView.isHidden = !isEmpty"), "Browse must replace empty section headings with a real empty state")
+assert(featured_controller.include?("makeEmptyLayout()") && featured_controller.include?("isEmpty ? self.emptyLayout : self.contentLayout"), "Browse empty state must use a header-free layout instead of showing empty content sections behind the placeholder")
+assert(featured_controller.include?("presentSourcesRoot()"), "the Browse empty-state action must open the root software-source manager")
+assert(featured_controller.include?("name: .altThemeDidChange") && featured_controller.include?("greaterThanOrEqualToConstant: 44"), "the Browse empty state must update with the selected theme and retain a 44-point action target")
+
+tab_bar_controller = read(root, "AltStore/TabBarController.swift")
+assert(tab_bar_controller.include?("func presentSourcesRoot()") && tab_bar_controller.include?("popToRootViewController(animated: false)"), "the explicit Manage Sources action must not strand users inside a previous source detail")
 
 app_ids_controller = read(root, "AltStore/App IDs/AppIDsViewController.swift")
 assert(!app_ids_controller.include?("self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader"), "App IDs layout sizing must not dequeue a supplementary view outside the collection-view data source callback")
@@ -178,6 +309,13 @@ assert(read(root, "AltStore/AppDelegate.swift").include?("AppManager.shared.reco
 ios_my_apps = read(root, "AltStore/My Apps/MyAppsViewController.swift")
 assert(!ios_my_apps.include?("switch Result(context.installedApp, context.error)"), "third-party IPA completion must not precondition-crash when an operation ends without a result")
 assert(ios_my_apps.include?("The installation ended before AltForge received a result."), "missing third-party IPA results must become a handled error")
+assert(ios_my_apps.include?("SideloadingStatusView") && ios_my_apps.include?("percentageLabel"), "third-party IPA installation must expose a persistent stage and percentage view")
+assert(ios_my_apps.include?("setInstallationStatusHandler") && ios_my_apps.include?("stage.localizedName"), "third-party IPA installation must surface operation stages instead of only aggregate progress")
+assert(ios_my_apps.include?("Remove Extensions (Recommended)") && ios_my_apps.include?("preferredAction = removeAction"), "extension removal must be the explicit recommended signing choice")
+assert(ios_my_apps.include?("Keep and Sign Extensions") && ios_my_apps.include?("may exceed the active-app or weekly App ID limit"), "keeping extensions must explain signing and free-account quota risk")
+assert(ios_my_apps.include?("appExtensions.prefix(4)") && ios_my_apps.include?("boundedSideloadingLabel"), "extension review must bound untrusted plugin names and list length")
+refresh_group = read(root, "AltStore/Operations/RefreshGroup.swift")
+assert(refresh_group.include?("detail.map { String($0.prefix(120)) }"), "visible installation detail must remain bounded")
 my_apps_update = ios_my_apps[/func update\(\).*?func updateBadgeCount/m]
 assert(my_apps_update && !my_apps_update.include?("reconfigureItems"), "My Apps appearance updates must not reconfigure a stale collection-view index path")
 assert(my_apps_update&.include?("cellForItem(at: indexPath) as? NoUpdatesCollectionViewCell"), "My Apps must update the already-visible no-updates cell without mutating collection structure")
@@ -202,7 +340,9 @@ allowed_diagnostic_details = ["localizedDiagnosticName", "authenticationDiagnost
 assert(diagnostic_detail_calls.all? { |line| allowed_diagnostic_details.any? { |value| line.include?(value) } }, "diagnostic details must remain on the connection/team/signing allowlist")
 
 ios_strings = JSON.parse(read(root, "AltStore/Resources/Localizable.xcstrings")).fetch("strings")
-["Authentication Ready", "Authenticating Apple ID", "Diagnostic ID", "Failure Stage", "Operation Trace", "Copy Diagnostic Report", "AltForge closed unexpectedly while it was active.", "The installation ended before AltForge received a result.", "Main App Bundle", "Removed unsupported Apple Watch components", "Theme Color", "Forge Red", "Ocean Blue", "Indigo", "Rose", "Selected"].each do |key|
+assert(ios_strings.dig("Sideloaded", "localizations", "zh-Hans", "stringUnit", "value") == "侧载", "Simplified Chinese must consistently use “侧载”")
+assert(!ios_strings.to_json.include?("\u65c1\u8f7d"), "Simplified Chinese localization contains deprecated sideload wording")
+["Authentication Ready", "Authenticating Apple ID", "Diagnostic ID", "Failure Stage", "Operation Trace", "Copy Diagnostic Report", "AltForge closed unexpectedly while it was active.", "The installation ended before AltForge received a result.", "Main App Bundle", "Removed unsupported Apple Watch components", "Installing App", "Reading IPA", "Downloading IPA", "Unpacking IPA", "Reviewing App Extensions", "Sign App Extensions?", "Keep and Sign Extensions", "Remove Extensions (Recommended)", "Theme Color", "Forge Red", "Ocean Blue", "Indigo", "Rose", "Selected"].each do |key|
   assert(ios_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese diagnostic string: #{key}")
 end
 

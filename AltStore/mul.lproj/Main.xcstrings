@@ -86,7 +86,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "版本 4.4.2"
+            "value" : "版本"
           }
         }
       }
@@ -338,7 +338,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Hello Me"
+            "value" : "您好"
           }
         },
         "ja" : {
@@ -386,7 +386,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "物品"
+            "value" : "项目"
           }
         }
       }
@@ -506,7 +506,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "..."
+            "value" : "…"
           }
         }
       }
@@ -536,7 +536,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按钮"
+            "value" : "发现更多软件源"
           }
         }
       }

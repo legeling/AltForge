@@ -76,6 +76,8 @@ class AppBannerView: RSTNibView
     var style: Style = .app
     
     private var originalTintColor: UIColor?
+    private weak var configuredStoreApp: StoreApp?
+    private weak var configuredSource: Source?
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var subtitleLabel: UILabel!
@@ -125,6 +127,8 @@ class AppBannerView: RSTNibView
         
         self.stackView.isLayoutMarginsRelativeArrangement = true
         self.stackView.preservesSuperviewLayoutMargins = true
+
+        NotificationCenter.default.addObserver(self, selector: #selector(AppBannerView.themeDidChange), name: .altThemeDidChange, object: nil)
     }
     
     override func tintColorDidChange()
@@ -171,6 +175,9 @@ extension AppBannerView
         self.style = .app
 
         let values = AppValues(app: app)
+        self.configuredStoreApp = (app as? StoreApp) ?? (app as? InstalledApp)?.storeApp
+        self.configuredSource = nil
+        self.tintColor = values.tintColor ?? .altPrimary
         self.titleLabel.text = app.name // Don't use values.name since that already includes "beta".
         self.betaBadgeView.isHidden = !values.isBeta
         
@@ -396,6 +403,8 @@ extension AppBannerView
     func configure(for source: Source)
     {
         self.style = .source
+        self.configuredStoreApp = nil
+        self.configuredSource = source
         
         let subtitle: String
         if let text = source.subtitle
@@ -421,6 +430,25 @@ extension AppBannerView
         self.accessibilityLabel = accessibilityLabel
         
         self.pillButtonHeightConstraint.constant = 36
+    }
+
+    @objc private func themeDidChange()
+    {
+        switch self.style
+        {
+        case .app:
+            let tintColor = self.configuredStoreApp?.effectiveTintColor ?? .altPrimary
+            self.tintColor = tintColor
+            self.iconImageView.backgroundColor = self.configuredStoreApp?.effectiveTintColor
+
+            if let source = self.configuredStoreApp?.source, !self.sourceIconImageView.isHidden
+            {
+                self.sourceIconImageView.backgroundColor = source.effectiveTintColor?.adjustedForDisplay ?? .altPrimary
+            }
+
+        case .source:
+            self.tintColor = self.configuredSource?.effectiveTintColor ?? .altPrimary
+        }
     }
 }
 

@@ -16,6 +16,12 @@
 - 设备回调显式解析 `Status`；`Complete` 无论是否同时带 100% 都完成事务、填满进度并释放 completion/activity。
 - repository contract 固定以上结构，macOS Universal Debug build 已通过。
 
+## 上游证据
+
+最后核对：2026-08-11。[AltStore #1685](https://github.com/altstoreio/AltStore/issues/1685) 仍为 Open，报告 macOS 26.1 + iOS 26.1 在 Backup 阶段发生 AltServer 崩溃，并分别暴露 USB `ServerError 2002` 与 Wi-Fi `Operation Error 1200`。它不是本 issue 两个 UI 根因的等价复现，但证明设备安装状态机仍需覆盖 USB/Wi-Fi、阶段转换、Server 退出和 activity 释放，而不能只验证成功截图。
+
+设备发现与连接主题的 34 条开放报告与逐条处置见 [`upstream/topics/03-device-discovery-and-connectivity.md`](upstream/topics/03-device-discovery-and-connectivity.md)。
+
 ## 关闭条件
 
 使用脱敏真实设备完成以下复测且不保存账号、UDID、设备名或 IPA 内容：

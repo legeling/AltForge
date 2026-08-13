@@ -16,6 +16,48 @@
 			<key>imageName</key>
 			<string>AppIcon_Coral</string>
 		</dict>
+		<dict>
+			<key>name</key>
+			<string>AltForge Frost</string>
+			<key>imageName</key>
+			<string>AppIcon_Frost</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>AltForge Paper</string>
+			<key>imageName</key>
+			<string>AppIcon_Paper</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>AltForge Neon</string>
+			<key>imageName</key>
+			<string>AppIcon_Neon</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>AltForge Blueprint</string>
+			<key>imageName</key>
+			<string>AppIcon_Blueprint</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>AltForge Titanium</string>
+			<key>imageName</key>
+			<string>AppIcon_Titanium</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>AltForge Glass</string>
+			<key>imageName</key>
+			<string>AppIcon_Glass</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>AltForge Ceramic</string>
+			<key>imageName</key>
+			<string>AppIcon_Ceramic</string>
+		</dict>
 	</array>
 </dict>
 </plist>

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 import AltSign
 import AltStoreCore
@@ -71,32 +70,25 @@ class ReviewPermissionsViewController: UICollectionViewController
         super.viewDidLoad()
         
         let buttonAppearance = UIBarButtonItemAppearance(style: .plain)
-        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.altPrimary]
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(resource: .gradientTop)
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor = .systemGroupedBackground
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
         appearance.buttonAppearance = buttonAppearance
         self.navigationItem.standardAppearance = appearance
+        self.navigationItem.scrollEdgeAppearance = appearance
+        self.navigationItem.compactAppearance = appearance
+        self.navigationController?.navigationBar.tintColor = .altPrimary
         
         self.title = NSLocalizedString("Review Permissions", comment: "")
         
         let collectionViewLayout = self.makeLayout()
         self.collectionView.collectionViewLayout = collectionViewLayout
         
-        if #available(iOS 16, *)
-        {
-            self.collectionView.backgroundView = UIHostingConfiguration {
-                LinearGradient(colors: [Color(UIColor(resource: .gradientTop)), Color(.gradientBottom)], startPoint: .top, endPoint: .bottom)
-            }
-            .margins(.all, 0)
-            .makeContentView()
-        }
-        else
-        {
-            self.collectionView.backgroundColor = UIColor(resource: .gradientBottom)
-        }
+        self.collectionView.backgroundView = nil
+        self.collectionView.backgroundColor = .systemGroupedBackground
         
         self.dataSource.proxy = self
         self.collectionView.dataSource = self.dataSource
@@ -123,7 +115,7 @@ extension ReviewPermissionsViewController
             
             var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             configuration.showsSeparators = true
-            configuration.separatorConfiguration.color = UIColor(resource: .gradientBottom).withAlphaComponent(0.7)
+            configuration.separatorConfiguration.color = .separator
             configuration.separatorConfiguration.bottomSeparatorInsets.leading = 20
             configuration.backgroundColor = .clear
             
@@ -178,8 +170,8 @@ extension ReviewPermissionsViewController
     {
         self.headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in
             var configuration = UIListContentConfiguration.prominentInsetGroupedHeader()
-            configuration.textProperties.color = .white
-            configuration.secondaryTextProperties.color = .white.withAlphaComponent(0.8)
+            configuration.textProperties.color = .label
+            configuration.secondaryTextProperties.color = .secondaryLabel
             configuration.textToSecondaryTextVerticalPadding = 8
             
             switch Section(rawValue: indexPath.section)!
@@ -216,7 +208,8 @@ extension ReviewPermissionsViewController
             
             var config = cell.defaultContentConfiguration()
             config.text = NSLocalizedString("Approve", comment: "")
-            config.textProperties.color = .white
+            let foregroundColor = UIColor.altPrimary.contrastingForegroundColor
+            config.textProperties.color = foregroundColor
             config.textProperties.font = .preferredFont(forTextStyle: .headline)
             config.textProperties.alignment = .center
             config.directionalLayoutMargins.top = 15
@@ -229,14 +222,14 @@ extension ReviewPermissionsViewController
                 // Change text color when highlighted
                 if state.isHighlighted
                 {
-                    content.textProperties.color = .white.withAlphaComponent(0.5)
+                    content.textProperties.color = foregroundColor.withAlphaComponent(0.65)
                 }
                 
                 cell.contentConfiguration = content
             }
             
             var backgroundConfig = UIBackgroundConfiguration.listGroupedCell()
-            backgroundConfig.backgroundColor = UIColor(resource: .darkButtonBackground)
+            backgroundConfig.backgroundColor = .altPrimary
             backgroundConfig.visualEffect = nil
             cell.backgroundConfiguration = backgroundConfig
         }
@@ -282,9 +275,9 @@ extension ReviewPermissionsViewController
         config.directionalLayoutMargins.bottom = 20
         
         config.secondaryTextProperties.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        config.secondaryTextProperties.color = .white.withAlphaComponent(0.8)
+        config.secondaryTextProperties.color = .secondaryLabel
         
-        config.imageProperties.tintColor = .white
+        config.imageProperties.tintColor = .altPrimary
         config.imageToTextPadding = 20
         config.directionalLayoutMargins.leading = 20
         
@@ -302,13 +295,11 @@ extension ReviewPermissionsViewController
         
         cell.contentConfiguration = config
         
-        var backgroundConfiguration = UIBackgroundConfiguration.clear()
-        backgroundConfiguration.backgroundColor = .white.withAlphaComponent(0.25)
-        backgroundConfiguration.visualEffect = UIVibrancyEffect(blurEffect: .init(style: .systemMaterial), style: .fill)
+        var backgroundConfiguration = UIBackgroundConfiguration.listGroupedCell()
+        backgroundConfiguration.backgroundColor = .secondarySystemGroupedBackground
+        backgroundConfiguration.visualEffect = nil
         cell.backgroundConfiguration = backgroundConfiguration
-        
-        // Ensure text is legible on gradient background.
-        cell.overrideUserInterfaceStyle = .dark
+        cell.overrideUserInterfaceStyle = .unspecified
     }
 }
 

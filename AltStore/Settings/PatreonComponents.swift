@@ -22,7 +22,7 @@ class PatronsHeaderView: UICollectionReusableView
         super.init(frame: frame)
         
         self.textLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        self.textLabel.textColor = .white
+        self.textLabel.textColor = .label
         self.addSubview(self.textLabel, pinningEdgesWith: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
     }
     
@@ -41,8 +41,8 @@ class PatronsFooterView: UICollectionReusableView
         
         self.button.translatesAutoresizingMaskIntoConstraints = false
         self.button.activityIndicatorView.style = .medium
-        self.button.activityIndicatorView.color = .white
-        self.button.titleLabel?.textColor = .white
+        self.button.activityIndicatorView.color = .altPrimary
+        self.button.setTitleColor(.altPrimary, for: .normal)
         self.addSubview(self.button)
         
         NSLayoutConstraint.activate([self.button.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -73,6 +73,11 @@ class AboutPatreonHeaderView: UICollectionReusableView
         self.textView.clipsToBounds = true
         self.textView.layer.cornerRadius = 20
         self.textView.textContainer.lineFragmentPadding = 0
+        self.textView.backgroundColor = .secondarySystemGroupedBackground
+        self.textView.textColor = .label
+
+        self.rileyLabel.textColor = .label
+        self.shaneLabel.textColor = .label
         
         for imageView in [self.rileyImageView!, self.shaneImageView!]
         {
@@ -84,6 +89,8 @@ class AboutPatreonHeaderView: UICollectionReusableView
         {
             button.clipsToBounds = true
             button.layer.cornerRadius = 16
+            button.backgroundColor = .altPrimary
+            button.setTitleColor(.altPrimary.contrastingForegroundColor, for: .normal)
         }
     }
     
@@ -94,4 +101,3 @@ class AboutPatreonHeaderView: UICollectionReusableView
         self.textView.textContainerInset = UIEdgeInsets(top: self.layoutMargins.left, left: self.layoutMargins.left, bottom: self.layoutMargins.right, right: self.layoutMargins.right)
     }
 }
-

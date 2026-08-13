@@ -27,10 +27,10 @@ class InstalledAppCollectionViewCell: UICollectionViewCell
         deactivateBadge.isHidden = true
         self.addSubview(deactivateBadge)
         
-        // Solid background to make the X opaque white.
+        // Solid background keeps the center of the destructive badge opaque.
         let backgroundView = UIView()
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.backgroundColor = .white
+        backgroundView.backgroundColor = .systemBackground
         deactivateBadge.addSubview(backgroundView)
                     
         let badgeView = UIImageView(image: UIImage(systemName: "xmark.circle.fill"))

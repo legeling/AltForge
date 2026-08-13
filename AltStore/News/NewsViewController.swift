@@ -496,7 +496,7 @@ extension NewsViewController
         footerView.bannerView.button.isIndicatingActivity = false
         footerView.bannerView.configure(for: storeApp)
         
-        footerView.bannerView.tintColor = storeApp.tintColor
+        footerView.bannerView.tintColor = storeApp.effectiveTintColor ?? .altPrimary
         footerView.bannerView.button.addTarget(self, action: #selector(NewsViewController.performAppAction(_:)), for: .primaryActionTriggered)
         footerView.tapGestureRecognizer.addTarget(self, action: #selector(NewsViewController.handleTapGesture(_:)))
         

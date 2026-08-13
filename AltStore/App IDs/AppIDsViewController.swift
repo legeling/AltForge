@@ -89,7 +89,7 @@ private extension AppIDsViewController
             cell.bannerView.iconImageView.isHidden = true
             cell.bannerView.button.isIndicatingActivity = false
             
-            cell.bannerView.buttonLabel.text = NSLocalizedString("Expires in", comment: "")
+            cell.bannerView.buttonLabel.text = NSLocalizedString("Expires in", comment: "Remaining validity label shown above the number of days")
             
             let attributedAccessibilityLabel = NSMutableAttributedString(string: appID.name + ". ")
             

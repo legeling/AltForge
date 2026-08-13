@@ -1,0 +1,26 @@
+{
+  "fill" : {
+    "solid" : "srgb:0.94902,0.95686,0.96471,1.00000"
+  },
+  "groups" : [
+    {
+      "hidden" : false,
+      "layers" : [
+        {
+          "hidden" : false,
+          "image-name" : "AltForgePaper.png",
+          "name" : "AltForge Paper",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [0, 0]
+          }
+        }
+      ]
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : ["watchOS"],
+    "squares" : "shared"
+  }
+}

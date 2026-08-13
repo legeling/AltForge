@@ -57,6 +57,8 @@ class AltAppIconsViewController: UICollectionViewController
     private var iconsBySection = [Section: [AltIcon]]()
     
     private var headerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>!
+    private var isChangingIcon = false
+    private var pendingIconName: String?
         
     override func viewDidLoad()
     {
@@ -66,29 +68,26 @@ class AltAppIconsViewController: UICollectionViewController
         
         let collectionViewLayout = self.makeLayout()
         self.collectionView.collectionViewLayout = collectionViewLayout
-        
-        self.collectionView.backgroundColor = UIColor(resource: .settingsBackground)
-        
-        if #available(iOS 26, *)
-        {
-            let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithDefaultBackground()
-            appearance.shadowColor = nil
-            appearance.titleTextAttributes = textAttributes
-            appearance.largeTitleTextAttributes = textAttributes
-            
-            self.navigationItem.standardAppearance = appearance
-            self.navigationItem.scrollEdgeAppearance = appearance
-        }
+
+        self.collectionView.backgroundColor = .systemGroupedBackground
+        self.collectionView.indicatorStyle = .default
+        self.view.tintColor = .altPrimary
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemGroupedBackground
+        appearance.shadowColor = nil
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        self.navigationItem.standardAppearance = appearance
+        self.navigationItem.scrollEdgeAppearance = appearance
         
         do
         {
             let fileURL = Bundle.main.url(forResource: "AltIcons", withExtension: "plist")!
             let data = try Data(contentsOf: fileURL)
             
-            var icons = try PropertyListDecoder().decode([Section: [AltIcon]].self, from: data)
+            let icons = try PropertyListDecoder().decode([Section: [AltIcon]].self, from: data)
             
             self.iconsBySection = icons
         }
@@ -105,13 +104,10 @@ class AltAppIconsViewController: UICollectionViewController
                 
         self.headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in
             let section = Section.allCases[indexPath.section]
-            
-            let font = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).bolded(), size: 0.0)
-            
-            var configuration = UIListContentConfiguration.cell()
+
+            var configuration = UIListContentConfiguration.groupedHeader()
             configuration.text = section.localizedName
-            configuration.textProperties.font = font
-            configuration.textProperties.color = .white.withAlphaComponent(0.8)
+            configuration.textProperties.color = .secondaryLabel
             headerView.contentConfiguration = configuration
             
             headerView.backgroundConfiguration = .clear()
@@ -140,16 +136,14 @@ private extension AltAppIconsViewController
         }
         
         let dataSource = RSTCompositeCollectionViewDataSource(dataSources: dataSources)
-        dataSource.cellConfigurationHandler = { cell, icon, indexPath in
+        dataSource.cellConfigurationHandler = { [weak self] cell, icon, indexPath in
             let cell = cell as! UICollectionViewListCell
             
             let imageWidth = 44.0
-            let font = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).bolded(), size: 0.0)
-            
+
             var config = cell.defaultContentConfiguration()
-            config.text = icon.name
-            config.textProperties.font = font
-            config.textProperties.color = .white
+            config.text = NSLocalizedString(icon.name, comment: "Alternate app icon name")
+            config.textProperties.color = .label
             
             let image = UIImage(named: icon.imageName)
             config.image = image
@@ -158,24 +152,36 @@ private extension AltAppIconsViewController
             
             cell.contentConfiguration = config
 
-            if UIApplication.shared.alternateIconName == icon.imageName || (UIApplication.shared.alternateIconName == nil && icon.imageName == AltIcon.defaultIconName)
+            if self?.pendingIconName == icon.imageName
             {
-                cell.accessories = [.checkmark(options: .init(tintColor: .white))]
+                let activityIndicator = UIActivityIndicatorView(style: .medium)
+                activityIndicator.color = .altPrimary
+                activityIndicator.startAnimating()
+                cell.accessories = [.customView(configuration: .init(customView: activityIndicator, placement: .trailing(), tintColor: .altPrimary))]
+                cell.accessibilityValue = NSLocalizedString("Applying…", comment: "App icon change in progress")
+                cell.accessibilityTraits.remove(.selected)
+            }
+            else if UIApplication.shared.alternateIconName == icon.imageName || (UIApplication.shared.alternateIconName == nil && icon.imageName == AltIcon.defaultIconName)
+            {
+                cell.accessories = [.checkmark(options: .init(tintColor: .altPrimary))]
+                cell.accessibilityValue = NSLocalizedString("Selected", comment: "Accessibility value for the selected app icon")
+                cell.accessibilityTraits.insert(.selected)
             }
             else
             {
                 cell.accessories = []
+                cell.accessibilityValue = nil
+                cell.accessibilityTraits.remove(.selected)
             }
                       
-            var backgroundConfiguration = UIBackgroundConfiguration.listPlainCell()
-            backgroundConfiguration.backgroundColorTransformer = UIConfigurationColorTransformer { [weak cell] c in
-                if let state = cell?.configurationState, state.isHighlighted 
+            var backgroundConfiguration = UIBackgroundConfiguration.listGroupedCell()
+            backgroundConfiguration.backgroundColorTransformer = UIConfigurationColorTransformer { [weak cell] _ in
+                if let state = cell?.configurationState, state.isHighlighted || state.isSelected
                 {
-                    // Highlighted, so use darker white for background.
-                    return .white.withAlphaComponent(0.4)
+                    return .tertiarySystemFill
                 }
-                
-                return .white.withAlphaComponent(0.25)
+
+                return .secondarySystemGroupedBackground
             }
             cell.backgroundConfiguration = backgroundConfiguration
         }
@@ -194,28 +200,53 @@ extension AltAppIconsViewController
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
+        guard !self.isChangingIcon else
+        {
+            collectionView.deselectItem(at: indexPath, animated: true)
+            return
+        }
+
         let icon = self.dataSource.item(at: indexPath)
-        guard UIApplication.shared.alternateIconName != icon.imageName else { return }
-        
-        // Deselect previous icon + select new icon
-        collectionView.reloadData()
+        let currentIconName = UIApplication.shared.alternateIconName ?? AltIcon.defaultIconName
+        guard currentIconName != icon.imageName else
+        {
+            collectionView.deselectItem(at: indexPath, animated: true)
+            return
+        }
+
+        self.isChangingIcon = true
+        self.pendingIconName = icon.imageName
+        collectionView.deselectItem(at: indexPath, animated: true)
+        collectionView.reconfigureItems(at: [indexPath])
+        UISelectionFeedbackGenerator().selectionChanged()
         
         // If assigning primary icon, pass "nil" as alternate icon name.
-        let imageName = (icon.imageName == "AppIcon") ? nil : icon.imageName
+        let imageName = (icon.imageName == AltIcon.defaultIconName) ? nil : icon.imageName
         UIApplication.shared.setAlternateIconName(imageName) { error in
-            if let error
-            {
-                let alertController = UIAlertController(title: NSLocalizedString("Unable to Change App Icon", comment: ""),
-                                                        message: error.localizedDescription,
-                                                        preferredStyle: .alert)
-                alertController.addAction(.ok)
-                self.present(alertController, animated: true)
-                
-                collectionView.reloadData()
-            }
-            else
-            {
-                NotificationCenter.default.post(name: UIApplication.didChangeAppIconNotification, object: icon)
+            DispatchQueue.main.async {
+                self.isChangingIcon = false
+                self.pendingIconName = nil
+
+                let affectedIconNames = [currentIconName, icon.imageName]
+                let affectedIndexPaths = collectionView.indexPathsForVisibleItems.filter { indexPath in
+                    affectedIconNames.contains(self.dataSource.item(at: indexPath).imageName)
+                }
+                collectionView.reconfigureItems(at: affectedIndexPaths)
+
+                if let error
+                {
+                    UINotificationFeedbackGenerator().notificationOccurred(.error)
+                    let alertController = UIAlertController(title: NSLocalizedString("Unable to Change App Icon", comment: ""),
+                                                            message: error.localizedDescription,
+                                                            preferredStyle: .alert)
+                    alertController.addAction(.ok)
+                    self.present(alertController, animated: true)
+                }
+                else
+                {
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    NotificationCenter.default.post(name: UIApplication.didChangeAppIconNotification, object: icon)
+                }
             }
         }
     }

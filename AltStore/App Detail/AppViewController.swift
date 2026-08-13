@@ -18,6 +18,10 @@ import NukeExtensions
 class AppViewController: UIViewController
 {
     var app: StoreApp!
+
+    private var appTintColor: UIColor {
+        return self.app.effectiveTintColor ?? .altPrimary
+    }
     
     private var contentViewController: AppContentViewController!
     private var contentViewControllerShadowView: UIView!
@@ -81,7 +85,7 @@ class AppViewController: UIViewController
         self.navigationItem.titleView = self.navigationBarTitleView
         
         self.contentViewControllerShadowView = UIView()
-        self.contentViewControllerShadowView.backgroundColor = .white
+        self.contentViewControllerShadowView.backgroundColor = .altBackground
         self.contentViewControllerShadowView.layer.cornerRadius = 38
         self.contentViewControllerShadowView.layer.shadowColor = UIColor.black.cgColor
         self.contentViewControllerShadowView.layer.shadowOffset = CGSize(width: 0, height: -1)
@@ -106,18 +110,18 @@ class AppViewController: UIViewController
         self.bannerView.backgroundEffectView.effect = UIBlurEffect(style: .regular)
         self.bannerView.backgroundEffectView.backgroundColor = .clear
         self.bannerView.iconImageView.image = nil
-        self.bannerView.iconImageView.tintColor = self.app.tintColor
-        self.bannerView.button.tintColor = self.app.tintColor
-        self.bannerView.tintColor = self.app.tintColor
+        self.bannerView.iconImageView.tintColor = self.appTintColor
+        self.bannerView.button.tintColor = self.appTintColor
+        self.bannerView.tintColor = self.appTintColor
         self.bannerView.accessibilityTraits.remove(.button)
         
         self.bannerView.button.addTarget(self, action: #selector(AppViewController.performAppAction(_:)), for: .primaryActionTriggered)
         
-        self.backButtonContainerView.tintColor = self.app.tintColor
+        self.backButtonContainerView.tintColor = self.appTintColor
         
-        self.navigationBarDownloadButton.tintColor = self.app.tintColor
+        self.navigationBarDownloadButton.tintColor = self.appTintColor
         self.navigationBarAppNameLabel.text = self.app.name
-        self.navigationBarAppIconImageView.tintColor = self.app.tintColor
+        self.navigationBarAppIconImageView.tintColor = self.appTintColor
         
         self.contentSizeObservation = self.contentViewController.tableView.observe(\.contentSize) { [weak self] (tableView, change) in
             self?.view.setNeedsLayout()
@@ -134,6 +138,7 @@ class AppViewController: UIViewController
         NotificationCenter.default.addObserver(self, selector: #selector(AppViewController.didChangeApp(_:)), name: .NSManagedObjectContextObjectsDidChange, object: DatabaseManager.shared.viewContext)
         NotificationCenter.default.addObserver(self, selector: #selector(AppViewController.willEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(AppViewController.didBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppViewController.themeDidChange), name: .altThemeDidChange, object: nil)
         
         self._backgroundBlurEffect = self.backgroundBlurView.effect as? UIBlurEffect
         self._backgroundBlurTintColor = self.backgroundBlurView.contentView.backgroundColor
@@ -163,7 +168,7 @@ class AppViewController: UIViewController
             if let downloadButton = self.navigationItem.rightBarButtonItem
             {
                 downloadButton.style = .prominent
-                downloadButton.tintColor = self.app.tintColor
+                downloadButton.tintColor = self.appTintColor
             }
             
             self.backButton.isHidden = true
@@ -451,7 +456,7 @@ private extension AppViewController
         {
             if #unavailable(iOS 26)
             {
-                button.tintColor = self.app.tintColor
+                button.tintColor = self.appTintColor
             }
             button.isIndicatingActivity = false
         }
@@ -597,7 +602,7 @@ private extension AppViewController
             
             barAppearance.titleTextAttributes = [.foregroundColor: UIColor.clear]
             
-            let tintColor = isHidden ? UIColor.clear : self.app.tintColor ?? .altPrimary
+            let tintColor = isHidden ? UIColor.clear : self.appTintColor
             barAppearance.configureWithTintColor(tintColor)
         }
         
@@ -642,8 +647,8 @@ private extension AppViewController
             self.likesButtonContainerView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
             self.moreButtonContainerView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
             
-            self.likesButtonContainerView.tintColor = self.app.tintColor
-            self.moreButtonContainerView.tintColor = self.app.tintColor
+            self.likesButtonContainerView.tintColor = self.appTintColor
+            self.moreButtonContainerView.tintColor = self.appTintColor
         }
         
         self.likesButtonContainerView.clipsToBounds = true
@@ -904,6 +909,24 @@ extension AppViewController
 
 private extension AppViewController
 {
+    @objc func themeDidChange()
+    {
+        let tintColor = self.appTintColor
+        self.bannerView.iconImageView.tintColor = tintColor
+        self.bannerView.button.tintColor = tintColor
+        self.bannerView.tintColor = tintColor
+        self.backButtonContainerView.tintColor = tintColor
+        self.navigationBarDownloadButton.tintColor = tintColor
+        self.navigationBarAppIconImageView.tintColor = tintColor
+        self.navigationItem.rightBarButtonItem?.tintColor = tintColor
+        self.likesButtonContainerView.tintColor = tintColor
+        self.moreButtonContainerView.tintColor = tintColor
+
+        self.contentViewController.tableView.reloadData()
+        self.contentViewController.appDetailCollectionViewController.collectionView.reloadData()
+        self.updateNavigationBarAppearance(isHidden: self.navigationBarDownloadButton.alpha == 0)
+    }
+
     @objc func didChangeApp(_ notification: Notification)
     {
         // Async so that AppManager.installationProgress(for:) is nil when we update.

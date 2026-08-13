@@ -29,6 +29,8 @@
 | Changes | 单次需求、修复或流程变更的生命周期 | [`docs/changes/`](changes/) |
 | Records | Issue、ADR、发布、归档和工程规则 | [`docs/issues/`](issues/)、[`docs/adr/`](adr/)、[`docs/releases/`](releases/)、[`docs/archive/`](archive/)、[`docs/rules/`](rules/) |
 
+上游 AltStore Issue 的完整审计位于 [`docs/issues/upstream/`](issues/upstream/)：审计方法、范围与处置、15 份主题报告、645 条逐项附录和机器数据彼此分离，根目录 Issue Register 只维护 AltForge 自身风险。
+
 ## 当前基线
 
 - 产品形态：AltStore Classic 派生项目，由 iOS 端 AltForge 与 macOS 端 AltServer 协作完成侧载。

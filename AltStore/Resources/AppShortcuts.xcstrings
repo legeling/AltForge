@@ -6,7 +6,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 ${applicationName} 刷新"
+            "value" : "刷新 ${applicationName}"
           }
         }
       }
@@ -16,7 +16,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "刷新 ${applicationName} App"
+            "value" : "刷新 ${applicationName} 中的 App"
           }
         }
       }
