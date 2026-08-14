@@ -19,6 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/legeling/AltForge/releases"><strong>下载</strong></a> ·
+  <a href="https://altforge-dz7.pages.dev"><strong>官方网站</strong></a> ·
   <a href="#altforge-的主要修改"><strong>改动</strong></a> ·
   <a href="#从源码构建"><strong>构建</strong></a> ·
   <a href="docs/README.md"><strong>文档</strong></a> ·
@@ -26,6 +27,8 @@
 </p>
 
 AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生项目。它保留经过验证的 AltStore/AltServer 架构，同时持续维护 Classic 侧载流程需要的兼容性修复和实用改进。
+
+官方下载与安装页面为 [altforge-dz7.pages.dev](https://altforge-dz7.pages.dev)。其中 macOS、Windows 与 IPA 下载始终指向本仓库最新正式发布的 GitHub Release。
 
 > [!IMPORTANT]
 > AltForge 构建为 **AltStore Classic** 应用。`marketplace` 是历史分支名称；发布版本不会嵌入 Marketplace extension 或 entitlement。

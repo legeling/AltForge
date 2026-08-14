@@ -41,6 +41,7 @@
 - 发布产物：未签名 IPA、未公证的 macOS AltServer、未签名的 Windows AltServer ZIP、`apps.json`、三类自有远程配置 JSON 与校验和；标签流水线只创建 Draft。
 - 本地 macOS 试装：[DMG 构建、安装与清理指南](guides/local-macos-validation.md)。
 - Release CDN：[版本固定对象、Actions 变量、完整性与回滚要求](guides/release-cdn.md)。
+- 官方网站：[Cloudflare Pages 下载与安装入口](https://altforge-dz7.pages.dev)，源码位于 [`website/`](../website/README.md)，安装包继续由 GitHub Release 托管。
 - 已知重点：Unicode IPA 兼容、简体中文、本地构建可复现性、签名安装链路测试。
 
 ## 维护规则

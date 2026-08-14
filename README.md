@@ -19,6 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/legeling/AltForge/releases"><strong>Releases</strong></a> ·
+  <a href="https://altforge-dz7.pages.dev"><strong>Website</strong></a> ·
   <a href="#what-altforge-changes"><strong>Changes</strong></a> ·
   <a href="#build-from-source"><strong>Build</strong></a> ·
   <a href="docs/README.md"><strong>Documentation</strong></a> ·
@@ -26,6 +27,8 @@
 </p>
 
 AltForge is an independent derivative of [AltStore](https://github.com/altstoreio/AltStore). It preserves the proven AltStore/AltServer architecture while maintaining compatibility fixes and practical improvements for the Classic sideloading workflow.
+
+The official download and installation page is [altforge-dz7.pages.dev](https://altforge-dz7.pages.dev). Its macOS, Windows, and IPA downloads always resolve to this repository's latest published GitHub Release.
 
 > [!IMPORTANT]
 > AltForge is built as an **AltStore Classic** application. The `marketplace` branch name is historical; releases do not embed the Marketplace extension or entitlement.

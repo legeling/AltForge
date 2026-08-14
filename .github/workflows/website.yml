@@ -1,0 +1,63 @@
+name: Website
+
+on:
+  pull_request:
+    paths:
+      - "website/**"
+      - "design-system/altforge-website/**"
+      - "Scripts/test_website.rb"
+      - "Scripts/test_repository_contract.rb"
+      - ".github/workflows/website.yml"
+  push:
+    branches:
+      - marketplace
+    paths:
+      - "website/**"
+      - "design-system/altforge-website/**"
+      - "Scripts/test_website.rb"
+      - "Scripts/test_repository_contract.rb"
+      - ".github/workflows/website.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Validate website JavaScript
+        run: node --check website/app.js
+
+      - name: Validate website and repository contracts
+        run: |
+          ruby Scripts/test_website.rb
+          ruby Scripts/test_repository_contract.rb
+
+  deploy:
+    if: github.event_name == 'push' && vars.CLOUDFLARE_PAGES_DEPLOY_ENABLED == 'true'
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Deploy marketplace to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy website --project-name=altforge --branch=marketplace
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

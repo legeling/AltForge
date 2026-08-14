@@ -353,7 +353,7 @@ assert(altsign_application.include?('isKindOfClass:[NSNumber class]'), "untruste
 
 workflow = read(root, ".github/workflows/release.yml")
 workflow_names = Dir.children(File.join(root, ".github/workflows")).select { |name| name.end_with?(".yml", ".yaml") }.sort
-assert(workflow_names == ["release.yml"], "only the tag-driven release workflow may be enabled")
+assert(workflow_names == ["release.yml", "website.yml"], "only the release and bounded website workflows may be enabled")
 assert(workflow.include?("tags:\n      - \"v*\""), "release workflow must remain tag-only")
 assert(!workflow.match?(/^\s*pull_request:/), "release workflow must not run for pull requests")
 assert(!workflow.match?(/^\s*branches:/), "release workflow must not run for branch pushes")
@@ -365,6 +365,13 @@ assert(workflow.include?("--clobber"), "same-tag recovery must replace every rev
 assert(!workflow.include?("gh release delete"), "same-tag recovery must not delete the public release")
 assert(workflow.include?("vcpkg_baseline: ${{ steps.version.outputs.vcpkg_baseline }}"), "prepare must expose the manifest vcpkg baseline")
 assert(workflow.include?("ref: ${{ needs.prepare.outputs.vcpkg_baseline }}"), "Windows must check out the manifest vcpkg baseline")
+
+website_workflow = read(root, ".github/workflows/website.yml")
+assert(!website_workflow.include?("tags:"), "website workflow must never trigger a product Release")
+assert(website_workflow.include?("branches:\n      - marketplace"), "website workflow must follow the repository production branch")
+assert(website_workflow.include?("CLOUDFLARE_PAGES_DEPLOY_ENABLED == 'true'"), "website deployment must be explicitly enabled")
+assert(website_workflow.include?("pages deploy website --project-name=altforge --branch=marketplace"), "website workflow may deploy only the bounded static directory")
+assert(website_workflow.include?("secrets.CLOUDFLARE_API_TOKEN") && website_workflow.include?("secrets.CLOUDFLARE_ACCOUNT_ID"), "website deployment credentials must come from repository Secrets")
 
 windows_build = read(root, "AltServer-Windows/Scripts/build-release.ps1")
 assert(windows_build.include?("/DLOG_ERR=kDebugLevelError"), "Windows mDNSResponder build must define the missing LOG_ERR priority")
@@ -765,5 +772,8 @@ user_facing_files.each do |path|
     assert(!contents.include?(url), "#{path} still exposes upstream support URL #{url}")
   end
 end
+
+assert(File.file?(File.join(root, "website/index.html")), "the official static website entrypoint is missing")
+assert(File.file?(File.join(root, "Scripts/test_website.rb")), "the static website contract is missing")
 
 puts "repository release policy contract passed"

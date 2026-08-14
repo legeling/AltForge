@@ -243,6 +243,24 @@ AltForge Server 的设备安装 KVO progress 与 terminal success/failure 共用
 
 `effectiveTintColor` 是 source、app 和 news 的统一展示策略：官方 source ID、AltForge bundle ID 及其资讯强制返回动态 `altSourceTint`，避免 Core Data 缓存或旧 Release metadata 的红色继续污染已选择的蓝色、靛蓝或玫瑰主题；第三方 metadata tint 路径保持不变。可复用的 banner、news cell 与 source header 监听主题通知并只重配当前对象，App 详情重载可见内容；权限确认、补丁页、添加来源、通用详情背景和文本改用 UIKit 系统语义色，交互控件使用 `altPrimary`。红、绿、黄只用于删除/失败、成功/有效期和警告状态。一次主题变化只遍历系统有界的已加载 window 和可见 view/cell，时间为 `O(v)`、额外空间为 `O(1)`；不新增网络、磁盘 I/O 或后台进程。
 
+### `DES-025` 静态官网与 Release 单一数据源
+
+`website/` 是不依赖框架、包管理器和服务端运行时的静态交付面。`index.html` 保留完整的中英文下载、安装、安全边界和支持入口；`app.js` 只负责本地语言偏好、用户平台识别与从本仓库 latest Release API 读取当前版本。读取失败时显示不含版本号的“最新”并保持全部链接可用；DMG、ZIP 与 IPA 始终使用本仓库稳定的 `releases/latest/download/<artifact>`，网页不复制发布二进制、不代理 Apple 账号、不建立另一套版本或下载控制面。
+
+页面采用移动优先的语义 HTML/CSS，以系统字体、锻造红、青色辅色与仓库品牌图构建克制的下载工具界面。CSS 使用语义 token 同时定义浅色/深色、可见 focus、44px 交互区域和 reduced-motion；布局以 320/375/768/1024/1440px 为验证断点，固定格式图标使用显式尺寸和 aspect ratio。品牌图从 `docs/assets/brand/` 通过既有生成脚本复制，避免 website 产生不可追溯副本。
+
+Cloudflare Pages 只托管 `website/` 静态目录；`_headers` 限制脚本、连接、frame 与高风险浏览器权限。部署使用有界的 Wrangler Direct Upload，生产分支标记为 `marketplace`，不改动 GitHub tag-only Release workflow。请求成本为一个 HTML、一个 CSS、一个小型 JavaScript 和三张有界图片；版本请求仅一次、无轮询，时间与内存均为 `O(1)`。部署失败保留上一版本，回滚使用 Pages deployment history或重新部署已知提交的 `website/`。
+
+### `DES-026` 官网工业编辑视觉与仓库联动
+
+首屏改为单一全幅品牌图：`altforge-hero.jpg` 以规范 AltForge 标记为参考，使用石墨、白色陶瓷、锻造红与信号青材质，只在右侧保留一个可识别标记，左侧低细节区域承载标题、Release、平台下载与 GitHub 源码操作。页面不再加载玻璃/钛金属双图标舞台、悬浮版本卡或分栏预览；`design-system/altforge-website/MASTER.md` 记录视觉 token、资产来源和禁止模式。下方依次使用仓库归属信息带、平台下载列表、三步安装流程、深色能力带与 FAQ，页面区段不嵌套卡片，固定控件均有稳定尺寸。
+
+现有 Cloudflare `altforge` 是 Direct Upload 项目且不能原地切换为原生 Git integration，因此 `.github/workflows/website.yml` 使用官方 Wrangler Action 把仓库提交与原 Pages 项目连接。PR 和 `marketplace` push 总是运行 HTML/CSS/JS/仓库契约；生产 deploy job 额外要求仓库变量 `CLOUDFLARE_PAGES_DEPLOY_ENABLED=true` 与 `CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_API_TOKEN` Secrets，缺失时跳过而不尝试宽权限本地 OAuth 凭据。工作流只上传固定 `website/` 目录，10 分钟超时、同 ref 有界并发；回滚仍可重新部署已知提交或使用 Pages deployment history。
+
+首屏图片约 1774 × 887，JPEG 控制在 2.5 MB 内；页面加载量保持固定，版本 API 使用 8 秒超时、单次请求且不重试，总体时间/空间与网络扇出为 `O(1)`。系统字体避免第三方字体请求，CSP 不新增 host。
+
+动效只承担层级与操作反馈：hero 图片和标题在首次载入时完成一次有界入场，仓库信息顺序出现，后续标题、平台行、流程、能力与 FAQ 使用 `IntersectionObserver` 在首次进入可见区时增加小幅透明度/位移过渡并立即取消观察；按钮图标、FAQ 指示与平台标记只在 hover/open 时反馈。不读取鼠标坐标、不持续监听滚动、不改变布局尺寸。未运行 JavaScript 时内容保持完整可读，系统 reduced-motion 下所有 animation/transition 近似即时完成。观察节点数随页面组件线性增长，时间与额外空间为 `O(n)`，当前固定页面规模有界。
+
 ## 可选目标与边界
 
 | Target | 责任 | 核心安装依赖 |

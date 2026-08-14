@@ -19,6 +19,7 @@
 | [`CHG-20260810-005`](active/CHG-20260810-005-ios-app-group-migration-fallback/README.md) | iOS App Group 迁移降级修复 | In progress |
 | [`CHG-20260811-004`](active/CHG-20260811-004-ios-install-crash-diagnostics-authentication/README.md) | iOS 安装中断崩溃、恢复日志与认证说明 | In progress / device E2E pending |
 | [`CHG-20260811-006`](active/CHG-20260811-006-ios-theme-color-selection/README.md) | iOS 主题色选择与默认品牌色 | Release build passed / visual matrix pending |
+| [`CHG-20260814-001`](active/CHG-20260814-001-website-visual-repository-link/README.md) | 重构官网视觉并关联代码仓库 | In progress / verification and Git delivery pending |
 
 ## Completed
 
@@ -39,6 +40,7 @@
 | [`CHG-20260811-002`](completed/2026/08/CHG-20260811-002-ios-brand-settings-polish/README.md) | 收敛 iOS 品牌、配色与设置身份 | 2026-08-11 |
 | [`CHG-20260811-003`](completed/2026/08/CHG-20260811-003-ios-public-identity-crash-name/README.md) | 修复 iOS 系统崩溃报告与公开品牌残留 | 2026-08-11 |
 | [`CHG-20260811-005`](completed/2026/08/CHG-20260811-005-macos-dmg-finder-layout/README.md) | 收敛 macOS DMG Finder 布局 | 2026-08-11 |
+| [`CHG-20260813-001`](completed/2026/08/CHG-20260813-001-static-download-website/README.md) | 建立 AltForge 静态下载官网 | 2026-08-13 |
 
 ## 记录要求
 

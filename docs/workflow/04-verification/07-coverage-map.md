@@ -30,6 +30,8 @@
 | iOS public identity | `FR-035` | `DES-021` | `TEST-034` | Repository contract、iOS build/build-for-testing 和产物检查覆盖 bundle/executable/test host、Universal Mach-O 与公开资源 allowlist；系统 crash-report 标题待真机手工确认 | `T-023` |
 | iOS install crash, diagnostics and authentication | `FR-036` | `DES-022` | `TEST-035` | build 15 定位 ldid 未映射 CPU type 的空架构名称崩溃，最符合 Watch arm64_32；真实最小 watchOS Mach-O 签名、未知 CPU 安全失败、repository contract 与完整 iOS Release build 通过；同一第三方 IPA E2E 待验证 | `T-024` |
 | iOS theme colors | `FR-037` | `DES-023` | `TEST-036` | Forge Red default、four-value preference/fallback、localized swatch picker、Launch child 即时刷新路径、official source/app/news/detail effective tint、raw metadata bypass guard、permission/add-source semantic colors and release metadata are covered by XCTest/static contracts, resource parsing and a full Debug iOS Simulator build; light/dark real-device matrix pending | `T-025` |
+| Static download website | `FR-039` | `DES-025` | `TEST-038` | Static contracts, browser matrix, platform routing, Release fallback, production security headers and Cloudflare Pages live readback pass | `T-038` |
+| Website visual and repository delivery | `FR-040` | `DES-026` | `TEST-039` | Static contracts, production deployment `92c5fb54`, and the local 320-1918px bilingual light/dark Playwright matrix cover the single hero, bounded motion/reduced-motion, repository provenance, SVG fallback, platform routing, production hashes/headers/downloads and GitHub homepage; hosted workflow and Git delivery pending | `T-039` |
 
 ## 风险排序
 

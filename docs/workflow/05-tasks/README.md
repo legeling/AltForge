@@ -33,6 +33,8 @@
 | `T-023` 修复 iOS 公开身份和 crash-report 名称 | Done with system UI gap | `FR-035`; `DES-021`; `TEST-034` | bundle/executable/test host、公开资源 allowlist、iOS build/build-for-testing 与产物 Mach-O 检查通过；系统 crash-report 标题待真机手工确认 |
 | `T-024` 修复 iOS 安装中断崩溃、恢复日志与认证说明 | In progress / device UX validation | `FR-036`; `DES-022`; `TEST-035` | build 18 已包含串行终态响应；当前新增持续阶段/总百分比状态带，扩展数量/名称检查，以及“剔除（推荐）/保留并签名”和免费账号限额提示；自动门禁与真机双分支回归待完成 |
 | `T-025` 增加 iOS 主题色选择 | In progress / visual matrix pending | `FR-037`; `DES-023`; `TEST-036` | 默认锻造红、四主题持久化、设置色板、Launch child 即时刷新路径、官方 source/app/news/detail 统一 effective tint、权限/来源页语义色及 raw metadata 绕过门禁已实现；Debug iOS Simulator build 通过，四主题深浅色真机矩阵待完成 |
+| `T-038` 建立官网与 Cloudflare Pages 下载入口 | Done | `FR-039`; `DES-025`; `TEST-038` | 同仓库双语静态页面、平台识别、Release latest 下载、版本 metadata fallback、安全响应头与品牌资产生成完成；桌面/移动、深浅色浏览器矩阵与 `https://altforge-dz7.pages.dev` 生产回读通过 |
+| `T-039` 重构官网视觉并关联代码仓库 | In progress / Git delivery and hosted deploy pending | `FR-040`; `DES-026`; `TEST-039` | 单一全幅工业品牌图、仓库归属带、下载/流程/能力/FAQ 层级、克制动效和 fail-closed workflow 已实现；production `92c5fb54`、线上 hash/headers/downloads、GitHub homepage 与 320-1918px 动效/reduced-motion 浏览器矩阵通过。Hosted workflow、提交推送与 Pages Secrets 启用待完成 |
 
 ## Analyze 门禁结果
 

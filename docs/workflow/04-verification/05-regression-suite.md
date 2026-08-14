@@ -128,6 +128,17 @@ iOS 主题色变化执行 `TEST-036`：先运行偏好 round-trip XCTest、repos
 - 使用 Apple 官网版 iTunes/iCloud 做 `TEST-019`；不得把 Apple 安装包或敏感数据加入 artifact。
 - macOS/Linux 上的 XML/YAML/parser 检查不等同于 MSBuild 通过。
 
+## Suite I：静态官网
+
+触发：`website/`、官网设计系统/品牌图、下载 URL、Release metadata、GitHub Actions workflow、仓库 homepage 或 Cloudflare Pages 配置变化。
+
+- 运行 `ruby Scripts/test_website.rb`，检查 HTML 可解析、英中 key 完整、平台下载使用本仓库 `releases/latest`、无第三方下载/分析 host、单一 hero 与资产来源、仓库归属入口、workflow fail-closed，以及 CSP、focus、dark mode、reduced-motion 与 44px target 契约。
+- 启动任务专属静态服务器；以真实浏览器检查 320、375、768、1024、1440px，并分别覆盖浅色、深色、English、简体中文。检查首屏只有一个主导 AltForge 标记且露出下一段，标题/版本/下载/源码无遮挡；继续检查平台列表、安装步骤、FAQ 与 footer，无横向滚动、文字截断、重叠或不可操作控件。
+- 模拟 latest Release API 不可访问，确认通用“最新”和全部下载链接仍可用；模拟 macOS、Windows 与其他平台，确认首要 CTA 分别为 DMG、ZIP 与 latest Release，且对应平台只显示一个推荐状态。
+- 部署后检查 Pages production URL 返回 200、安全响应头生效、latest Release API 当前版本可显示，三个下载 URL 仍由 GitHub Release 响应；确认线上 HTML/CSS/JS/hero 与本地预期一致，不得把 IPA/DMG/ZIP 上传到 Pages。
+- 检查 GitHub repository homepage 指向生产官网；workflow 必须在未设置启用变量时只验证不部署，启用后只从 `marketplace` 上传 `website/`，凭据只来自 repository Secrets。
+- 验证后停止本次静态服务器和浏览器，清理任务截图与临时缓存；只有用户要求试用时保留单个服务器并报告端口。
+
 ## 命令登记规则
 
 - tag-driven Release workflow 是自动构建命令的真相来源，本文件解释本地预检和触发条件。

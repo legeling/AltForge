@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#0a0b0c">
+    <meta name="description" content="AltForge is a maintained AltStore Classic derivative for installing, refreshing, and managing sideloaded apps.">
+    <meta property="og:title" content="AltForge">
+    <meta property="og:description" content="AltStore Classic, maintained for Unicode apps, international users, and modern Apple platforms.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/altforge-hero.jpg">
+    <title>AltForge · Classic sideloading, thoughtfully maintained</title>
+    <link rel="icon" href="assets/altforge-icon.png">
+    <link rel="preload" href="assets/altforge-hero.jpg" as="image" fetchpriority="high">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="skip">跳到主要内容</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#top" aria-label="AltForge home">
+          <img src="assets/altforge-icon.png" width="34" height="34" alt="">
+          <span>AltForge</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="#download" data-i18n="navDownload">下载</a>
+          <a href="#workflow" data-i18n="navWorkflow">流程</a>
+          <a href="#faq" data-i18n="navHelp">帮助</a>
+        </nav>
+        <div class="header-actions">
+          <a class="source-link" href="https://github.com/legeling/AltForge" rel="noreferrer">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.87c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.82a9.6 9.6 0 0 1 2.5.34c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.86v2.76c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+            <span>GitHub</span>
+          </a>
+          <button class="language-switch" type="button" aria-label="Switch to English" data-language-switch>EN</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <img class="hero-background" src="assets/altforge-hero.jpg" width="1774" height="887" alt="" fetchpriority="high">
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-inner">
+          <p class="hero-kicker">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span data-i18n="heroKicker">开源维护中的 AltStore Classic</span>
+          </p>
+          <h1 id="hero-title">AltForge</h1>
+          <p class="hero-lede" data-i18n="heroLede">更可靠的经典侧载工具，为中文、Unicode 应用与现代 Apple 平台持续维护。</p>
+          <div class="release-meta" aria-live="polite">
+            <a href="https://github.com/legeling/AltForge/releases/latest">
+              <span>Release</span>
+              <strong data-release-version data-i18n="latestFallback">最新</strong>
+            </a>
+            <span class="meta-divider" aria-hidden="true"></span>
+            <span data-i18n="iosRequirement">支持 iOS 17.4+</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button button-primary" data-primary-download href="https://github.com/legeling/AltForge/releases/latest">
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"/></svg>
+              <span data-primary-label data-i18n="downloadRelease">下载最新版本</span>
+            </a>
+            <a class="button button-hero-secondary" href="https://github.com/legeling/AltForge">
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.87c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.82a9.6 9.6 0 0 1 2.5.34c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.86v2.76c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+              <span data-i18n="viewSource">查看源代码</span>
+            </a>
+          </div>
+          <p class="download-note" data-primary-note data-i18n="downloadNote">自动为你的电脑选择安装服务，也可以在下方手动选择平台。</p>
+        </div>
+        <a class="hero-next" href="#repository" aria-label="Continue to repository information">
+          <span data-i18n="heroNext">版本与源码</span>
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+      </section>
+
+      <section class="repository-band" id="repository" aria-label="Repository provenance">
+        <div class="repository-inner">
+          <div class="repository-name">
+            <span data-i18n="repositoryLabel">官方仓库</span>
+            <strong>legeling / AltForge</strong>
+          </div>
+          <a href="https://github.com/legeling/AltForge">
+            <small data-i18n="repositoryCode">源代码</small>
+            <strong data-i18n="repositoryCodeNote">公开、可审计</strong>
+          </a>
+          <a href="https://github.com/legeling/AltForge/releases/latest">
+            <small data-i18n="latestRelease">最新发布</small>
+            <strong data-release-version data-i18n="latestFallback">最新</strong>
+          </a>
+          <a href="https://github.com/legeling/AltForge/releases/latest/download/SHA256SUMS.txt">
+            <small data-i18n="integrity">完整性</small>
+            <strong>SHA-256</strong>
+          </a>
+          <a href="https://github.com/legeling/AltForge/blob/marketplace/LICENSE">
+            <small data-i18n="license">许可证</small>
+            <strong>AGPL-3.0</strong>
+          </a>
+        </div>
+      </section>
+
+      <section class="section download-section" id="download">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow" data-i18n="downloadEyebrow">桌面端安装服务</p>
+            <h2 data-i18n="downloadTitle">选择你的电脑</h2>
+          </div>
+          <p data-i18n="downloadIntro">AltForge 需要电脑端 Server 完成认证、签名和设备安装。所有文件均直接来自本仓库最新 Release。</p>
+        </div>
+
+        <div class="platform-list">
+          <article class="platform-row" data-platform="mac">
+            <div class="platform-mark" aria-hidden="true">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24"><path d="M16.9 13.4c0-2.5 2.1-3.7 2.2-3.8a4.8 4.8 0 0 0-3.8-2c-1.6-.2-3.1.9-3.9.9-.8 0-2-1-3.4-1-1.7 0-3.4 1-4.3 2.6-1.8 3.1-.5 7.8 1.3 10.3.9 1.2 1.9 2.6 3.3 2.5 1.3-.1 1.8-.8 3.4-.8 1.6 0 2 .8 3.4.8s2.4-1.3 3.2-2.5c1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1.1-2.8-4.1ZM14.2 5.9c.7-.9 1.2-2.1 1.1-3.3-1.1 0-2.4.7-3.2 1.6-.7.8-1.3 2-1.2 3.2 1.2.1 2.5-.6 3.3-1.5Z"/></svg>
+            </div>
+            <div class="platform-copy">
+              <div class="platform-title">
+                <p>macOS 11+</p>
+                <h3>AltForge Server</h3>
+                <span class="recommended" data-recommended data-i18n="recommended">推荐</span>
+              </div>
+              <p data-i18n="macDescription">适用于 Apple 芯片和 Intel Mac 的通用 DMG。</p>
+              <small data-i18n="macWarning">当前为 ad-hoc 签名，尚未经过 Apple 公证。</small>
+            </div>
+            <a class="download-command" href="https://github.com/legeling/AltForge/releases/latest/download/AltForge-AltServer-macOS.dmg" data-download-kind="mac">
+              <span data-i18n="downloadDmg">下载 DMG</span>
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
+            </a>
+          </article>
+
+          <article class="platform-row" data-platform="windows">
+            <div class="platform-mark" aria-hidden="true">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24"><path d="M3 5.3 10.5 4v7.2H3V5.3Zm8.5-1.5L21 2.3v8.9h-9.5V3.8ZM3 12.2h7.5V20L3 18.7v-6.5Zm8.5 0H21v9.5l-9.5-1.5v-8Z"/></svg>
+            </div>
+            <div class="platform-copy">
+              <div class="platform-title">
+                <p>Windows 10+</p>
+                <h3>AltForge Server</h3>
+                <span class="recommended" data-recommended data-i18n="recommended">推荐</span>
+              </div>
+              <p data-i18n="windowsDescription">便携式 Win32 版本，包含运行所需的 DLL。</p>
+              <small data-i18n="windowsWarning">当前未代码签名，需使用 Apple 官网版 iTunes 与 iCloud。</small>
+            </div>
+            <a class="download-command" href="https://github.com/legeling/AltForge/releases/latest/download/AltForge-AltServer-Windows.zip" data-download-kind="windows">
+              <span data-i18n="downloadZip">下载 ZIP</span>
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
+            </a>
+          </article>
+        </div>
+
+        <div class="advanced-download">
+          <div>
+            <p class="eyebrow" data-i18n="advancedDownload">高级下载</p>
+            <h3>AltForge.ipa</h3>
+            <p data-i18n="ipaNote">未签名的 Classic 安装包，供 AltForge Server 或其他兼容签名工具使用，不能在 iPhone 上直接打开安装。</p>
+          </div>
+          <a class="button button-secondary" href="https://github.com/legeling/AltForge/releases/latest/download/AltForge.ipa">
+            <span data-i18n="downloadIpa">下载 IPA</span>
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="workflow-section" id="workflow">
+        <div class="section workflow-inner">
+          <div class="section-heading split-heading">
+            <div>
+              <p class="eyebrow" data-i18n="workflowEyebrow">经典侧载流程</p>
+              <h2 data-i18n="workflowTitle">三步完成安装</h2>
+            </div>
+            <p data-i18n="workflowIntro">Server 在你的电脑上连接 Apple 开发者服务，并针对所选设备完成签名。AltForge 不代理账号，也不收集凭据。</p>
+          </div>
+          <ol class="steps">
+            <li><span>01</span><div><h3 data-i18n="stepOneTitle">安装并打开 Server</h3><p data-i18n="stepOneBody">macOS 将 App 拖入“应用程序”；Windows 解压完整 ZIP 后运行。</p></div></li>
+            <li><span>02</span><div><h3 data-i18n="stepTwoTitle">连接并信任设备</h3><p data-i18n="stepTwoBody">使用 USB，或确保电脑与设备在同一 Wi-Fi，并在设备上选择信任。</p></div></li>
+            <li><span>03</span><div><h3 data-i18n="stepThreeTitle">安装 AltForge</h3><p data-i18n="stepThreeBody">从菜单选择设备并登录 Apple ID，Server 会下载官方 IPA、签名并安装。</p></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="features-section" id="features">
+        <div class="section features-inner">
+          <div class="feature-intro">
+            <p class="eyebrow" data-i18n="featuresEyebrow">为什么选择 AltForge</p>
+            <h2 data-i18n="featuresTitle">维护真实问题，不重造侧载流程</h2>
+          </div>
+          <div class="feature-grid">
+            <article><span>01</span><h3 data-i18n="featureUnicodeTitle">Unicode 兼容</h3><p data-i18n="featureUnicodeBody">保留中文显示名与资源路径，ZIP 路径在使用前经过安全校验。</p></article>
+            <article><span>02</span><h3 data-i18n="featureLanguageTitle">原生双语</h3><p data-i18n="featureLanguageBody">iOS 应用与 macOS Server 支持 English 和简体中文。</p></article>
+            <article><span>03</span><h3 data-i18n="featureProgressTitle">安装过程可见</h3><p data-i18n="featureProgressBody">清晰显示下载、认证、签名和设备安装阶段，并保留脱敏诊断。</p></article>
+            <article><span>04</span><h3 data-i18n="featureOpenTitle">开源可追溯</h3><p data-i18n="featureOpenBody">源码、Release、校验和、版本历史与已知限制都在同一仓库。</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow" data-i18n="faqEyebrow">安装前须知</p>
+            <h2 data-i18n="faqTitle">常见问题</h2>
+          </div>
+          <p data-i18n="faqIntro">签名、账号与系统安全提示都有明确边界。遇到问题时，请优先核对 Release 与脱敏诊断。</p>
+        </div>
+        <div class="faq-list">
+          <details><summary data-i18n="faqDirectQuestion">可以直接在 iPhone 上安装 IPA 吗？</summary><p data-i18n="faqDirectAnswer">不可以。IPA 需要针对你的 Apple ID、开发团队和设备重新签名，因此必须使用电脑端 AltForge Server 或其他兼容签名工具。</p></details>
+          <details><summary data-i18n="faqSafetyQuestion">为什么系统会提示无法验证开发者？</summary><p data-i18n="faqSafetyAnswer">当前 macOS DMG 未使用 Developer ID 签名和 Apple 公证，Windows ZIP 也未代码签名。请只从本仓库 Release 下载，并在需要时核对 SHA-256。</p></details>
+          <details><summary data-i18n="faqAppleIdQuestion">Apple ID 会上传到 AltForge 吗？</summary><p data-i18n="faqAppleIdAnswer">AltForge Server 使用 Apple ID 与 Apple 开发者服务完成签名。仓库不会收集账号；保存密码是可选的，并仅存入本机钥匙串。</p></details>
+          <details><summary data-i18n="faqRefreshQuestion">免费账号为什么需要每 7 天刷新？</summary><p data-i18n="faqRefreshAnswer">免费开发团队签发的 App 通常只有 7 天有效期。保持设备与 AltForge Server 在同一网络，可在到期前刷新。</p></details>
+        </div>
+        <div class="support-links">
+          <a href="https://github.com/legeling/AltForge/releases"><span><strong data-i18n="allReleases">全部版本</strong><small data-i18n="allReleasesNote">发布说明与校验和</small></span><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="https://github.com/legeling/AltForge/blob/marketplace/README.zh-CN.md" data-doc-link><span><strong data-i18n="documentation">使用文档</strong><small data-i18n="documentationNote">完整说明与构建指南</small></span><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="https://github.com/legeling/AltForge/issues/new/choose"><span><strong data-i18n="reportIssue">报告问题</strong><small data-i18n="reportIssueNote">附上脱敏诊断报告</small></span><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="assets/altforge-icon.png" width="36" height="36" alt="">
+          <div><strong>AltForge</strong><p data-i18n="footerDescription">由 AltForge Contributors 维护，基于 AltStore 团队的开源工作。</p></div>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/legeling/AltForge">GitHub</a>
+          <a href="https://github.com/legeling/AltForge/blob/marketplace/LICENSE" data-i18n="license">许可证</a>
+          <a href="https://github.com/altstoreio/AltStore" data-i18n="upstream">上游项目</a>
+        </div>
+        <p class="license-line">AGPL-3.0 · <span data-i18n="independent">独立的 AltStore 衍生项目</span></p>
+      </div>
+    </footer>
+
+    <noscript><p class="noscript" data-i18n="noscript">JavaScript 仅用于语言、平台识别和版本显示；所有下载链接仍然可以直接使用。</p></noscript>
+  </body>
+</html>

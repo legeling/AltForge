@@ -66,6 +66,8 @@
 - `FR-032` iOS 客户端只有在系统实际提供 App Group container 时才能迁移数据库与已缓存 Apps；重签后只有 App Group 元数据但无 container 时必须继续使用应用沙盒，禁止删除、替换或移动同一路径，并允许未来取得 container 后重新尝试迁移。
 - `FR-036` iOS 设置页、认证页和“我的 App”之间切换不得因展示层动态配色退出，浅色与深色模式都不得用固定前景色造成正文不可读；第三方 IPA 安装全程必须在“我的 App”持续显示 App 名称、总百分比、当前阶段和有界详情，阶段覆盖读取/下载、解包、检查扩展、查找 Server、认证、准备描述文件、签名、发送和设备安装。检测到 App Extensions 后必须列出数量和部分名称，由用户明确选择“剔除扩展（推荐）”或“保留并签名扩展”；说明剔除通常不影响主要功能但可能失去小组件、分享、通知等扩展功能，保留会逐个签名并可能因免费账号的活跃 App/每周 App ID 限额失败，不得静默剔除或保留。畸形可选 plist 字段或 operation 无结果结束必须返回普通错误，不得触发异常或 precondition。签名器必须支持 iOS App 内常见的 Apple Watch `arm64_32` Mach-O，并把其他未知 CPU type、空 entitlement 或不可表示的路径转成可记录错误，禁止原生空指针崩溃；Classic 不支持安装 Apple Watch companion 时，必须在 iPhone 重签前移除 `Watch/` 组件而不是继续用主 App entitlement 签名。AltForge Server 必须串行发送设备安装进度和唯一终态响应，设备完成后客户端必须结束进度、保存 `InstalledApp`，重启后“我的 App”仍可见；不得用超时把未知结果猜成成功。安装、更新和刷新失败或前台异常退出后，错误日志必须保留有界的客户端诊断编号、失败阶段、相对耗时轨迹及最新签名或安装进度，并允许一次复制诊断报告。记录可以包含操作类型、App 名称与 bundle ID、预定义 UI checkpoint、USB/Wi-Fi/本机连接类别、账号团队类别、错误域/代码、安装百分比，以及最多四段且不超过 120 字符的 bundle 相对签名路径和 CPU 架构；不得包含 Apple ID、密码、验证码、UDID、团队 ID、Server 名称/ID、证书、profile 内容或本地/远程绝对路径。Apple developer team 必须沿用账号返回结果自动选择，并在设置中显示实际团队名称与账号类型；认证和工作原理说明必须准确覆盖 USB/Wi-Fi、签名、安装、七天有效期与刷新条件。
 - `FR-037` iOS 客户端必须在设置中提供带色板和选中状态的主题色选择，偏好重启后保持并在非法值时回退默认色；默认使用与 AltForge 图标一致的锻造红，页面背景、正文、分隔线与表单继续使用系统语义色。主题变化必须立即更新导航、标签栏、徽标、官方 AltForge source/app/news 卡片、详情页和权限确认页，不得让 Release metadata 中的旧色值绕过当前主题，也不得覆盖第三方 source/app 自有 tint。红、绿、黄只保留给删除、失败、成功、到期和警告等明确状态，不得充当普通页面装饰色。
+- `FR-039` AltForge 必须提供同仓库维护的中英双语静态官网，首屏直接展示当前版本、平台安装服务和安装步骤。macOS DMG、Windows ZIP、unsigned IPA、Release、文档与 Issue 入口必须指向 `legeling/AltForge`，安装包使用 `releases/latest/download/<artifact>`，版本展示从本仓库正式 Release API 读取并在不可用时回退为无版本号的“最新”，不在网页维护第二套可漂移的版本配置。页面必须支持系统深浅色、键盘焦点、减弱动态效果和 320px 以上无横向滚动；必须披露 unsigned/ad-hoc/notarization、Apple ID 与七天刷新边界，不加入账号收集、分析脚本或 Release 二进制副本。
+- `FR-040` 官网首屏必须用单一、可识别的 AltForge 品牌视觉建立产品身份，不得重复堆叠超大应用图标、悬浮版本卡或装饰性面板。首屏必须在不滚动时同时提供产品定位、当前 Release、平台自适应下载和源码入口，并露出下一段仓库信息；下载、源码、Release、校验和与许可证必须形成清晰的仓库归属链。官网源码、设计系统、自动化验证和部署工作流必须随 `marketplace` 分支维护；现有 Cloudflare Direct Upload 项目通过 GitHub Actions + Wrangler 关联仓库，凭据只允许使用 GitHub Secrets，且在显式启用变量缺失时必须 fail closed。
 
 ## 非功能需求
 
@@ -105,6 +107,8 @@
 - `AC-024` iOS 四个主标签使用系统图标；官方来源和自身应用卡片使用当前 AltForge 主题的克制来源色；设置主页及全部子页面在深浅色模式使用系统分组背景、语义文字/分隔线/选中态。应用图标页展示标准、珊瑚、冰霜、纸白、霓虹、蓝图、钛金属、光学玻璃和陶瓷珐琅九款图标，切换时目标行立即显示进度且列表、滚动和返回保持可用，完成后旧/新两行勾选正确；简体中文统一显示“侧载”。页面显示构建版本、AltForge Contributors、上游原始开发者和原始设计，所有项目入口指向 `legeling/AltForge`。覆盖 `FR-034`。
 - `AC-025` iOS 构建产物的 `CFBundleDisplayName`、`CFBundleName`、`CFBundleExecutable` 和实际 Mach-O 文件均为 AltForge；AltTests 能加载该 executable。公开 storyboard/XIB/string catalog 不再显示当前产品为 AltStore 或 AltServer，同时仍准确保留 AltStore PAL、AltStore 2.0、第三方 source、上游致谢和旧证书兼容文本。覆盖 `FR-035`。
 - `AC-026` 新安装默认显示锻造红；用户在设置中切换四种主题后，色板勾选、导航、标签栏、徽标、官方来源/应用/资讯卡片、应用详情与权限确认立即更新，第三方 tint 不变，重启后仍保持选择；非法偏好回退锻造红，浅色与深色背景、文字、输入框和按钮继续使用系统语义色或当前主题。非状态型界面不出现独立红、绿、黄。覆盖 `FR-037`。
+- `AC-028` 官网在 320、375、768、1024 和 1440px 视口以及系统浅色/深色下无横向滚动、遮挡或不可读文本；语言选择重载后保持，macOS/Windows 用户的首要按钮分别使用本仓库 latest DMG/ZIP，其他平台进入 latest Release。JavaScript 或 Release API 不可用时，页面仍显示“最新”且直接下载链接可用。仓库 contract 能拒绝固定版本下载 URL、第三方分析/下载 host、缺少 CSP/焦点/reduced-motion 或未受生成脚本管理的品牌图。覆盖 `FR-039`。
+- `AC-029` 官网在 320、375、768、1024 与 1440px 的首屏只出现一个主导 AltForge 标记，标题、定位、Release、下载与源码操作无遮挡，下一段仓库归属信息可见；不再引用玻璃/钛金属双图标舞台。页面展示的仓库、Release、SHA-256 与 AGPL 入口均指向 `legeling/AltForge`。网站 workflow 在 PR/`marketplace` push 上运行静态门禁，只有 `CLOUDFLARE_PAGES_DEPLOY_ENABLED=true` 且两个 Cloudflare Secrets 存在时才部署 `website/` 到 `altforge`。覆盖 `FR-040`。
 
 ## 范围外
 
@@ -141,3 +145,5 @@
 | `FR-034` | `DES-020` | `TEST-033` | `T-022` |
 | `FR-035` | `DES-021` | `TEST-034` | `T-023` |
 | `FR-037` | `DES-023` | `TEST-036` | `T-025` |
+| `FR-039` | `DES-025` | `TEST-038` | `T-038` |
+| `FR-040` | `DES-026` | `TEST-039` | `T-039` |

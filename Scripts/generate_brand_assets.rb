@@ -109,6 +109,8 @@ resize_png(TEMPLATE_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/SmallIcon.i
 resize_png(APP_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/AltForge.imageset/AltForge@2x.png"), 120)
 resize_png(APP_ICON, File.join(ROOT, "AltWidget/Assets.xcassets/AltForge.imageset/AltForge@3x.png"), 180)
 
+resize_png(APP_ICON, File.join(ROOT, "website/assets/altforge-icon.png"), 512)
+
 write_ico(APP_ICON, File.join(ROOT, "AltServer-Windows/Resources/Icon.ico"), [16, 32, 48, 256])
 write_ico(APP_ICON, File.join(ROOT, "AltServer-Windows/AltServer/MenuBarIcon.ico"), [16, 19, 24, 32, 48])
 
