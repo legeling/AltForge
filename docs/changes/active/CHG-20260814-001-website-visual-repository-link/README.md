@@ -1,6 +1,6 @@
 # CHG-20260814-001：重构官网视觉并关联代码仓库
 
-- 状态：In progress / Git delivery pending
+- 状态：In progress / hosted deploy secrets pending
 - 日期：2026-08-14
 - 类型：Feature / Design / Distribution
 
@@ -43,9 +43,10 @@
 - 本地 Playwright 已覆盖 320/375/768/1024/1440/1918px、English/简体中文、浅色/深色与 reduced motion；所有尺寸均无横向溢出或可见元素越界，语言选择刷新后保持，FAQ 可展开，Windows 与 macOS 主下载路由正确。
 - 动效验证覆盖 hero/header 入场、23 个有界 reveal 节点、节点进入后解除观察、按钮图标反馈与 FAQ answer 入场；reduced-motion 下不启用 reveal observer，animation/transition 均缩短为 `0.01ms`。
 - CSS 请求被主动阻断时，12 个内联 SVG 仍保持 20-28px 的显式尺寸；不会再次出现无样式页面中的巨型 GitHub 图标。
+- `marketplace` 已推送 `2063c3fd` 与 CI 修复 `e5a7f7f8`；Website Actions run `31790637050` 的 JavaScript 与两项 repository contract hosted verify 通过，deploy job 因启用变量未设置而按设计跳过。
 
 ## 残余风险
 
 - Cloudflare `altforge` 是 Direct Upload 项目，不能原地转换为原生 Git integration；自动部署依赖 GitHub Actions 与最小权限 Pages token。
 - 当前仓库尚无 `CLOUDFLARE_API_TOKEN` 与 `CLOUDFLARE_ACCOUNT_ID` Secrets，workflow 的生产 deploy 按设计保持禁用。
-- 未经明确 Git 授权不提交或推送，因此远端仓库在交付前仍看不到本轮源码与 workflow。
+- Direct Upload 已完成当前生产交付；未来 push 自动部署仍需配置最小权限 Secrets 和显式启用变量。
