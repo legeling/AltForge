@@ -83,6 +83,7 @@ workflow_path = File.join(root, ".github/workflows/website.yml")
 assert(File.file?(workflow_path), "repository-linked website workflow is missing")
 workflow = File.read(workflow_path)
 assert(workflow.include?("branches:\n      - marketplace"), "website workflow must target marketplace")
+assert(workflow.include?("submodules: recursive"), "website verification must check out repository contract dependencies")
 assert(workflow.include?("pages deploy website --project-name=altforge --branch=marketplace"), "website workflow must deploy the repository website directory")
 assert(workflow.include?("CLOUDFLARE_PAGES_DEPLOY_ENABLED") && workflow.include?("CLOUDFLARE_API_TOKEN"), "website deployment must stay fail-closed behind repository configuration")
 
