@@ -34,6 +34,7 @@
 | Website visual and repository delivery | `FR-040` | `DES-026` | `TEST-039` | Static contracts, production deployment `92c5fb54`, local 320-1918px bilingual light/dark Playwright, Git delivery, and hosted verify run `31790637050` cover the single hero, bounded motion/reduced-motion, repository provenance, SVG fallback, platform routing, production hashes/headers/downloads and GitHub homepage; hosted deploy secrets remain pending | `T-039` |
 | Apple authentication response compatibility | `FR-041` | `DES-027` | `TEST-040` | Source/static contract, local/hosted tests, Apple/Windows builds and published `v2.4.2 (20)` artifacts cover the shared Xcode 27 beta 6 product/bundle identity, runtime CFNetwork/Darwin User-Agent, rejection of Xcode 11 constants and safe malformed-response mapping; checksums and latest endpoints pass, while real Apple account/2FA/team/certificate and install validation remain pending | `T-040` |
 | User-facing error copy | `FR-042` | `DES-028` | `TEST-041` | Shared presentation, provider relocalization, known-code fixtures, zh-Hans scan, local/hosted focused tests and Apple/Windows builds pass and ship in `v2.4.2`; real Chinese UI and Windows device validation remain pending | `T-041` |
+| macOS direct update download | `FR-043` | `DES-029` | `TEST-042` | Source/static contract, Release macOS build and full live `v2.4.2` DMG size/SHA-256 probe pass; update-available progress/cancel/collision/failure/automatic DMG-open UI still needs a local older-version build | `T-042` |
 
 ## 风险排序
 

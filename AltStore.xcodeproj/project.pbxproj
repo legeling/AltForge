@@ -13,6 +13,7 @@
 		A18F00010000000000000004 /* AppleIDVerificationWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */; };
 		A18F00010000000000000005 /* InstallationProgressWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000014 /* InstallationProgressWindowController.swift */; };
 		A18F00010000000000000006 /* AboutWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000015 /* AboutWindowController.swift */; };
+		A18F00010000000000000007 /* ServerUpdateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F00010000000000000016 /* ServerUpdateController.swift */; };
 		A17F00000000000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000011 /* Localizable.xcstrings */; };
 		A17F00000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000012 /* Localizable.xcstrings */; };
 		A17F00000000000000000003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A17F00000000000000000013 /* Localizable.xcstrings */; };
@@ -721,6 +722,7 @@
 		A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIDVerificationWindowController.swift; sourceTree = "<group>"; };
 			A18F00010000000000000014 /* InstallationProgressWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationProgressWindowController.swift; sourceTree = "<group>"; };
 			A18F00010000000000000015 /* AboutWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindowController.swift; sourceTree = "<group>"; };
+		A18F00010000000000000016 /* ServerUpdateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerUpdateController.swift; sourceTree = "<group>"; };
 		A17F00000000000000000011 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 		A17F00000000000000000013 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Resources/Localizable.xcstrings; sourceTree = "<group>"; };
@@ -1486,6 +1488,7 @@
 				A18F00010000000000000013 /* AppleIDVerificationWindowController.swift */,
 				A18F00010000000000000014 /* InstallationProgressWindowController.swift */,
 				A18F00010000000000000015 /* AboutWindowController.swift */,
+				A18F00010000000000000016 /* ServerUpdateController.swift */,
 				BF458695229872EA00BD7491 /* Main.storyboard */,
 				BFAD67A225E0854500D4C4D1 /* DeveloperDiskManager.swift */,
 				BFF0394A25F0551600BE607D /* MenuController.swift */,
@@ -3283,6 +3286,7 @@
 				BF458690229872EA00BD7491 /* AppDelegate.swift in Sources */,
 				A18F00010000000000000005 /* InstallationProgressWindowController.swift in Sources */,
 				A18F00010000000000000006 /* AboutWindowController.swift in Sources */,
+				A18F00010000000000000007 /* ServerUpdateController.swift in Sources */,
 				BFECAC8424FD950B0077C41F /* ALTConstants.m in Sources */,
 				BF4586C52298CDB800BD7491 /* ALTDeviceManager.mm in Sources */,
 				D58032F02AB2429D00878F5E /* ProcessInfo+Device.swift in Sources */,
@@ -3961,7 +3965,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.2;
+				MARKETING_VERSION = 2.4.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_MODULE_NAME = AltServer;
 				EXECUTABLE_NAME = "AltForge Server";
@@ -4016,7 +4020,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.2;
+				MARKETING_VERSION = 2.4.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_MODULE_NAME = AltServer;
 				EXECUTABLE_NAME = "AltForge Server";
@@ -4386,7 +4390,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.4.2;
+				MARKETING_VERSION = 2.4.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -4450,7 +4454,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.4.2;
+				MARKETING_VERSION = 2.4.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_CPLUSPLUSFLAGS = (

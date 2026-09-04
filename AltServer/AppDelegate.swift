@@ -16,18 +16,6 @@ import LaunchAtLogin
 
 extension ALTDevice: MenuDisplayable {}
 
-private struct GitHubRelease: Decodable
-{
-    let tagName: String
-    let htmlURL: URL
-
-    private enum CodingKeys: String, CodingKey
-    {
-        case tagName = "tag_name"
-        case htmlURL = "html_url"
-    }
-}
-
 private enum PreferredLanguage: String, CaseIterable
 {
     case system
@@ -85,6 +73,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let pluginManager = PluginManager()
     private let appleIDCredentialStore = AppleIDCredentialStore()
     private let aboutWindowController = AboutWindowController()
+    private let serverUpdateController = ServerUpdateController()
     private var activeInstallations = [String: ActiveInstallation]()
     private static let languagePreferenceKey = "AltForgePreferredLanguage"
     
@@ -211,40 +200,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func checkForUpdates(_ sender: NSMenuItem)
     {
-        sender.isEnabled = false
-        sender.title = NSLocalizedString("Checking for Updates…", comment: "")
-
-        var request = URLRequest(url: URL(string: "https://api.github.com/repos/legeling/AltForge/releases/latest")!)
-        request.timeoutInterval = 10
-        request.cachePolicy = .reloadIgnoringLocalCacheData
-        request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
-        request.setValue("AltForge-Server", forHTTPHeaderField: "User-Agent")
-
-        URLSession.shared.dataTask(with: request) { [weak self, weak sender] data, response, error in
-            DispatchQueue.main.async {
-                sender?.isEnabled = true
-                sender?.title = NSLocalizedString("Check for Updates…", comment: "")
-
-                guard let self else { return }
-                guard error == nil,
-                      let response = response as? HTTPURLResponse,
-                      response.statusCode == 200,
-                      let data,
-                      data.count <= 1_048_576,
-                      let release = try? JSONDecoder().decode(GitHubRelease.self, from: data)
-                else {
-                    self.showUpdateCheckFailure()
-                    return
-                }
-
-                self.showUpdateResult(release)
-            }
-        }.resume()
+        self.serverUpdateController.checkForUpdates(menuItem: sender)
     }
 
     func applicationWillTerminate(_ aNotification: Notification)
     {
-        // Insert code here to tear down your application
+        self.serverUpdateController.cancel()
     }
 }
 
@@ -374,70 +335,6 @@ private extension AppDelegate
         let isWired = self.wiredDeviceIdentifiers.contains(device.identifier)
         let description = isWired ? NSLocalizedString("USB", comment: "") : NSLocalizedString("Wi-Fi", comment: "")
         return NSImage(systemSymbolName: isWired ? "cable.connector" : "wifi", accessibilityDescription: description)
-    }
-
-    func showUpdateResult(_ release: GitHubRelease)
-    {
-        let currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
-        guard let latestVersion = self.semanticVersion(from: release.tagName) else
-        {
-            self.showUpdateCheckFailure()
-            return
-        }
-        let alert = NSAlert()
-
-        if latestVersion.compare(currentVersion, options: .numeric) == .orderedDescending
-        {
-            alert.messageText = NSLocalizedString("Update Available", comment: "")
-            alert.informativeText = String(format: NSLocalizedString("AltForge Server %@ is available. You are using %@.", comment: ""), latestVersion, currentVersion)
-            alert.addButton(withTitle: NSLocalizedString("Open Release", comment: ""))
-            alert.addButton(withTitle: NSLocalizedString("Later", comment: ""))
-
-            NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-            guard alert.runModal() == .alertFirstButtonReturn else { return }
-            guard release.htmlURL.scheme == "https", release.htmlURL.host == "github.com" else
-            {
-                self.showUpdateCheckFailure()
-                return
-            }
-            NSWorkspace.shared.open(release.htmlURL)
-        }
-        else
-        {
-            alert.messageText = NSLocalizedString("AltForge Server Is Up to Date", comment: "")
-            alert.informativeText = String(format: NSLocalizedString("You are using the latest version (%@).", comment: ""), currentVersion)
-            alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
-            NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-            alert.runModal()
-        }
-    }
-
-    func semanticVersion(from tag: String) -> String?
-    {
-        let version = tag.hasPrefix("v") ? String(tag.dropFirst()) : tag
-        let components = version.split(separator: ".", omittingEmptySubsequences: false)
-        guard version.count <= 32,
-              components.count == 3,
-              components.allSatisfy({ !$0.isEmpty && $0.allSatisfy(\.isNumber) })
-        else { return nil }
-        return version
-    }
-
-    func showUpdateCheckFailure()
-    {
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.messageText = NSLocalizedString("Unable to Check for Updates", comment: "")
-        alert.informativeText = NSLocalizedString("AltForge Server could not read the latest release from GitHub. You can open the Releases page and check manually.", comment: "")
-        alert.addButton(withTitle: NSLocalizedString("Open Releases", comment: ""))
-        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
-
-        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
-        if alert.runModal() == .alertFirstButtonReturn,
-           let releasesURL = URL(string: "https://github.com/legeling/AltForge/releases")
-        {
-            NSWorkspace.shared.open(releasesURL)
-        }
     }
 
     @objc func installAltStore(to device: ALTDevice)

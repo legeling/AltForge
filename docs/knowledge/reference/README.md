@@ -53,7 +53,7 @@ xcodebuild build -workspace AltStore.xcworkspace -scheme AltServer -configuratio
 | 能力 | 所有者/入口 | 仓库策略 |
 |---|---|---|
 | 官方 source、远程配置、Developer Disk 索引 | `https://github.com/legeling/AltForge/releases/latest/download/` | 必须由本仓库 Release 发布并进入 checksum |
-| macOS 更新检查 | `https://api.github.com/repos/legeling/AltForge/releases/latest` | 仅检查版本，失败时提供仓库 Releases 手工入口 |
+| macOS 更新检查 | `https://api.github.com/repos/legeling/AltForge/releases/latest` | 比较版本并读取 tag 固定 DMG 的 size/SHA-256；成功后直接下载并打开，失败时提供重试与仓库 Releases 入口 |
 | 支持、隐私、FAQ、Issue | `https://github.com/legeling/AltForge` | 必须指向本仓库内容 |
 | Developer Disk 文件 | 索引中经审核的第三方 HTTPS URL | 外部兼容依赖；AltForge 不镜像、不声称所有权 |
 | Apple Developer/device 服务 | Apple | 核心外部依赖，不可改写 |

@@ -1559,6 +1559,192 @@
         }
       }
     },
+    "AltForge Server will download the verified disk image and open the installer automatically." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 将下载并校验磁盘映像，完成后自动打开安装窗口。"
+          }
+        }
+      }
+    },
+    "AltForge Server could not download and verify the update." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 无法下载并校验更新。"
+          }
+        }
+      }
+    },
+    "AltForge Server could not access your Downloads folder." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 无法访问你的“下载”文件夹。"
+          }
+        }
+      }
+    },
+    "Cancelling download…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在取消下载…"
+          }
+        }
+      }
+    },
+    "Downloaded %@ of %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloaded %1$@ of %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已下载 %1$@，共 %2$@"
+          }
+        }
+      }
+    },
+    "Downloading AltForge Server %@ from GitHub…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在从 GitHub 下载 AltForge Server %@…"
+          }
+        }
+      }
+    },
+    "Downloading Update" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在下载更新"
+          }
+        }
+      }
+    },
+    "Download Update" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载更新"
+          }
+        }
+      }
+    },
+    "GitHub returned release information that AltForge Server could not verify." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub 返回了 AltForge Server 无法验证的版本信息。"
+          }
+        }
+      }
+    },
+    "Preparing download…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备下载…"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重试"
+          }
+        }
+      }
+    },
+    "Show in Finder" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在访达中显示"
+          }
+        }
+      }
+    },
+    "The downloaded installer did not match the size and SHA-256 published by GitHub." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载的安装器与 GitHub 发布的文件大小或 SHA-256 不一致。"
+          }
+        }
+      }
+    },
+    "The latest release does not include a verified macOS installer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最新版本没有包含可验证的 macOS 安装器。"
+          }
+        }
+      }
+    },
+    "The macOS installer link or integrity metadata is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS 安装器链接或完整性信息无效。"
+          }
+        }
+      }
+    },
+    "The verified disk image remains in Downloads. Open it manually to install the update." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已校验的磁盘映像仍保存在“下载”文件夹中。请手动打开它以安装更新。"
+          }
+        }
+      }
+    },
+    "Unable to Download Update" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法下载更新"
+          }
+        }
+      }
+    },
+    "Unable to Open Installer" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法打开安装器"
+          }
+        }
+      }
+    },
     "Failed to Remove Legacy Mail Plug-in" : {
       "localizations" : {
         "zh-Hans" : {

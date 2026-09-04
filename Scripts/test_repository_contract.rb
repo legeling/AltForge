@@ -472,9 +472,17 @@ assert(!storyboard.include?('systemMenu="recentDocuments"'), "device submenus mu
 app_delegate = read(root, "AltServer/AppDelegate.swift")
 assert(app_delegate.include?('NSLocalizedString("%@ (%@)"'), "device menu must include a connection label")
 assert(app_delegate.include?("ALTDeviceManager.shared.connectedDevices"), "device menu must distinguish USB devices")
-assert(app_delegate.include?('request.timeoutInterval = 10'), "update request must have a finite timeout")
-assert(app_delegate.include?('data.count <= 1_048_576'), "update response must have a size bound")
-assert(app_delegate.include?('release.htmlURL.host == "github.com"'), "update release URL must validate the GitHub host")
+assert(app_delegate.include?("self.serverUpdateController.checkForUpdates(menuItem: sender)"), "macOS update action must use the direct update controller")
+assert(app_delegate.include?("self.serverUpdateController.cancel()"), "macOS update resources must be cancelled when the app terminates")
+update_controller = read(root, "AltServer/ServerUpdateController.swift")
+assert(update_controller.include?("timeoutIntervalForRequest = 10") && update_controller.include?("timeoutIntervalForResource = 600"), "update requests must have finite metadata and installer timeouts")
+assert(update_controller.include?("maximumMetadataSize = 1_048_576") && update_controller.include?("maximumInstallerSize"), "update metadata and installer downloads must be size-bounded")
+assert(update_controller.include?('asset.downloadURL.host?.lowercased() == "github.com"') && update_controller.include?('asset.downloadURL.path == expectedPath'), "update installer URL must be pinned to the expected GitHub release asset")
+assert(update_controller.include?("URLSessionDownloadDelegate"), "macOS updates must report progress from URLSession download callbacks")
+assert(update_controller.include?("asset.digest?.lowercased()") && update_controller.include?("SHA256()") && update_controller.include?("fileSize == self.asset.size"), "downloaded updates must verify GitHub size and SHA-256 metadata")
+assert(update_controller.include?('NSLocalizedString("Download Update"') && !update_controller.include?('NSLocalizedString("Open Release"'), "an available update must offer a direct download instead of sending users to the release page")
+assert(update_controller.include?("FileManager.default.urls(for: .downloadsDirectory") && update_controller.include?("NSWorkspace.shared.open(fileURL)"), "a verified update must be saved to Downloads and open its installer automatically")
+assert(update_controller.include?("cancelHandler") && update_controller.include?("downloadGeneration") && update_controller.include?("self.downloadGeneration == expectedGeneration"), "update download cancellation must not let stale callbacks finish another transfer")
 assert(app_delegate.include?('systemSymbolName: "arrow.down.app"'), "Install AltForge must use an install icon")
 assert(app_delegate.include?('case simplifiedChinese'), "macOS settings menu must expose Simplified Chinese")
 assert(app_delegate.include?('UserDefaults.standard.set([identifier], forKey: "AppleLanguages")'), "macOS language preference is not persisted")
@@ -667,6 +675,9 @@ end
 end
 ["Automatic (Recommended)", "Current source: %@", "Downloading the verified IPA from the selected mirror…", "GitHub (Official)", "The selected download sources could not download AltForge."].each do |key|
   assert(desktop_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese download string: #{key}")
+end
+["Download Update", "Downloading Update", "Downloaded %@ of %@", "Preparing download…", "Cancelling download…", "Unable to Download Update", "Retry", "Unable to Open Installer", "Show in Finder", "AltForge Server will download the verified disk image and open the installer automatically.", "The downloaded installer did not match the size and SHA-256 published by GitHub."].each do |key|
+  assert(desktop_strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value"), "missing Simplified Chinese updater string: #{key}")
 end
 altsign_error_source = read(root, "Dependencies/AltSign/AltSign/Categories/NSError+ALTErrors.m")
 altsign_error_source.scan(/NSLocalizedString\(@"((?:\\.|[^"\\])*)"/).flatten.uniq.each do |key|

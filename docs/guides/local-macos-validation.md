@@ -48,7 +48,7 @@ find "${TMPDIR:-/tmp}/AltForge-LocalDMG-DerivedData" -depth -delete
 2. 把 `AltForge Server.app` 拖到 DMG 内的 `Applications` 快捷方式。
 3. 在 Finder 的 Applications 中找到 AltForge Server，首次启动使用右键菜单中的“打开”。不要全局关闭 Gatekeeper。
 4. 如果旧版 `/Applications/AltServer.app` 已存在，先退出正在运行的旧版，再由 Finder 手动移除；不要在测试脚本里静默覆盖用户安装。
-5. 启动成功后，AltForge Server 应出现在菜单栏。选择 **检查更新** 应从本仓库 GitHub Releases 检查最新版本，而不是访问上游下载站点。
+5. 启动成功后，AltForge Server 应出现在菜单栏。选择 **检查更新** 应从本仓库 GitHub Releases 检查最新版本；发现新版时可直接下载经过 size/SHA-256 校验的 DMG，保存到“下载”文件夹并自动打开安装窗口，而不是先把用户带到网页。
 
 ## 功能验证清单
 
@@ -59,6 +59,7 @@ find "${TMPDIR:-/tmp}/AltForge-LocalDMG-DerivedData" -depth -delete
 - 连接并信任 iPhone/iPad 后，**Install AltForge** 能进入设备与 Apple ID 流程。
 - 使用脱敏测试账号做真机验证；不得保存 Apple ID、密码、UDID、证书、profile、Cookie 或 anisette data。
 - iOS 端安装完成后检查英文与简体中文切换、首次 source 加载、刷新和错误提示。
+- 使用低于 latest 的临时 `MARKETING_VERSION` 构建检查直接更新：进度窗口持续可见、取消后没有遗留传输，下载完成后 DMG 自动挂载并显示紧凑安装窗口；完成后推出本次挂载并删除测试下载。
 
 ## 发布前仍需验证
 

@@ -61,6 +61,7 @@
 - Windows 静态 contract 确认产品名为 `AltForge Server`、保留上游版权、更新菜单使用 `Check for Updates...`，并在设备名后标注 USB/Wi-Fi；Windows hosted build 仍由下一次 Draft Release 验证。
 - 当前 Debug 版已启动供手工复测；升级自旧开发构建时需要先关闭再开启一次“登录时启动”，以注销 macOS 缓存的旧 bundle 路径并注册当前 `AltForge Server.app`。系统登录项提示、真实菜单、语言重启和设备连接状态仍保留为手工 smoke test。
 - 该 change 最初交付的独立设置窗口已根据实际使用反馈由 `CHG-20260810-001` 改为状态菜单内联设置；本记录保留原始实现事实。
+- 该 change 最初只让更新弹窗打开 Release 页面；`CHG-20260904-003` 在不静默替换运行中 App 的前提下，将当前行为扩展为校验后直接下载并自动打开 DMG。
 
 ## 残余风险
 

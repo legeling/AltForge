@@ -42,6 +42,7 @@
 | `TEST-039` | Website visual/repository delivery | P2 | Script/Browser/Network/CI | 单一全幅 hero、首屏层级、仓库归属带、无旧双图标、320-1440px 深浅色与双语、平台推荐、Actions fail-closed、Pages 生产回读、GitHub homepage | Partial |
 | `TEST-040` | Apple authentication response compatibility | P0 | Static/Build/Manual E2E | current coherent developer client identity、legacy Xcode identity rejection、HTML/malformed plist error mapping、no response-body logging、real Apple login/2FA/team/certificate lookup | Partial |
 | `TEST-041` | Error presentation | P1 | XCTest/Static/Build/Localization | known custom codes、provider relocalization、system-domain classification、detail-only diagnostics、Windows parity | Partial |
+| `TEST-042` | macOS direct update | P1 | Static/Build/Network/Manual UI | newer/current/invalid latest metadata、pinned GitHub DMG、size/SHA-256、progress、cancel、timeout、single transfer、Downloads collision、automatic installer open、failure recovery | Partial |
 
 状态只能使用：`Automated`、`CI defined`、`Partial`、`Planned`、`Manual pending`、`Manual harness only`、`Blocked`。状态变化必须同步 coverage map。
 ## TEST-041：错误码与用户提示

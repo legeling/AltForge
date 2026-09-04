@@ -141,7 +141,7 @@ Release workflow 与本地验证都只对 staging 副本执行 `--ad-hoc-sign`�
 
 `Settings` 是状态菜单内的子菜单，不创建独立窗口；其中直接包含 `Launch at Login` 开关和语言子菜单。登录启动菜单项使用标准 `NSMenuItem.state`，并以本地化标题补充 `On/Off/Requires Approval`；macOS 13+ 使用 `SMAppService.mainApp` 的真实状态、可抛错 register/unregister 和登录项系统设置入口，macOS 11/12 才使用 `LaunchAtLogin` fallback。macOS 会缓存同一 bundle identifier 的旧注册路径与展示信息，所以从历史 `AltServer.app` 开发构建升级后由用户关闭再开启一次登录项以完成 unregister/register；App 不在启动时静默修改用户的登录项授权。语言选择使用单选勾选状态，保存到 App 自有 preference，并为下一次启动设置 `AppleLanguages`；选择“跟随系统”时移除覆盖。偏好在重启前显式写盘，随后明确提供“立即重启/稍后”；立即重启只创建一个 0.5 秒延迟的短生命周期 relauncher，避免选择丢失和新旧服务实例长期并存。Storyboard/string catalog 仍是唯一文本源，不尝试在当前进程热替换已加载资源。设备子菜单不得声明为 `recentDocuments` 系统菜单，避免 macOS 注入与安装无关的时钟图标；安装、设置和检查更新入口分别使用安装、齿轮和刷新 template SF Symbol，安装图标另提供兼容 fallback。
 
-“检查更新”对固定 GitHub API 发出单次 GET，请求超时 10 秒且不重试。解析只接受 200 JSON；打开 Release 前必须验证 `https` 和 `github.com` host。它只比较当前 `CFBundleShortVersionString` 与 latest tag，不承担下载、签名或安装职责；首次 Release 尚未发布、离线、限流或格式错误均返回明确的手工 Releases 入口。
+“检查更新”继续对固定 GitHub API 发出单次 GET，并比较当前 `CFBundleShortVersionString` 与 latest tag；下载与自动打开 DMG 的后续职责由 `DES-029` 的独立 controller 承担。首次 Release 尚未发布、离线、限流或格式错误仍返回明确的手工 Releases 入口。
 
 ### `DES-015` 网络所有权边界
 
@@ -272,6 +272,12 @@ AltForge Server 继续在 `AnisetteDataManager` 生成或规范化 Apple 认证�
 `NSError.userFacingPresentation` 是用户界面的唯一通用错误展示适配层，输出短标题、具体原因和可选恢复建议。Apple API、AltSign、Server 与 Connection provider 错误先移除远端固化的本地化字段，再由客户端 provider 使用当前语言和保留的结构化 userInfo 重新生成；本地业务错误继续使用各自 code 的 `errorFailureReason`。`NSURLErrorDomain` 与 `NSCocoaErrorDomain` 只覆盖稳定且可判定的网络、文件和解析 code，其余保留真实系统原因并使用保守建议。
 
 错误详情继续保存 domain、display code、底层错误、诊断阶段和原始进程输出。主提示不再拼接源码位置、debug description 或命令输出。AltSign 公开枚举显式覆盖 Windows 已存在的签名错误 5-7，并把 Apple API invalid response 固定为 3022；Windows 3013-3017 与 Apple 平台重新对齐。所有判断均为固定 switch，单次展示 `O(1)`，不增加网络 I/O、重试、缓存或协议字段。
+
+### `DES-029` macOS 直接下载更新
+
+`ServerUpdateController` 负责 GitHub latest metadata、版本比较、DMG 资产校验、下载状态和完成后的系统打开动作，`AppDelegate` 只把状态菜单命令转交给它并在退出时取消资源。Metadata 使用 ephemeral `URLSession`，10 秒 request/30 秒 resource timeout，响应上限 1 MiB；只接受纯数字 `vX.Y.Z`、本仓 GitHub Release 页面，以及路径严格匹配当前 tag 的 `AltForge-AltServer-macOS.dmg`。资产必须声明 `0 < size <= 512 MiB` 和 64 位 `sha256:` digest。
+
+DMG 使用单任务 `URLSessionDownloadDelegate`，45 秒 request/600 秒 resource timeout，在串行 utility delegate queue 上报告实际字节并以 1 MiB block 流式计算 SHA-256。size/hash 通过后原子移动到用户“下载”文件夹；同名且内容一致时复用，冲突时最多寻找 100 个有界名称。下载期间独立原生窗口显示版本、进度、字节和取消操作；重复检查只聚焦现有窗口，不创建并发任务，取消或 App 退出都会终止 session。成功后 `NSWorkspace` 自动打开 DMG，由系统挂载并显示既有 App/Applications 安装窗口；打开失败时可在访达定位文件或进入 Release。由于发行包尚无 Developer ID/notarization，不静默替换运行中的 App，也不引入 Sparkle feed 或提权安装。下载、hash 和磁盘 I/O 为 `O(bytes)`，额外内存为固定 1 MiB，网络扇出为一次 metadata 加一次 DMG。
 
 ## 可选目标与边界
 

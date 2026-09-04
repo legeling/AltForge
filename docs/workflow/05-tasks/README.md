@@ -37,6 +37,7 @@
 | `T-039` 重构官网视觉并关联代码仓库 | In progress / hosted deploy secrets pending | `FR-040`; `DES-026`; `TEST-039` | 单一全幅工业品牌图、仓库归属带、下载/流程/能力/FAQ 层级、克制动效和 fail-closed workflow 已实现；production `92c5fb54`、线上 hash/headers/downloads、GitHub homepage、320-1918px 动效/reduced-motion 浏览器矩阵、Git delivery 与 hosted verify `31790637050` 通过。Pages Secrets 与 push 自动部署启用待完成 |
 | `T-040` 修复 Apple 认证响应格式失败 | Released in v2.4.2 / account E2E pending | `FR-041`; `DES-027`; `TEST-040` | 2026-09-04 的 Duolingo/微信安装均在认证阶段以 Cocoa 3840 失败；认证、2FA、Developer Services 与 anisette 已统一为 Xcode 27 beta 6 product/bundle identity，GSA User-Agent 改为当前 CFNetwork/Darwin，并将畸形响应映射为明确握手失败。Local/hosted tests、三平台 build、产物 identity/checksum/latest 回读通过并发布 `v2.4.2`；真实登录/2FA/团队/证书/安装待验证 |
 | `T-041` 统一错误码与用户提示 | Released in v2.4.2 / device UI validation pending | `FR-042`; `DES-028`; `TEST-041` | 全部产品错误域已进入统一标题/原因/下一步展示；provider 重新本地化、跨平台编码 contract、本地/hosted 定向 XCTest 与 Apple/Windows build 通过，已随 `v2.4.2` 交付；真实中文界面及 Windows 设备待验证 |
+| `T-042` 建立 macOS 直接下载更新闭环 | v2.4.3 release candidate / manual UI pending | `FR-043`; `DES-029`; `TEST-042` | 更新检查直接下载 tag 固定 DMG，显示字节/百分比并支持取消；size/SHA-256 通过后保存到“下载”并自动打开系统安装窗口。Contract、Release build 和完整公开 DMG probe 通过；已进入 `v2.4.3` 发布批次，旧版本下载/取消/重名/失败/自动挂载 UI 矩阵待执行 |
 
 ## Analyze 门禁结果
 

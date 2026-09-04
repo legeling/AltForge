@@ -70,6 +70,7 @@
 - `FR-040` 官网首屏必须用单一、可识别的 AltForge 品牌视觉建立产品身份，不得重复堆叠超大应用图标、悬浮版本卡或装饰性面板。首屏必须在不滚动时同时提供产品定位、当前 Release、平台自适应下载和源码入口，并露出下一段仓库信息；下载、源码、Release、校验和与许可证必须形成清晰的仓库归属链。官网源码、设计系统、自动化验证和部署工作流必须随 `marketplace` 分支维护；现有 Cloudflare Direct Upload 项目通过 GitHub Actions + Wrangler 关联仓库，凭据只允许使用 GitHub Secrets，且在显式启用变量缺失时必须 fail closed。
 - `FR-041` Apple ID 认证必须使用与当前 macOS 身份一致且仍被 Apple 接受的开发者客户端描述；Xcode 产品版本、公开 build 与认证 bundle version 必须单点定义并同时供认证、2FA、Developer Services 与 anisette 使用，不得继续发送已被服务端拒绝的 Xcode 11 身份。Apple 或网络中间层返回 HTML、空内容或畸形 plist 时必须停止认证并返回明确的握手失败，不得把底层 `NSCocoaErrorDomain 3840` 显示成 IPA 格式错误，也不得记录响应正文、Apple ID、密码、验证码或 anisette 数据。
 - `FR-042` 所有产品自定义错误码必须以统一的标题、与 domain/code 对应的具体原因和可执行的下一步展示；远端错误必须按客户端当前语言重新本地化。系统与第三方错误只能按稳定 domain/code 分类，不得把解析、网络、认证、签名或 IPA 错误互相误报。源码位置、原始进程输出、底层错误与诊断码只进入详情，不得拼入主提示；未知错误必须明确表示原因未识别，不能编造原因。
+- `FR-043` macOS AltForge Server 检查到新版本时必须在当前弹窗直接提供下载，不得把打开 Release 页面作为正常更新的唯一操作。下载必须来自该版本的本仓库 GitHub DMG 资产，显示实际字节进度，并在写入“下载”文件夹前校验 API 发布的文件大小和 SHA-256；完成后自动打开磁盘映像以显示系统安装窗口。更新检查、下载和校验均须有大小、超时和单任务上限，允许取消；失败时保留明确原因、重试和 Release 兜底。当前未 Developer ID 签名/notarize 的 App 不得静默覆盖运行中的 `/Applications` 副本或冒充全自动安装。
 
 ## 非功能需求
 
@@ -113,6 +114,7 @@
 - `AC-029` 官网在 320、375、768、1024 与 1440px 的首屏只出现一个主导 AltForge 标记，标题、定位、Release、下载与源码操作无遮挡，下一段仓库归属信息可见；不再引用玻璃/钛金属双图标舞台。页面展示的仓库、Release、SHA-256 与 AGPL 入口均指向 `legeling/AltForge`。网站 workflow 在 PR/`marketplace` push 上运行静态门禁，只有 `CLOUDFLARE_PAGES_DEPLOY_ENABLED=true` 且两个 Cloudflare Secrets 存在时才部署 `website/` 到 `altforge`。覆盖 `FR-040`。
 - `AC-030` 在 macOS 26.5.2 与 Xcode 26.6 环境，AltForge Server 产生的 `X-MMe-Client-Info` 使用当前 Mac model、系统版本和 build，并使用已验证的现代 Xcode client version；静态门禁拒绝 `3594.4.19`。给定以 `<html>` 开头或其他不可解析的认证响应，AltSign 返回 `AltStore.AppleDeveloperError 3020` 并只保留底层解析错误，不保存响应体。相同测试账号的真实登录、2FA、团队与证书查询成功后，Duolingo 与微信安装才能进入 IPA 读取阶段。覆盖 `FR-041`。
 - `AC-031` 枚举 AltSign 0-7、Apple API 3000-3022、Server 0-16/100-101、Connection 0-6 及本地业务错误 fixture 时，每项均生成非空标题、具体原因和恢复建议；认证解析失败 3020 不显示 Cocoa 3840 或 IPA 格式文案，远端英文 provider 错误在简体中文客户端重新本地化，进程输出和源码位置只出现在详情。Apple 与 Windows 的同名 Apple API code 数值完全一致。覆盖 `FR-042`。
+- `AC-032` 给定 newer latest Release，更新弹窗主操作为“下载更新”；只接受 `https://github.com/legeling/AltForge/releases/download/v<tag>/AltForge-AltServer-macOS.dmg` 以及有效的正数 size/`sha256:` digest。下载窗口显示字节与百分比并可取消，超时、HTTP、目录、size 或 digest 失败时不打开文件并允许重试；成功后文件位于“下载”文件夹并由 `NSWorkspace` 自动打开。重复操作不创建并发下载，应用退出会取消会话。覆盖 `FR-043`。
 
 ## 范围外
 
@@ -153,3 +155,4 @@
 | `FR-040` | `DES-026` | `TEST-039` | `T-039` |
 | `FR-041` | `DES-027` | `TEST-040` | `T-040` |
 | `FR-042` | `DES-028` | `TEST-041` | `T-041` |
+| `FR-043` | `DES-029` | `TEST-042` | `T-042` |
