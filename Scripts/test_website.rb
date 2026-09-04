@@ -19,6 +19,7 @@ html = File.read(File.join(website, "index.html"))
 css = File.read(File.join(website, "styles.css"))
 javascript = File.read(File.join(website, "app.js"))
 headers = File.read(File.join(website, "_headers"))
+product_version = File.read(File.join(root, "VERSION")).strip
 
 assert(html.start_with?("<!doctype html>"), "HTML must declare the HTML5 doctype")
 assert(html.scan(/<html(?:\s|>)/).length == 1 && html.scan(%r{</html>}).length == 1, "HTML document boundaries are invalid")
@@ -51,7 +52,7 @@ invalid_urls = external_urls.reject do |value|
     value.start_with?("https://github.com/altstoreio/AltStore")
 end
 assert(invalid_urls.empty?, "unexpected external URL: #{invalid_urls.join(', ')}")
-assert(![html, css, javascript].join.include?("2.4.1"), "website must not duplicate the current release version")
+assert(![html, css, javascript].join.include?(product_version), "website must not duplicate the current release version")
 
 %w[AltForge-AltServer-macOS.dmg AltForge-AltServer-Windows.zip AltForge.ipa].each do |asset|
   assert([html, javascript].join.include?("releases/latest/download/#{asset}"), "missing latest Release URL for #{asset}")

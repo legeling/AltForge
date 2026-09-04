@@ -68,7 +68,7 @@
 - `FR-037` iOS 客户端必须在设置中提供带色板和选中状态的主题色选择，偏好重启后保持并在非法值时回退默认色；默认使用与 AltForge 图标一致的锻造红，页面背景、正文、分隔线与表单继续使用系统语义色。主题变化必须立即更新导航、标签栏、徽标、官方 AltForge source/app/news 卡片、详情页和权限确认页，不得让 Release metadata 中的旧色值绕过当前主题，也不得覆盖第三方 source/app 自有 tint。红、绿、黄只保留给删除、失败、成功、到期和警告等明确状态，不得充当普通页面装饰色。
 - `FR-039` AltForge 必须提供同仓库维护的中英双语静态官网，首屏直接展示当前版本、平台安装服务和安装步骤。macOS DMG、Windows ZIP、unsigned IPA、Release、文档与 Issue 入口必须指向 `legeling/AltForge`，安装包使用 `releases/latest/download/<artifact>`，版本展示从本仓库正式 Release API 读取并在不可用时回退为无版本号的“最新”，不在网页维护第二套可漂移的版本配置。页面必须支持系统深浅色、键盘焦点、减弱动态效果和 320px 以上无横向滚动；必须披露 unsigned/ad-hoc/notarization、Apple ID 与七天刷新边界，不加入账号收集、分析脚本或 Release 二进制副本。
 - `FR-040` 官网首屏必须用单一、可识别的 AltForge 品牌视觉建立产品身份，不得重复堆叠超大应用图标、悬浮版本卡或装饰性面板。首屏必须在不滚动时同时提供产品定位、当前 Release、平台自适应下载和源码入口，并露出下一段仓库信息；下载、源码、Release、校验和与许可证必须形成清晰的仓库归属链。官网源码、设计系统、自动化验证和部署工作流必须随 `marketplace` 分支维护；现有 Cloudflare Direct Upload 项目通过 GitHub Actions + Wrangler 关联仓库，凭据只允许使用 GitHub Secrets，且在显式启用变量缺失时必须 fail closed。
-- `FR-041` Apple ID 认证必须使用与当前 macOS 身份一致且仍被 Apple 接受的开发者客户端描述，不得继续发送已被服务端拒绝的 Xcode 11 身份。Apple 或网络中间层返回 HTML、空内容或畸形 plist 时必须停止认证并返回明确的握手失败，不得把底层 `NSCocoaErrorDomain 3840` 显示成 IPA 格式错误，也不得记录响应正文、Apple ID、密码、验证码或 anisette 数据。
+- `FR-041` Apple ID 认证必须使用与当前 macOS 身份一致且仍被 Apple 接受的开发者客户端描述；Xcode 产品版本、公开 build 与认证 bundle version 必须单点定义并同时供认证、2FA、Developer Services 与 anisette 使用，不得继续发送已被服务端拒绝的 Xcode 11 身份。Apple 或网络中间层返回 HTML、空内容或畸形 plist 时必须停止认证并返回明确的握手失败，不得把底层 `NSCocoaErrorDomain 3840` 显示成 IPA 格式错误，也不得记录响应正文、Apple ID、密码、验证码或 anisette 数据。
 - `FR-042` 所有产品自定义错误码必须以统一的标题、与 domain/code 对应的具体原因和可执行的下一步展示；远端错误必须按客户端当前语言重新本地化。系统与第三方错误只能按稳定 domain/code 分类，不得把解析、网络、认证、签名或 IPA 错误互相误报。源码位置、原始进程输出、底层错误与诊断码只进入详情，不得拼入主提示；未知错误必须明确表示原因未识别，不能编造原因。
 
 ## 非功能需求

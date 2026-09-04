@@ -11,10 +11,6 @@ import OSLog
 
 private enum AppleDeveloperClientIdentity
 {
-    // Apple began rejecting the legacy Xcode 11 identity in 2026. Keep this aligned with a
-    // currently accepted Xcode client while deriving the hardware and OS tuple from this Mac.
-    static let xcodeVersion = "25183.54.10"
-
     static var deviceDescription: String
     {
         let processInfo = ProcessInfo.processInfo
@@ -34,7 +30,7 @@ private enum AppleDeveloperClientIdentity
 
         let deviceModel = processInfo.deviceModel ?? "iMac21,1"
         let osName = (osVersion.majorVersion < 11) ? "Mac OS X" : "macOS"
-        return "<\(deviceModel)> <\(osName);\(osVersion.stringValue);\(buildVersion)> <com.apple.AuthKit/1 (com.apple.dt.Xcode/\(self.xcodeVersion))>"
+        return "<\(deviceModel)> <\(osName);\(osVersion.stringValue);\(buildVersion)> <com.apple.AuthKit/1 (com.apple.dt.Xcode/\(ALTAppleXcodeBundleVersion))>"
     }
 }
 

@@ -110,6 +110,8 @@ jobs:
           -only-testing:AltTests/AltTests/testSigningDiagnosticDetailIsRelativeAndBounded
           -only-testing:AltTests/AltTests/testThemePreferenceDefaultsAndRoundTrips
           -only-testing:AltTests/AltTests/testHealthKitCapabilityMapping
+          -only-testing:AltTests/AltTests/testAllKnownErrorsHaveCompleteUserFacingPresentations
+          -only-testing:AltTests/AltTests/testAuthenticationParsingErrorUsesAuthenticationCopy
 
       - name: Build unsigned iOS application
         env:
