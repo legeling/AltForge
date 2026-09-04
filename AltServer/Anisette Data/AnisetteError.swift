@@ -44,7 +44,7 @@ struct AnisetteError: ALTLocalizedError
         {
         case .aosKitFailure: return NSLocalizedString("AltForge Server could not retrieve anisette data from AOSKit.", comment: "")
         case .missingValue:
-            let valueName = self.value.map { "anisette data value “\($0)”" } ?? NSLocalizedString("anisette data values.", comment: "")
+            let valueName = self.value.map { String(format: NSLocalizedString("the Apple authentication value “%@”", comment: ""), $0) } ?? NSLocalizedString("the required Apple authentication values", comment: "")
             return String(format: NSLocalizedString("AltForge Server could not retrieve %@.", comment: ""), valueName)
         }
     }

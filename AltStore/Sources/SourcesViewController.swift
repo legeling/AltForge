@@ -406,11 +406,9 @@ private extension SourcesViewController
             return
         }
         
-        let nsError = error as NSError
-        let title = nsError.localizedTitle // OK if nil.
-        let message = [nsError.localizedDescription, nsError.localizedDebugDescription, nsError.localizedRecoverySuggestion].compactMap { $0 }.joined(separator: "\n\n")
+        let presentation = error.userFacingPresentation
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertController = UIAlertController(title: presentation.title, message: presentation.combinedMessage, preferredStyle: .alert)
         alertController.addAction(.ok)
         self.present(alertController, animated: true, completion: nil)
     }

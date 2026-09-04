@@ -326,7 +326,7 @@ private extension AppDelegate
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.messageText = NSLocalizedString("Unable to Change Launch at Login", comment: "")
-        alert.informativeText = NSLocalizedString("AltForge Server could not update its login item. Install the app in Applications and try again.", comment: "") + "\n\n" + error.localizedDescription
+        alert.informativeText = NSLocalizedString("AltForge Server could not update its login item. Install the app in Applications and try again.", comment: "") + "\n\n" + error.userFacingPresentation.message
         alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
 
         NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
@@ -478,11 +478,7 @@ private extension AppDelegate
             }
             catch let error as JITError where error.code == .dependencyNotFound
             {
-                var errorMessage = error.localizedDescription
-                if let recoverySuggestion = error.recoverySuggestion
-                {
-                    errorMessage += "\n\n" + recoverySuggestion
-                }
+                let errorMessage = error.userFacingPresentation.combinedMessage
                 
                 await MainActor.run { [errorMessage] in
                     let alert = NSAlert()
@@ -647,21 +643,7 @@ private extension AppDelegate
 
     func localizedAuthenticationFailure(for error: Error) -> String
     {
-        switch error
-        {
-        case ALTAppleAPIError.incorrectCredentials:
-            return NSLocalizedString("Your Apple ID or password is incorrect. Check your details and try again.", comment: "")
-        case ALTAppleAPIError.appSpecificPasswordRequired:
-            return NSLocalizedString("This Apple ID requires an app-specific password. Create one at appleid.apple.com and try again.", comment: "")
-        case ALTAppleAPIError.incorrectVerificationCode:
-            return NSLocalizedString("The verification code was incorrect. Try signing in again to request a new code.", comment: "")
-        case ALTAppleAPIError.authenticationHandshakeFailed:
-            return NSLocalizedString("AltForge Server could not complete the secure sign-in with Apple. Check your network and try again.", comment: "")
-        case ALTAppleAPIError.invalidAnisetteData:
-            return NSLocalizedString("AltForge Server could not verify this Mac with Apple. Check the date and time on your devices, then try again.", comment: "")
-        default:
-            return NSLocalizedString("AltForge Server could not sign in with Apple. Check your connection and try again.", comment: "")
-        }
+        return error.userFacingPresentation.combinedMessage
     }
     
     func showErrorAlert(error: Error)
@@ -670,19 +652,12 @@ private extension AppDelegate
         
         let nsError = error as NSError
         
-        var messageComponents = [error.localizedDescription]
-        if let recoverySuggestion = nsError.localizedRecoverySuggestion
-        {
-            messageComponents.append(recoverySuggestion)
-        }
-        
-        let title = nsError.localizedTitle ?? NSLocalizedString("Operation Failed", comment: "")
-        let message = messageComponents.joined(separator: "\n\n")
+        let presentation = nsError.userFacingPresentation
         
         let alert = NSAlert()
         alert.alertStyle = .critical
-        alert.messageText = title
-        alert.informativeText = message
+        alert.messageText = presentation.title
+        alert.informativeText = presentation.combinedMessage
         alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
         alert.addButton(withTitle: NSLocalizedString("View More Details", comment: ""))
         
@@ -795,7 +770,7 @@ private extension AppDelegate
                 case .failure(let error):
                     let alert = NSAlert()
                     alert.messageText = NSLocalizedString("Failed to Remove Legacy Mail Plug-in", comment: "")
-                    alert.informativeText = error.localizedDescription
+                    alert.informativeText = error.userFacingPresentation.combinedMessage
                     alert.runModal()
                     
                 case .success:
@@ -860,7 +835,7 @@ extension AppDelegate: NSMenuDelegate
                 DispatchQueue.main.async {
                     guard let installedApps = installedApps else {
                         print("Failed to fetch installed apps from \(device).", error!)
-                        submenuController.placeholder = error?.localizedDescription
+                        submenuController.placeholder = error?.userFacingPresentation.message
                         return
                     }
                     

@@ -431,7 +431,7 @@ private extension SettingsViewController
             }
             catch
             {
-                await self.presentAlert(title: String(localized: "Unable to Sign In"), message: error.localizedDescription)
+                await self.presentAlert(title: String(localized: "Unable to Sign In"), message: error.userFacingPresentation.combinedMessage)
             }
             
             self.update()
@@ -563,7 +563,7 @@ private extension SettingsViewController
                     {
                     case .success: break
                     case .failure(let error):
-                        let alertController = UIAlertController(title: NSLocalizedString("Unable to Clear Cache", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                        let alertController = UIAlertController(title: NSLocalizedString("Unable to Clear Cache", comment: ""), message: error.userFacingPresentation.combinedMessage, preferredStyle: .alert)
                         alertController.addAction(.ok)
                         self?.present(alertController, animated: true)
                     }

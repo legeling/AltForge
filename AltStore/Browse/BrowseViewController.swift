@@ -369,7 +369,7 @@ private extension BrowseViewController
                 self.placeholderView.detailTextLabel.isHidden = false
                 
                 self.placeholderView.textLabel.text = NSLocalizedString("Unable to Fetch Apps", comment: "")
-                self.placeholderView.detailTextLabel.text = error.localizedDescription
+                self.placeholderView.detailTextLabel.text = error.userFacingPresentation.message
                 
                 self.placeholderView.activityIndicatorView.stopAnimating()
                 

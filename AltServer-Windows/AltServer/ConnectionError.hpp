@@ -86,7 +86,7 @@ public:
 			break;
 
 		case ConnectionErrorCode::InvalidResponse:
-			ss << "AltServer received an invalid response from " << deviceName << ".";
+			ss << "AltForge Server received an invalid response from " << deviceName << ".";
 			break;
 
 		case ConnectionErrorCode::Usbmuxd:
@@ -94,11 +94,11 @@ public:
 			break;
 
 		case ConnectionErrorCode::SSL:
-			ss << "AltServer could not establish a secure connection to " << deviceName << ".";
+			ss << "AltForge Server could not establish a secure connection to " << deviceName << ".";
 			break;
 
 		case ConnectionErrorCode::TimedOut:
-			ss << "AltServer's connection to " << deviceName << " timed out.";
+			ss << "AltForge Server's connection to " << deviceName << " timed out.";
 			break;
 
 		}

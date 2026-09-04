@@ -40,5 +40,18 @@
 | `TEST-036` | iOS theme colors | P2 | Unit/Static/Build/Simulator UI | Forge Red default、four-value persistence/fallback、localized swatch/checkmark picker、live navigation/tab/badge/official source/app/news/detail tint、raw metadata bypass guard、permission/add-source semantic colors、third-party tint preservation、semantic status-color allowlist、light/dark contrast | Partial |
 | `TEST-038` | Static website | P2 | Script/Browser/Network | 双语、latest Release 下载与 fallback、320-1440px 深浅色、平台识别、安全响应头、Pages 生产回读 | Automated |
 | `TEST-039` | Website visual/repository delivery | P2 | Script/Browser/Network/CI | 单一全幅 hero、首屏层级、仓库归属带、无旧双图标、320-1440px 深浅色与双语、平台推荐、Actions fail-closed、Pages 生产回读、GitHub homepage | Partial |
+| `TEST-040` | Apple authentication response compatibility | P0 | Static/Build/Manual E2E | current coherent developer client identity、legacy Xcode identity rejection、HTML/malformed plist error mapping、no response-body logging、real Apple login/2FA/team/certificate lookup | Partial |
+| `TEST-041` | Error presentation | P1 | XCTest/Static/Build/Localization | known custom codes、provider relocalization、system-domain classification、detail-only diagnostics、Windows parity | Partial |
 
 状态只能使用：`Automated`、`CI defined`、`Partial`、`Planned`、`Manual pending`、`Manual harness only`、`Blocked`。状态变化必须同步 coverage map。
+## TEST-041：错误码与用户提示
+
+| Case | 输入 | 期望 |
+|---|---|---|
+| `ERR-001` | AltSign 0-7、Apple API 3000-3022 | 每个 code 有非空标题、具体原因和恢复建议 |
+| `ERR-002` | Server 0-16/100-101、Connection 0-6 | 客户端按当前语言重新生成文案，不显示远端固化英文 |
+| `ERR-003` | Apple API 3020，底层 Cocoa 3840 | 标题为 Apple ID 登录失败，原因指向 Apple 认证响应，不提 IPA 格式 |
+| `ERR-004` | Cocoa 文件缺失、损坏、解析失败与常见 URL 错误 | 按 domain/code 区分文件、数据、网络与 TLS，不互相误报 |
+| `ERR-005` | ProcessError 携带命令输出与源码位置 | 主提示不含原始输出/源码位置；详情仍保留结构化字段 |
+| `ERR-006` | Windows Apple API enum | 3013-3017 与 Apple 平台一致，invalid response 独占 3022 |
+| `ERR-007` | 简体中文 catalog | 所有共享标题、原因与建议存在非空中文值，变量占位符保持一致 |

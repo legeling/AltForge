@@ -32,9 +32,9 @@ struct BatchError: ALTLocalizedError
     }
     
     var errorFailureReason: String {
-        guard !self.underlyingErrors.isEmpty else { return NSLocalizedString("An unknown error occured.", comment: "") }
+        guard !self.underlyingErrors.isEmpty else { return NSLocalizedString("AltForge did not receive a recognizable reason for this failure.", comment: "") }
         
-        let errorMessages = self.underlyingErrors.map { $0.localizedDescription }
+        let errorMessages = self.underlyingErrors.map { $0.userFacingPresentation.message }
         
         let message = errorMessages.joined(separator: "\n\n")
         return message

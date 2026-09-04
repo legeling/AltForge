@@ -21,7 +21,7 @@ public:
         switch ((WindowsErrorCode)this->code())
         {
         case WindowsErrorCode::WindowsDefenderBlockedCommunication:
-            return "Windows Defender blocked AltForge from communicating with AltForge Server.";
+            return "Windows Defender blocked AltForge Server from communicating with the device.";
         }
 
         return std::nullopt;
@@ -32,7 +32,7 @@ public:
         switch ((WindowsErrorCode)this->code())
         {
         case WindowsErrorCode::WindowsDefenderBlockedCommunication:
-            return "Disable Windows real-time protection on your computer then try again.";
+            return "Allow AltForge Server through Windows Security and the firewall, then try again. Do not disable real-time protection.";
         }
 
         return std::nullopt;

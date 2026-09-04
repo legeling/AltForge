@@ -63,6 +63,40 @@ final class AltTests: XCTestCase
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testAllKnownErrorsHaveCompleteUserFacingPresentations() throws
+    {
+        let providerErrors: [NSError] =
+            (0...7).map { NSError(domain: AltSignErrorDomain, code: $0) } +
+            (3000...3022).map { NSError(domain: ALTAppleAPIErrorDomain, code: $0) } +
+            (0...16).map { NSError(domain: AltServerErrorDomain, code: $0) } +
+            [100, 101].map { NSError(domain: AltServerErrorDomain, code: $0) } +
+            (0...6).map { NSError(domain: AltServerConnectionErrorDomain, code: $0) }
+
+        let errors = AltTests.allRealErrors.map { $0 as NSError } + providerErrors
+        for error in errors
+        {
+            let presentation = error.userFacingPresentation
+            XCTAssertFalse(presentation.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, error.localizedErrorCode)
+            XCTAssertFalse(presentation.message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, error.localizedErrorCode)
+            XCTAssertFalse(try XCTUnwrap(presentation.recoverySuggestion, error.localizedErrorCode).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, error.localizedErrorCode)
+            XCTAssertFalse(presentation.message.contains(".swift line "), error.localizedErrorCode)
+            XCTAssertFalse(presentation.message.contains(".m line "), error.localizedErrorCode)
+        }
+    }
+
+    func testAuthenticationParsingErrorUsesAuthenticationCopy() throws
+    {
+        let error = ALTAppleAPIError(.authenticationHandshakeFailed, userInfo: [
+            NSUnderlyingErrorKey: NSError(domain: NSCocoaErrorDomain, code: 3840)
+        ]) as NSError
+        let presentation = error.userFacingPresentation
+
+        XCTAssertEqual(presentation.title, NSLocalizedString("Apple ID Sign-In Failed", comment: "Error presentation title"))
+        XCTAssertEqual(presentation.message, NSLocalizedString("Apple's authentication service returned a response that AltForge Server could not read.", comment: ""))
+        XCTAssertNotEqual(presentation.message, NSError(domain: NSCocoaErrorDomain, code: 3840).localizedDescription)
+        XCTAssertNotNil(presentation.recoverySuggestion)
+    }
+
     func testALTApplicationIgnoresMalformedOptionalMetadata() throws
     {
         let appURL = FileManager.default.temporaryDirectory

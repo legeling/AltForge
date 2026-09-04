@@ -261,6 +261,18 @@ Cloudflare Pages 只托管 `website/` 静态目录；`_headers` 限制脚本、�
 
 动效只承担层级与操作反馈：hero 图片和标题在首次载入时完成一次有界入场，仓库信息顺序出现，后续标题、平台行、流程、能力与 FAQ 使用 `IntersectionObserver` 在首次进入可见区时增加小幅透明度/位移过渡并立即取消观察；按钮图标、FAQ 指示与平台标记只在 hover/open 时反馈。不读取鼠标坐标、不持续监听滚动、不改变布局尺寸。未运行 JavaScript 时内容保持完整可读，系统 reduced-motion 下所有 animation/transition 近似即时完成。观察节点数随页面组件线性增长，时间与额外空间为 `O(n)`，当前固定页面规模有界。
 
+### `DES-027` Apple 认证客户端身份与响应边界
+
+AltForge Server 继续在 `AnisetteDataManager` 生成或规范化 Apple 认证所需的设备描述；Mac model、macOS version 和 build 来自当前 `ProcessInfo`，Xcode client version 使用已由上游登录 harness 验证的现代固定值。AOSKit、XPC 与 Mail plug-in 三条来源都必须得到同一客户端身份，避免 Apple 将真实当前系统与 2019 年 Xcode 11 标识判为不一致。该变化不修改 machine ID、one-time password、local user ID 或 routing info，也不增加认证请求、重试或持久化。
+
+`ALTAppleAPI.sendAuthenticationRequest` 仍只解析 Apple 的 plist 响应。URLSession 错误优先返回；响应不能解析为预期 plist/Response/Status 时，统一转换为 `authenticationHandshakeFailed`，底层解析错误仅作为 `NSUnderlyingErrorKey` 保留。不得打印、持久化或复制响应正文，因为 HTML 拦截页可能包含识别信息。一次认证仍为既有有限 SRP 请求序列，新增判断为 `O(1)`，无额外网络 I/O、缓存或长期资源。
+
+### `DES-028` 统一错误展示与跨平台编码
+
+`NSError.userFacingPresentation` 是用户界面的唯一通用错误展示适配层，输出短标题、具体原因和可选恢复建议。Apple API、AltSign、Server 与 Connection provider 错误先移除远端固化的本地化字段，再由客户端 provider 使用当前语言和保留的结构化 userInfo 重新生成；本地业务错误继续使用各自 code 的 `errorFailureReason`。`NSURLErrorDomain` 与 `NSCocoaErrorDomain` 只覆盖稳定且可判定的网络、文件和解析 code，其余保留真实系统原因并使用保守建议。
+
+错误详情继续保存 domain、display code、底层错误、诊断阶段和原始进程输出。主提示不再拼接源码位置、debug description 或命令输出。AltSign 公开枚举显式覆盖 Windows 已存在的签名错误 5-7，并把 Apple API invalid response 固定为 3022；Windows 3013-3017 与 Apple 平台重新对齐。所有判断均为固定 switch，单次展示 `O(1)`，不增加网络 I/O、重试、缓存或协议字段。
+
 ## 可选目标与边界
 
 | Target | 责任 | 核心安装依赖 |

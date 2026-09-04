@@ -114,7 +114,7 @@ class EnableJITOperation<Context: EnableJITContext>: ResultOperation<Void>, @unc
                                     {
                                     case .failure(let error):
                                         content.title = String(format: NSLocalizedString("Could not enable JIT for %@", comment: ""), appName)
-                                        content.body = error.localizedDescription
+                                        content.body = error.userFacingPresentation.message
 
                                         UIDevice.current.vibrate(pattern: .error)
                                         

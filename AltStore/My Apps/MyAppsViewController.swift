@@ -853,8 +853,7 @@ private extension MyAppsViewController
                         localizedText = String(format: NSLocalizedString("Failed to refresh %@ apps.", comment: ""), NSNumber(value: failures.count))
                     }
                     
-                    let error = failures.first?.value as NSError?
-                    let detailText = error?.localizedFailure ?? error?.localizedFailureReason ?? error?.localizedDescription
+                    let detailText = failures.first?.value.userFacingPresentation.combinedMessage
                     
                     toastView = ToastView(text: localizedText, detailText: detailText)
                     toastView.preferredDuration = 4.0
@@ -2372,7 +2371,7 @@ extension MyAppsViewController
         if let storeApp = installedApp.storeApp, storeApp.isPledgeRequired, !storeApp.isPledged
         {
             let error = OperationError.pledgeInactive(appName: installedApp.name)
-            title = error.localizedDescription
+            title = error.userFacingPresentation.message
             
             let allowedActions: Set<UIMenuElement> = [
                 openMenu,

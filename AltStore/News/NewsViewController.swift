@@ -306,7 +306,7 @@ private extension NewsViewController
             self.placeholderView.detailTextLabel.isHidden = false
             
             self.placeholderView.textLabel.text = NSLocalizedString("Unable to Fetch News", comment: "")
-            self.placeholderView.detailTextLabel.text = error.localizedDescription
+            self.placeholderView.detailTextLabel.text = error.userFacingPresentation.message
             
             self.retryButton.isHidden = false
             self.placeholderView.activityIndicatorView.stopAnimating()

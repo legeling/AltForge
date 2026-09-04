@@ -1,6 +1,1206 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Deactivate one sideloaded app, then try again. If an offloaded app is still counted, reinstall or delete it before retrying." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先停用一个侧载 App，然后重试。如果已卸载的 App 仍被计入，请重新安装或彻底删除后再试。"
+          }
+        }
+      }
+    },
+    "Could not find matching provisioning profile." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到匹配的描述文件。"
+          }
+        }
+      }
+    },
+    "Incorrect verification code." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证码不正确。"
+          }
+        }
+      }
+    },
+    "The app is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 无效。"
+          }
+        }
+      }
+    },
+    "The bundle identifier for this app has already been registered." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 App 的 Bundle ID 已被注册。"
+          }
+        }
+      }
+    },
+    "The bundle identifier for this app is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 App 的 Bundle ID 无效。"
+          }
+        }
+      }
+    },
+    "The certificate request is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "证书请求无效。"
+          }
+        }
+      }
+    },
+    "The identifier for the requested provisioning profile is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求的描述文件标识符无效。"
+          }
+        }
+      }
+    },
+    "The name of this app contains invalid characters." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 App 的名称包含无效字符。"
+          }
+        }
+      }
+    },
+    "The name “%@” contains invalid characters." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名称“%@”包含无效字符。"
+          }
+        }
+      }
+    },
+    "The provided .ipa does not contain an app bundle." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该 IPA 不包含 App 包。"
+          }
+        }
+      }
+    },
+    "The provided app group is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 App Group 无效。"
+          }
+        }
+      }
+    },
+    "The provided app is missing its Info.plist." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该 App 缺少 Info.plist。"
+          }
+        }
+      }
+    },
+    "There is no App ID with the requested identifier on this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该团队中没有与请求标识符匹配的 App ID。"
+          }
+        }
+      }
+    },
+    "There is no certificate with the requested serial number for this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该团队中没有与请求序列号匹配的证书。"
+          }
+        }
+      }
+    },
+    "There is no provisioning profile with the requested identifier on this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该团队中没有与请求标识符匹配的描述文件。"
+          }
+        }
+      }
+    },
+    "This account requires signing in with two-factor authentication." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此账号需要使用双重认证登录。"
+          }
+        }
+      }
+    },
+    "This device is already registered with this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备已注册到该团队。"
+          }
+        }
+      }
+    },
+    "This device's UDID is invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备的 UDID 无效。"
+          }
+        }
+      }
+    },
+    "You are not a member of any development teams." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 Apple ID 不属于任何开发者团队。"
+          }
+        }
+      }
+    },
+    "You may only register 10 App IDs every 7 days." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每 7 天最多只能注册 10 个 App ID。"
+          }
+        }
+      }
+    },
+    "Your Apple ID or password is incorrect." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID 或密码不正确。"
+          }
+        }
+      }
+    },
+    "A connection to the server could not be established." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法连接到服务器。"
+          }
+        }
+      }
+    },
+    "A secure connection to the server could not be verified." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法验证与服务器的安全连接。"
+          }
+        }
+      }
+    },
+    "Access Could Not Be Verified" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法验证访问权限"
+          }
+        }
+      }
+    },
+    "Account Request Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账号请求失败"
+          }
+        }
+      }
+    },
+    "Add a valid source before trying again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先添加有效的软件源，然后重试。"
+          }
+        }
+      }
+    },
+    "AltForge Server Connection Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 连接失败"
+          }
+        }
+      }
+    },
+    "AltForge Server Error" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 出错"
+          }
+        }
+      }
+    },
+    "AltForge Server could not obtain valid Apple authentication data from this computer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 无法从这台电脑获取有效的 Apple 认证数据。"
+          }
+        }
+      }
+    },
+    "AltForge Server did not return a recognizable reason for this failure." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge Server 未返回可识别的失败原因。"
+          }
+        }
+      }
+    },
+    "AltForge could not determine why the app could not be signed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 无法确定 App 签名失败的原因。"
+          }
+        }
+      }
+    },
+    "AltForge did not receive a recognizable reason for this failure." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 未收到可识别的失败原因。"
+          }
+        }
+      }
+    },
+    "AltForge sent an invalid request to Apple Developer services." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AltForge 向 Apple 开发者服务发送了无效请求。"
+          }
+        }
+      }
+    },
+    "App Data Could Not Be Updated" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法更新 App 数据"
+          }
+        }
+      }
+    },
+    "App Installation Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 安装失败"
+          }
+        }
+      }
+    },
+    "App Package Could Not Be Read" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取 App 安装包"
+          }
+        }
+      }
+    },
+    "App Preparation Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法准备 App"
+          }
+        }
+      }
+    },
+    "App Refresh Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法刷新 App"
+          }
+        }
+      }
+    },
+    "App Signing Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 签名失败"
+          }
+        }
+      }
+    },
+    "App Verification Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 验证失败"
+          }
+        }
+      }
+    },
+    "Apple Developer Setup Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 开发者配置失败"
+          }
+        }
+      }
+    },
+    "Apple Developer services returned a response that AltForge could not read." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 开发者服务返回了 AltForge 无法读取的数据。"
+          }
+        }
+      }
+    },
+    "Apple Developer services returned an unknown error." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 开发者服务返回了未知错误。"
+          }
+        }
+      }
+    },
+    "Apple ID Sign-In Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID 登录失败"
+          }
+        }
+      }
+    },
+    "Apple's authentication service returned a response that AltForge Server could not read." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 认证服务返回了 AltForge Server 无法读取的数据。"
+          }
+        }
+      }
+    },
+    "Check that the file is accessible, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确认文件可以访问后重试。"
+          }
+        }
+      }
+    },
+    "Check that this Apple ID can use Apple Developer services and has accepted the latest Apple agreements, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确认此 Apple ID 可以使用 Apple 开发者服务，并已接受 Apple 的最新协议，然后重试。"
+          }
+        }
+      }
+    },
+    "Check the Apple ID account status, device date and time, then sign in again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查 Apple ID 状态以及设备的日期与时间，然后重新登录。"
+          }
+        }
+      }
+    },
+    "Check the Apple ID and password, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查 Apple ID 和密码后重试。"
+          }
+        }
+      }
+    },
+    "Check the account status and network connection, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查账号状态和网络连接后重试。"
+          }
+        }
+      }
+    },
+    "Check the computer's date and time, then update AltForge Server before retrying." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查电脑的日期与时间，更新 AltForge Server 后重试。"
+          }
+        }
+      }
+    },
+    "Check the connection to AltForge Server, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查与 AltForge Server 的连接后重试。"
+          }
+        }
+      }
+    },
+    "Check the device date and time. If the problem continues, try another trusted network." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查设备的日期与时间。如果问题仍然存在，请换用其他可信网络。"
+          }
+        }
+      }
+    },
+    "Check the network and device date and time, then update AltForge Server before retrying." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查网络以及设备的日期与时间，更新 AltForge Server 后重试。"
+          }
+        }
+      }
+    },
+    "Check the network connection and try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查网络连接后重试。"
+          }
+        }
+      }
+    },
+    "Check the network, then update AltForge and AltForge Server before retrying." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查网络，更新 AltForge 和 AltForge Server 后重试。"
+          }
+        }
+      }
+    },
+    "Check the source address and content. If it is maintained by someone else, contact the source maintainer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查软件源地址和内容。如果软件源由他人维护，请联系维护者处理。"
+          }
+        }
+      }
+    },
+    "Check this Mac's date and time, then update AltForge Server before retrying." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查这台 Mac 的日期与时间，更新 AltForge Server 后重试。"
+          }
+        }
+      }
+    },
+    "Choose the app again and make sure it is a complete, unmodified IPA file." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新选择 App，并确认它是完整且未经修改的 IPA 文件。"
+          }
+        }
+      }
+    },
+    "Create an app-specific password at appleid.apple.com, then sign in with it." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请前往 appleid.apple.com 创建 App 专用密码，然后使用该密码登录。"
+          }
+        }
+      }
+    },
+    "Device Connection Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备连接失败"
+          }
+        }
+      }
+    },
+    "Device Installation Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备安装失败"
+          }
+        }
+      }
+    },
+    "Download or export the app again from a trusted source, then retry with the new IPA file." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请从可信来源重新下载或导出 App，再使用新的 IPA 文件重试。"
+          }
+        }
+      }
+    },
+    "Download or export the app again from a trusted source, then retry with the new file." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请从可信来源重新下载或导出 App，再使用新文件重试。"
+          }
+        }
+      }
+    },
+    "Enter the latest six-digit verification code sent to your trusted Apple device." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入发送到受信任 Apple 设备上的最新六位验证码。"
+          }
+        }
+      }
+    },
+    "File or Data Could Not Be Read" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取文件或数据"
+          }
+        }
+      }
+    },
+    "For your safety, installation was stopped. Download the app again from its trusted original source." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为保障安全，安装已停止。请从可信的原始来源重新下载 App。"
+          }
+        }
+      }
+    },
+    "JIT Could Not Be Enabled" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法启用 JIT"
+          }
+        }
+      }
+    },
+    "Keep the device unlocked and connected to this computer, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请保持设备解锁并连接到这台电脑，然后重试。"
+          }
+        }
+      }
+    },
+    "Keep the device unlocked and connected, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请保持设备解锁并连接，然后重试。"
+          }
+        }
+      }
+    },
+    "Keep the device unlocked and open More Details for the device's installation reason." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请保持设备解锁，并打开“更多详情”查看设备返回的安装失败原因。"
+          }
+        }
+      }
+    },
+    "Mail Plug-In Operation Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邮件插件操作失败"
+          }
+        }
+      }
+    },
+    "Network Request Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络请求失败"
+          }
+        }
+      }
+    },
+    "Open More Details to check the process and exit code, then update the related dependency before retrying." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请打开“更多详情”查看进程和退出码，更新相关依赖后重试。"
+          }
+        }
+      }
+    },
+    "Open Settings, reconnect the required account, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请打开“设置”，重新连接所需账号后重试。"
+          }
+        }
+      }
+    },
+    "Reconnect and unlock the device, then trust this computer when prompted." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新连接并解锁设备，并在提示时信任这台电脑。"
+          }
+        }
+      }
+    },
+    "Reconnect the device and try again. If the problem continues, restart AltForge Server." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新连接设备后重试。如果问题仍然存在，请重新启动 AltForge Server。"
+          }
+        }
+      }
+    },
+    "Reconnect the device by USB, unlock it, and confirm that this computer is trusted." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请通过 USB 重新连接并解锁设备，然后确认已信任这台电脑。"
+          }
+        }
+      }
+    },
+    "Required Process Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必要进程运行失败"
+          }
+        }
+      }
+    },
+    "Select the file again and make sure it has not been moved or deleted." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新选择文件，并确认文件未被移动或删除。"
+          }
+        }
+      }
+    },
+    "Sign in again so AltForge can prepare a valid development certificate." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新登录，以便 AltForge 准备有效的开发证书。"
+          }
+        }
+      }
+    },
+    "Sign in again to request a new verification code, then enter the latest code." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新登录以获取新的验证码，然后输入最新验证码。"
+          }
+        }
+      }
+    },
+    "Sign in with your Apple ID again so AltForge can create a new provisioning profile." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新登录 Apple ID，以便 AltForge 创建新的描述文件。"
+          }
+        }
+      }
+    },
+    "Sign in with your Apple ID again so AltForge can create fresh signing assets." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新登录 Apple ID，以便 AltForge 创建新的签名资料。"
+          }
+        }
+      }
+    },
+    "Sign in with your Apple ID, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请登录 Apple ID 后重试。"
+          }
+        }
+      }
+    },
+    "Source Could Not Be Used" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法使用软件源"
+          }
+        }
+      }
+    },
+    "The Apple root signing certificate could not be found." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到 Apple 根签名证书。"
+          }
+        }
+      }
+    },
+    "The Mail plug-in installer returned an error." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邮件插件安装程序返回了错误。"
+          }
+        }
+      }
+    },
+    "The device could not remove the app." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备无法移除该 App。"
+          }
+        }
+      }
+    },
+    "The device is already registered. Try the installation again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该设备已经注册，请重新尝试安装。"
+          }
+        }
+      }
+    },
+    "The network connection was interrupted." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络连接已中断。"
+          }
+        }
+      }
+    },
+    "The network request timed out." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络请求超时。"
+          }
+        }
+      }
+    },
+    "The provisioning profile is invalid or has expired." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "描述文件无效或已过期。"
+          }
+        }
+      }
+    },
+    "The requested app group does not exist on this team." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该团队中不存在所请求的 App Group。"
+          }
+        }
+      }
+    },
+    "The returned data could not be read." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "返回的数据无法读取。"
+          }
+        }
+      }
+    },
+    "The selected file could not be found." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到所选文件。"
+          }
+        }
+      }
+    },
+    "The selected file is damaged or is not in the expected format." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选文件已损坏，或不是预期的格式。"
+          }
+        }
+      }
+    },
+    "The server address could not be resolved." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法解析服务器地址。"
+          }
+        }
+      }
+    },
+    "The server returned an HTTP error." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "服务器返回了 HTTP 错误。"
+          }
+        }
+      }
+    },
+    "The signing certificate is invalid or has expired." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "签名证书无效或已过期。"
+          }
+        }
+      }
+    },
+    "This Apple ID requires an app-specific password." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 Apple ID 需要使用 App 专用密码。"
+          }
+        }
+      }
+    },
+    "This Mac's Apple authentication data is missing or invalid." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这台 Mac 的 Apple 认证数据缺失或无效。"
+          }
+        }
+      }
+    },
+    "This device is not connected to the internet." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备未连接到互联网。"
+          }
+        }
+      }
+    },
+    "Try again. If the problem continues, open More Details and include the diagnostic code when reporting it." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重试。如果问题仍然存在，请打开“更多详情”，反馈时附上诊断代码。"
+          }
+        }
+      }
+    },
+    "Try again. If the problem continues, update AltForge and AltForge Server before retrying." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重试。如果问题仍然存在，请更新 AltForge 和 AltForge Server 后再试。"
+          }
+        }
+      }
+    },
+    "Try the installation again so AltForge can recreate the required Apple Developer records." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新尝试安装，以便 AltForge 重建所需的 Apple 开发者记录。"
+          }
+        }
+      }
+    },
+    "Unlock the device and remove the app directly on the device, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请解锁设备，直接在设备上移除该 App，然后重试。"
+          }
+        }
+      }
+    },
+    "Unlock the device, check that it has enough free storage, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请解锁设备，确认有足够的可用存储空间后重试。"
+          }
+        }
+      }
+    },
+    "Unlock the device, reconnect it, and confirm that this computer is trusted." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请解锁并重新连接设备，然后确认已信任这台电脑。"
+          }
+        }
+      }
+    },
+    "Update AltForge Server so it can download a Developer Disk that matches this device." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请更新 AltForge Server，以便下载与该设备匹配的开发者磁盘。"
+          }
+        }
+      }
+    },
+    "Update AltForge and AltForge Server to matching versions, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请将 AltForge 和 AltForge Server 更新到匹配的版本后重试。"
+          }
+        }
+      }
+    },
+    "Update AltForge and AltForge Server, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请更新 AltForge 和 AltForge Server 后重试。"
+          }
+        }
+      }
+    },
+    "Update AltForge and AltForge Server, then try preparing the app again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请更新 AltForge 和 AltForge Server，然后重新准备 App。"
+          }
+        }
+      }
+    },
+    "Update the device, or install an app version that supports its current operating system." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请更新设备系统，或安装支持当前系统版本的 App。"
+          }
+        }
+      }
+    },
+    "Update the operating system's trusted certificates, then try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请更新操作系统的受信任证书后重试。"
+          }
+        }
+      }
+    },
+    "Use a complete, unmodified IPA from a trusted source. If the problem continues, try another Apple ID." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请使用来自可信来源、完整且未经修改的 IPA。如果问题仍然存在，请尝试其他 Apple ID。"
+          }
+        }
+      }
+    },
+    "Wait for an existing App ID to expire, or use a paid Apple Developer account." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请等待现有 App ID 到期，或改用付费 Apple Developer 账号。"
+          }
+        }
+      }
+    },
+    "the Apple authentication value “%@”" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 认证值“%@”"
+          }
+        }
+      }
+    },
+    "the required Apple authentication values" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所需的 Apple 认证值"
+          }
+        }
+      }
+    },
     "AltForge Blueprint" : {
       "localizations" : {
         "zh-Hans" : {

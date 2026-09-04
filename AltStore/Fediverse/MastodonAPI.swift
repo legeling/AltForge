@@ -74,10 +74,10 @@ struct MastodonError: ALTLocalizedError
     var errorFailureReason: String {
         switch self.code
         {
-        case .unknown: return String(localized: "An unknown error occured.")
+        case .unknown: return String(localized: "AltForge did not receive a recognizable reason for this failure.")
         case .unauthorized: return String(localized: "This request requires an authenticated user.")
         case .http:
-            guard let statusCode else { return String(localized: "An HTTP error occured.") }
+            guard let statusCode else { return String(localized: "The server returned an HTTP error.") }
             return String(format: String(localized: "HTTP Status Code: %@"), statusCode as NSNumber)
             
         case .invalidServer:

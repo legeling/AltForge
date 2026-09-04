@@ -190,7 +190,7 @@ private extension PatchViewController
         DispatchQueue.main.async {
             let nsError = error as NSError
             
-            let alertController = UIAlertController(title: nsError.localizedFailure ?? title, message: error.localizedDescription, preferredStyle: .alert)
+            let alertController = UIAlertController(title: nsError.localizedFailure ?? title, message: error.userFacingPresentation.combinedMessage, preferredStyle: .alert)
             alertController.addAction(.ok)
             self.present(alertController, animated: true, completion: nil)
             

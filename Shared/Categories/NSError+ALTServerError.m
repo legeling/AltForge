@@ -155,7 +155,7 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
         }
         
         case ALTServerErrorUnknown:
-            return NSLocalizedString(@"An unknown error occured.", @"");
+            return NSLocalizedString(@"AltForge Server did not return a recognizable reason for this failure.", @"");
             
         case ALTServerErrorConnectionFailed:
         {
@@ -242,7 +242,7 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
             return NSLocalizedString(@"AltForge received an unknown response from AltForge Server.", @"");
             
         case ALTServerErrorInvalidAnisetteData:
-            return NSLocalizedString(@"The provided anisette data is invalid.", @"");
+            return NSLocalizedString(@"AltForge Server could not obtain valid Apple authentication data from this computer.", @"");
             
         case ALTServerErrorPluginNotFound:
             return NSLocalizedString(@"AltForge Server could not connect to the legacy Mail plug-in.", @"");
@@ -251,7 +251,7 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
             return [self profileErrorLocalizedDescriptionWithBaseDescription:NSLocalizedString(@"Could not find profile", "")];
             
         case ALTServerErrorAppDeletionFailed:
-            return NSLocalizedString(@"An error occured while removing the app.", @"");
+            return NSLocalizedString(@"The device could not remove the app.", @"");
             
         case ALTServerErrorRequestedAppNotRunning:
         {
@@ -298,22 +298,51 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
             
         case ALTServerErrorPluginNotFound:
             return NSLocalizedString(@"Make sure Mail is running and the plug-in is enabled in Mail's preferences.", @"");
+
+        case ALTServerErrorLostConnection:
+            return NSLocalizedString(@"Keep the device unlocked and connected to this computer, then try again.", @"");
+
+        case ALTServerErrorDeviceWriteFailed:
+            return NSLocalizedString(@"Unlock the device, check that it has enough free storage, then try again.", @"");
+
+        case ALTServerErrorInvalidRequest:
+        case ALTServerErrorInvalidResponse:
+        case ALTServerErrorUnknownRequest:
+        case ALTServerErrorUnknownResponse:
+            return NSLocalizedString(@"Update AltForge and AltForge Server to matching versions, then try again.", @"");
+
+        case ALTServerErrorInvalidApp:
+            return NSLocalizedString(@"Download or export the app again from a trusted source, then retry with the new IPA file.", @"");
+
+        case ALTServerErrorInstallationFailed:
+            return NSLocalizedString(@"Keep the device unlocked and open More Details for the device's installation reason.", @"");
+
+        case ALTServerErrorUnsupportediOSVersion:
+            return NSLocalizedString(@"Update the device, or install an app version that supports its current operating system.", @"");
+
+        case ALTServerErrorInvalidAnisetteData:
+            return NSLocalizedString(@"Check the computer's date and time, then update AltForge Server before retrying.", @"");
+
+        case ALTServerErrorProfileNotFound:
+            return NSLocalizedString(@"Sign in with your Apple ID again so AltForge can create a new provisioning profile.", @"");
+
+        case ALTServerErrorAppDeletionFailed:
+            return NSLocalizedString(@"Unlock the device and remove the app directly on the device, then try again.", @"");
+
+        case ALTServerErrorIncompatibleDeveloperDisk:
+            return NSLocalizedString(@"Update AltForge Server so it can download a Developer Disk that matches this device.", @"");
             
         case ALTServerErrorMaximumFreeAppLimitReached:
-#if TARGET_OS_OSX
-            return NSLocalizedString(@"Please deactivate a sideloaded app with AltForge in order to install another app.\n\nIf you're running iOS 13.5 or later, make sure 'Offload Unused Apps' is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps to prevent them from erroneously counting towards this limit.", @"");
-#else
-            return NSLocalizedString(@"Please deactivate a sideloaded app in order to install another one.\n\nIf you're running iOS 13.5 or later, make sure “Offload Unused Apps” is disabled in Settings > iTunes & App Stores, then install or delete all offloaded apps.", @"");
-#endif
+            return NSLocalizedString(@"Deactivate one sideloaded app, then try again. If an offloaded app is still counted, reinstall or delete it before retrying.", @"");
             
         case ALTServerErrorRequestedAppNotRunning:
         {
             NSString *deviceName = self.userInfo[ALTDeviceNameErrorKey] ?: NSLocalizedString(@"your device", @"");
             return [NSString stringWithFormat:NSLocalizedString(@"Make sure the app is running in the foreground on %@ then try again.", @""), deviceName];
         }
-            
-        default:
-            return nil;
+
+        case ALTServerErrorUnknown:
+            return NSLocalizedString(@"Try again. If the problem continues, open More Details and include the diagnostic code when reporting it.", @"");
     }
 }
 
@@ -444,20 +473,24 @@ NSErrorUserInfoKey const ALTNSCodingPathKey = @"NSCodingPath";
     switch ((ALTServerConnectionError)self.code)
     {
         case ALTServerConnectionErrorDeviceLocked:
-        {
             return NSLocalizedString(@"Please unlock the device with your passcode and try again.", @"");
-        }
-            
+
         case ALTServerConnectionErrorUnknown:
+            return NSLocalizedString(@"Reconnect the device and try again. If the problem continues, restart AltForge Server.", @"");
+
         case ALTServerConnectionErrorInvalidRequest:
         case ALTServerConnectionErrorInvalidResponse:
+            return NSLocalizedString(@"Update AltForge and AltForge Server to matching versions, then try again.", @"");
+
         case ALTServerConnectionErrorUsbmuxd:
+            return NSLocalizedString(@"Reconnect the device by USB, unlock it, and confirm that this computer is trusted.", @"");
+
         case ALTServerConnectionErrorSSL:
+            return NSLocalizedString(@"Unlock the device, reconnect it, and confirm that this computer is trusted.", @"");
+
         case ALTServerConnectionErrorTimedOut:
-        {
-            return nil;
+            return NSLocalizedString(@"Keep the device unlocked and connected, then try again.", @"");
         }
     }
-}
     
 @end

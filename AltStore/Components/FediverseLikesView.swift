@@ -99,7 +99,7 @@ struct FediverseLikesView: View
         .overlay {
             if let error
             {
-                ContentUnavailableView("Could Not Load Likes", systemImage: "heart", description: Text(error.localizedDescription))
+                ContentUnavailableView("Could Not Load Likes", systemImage: "heart", description: Text(error.userFacingPresentation.message))
             }
             else if let accounts, accounts.isEmpty
             {
@@ -253,4 +253,3 @@ private struct AccountRow: View
         }
     }
 }
-

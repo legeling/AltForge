@@ -572,6 +572,50 @@ assert(certificate_flow.include?("confirmReplacement(of: certificate)"), "manage
 
 altsign_package = read(root, "Dependencies/AltSign/Package.swift")
 assert(!altsign_package.include?('.define("MARKETPLACE")'), "Classic AltServer authentication must not compile AltSign with SRP cryptography disabled")
+anisette_manager = read(root, "AltServer/Anisette Data/AnisetteDataManager.swift")
+assert(anisette_manager.include?('static let xcodeVersion = "25183.54.10"'), "anisette data must use a currently accepted Apple developer client identity")
+assert(!anisette_manager.include?("3594.4.19"), "anisette data must not advertise the rejected Xcode 11 client identity")
+altsign_authentication = read(root, "Dependencies/AltSign/AltSign/Sources/ALTAppleAPI+Authentication.swift")
+assert(altsign_authentication.include?("ALTAppleAPIError(.authenticationHandshakeFailed, userInfo: [NSUnderlyingErrorKey: error])"), "malformed Apple authentication responses must not surface as raw property-list errors")
+assert(altsign_authentication.include?("without retaining or logging its body"), "authentication parse failures must document response-body privacy")
+
+error_presentation = read(root, "Shared/Extensions/NSError+AltStore.swift")
+assert(error_presentation.include?("struct ALTErrorPresentation"), "user-facing errors must use the shared title, reason, and recovery model")
+assert(error_presentation.include?("var userFacingPresentation: ALTErrorPresentation"), "all app surfaces must be able to request a consistent error presentation")
+assert(error_presentation.include?('case 3840, 4864:'), "property-list and archive parse failures must use a data-specific message")
+assert(!read(root, "Shared/Errors/ProcessError.swift").include?("baseMessage + \" \" + lastLine"), "raw process output must stay in error details instead of the primary message")
+assert(!read(root, "AltServer/Plugin/PluginManager.swift").include?("return output"), "privileged task output must stay in error details instead of the primary message")
+
+altsign_errors_header = read(root, "Dependencies/AltSign/AltSign/Categories/NSError+ALTErrors.h")
+assert(altsign_errors_header.include?("ALTAppleAPIErrorInvalidResponse = 3022"), "Apple API invalid-response errors need a unique cross-platform code")
+windows_altsign_errors = read(root, "AltServer-Windows/AltSign/Error.hpp")
+{
+  "MaximumAppIDLimitReached" => 3013,
+  "InvalidAppGroup" => 3014,
+  "AppGroupDoesNotExist" => 3015,
+  "InvalidProvisioningProfileIdentifier" => 3016,
+  "ProvisioningProfileDoesNotExist" => 3017,
+  "InvalidResponse" => 3022
+}.each do |name, code|
+  assert(windows_altsign_errors.include?("#{name} = #{code}"), "Windows Apple API error #{name} must use shared code #{code}")
+end
+
+error_copy_keys = [
+  "Apple ID Sign-In Failed",
+  "Apple's authentication service returned a response that AltForge Server could not read.",
+  "Check the network and device date and time, then update AltForge Server before retrying.",
+  "App Package Could Not Be Read",
+  "Device Connection Failed",
+  "App Verification Failed",
+  "The returned data could not be read."
+]
+%w[AltStore/Resources/Localizable.xcstrings AltServer/Resources/Localizable.xcstrings].each do |path|
+  strings = JSON.parse(read(root, path)).fetch("strings")
+  error_copy_keys.each do |key|
+    chinese = strings.dig(key, "localizations", "zh-Hans", "stringUnit", "value")
+    assert(chinese && !chinese.empty?, "missing Simplified Chinese error copy in #{path}: #{key}")
+  end
+end
 
 release_generator = read(root, "Scripts/generate_release_metadata.rb")
 assert(release_generator.include?('parser.on("--cdn-base-url URL")'), "release metadata generation must accept an explicit CDN base URL")

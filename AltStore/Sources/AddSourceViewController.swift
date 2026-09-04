@@ -843,7 +843,7 @@ private extension AddSourceViewController
         case (let sourceURL, .failure(let previewError))? where self.viewModel.sourceURL == sourceURL && !self.viewModel.isLoadingPreview:
             // The current URL matches the error being displayed, and we're not loading another preview, so show error.
             
-            footerView.placeholderView.textLabel.text = (previewError as NSError).localizedDebugDescription ?? previewError.localizedDescription
+            footerView.placeholderView.textLabel.text = previewError.userFacingPresentation.message
             footerView.placeholderView.textLabel.isHidden = false
             
             footerView.placeholderView.activityIndicatorView.stopAnimating()
@@ -989,7 +989,7 @@ private extension AddSourceViewController
             catch
             {
                 let errorTitle = NSLocalizedString("Unable to Add Source", comment: "")
-                await self.presentAlert(title: errorTitle, message: error.localizedDescription)
+                await self.presentAlert(title: errorTitle, message: error.userFacingPresentation.combinedMessage)
             }
         }
     }
@@ -1032,7 +1032,7 @@ private extension AddSourceViewController
                 
                 if let error = results.errors.first, errorsMatch
                 {
-                    message = error.localizedDescription
+                    message = error.userFacingPresentation.combinedMessage
                 }
                 
                 await self.presentAlert(title: String(title.characters), message: message)
@@ -1179,7 +1179,7 @@ extension AddSourceViewController: UICollectionViewDelegateFlowLayout
                 footerView.placeholderView.textLabel.text = NSLocalizedString("Unable to Load Featured Sources", comment: "")
                 
                 footerView.placeholderView.detailTextLabel.isHidden = false
-                footerView.placeholderView.detailTextLabel.text = error.localizedDescription
+                footerView.placeholderView.detailTextLabel.text = error.userFacingPresentation.message
                 
                 footerView.placeholderView.activityIndicatorView.stopAnimating()
             }

@@ -101,7 +101,7 @@ class DownloadAppOperation: ResultOperation<ALTApplication>, @unchecked Sendable
                 }
                 
                 let title = NSLocalizedString("Unsupported iOS Version", comment: "")
-                let message = error.localizedDescription + "\n\n" + NSLocalizedString("Would you like to download the last version compatible with this device instead?", comment: "")
+                let message = error.userFacingPresentation.message + "\n\n" + NSLocalizedString("Would you like to download the last version compatible with this device instead?", comment: "")
                 let localizedVersion = latestSupportedVersion.localizedVersion
                 
                 DispatchQueue.main.async {

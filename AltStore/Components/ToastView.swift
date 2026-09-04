@@ -58,35 +58,8 @@ class ToastView: RSTToastView
     
     convenience init(error: Error)
     {
-        var error = error as NSError
-        var underlyingError = error.underlyingError
-        
-        if
-            let unwrappedUnderlyingError = underlyingError,
-            error.domain == AltServerErrorDomain && error.code == ALTServerError.Code.underlyingError.rawValue
-        {
-            // Treat underlyingError as the primary error, but keep localized title + failure.
-            
-            let nsError = (error as NSError)
-            error = (unwrappedUnderlyingError as NSError)
-            
-            if let localizedTitle = nsError.localizedTitle
-            {
-                error = error.withLocalizedTitle(localizedTitle)
-            }
-            
-            if let localizedFailure = nsError.localizedFailure
-            {
-                error = error.withLocalizedFailure(localizedFailure)
-            }
-            
-            underlyingError = nil
-        }
-        
-        let text = error.localizedTitle ?? NSLocalizedString("Operation Failed", comment: "")
-        let detailText = error.localizedDescription
-        
-        self.init(text: text, detailText: detailText)
+        let presentation = error.userFacingPresentation
+        self.init(text: presentation.title, detailText: presentation.combinedMessage)
     }
     
     required init(coder aDecoder: NSCoder) {

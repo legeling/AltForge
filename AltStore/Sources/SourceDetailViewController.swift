@@ -316,7 +316,7 @@ class SourceDetailViewController: HeaderContentViewController<SourceHeaderView, 
             catch is CancellationError {}
             catch
             {
-                await self.presentAlert(title: errorTitle, message: error.localizedDescription)
+                await self.presentAlert(title: errorTitle, message: error.userFacingPresentation.combinedMessage)
             }
             
             self.viewModel.isAddingSource = false

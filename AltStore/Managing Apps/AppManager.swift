@@ -825,7 +825,7 @@ extension AppManager
                 catch
                 {
                     // This should be an alert, so show directly rather than re-throwing error.
-                    await presentingViewController.presentAlert(title: NSLocalizedString("Unable to Add Source", comment: ""), message: error.localizedDescription)
+                    await presentingViewController.presentAlert(title: NSLocalizedString("Unable to Add Source", comment: ""), message: error.userFacingPresentation.combinedMessage)
                     
                     // Don't rethrow error
                     // throw error

@@ -237,7 +237,7 @@ extension AltAppIconsViewController
                 {
                     UINotificationFeedbackGenerator().notificationOccurred(.error)
                     let alertController = UIAlertController(title: NSLocalizedString("Unable to Change App Icon", comment: ""),
-                                                            message: error.localizedDescription,
+                                                            message: error.userFacingPresentation.combinedMessage,
                                                             preferredStyle: .alert)
                     alertController.addAction(.ok)
                     self.present(alertController, animated: true)

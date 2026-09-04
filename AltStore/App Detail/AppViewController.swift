@@ -895,7 +895,7 @@ extension AppViewController
                 Logger.main.error("Failed to like app \(self.app.bundleIdentifier). \(error.localizedDescription, privacy: .public)")
                 self.hapticGenerator.notificationOccurred(.error)
                 
-                await self.presentAlert(title: String(localized: "Unable to Like App"), message: error.localizedDescription)
+                await self.presentAlert(title: String(localized: "Unable to Like App"), message: error.userFacingPresentation.combinedMessage)
                 
                 self._isLiked = previousState
             }

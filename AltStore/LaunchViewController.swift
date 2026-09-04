@@ -145,7 +145,7 @@ private extension LaunchViewController
                         for error in sourceErrors
                         {
                             let title = String(format: NSLocalizedString("“%@” Blocked", comment: ""), error.$source.name)
-                            let message = [error.localizedDescription, error.recoverySuggestion].compactMap { $0 }.joined(separator: "\n\n")
+                            let message = error.userFacingPresentation.combinedMessage
                             
                             await self.presentAlert(title: title, message: message)
                         }

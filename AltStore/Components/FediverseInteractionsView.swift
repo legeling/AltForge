@@ -530,7 +530,7 @@ private extension FediverseInteractions
                     // Unlike failed
                     rollBackIn()
                     
-                    let toastView = ToastView(text: String(localized: "Unable to Unlike \(itemName)"), detailText: error.localizedDescription)
+                    let toastView = ToastView(text: String(localized: "Unable to Unlike \(itemName)"), detailText: error.userFacingPresentation.combinedMessage)
                     toastView.show(in: presentingViewController)
                 }
                 else
@@ -538,7 +538,7 @@ private extension FediverseInteractions
                     // Like failed
                     rollBackOut()
                     
-                    let toastView = ToastView(text: String(localized: "Unable to Like \(itemName)"), detailText: error.localizedDescription)
+                    let toastView = ToastView(text: String(localized: "Unable to Like \(itemName)"), detailText: error.userFacingPresentation.combinedMessage)
                     toastView.show(in: presentingViewController)
                 }
             }

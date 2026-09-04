@@ -136,11 +136,7 @@ struct OperationError: ALTLocalizedError
         switch self.code
         {
         case .unknown:
-            var failureReason = self._failureReason ?? NSLocalizedString("An unknown error occured.", comment: "")
-            guard let sourceFile, let sourceLine else { return failureReason }
-            
-            failureReason += " (\(sourceFile) line \(sourceLine))"
-            return failureReason
+            return self._failureReason ?? NSLocalizedString("AltForge did not receive a recognizable reason for this failure.", comment: "")
             
         case .unknownResult: return NSLocalizedString("The operation returned an unknown result.", comment: "")
         case .timedOut: return NSLocalizedString("The operation timed out.", comment: "")
@@ -191,7 +187,7 @@ struct OperationError: ALTLocalizedError
         {
         case .serverNotFound: return NSLocalizedString("Make sure you're on the same Wi-Fi network as a computer running AltForge Server, or try connecting this device to your computer via USB.", comment: "")
         case .maximumAppIDLimitReached:
-            let baseMessage = NSLocalizedString("Delete sideloaded apps to free up App ID slots.", comment: "")
+            let baseMessage = NSLocalizedString("Wait for an existing App ID to expire, or use a paid Apple Developer account.", comment: "")
             guard let appName = self.appName, let requiredAppIDs = self.requiredAppIDs, let availableAppIDs = self.availableAppIDs, let date = self.expirationDate else { return baseMessage }
             
             var message: String = ""

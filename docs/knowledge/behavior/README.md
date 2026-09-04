@@ -78,6 +78,7 @@ macOS 桌面产物的公开目录和 executable 均为 `AltForge Server`；内�
 - 系统公开身份由 `CFBundleDisplayName`、`CFBundleName` 和实际 executable 共同定义，三者均为 AltForge，避免系统问题报告回退到历史 target 名。
 - `AltStore` target/scheme/Swift module、`AltStore.app` 包目录、协议/数据库/历史 identifier 属于内部兼容边界，不应为了视觉品牌做机械重命名；AltStore PAL、AltStore 2.0、第三方 source、上游归属和旧证书识别继续保留真实名称。
 - GitHub 仓库地址表示 AltForge 项目的固定维护与发布归属，不用于推断用户的 Apple 开发者身份。认证后从 Apple 返回的团队中优先复用 active team，否则按个人开发者、组织、免费团队、首个未知团队的顺序自动选择，并在设置中显示实际团队名称和类型。
+- Apple 认证使用 AltForge Server 提供的 anisette 值；客户端描述必须由当前 Mac model、macOS version/build 与已验证的现代 Xcode client version 组成。Apple 或网络中间层返回 HTML、空内容或畸形 plist 时，流程在 IPA 读取前以认证握手失败结束，只保留底层错误类型，不记录响应正文或任何凭据/anisette 值。
 - 安装、更新和刷新进入队列时只持久化最多 20 条脱敏 operation 摘要；每条最多保存 16 个关键阶段和 120 字符 detail。正常结束立即删除，失败时把客户端诊断编号、最后阶段和相对耗时轨迹写入既有错误日志，进程在结果落库前中断时于下次启动补写一次错误日志。诊断只允许连接类别和团队类别等低敏上下文，不保存凭据、设备/团队/Server 标识、签名材料或文件路径。设置、我的 App 和认证页面不得通过递归遍历 UIKit 私有子视图实现动态配色。
 
 ## 错误传输
@@ -86,6 +87,8 @@ macOS 桌面产物的公开目录和 executable 均为 `AltForge Server`；内�
 - `ALTLocalizedError` 提供 failure、reason 和 recovery suggestion。
 - `CodableError` 只编码允许的数据类型；unsupported userInfo 不跨进程传输。
 - 客户端收到错误后优先显示可操作的恢复建议，详细诊断进入 error log。
+- 所有可见错误通过 `userFacingPresentation` 生成“标题、具体原因、下一步”；Apple API、AltSign、Server 与 Connection 的远端文案按客户端当前语言重新生成，避免把 Server 端英文固化到中文界面。
+- 解析错误、网络错误、认证错误、IPA/签名错误只按真实 domain/code 分类；未知 code 使用不猜测原因的兜底。源码位置、debug description、底层错误和原始进程输出仅进入“更多详情”。
 - 诊断轨迹使用客户端生成的 operation ID，只关联本机 AppManager 阶段；当前不改变 Server Protocol，也不宣称能关联 macOS/Windows Server 的独立日志。
 
 ## Release

@@ -111,7 +111,7 @@ private extension SourceCollectionViewController
             self.placeholderView.detailTextLabel.isHidden = false
             
             self.placeholderView.textLabel.text = NSLocalizedString("Unable to Fetch Apps", comment: "")
-            self.placeholderView.detailTextLabel.text = error.localizedDescription
+            self.placeholderView.detailTextLabel.text = error.userFacingPresentation.message
             
             self.retryButton.isHidden = false
             self.placeholderView.activityIndicatorView.stopAnimating()
@@ -226,7 +226,7 @@ private extension SourceCollectionViewController
             catch
             {
                 let errorTitle = NSLocalizedString("Unable to Add Source", comment: "")
-                await self.presentAlert(title: errorTitle, message: error.localizedDescription)
+                await self.presentAlert(title: errorTitle, message: error.userFacingPresentation.combinedMessage)
             }
         }
     }
@@ -282,7 +282,7 @@ private extension SourceCollectionViewController
                     
                     if let error = results.errors.first, errorsMatch
                     {
-                        message = error.localizedDescription
+                        message = error.userFacingPresentation.combinedMessage
                     }
                     
                     await self.presentAlert(title: String(title.characters), message: message)

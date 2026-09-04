@@ -231,7 +231,7 @@ private extension BackgroundRefreshAppsOperation
                 Logger.sideload.error("Failed to refresh apps in background. \(error.localizedDescription, privacy: .public)")
                 
                 content.title = NSLocalizedString("Failed to Refresh Apps", comment: "")
-                content.body = error.localizedDescription
+                content.body = error.userFacingPresentation.message
                 
                 shouldPresentAlert = true
             }

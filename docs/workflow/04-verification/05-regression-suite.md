@@ -139,6 +139,26 @@ iOS 主题色变化执行 `TEST-036`：先运行偏好 round-trip XCTest、repos
 - 检查 GitHub repository homepage 指向生产官网；workflow 必须在未设置启用变量时只验证不部署，启用后只从 `marketplace` 上传 `website/`，凭据只来自 repository Secrets。
 - 验证后停止本次静态服务器和浏览器，清理任务截图与临时缓存；只有用户要求试用时保留单个服务器并报告端口。
 
+## Suite J：Apple 认证响应兼容
+
+触发：AltServer anisette client identity、AltSign GSA 请求/解析、认证错误映射或 Apple 系统版本变化。
+
+- 运行 repository contract，确认 `X-MMe-Client-Info` 不含已拒绝的 Xcode 11 client version，当前 Mac model、macOS version/build 与现代 client version 组成内部一致的描述。
+- 用 synthetic plist 覆盖正常 `Response/Status`、以 `<html>` 开头的正文、空内容和缺失 `Status`；畸形输入必须返回 `authenticationHandshakeFailed (3020)`，不得在日志、fixture 或 error userInfo 保存响应正文。
+- 构建 AltServer 与 AltStore target，确认 Server 生产者、Server Protocol 编解码和 iOS AltSign 消费者同时兼容；本变更不修改 machine ID、OTP、routing info、SRP 算法或协议 schema。
+- 用专用测试 Apple ID 在真实设备完成登录、2FA、团队和证书查询，再安装最小测试 IPA。账号、密码、验证码、UDID、token、certificate、profile 和 anisette headers 不进入命令输出或验证文档。
+- Apple endpoint 使用既有系统 URLSession 超时和显式用户重试；失败时不得自动无界重试。真实账号门禁未完成前保持 `ISSUE-20260904-001` Open。
+
+## Suite K：错误码与用户提示
+
+触发：错误 enum/domain、provider、错误序列化、Toast/Alert/通知展示或 string catalog 变化。
+
+- 运行 AltTests 中的 user-facing presentation 测试，枚举全部已知 provider code 和既有业务 fixture；标题、原因、恢复建议必须非空。
+- 运行 repository contract，检查 Apple/Windows code 数值、共享展示入口、简体中文 key、进程输出隔离和认证 3020 映射。
+- 构建 iOS AltStore 与 macOS AltServer，确认共享 Swift、Objective-C provider、AltSign submodule 与两份 catalog 同时编译。
+- 使用简体中文检查 Apple ID 错误、IPA 损坏、Server 断连和未知错误四类代表界面；主提示不得出现 domain、源码路径、命令输出或与阶段无关的“格式错误”。
+- Windows 变更至少执行源码/contract 检查；只有 Windows runner 完成 MSBuild 后才能声明 Windows 构建通过。
+
 ## 命令登记规则
 
 - tag-driven Release workflow 是自动构建命令的真相来源，本文件解释本地预检和触发条件。

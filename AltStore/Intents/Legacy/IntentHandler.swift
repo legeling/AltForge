@@ -47,7 +47,7 @@ class IntentHandler: NSObject, RefreshAllIntentHandling
             DatabaseManager.shared.start() { (error) in
                 if let error = error
                 {
-                    self.finish(intent, response: RefreshAllIntentResponse.failure(localizedDescription: error.localizedDescription))
+                    self.finish(intent, response: RefreshAllIntentResponse.failure(localizedDescription: error.userFacingPresentation.message))
                 }
                 else
                 {
@@ -132,7 +132,7 @@ private extension IntentHandler
                 catch let error as NSError
                 {
                     print("Failed to refresh apps in background.", error)
-                    self.finish(intent, response: RefreshAllIntentResponse.failure(localizedDescription: error.localizedFailureReason ?? error.localizedDescription))
+                    self.finish(intent, response: RefreshAllIntentResponse.failure(localizedDescription: error.userFacingPresentation.message))
                 }
                 
                 self.operations[intent] = nil

@@ -122,7 +122,7 @@ class InstallMarketplaceAppViewController: UICollectionViewController
         {
             Logger.sideload.error("Failed to prepare action button. \(error.localizedDescription, privacy: .public)")
             
-            let alertController = UIAlertController(title: NSLocalizedString("Unable to Prepare App", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+            let alertController = UIAlertController(title: NSLocalizedString("Unable to Prepare App", comment: ""), message: error.userFacingPresentation.combinedMessage, preferredStyle: .alert)
             alertController.addAction(.ok)
             self.present(alertController, animated: true)
             

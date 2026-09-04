@@ -52,36 +52,36 @@ enum class SignErrorCode
 enum class APIErrorCode
 {
     Unknown = 3000,
-    InvalidParameters,
+    InvalidParameters = 3001,
 
-    IncorrectCredentials,
-    AppSpecificPasswordRequired,
+    IncorrectCredentials = 3002,
+    AppSpecificPasswordRequired = 3003,
 
-    NoTeams,
-    InvalidDeviceID,
-    DeviceAlreadyRegistered,
+    NoTeams = 3004,
+    InvalidDeviceID = 3005,
+    DeviceAlreadyRegistered = 3006,
 
-    InvalidCertificateRequest,
-    CertificateDoesNotExist,
+    InvalidCertificateRequest = 3007,
+    CertificateDoesNotExist = 3008,
 
-    InvalidAppIDName,
-    InvalidBundleIdentifier,
-    BundleIdentifierUnavailable,
-    AppIDDoesNotExist,
+    InvalidAppIDName = 3009,
+    InvalidBundleIdentifier = 3010,
+    BundleIdentifierUnavailable = 3011,
+    AppIDDoesNotExist = 3012,
+    MaximumAppIDLimitReached = 3013,
 
-    InvalidAppGroup,
-    AppGroupDoesNotExist,
+    InvalidAppGroup = 3014,
+    AppGroupDoesNotExist = 3015,
 
-    InvalidProvisioningProfileIdentifier,
-    ProvisioningProfileDoesNotExist,
+    InvalidProvisioningProfileIdentifier = 3016,
+    ProvisioningProfileDoesNotExist = 3017,
 
-    InvalidResponse,
+    RequiresTwoFactorAuthentication = 3018,
+    IncorrectVerificationCode = 3019,
+    AuthenticationHandshakeFailed = 3020,
 
-	RequiresTwoFactorAuthentication,
-	IncorrectVerificationCode,
-	AuthenticationHandshakeFailed,
-
-	InvalidAnisetteData,
+    InvalidAnisetteData = 3021,
+    InvalidResponse = 3022,
 };
 
 enum class CocoaErrorCode
@@ -256,10 +256,10 @@ public:
         switch ((APIErrorCode)this->code())
         {
             case APIErrorCode::Unknown:
-                return "An unknown error occured.";
+                return "Apple Developer services returned an unknown error.";
 
             case APIErrorCode::InvalidParameters:
-                return "The provided parameters are invalid.";
+                return "AltForge sent an invalid request to Apple Developer services.";
 
             case APIErrorCode::IncorrectCredentials:
                 return "Incorrect Apple ID or password.";
@@ -294,6 +294,9 @@ public:
             case APIErrorCode::AppIDDoesNotExist:
                 return "There is no App ID with the requested identifier on this team.";
 
+            case APIErrorCode::MaximumAppIDLimitReached:
+                return "You may only register 10 App IDs every 7 days.";
+
             case APIErrorCode::InvalidAppGroup:
                 return "The provided app group is invalid.";
 
@@ -307,7 +310,7 @@ public:
                 return "There is no provisioning profile with the requested identifier on this team.";
 
             case APIErrorCode::InvalidResponse:
-                return "Server returned invalid response.";
+                return "Apple Developer services returned a response that AltForge could not read.";
 
 			case APIErrorCode::RequiresTwoFactorAuthentication:
 				return "This account requires signing in with two-factor authentication.";
@@ -316,10 +319,10 @@ public:
 				return "Incorrect verification code.";
 
 			case APIErrorCode::AuthenticationHandshakeFailed:
-				return "Failed to perform authentication handshake with server.";
+				return "Apple's authentication service returned a response that AltForge Server could not read.";
 
 			case APIErrorCode::InvalidAnisetteData:
-				return "Invalid anisette data. Please close both iTunes and iCloud, then try again.";
+				return "This computer's Apple authentication data is missing or invalid.";
         }
 
 		return "Unknown error.";
@@ -343,7 +346,7 @@ public:
         switch ((SignErrorCode)this->code())
         {
             case SignErrorCode::Unknown:
-                return "An unknown error occured.";
+                return "AltForge could not determine why the app could not be signed.";
 
             case SignErrorCode::InvalidApp:
                 return "The app is invalid.";
@@ -388,10 +391,10 @@ public:
         switch ((CocoaErrorCode)this->code())
         {
             case CocoaErrorCode::FileReadUnknown:
-                return "An unknown error occured while reading the file.";
+                return "The file could not be read.";
 
             case CocoaErrorCode::FileWriteUnknown:
-                return "An unknown error occured while writing to disk.";
+                return "The file could not be written to disk.";
 
 			case CocoaErrorCode::FileNoSuchFile:
                 return "The app could not be found.";

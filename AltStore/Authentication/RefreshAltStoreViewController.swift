@@ -65,7 +65,7 @@ private extension RefreshAltStoreViewController
                         sender.progress = nil
                         sender.isIndicatingActivity = false
                         
-                        let alertController = UIAlertController(title: NSLocalizedString("Failed to Refresh AltForge", comment: ""), message: error.localizedFailureReason ?? error.localizedDescription, preferredStyle: .alert)
+                        let alertController = UIAlertController(title: NSLocalizedString("Failed to Refresh AltForge", comment: ""), message: error.userFacingPresentation.combinedMessage, preferredStyle: .alert)
                         alertController.addAction(UIAlertAction(title: NSLocalizedString("Try Again", comment: ""), style: .default, handler: { (action) in
                             refresh()
                         }))

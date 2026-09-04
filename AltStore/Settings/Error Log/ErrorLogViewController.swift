@@ -103,7 +103,7 @@ private extension ErrorLogViewController
             cell.errorCodeLabel.text = loggedError.error.localizedErrorCode
             
             let nsError = loggedError.error as NSError
-            let errorDescription = [nsError.localizedDescription, nsError.localizedRecoverySuggestion].compactMap { $0 }.joined(separator: "\n\n")
+            let errorDescription = nsError.userFacingPresentation.combinedMessage
             cell.errorDescriptionTextView.text = errorDescription
             cell.errorDescriptionTextView.maximumNumberOfLines = 5
             cell.errorDescriptionTextView.isCollapsed = !self.expandedErrorIDs.contains(loggedError.objectID)
@@ -258,7 +258,7 @@ private extension ErrorLogViewController
             catch
             {
                 DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: NSLocalizedString("Failed to Clear Error Log", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                    let alertController = UIAlertController(title: NSLocalizedString("Failed to Clear Error Log", comment: ""), message: error.userFacingPresentation.combinedMessage, preferredStyle: .alert)
                     alertController.addAction(.ok)
                     self.present(alertController, animated: true)
                 }
@@ -355,7 +355,7 @@ private extension ErrorLogViewController
                 Logger.main.error("Failed to export OSLog entries. \(error.localizedDescription, privacy: .public)")
                 
                 await MainActor.run {
-                    let alertController = UIAlertController(title: NSLocalizedString("Unable to Export Detailed Log", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                    let alertController = UIAlertController(title: NSLocalizedString("Unable to Export Detailed Log", comment: ""), message: error.userFacingPresentation.combinedMessage, preferredStyle: .alert)
                     alertController.addAction(.ok)
                     self.present(alertController, animated: true)
                 }

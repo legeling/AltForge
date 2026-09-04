@@ -222,7 +222,7 @@ struct VerificationError: ALTLocalizedError
         case .unsupportedRegion:
             let appName = self.$app.name ?? String(localized: "This app")
             
-            let failureReason = String(localized: "\(appName) is not available in your region.")
+            let failureReason = String(format: NSLocalizedString("%@ is not available in your region.", comment: ""), appName)
             return failureReason
         }
     }

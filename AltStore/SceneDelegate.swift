@@ -241,7 +241,7 @@ private extension SceneDelegate
                 Keychain.shared.palPromoExpiration = nil
                 #endif
                 
-                let alertController = UIAlertController(title: NSLocalizedString("Unable to Redeem PAL Promo", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                let alertController = UIAlertController(title: NSLocalizedString("Unable to Redeem PAL Promo", comment: ""), message: error.userFacingPresentation.combinedMessage, preferredStyle: .alert)
                 alertController.addAction(.ok)
                 rootViewController.present(alertController, animated: true)
             }

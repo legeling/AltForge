@@ -56,21 +56,12 @@ struct ProcessError: ALTLocalizedError
         {
         case .failed:
             guard let exitCode else { return String(format: NSLocalizedString("%@ failed.", comment: ""), self.processName) }
-            
-            let baseMessage = String(format: NSLocalizedString("%@ failed with code %@.", comment: ""), self.processName, NSNumber(value: exitCode))
-            guard let lastLine = self.lastOutputLine else { return baseMessage }
-            
-            let failureReason = baseMessage + " " + lastLine
-            return failureReason
+            return String(format: NSLocalizedString("%@ failed with code %@.", comment: ""), self.processName, NSNumber(value: exitCode))
             
         case .timedOut: return String(format: NSLocalizedString("%@ timed out.", comment: ""), self.processName)
         case .terminated: return String(format: NSLocalizedString("%@ unexpectedly quit.", comment: ""), self.processName)
         case .unexpectedOutput:
-            let baseMessage = String(format: NSLocalizedString("%@ returned unexpected output.", comment: ""), self.processName)
-            guard let lastLine = self.lastOutputLine else { return baseMessage }
-            
-            let failureReason = baseMessage + " " + lastLine
-            return failureReason
+            return String(format: NSLocalizedString("%@ returned unexpected output.", comment: ""), self.processName)
         }
     }
     
@@ -79,10 +70,4 @@ struct ProcessError: ALTLocalizedError
         return String(format: NSLocalizedString("The process '%@'", comment: ""), executableName)
     }
     
-    private var lastOutputLine: String? {
-        guard let output else { return nil }
-        
-        let lastLine = output.components(separatedBy: .newlines).last(where: { !$0.isEmpty })
-        return lastLine
-    }
 }

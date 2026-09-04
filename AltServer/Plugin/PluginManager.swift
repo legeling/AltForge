@@ -51,13 +51,7 @@ struct PluginError: ALTLocalizedError
         case .cancelled: return NSLocalizedString("Mail plug-in installation was cancelled.", comment: "")
         case .unknown: return NSLocalizedString("Failed to install Mail plug-in.", comment: "")
         case .taskError:
-            if let output = self.taskErrorOutput
-            {
-                return output
-            }
-            
-            // Use .taskErrorCode base message as fallback.
-            fallthrough
+            return NSLocalizedString("The Mail plug-in installer returned an error.", comment: "")
             
         case .taskErrorCode:
             let baseMessage = NSLocalizedString("There was an error installing the Mail plug-in.", comment: "")
