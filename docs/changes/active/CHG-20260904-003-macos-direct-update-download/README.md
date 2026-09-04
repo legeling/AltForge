@@ -1,6 +1,6 @@
 # CHG-20260904-003：macOS 检查更新直接下载并打开安装器
 
-- 状态：v2.4.3 release candidate / manual update UI pending
+- 状态：Released in v2.4.3 / manual update UI pending
 - 日期：2026-09-04
 - 类型：Feature / macOS / Update UX / Security
 
@@ -47,6 +47,7 @@
 - 受控公开网络 probe 读取 latest metadata 并下载 `v2.4.2` DMG；实测 `8,780,364` bytes，SHA-256 `7d19efaee18a66ac3ea4991afaad98ec2e71005eb7d91273f808b44a52424fd1` 与 GitHub API 完全一致，临时文件已删除。
 - iOS、macOS 与 Windows 产品版本已统一进入 `2.4.3`，由标签流水线构建同一 commit 的三平台产物。
 - 版本同步后再次完成 AltServer Release generic macOS build；产物为 `2.4.3 (1000)` 并包含直接下载、固定 DMG 和进度窗口文案。
+- GitHub Actions run `33863304381` 的 Apple、Windows 与 publish jobs 通过；公开 `v2.4.3 (21)` 的九项资产通过 checksum，DMG 内正式二进制及简体中文资源包含更新闭环，latest API/source/下载端点回读通过。
 - 未启动或操作 GUI，低版本弹窗、进度、取消、重名复用和自动挂载仍需手工矩阵；不能仅凭 build 与网络 probe 声称界面闭环已验收。
 
 ## 回滚
