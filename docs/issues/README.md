@@ -26,6 +26,7 @@
 | [`ISSUE-20260811-004`](ISSUE-20260811-004-altjit-runtime-compatibility.md) | AltJIT 依赖与新系统运行时兼容缺少验证 | P1 | Open | `FR-012`, `TEST-014`, `T-009` |
 | [`ISSUE-20260811-005`](ISSUE-20260811-005-device-discovery-connectivity.md) | 设备发现与 AltServer 连接缺少跨平台实机矩阵 | P1 | Open | `DES-002`, `TEST-019`, `TEST-026`, `TEST-030`, `T-012`, `T-016`, `T-019` |
 | [`ISSUE-20260811-006`](ISSUE-20260811-006-refresh-backup-lifecycle.md) | 刷新、停用、备份与失败清理缺少完整回归 | P1 | Open | `FR-008`, `TEST-015`, `TEST-017`, `T-008`, `T-010` |
+| [`ISSUE-20260904-001`](ISSUE-20260904-001-apple-authentication-live-validation.md) | Apple 新认证身份缺少真实账号与设备验证 | P0 | In progress | `FR-041`, `TEST-040`, `T-040`, `CHG-20260904-001` |
 
 ## Resolved
 

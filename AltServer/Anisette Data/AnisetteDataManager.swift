@@ -9,25 +9,48 @@
 import Foundation
 import OSLog
 
+private enum AppleDeveloperClientIdentity
+{
+    // Apple began rejecting the legacy Xcode 11 identity in 2026. Keep this aligned with a
+    // currently accepted Xcode client while deriving the hardware and OS tuple from this Mac.
+    static let xcodeVersion = "25183.54.10"
+
+    static var deviceDescription: String
+    {
+        let processInfo = ProcessInfo.processInfo
+        let osVersion: OperatingSystemVersion
+        let buildVersion: String
+
+        if let build = processInfo.operatingSystemBuildVersion
+        {
+            osVersion = processInfo.operatingSystemVersion
+            buildVersion = build
+        }
+        else
+        {
+            osVersion = OperatingSystemVersion(majorVersion: 13, minorVersion: 4, patchVersion: 0)
+            buildVersion = "22F66"
+        }
+
+        let deviceModel = processInfo.deviceModel ?? "iMac21,1"
+        let osName = (osVersion.majorVersion < 11) ? "Mac OS X" : "macOS"
+        return "<\(deviceModel)> <\(osName);\(osVersion.stringValue);\(buildVersion)> <com.apple.AuthKit/1 (com.apple.dt.Xcode/\(self.xcodeVersion))>"
+    }
+}
+
 private extension Bundle
 {
     struct ID
     {
-        static let mail = "com.apple.mail"
         static let altXPC = "com.rileytestut.AltXPC"
     }
 }
 
 private extension ALTAnisetteData
 {
-    func sanitize(byReplacingBundleID bundleID: String)
+    func normalizeDeveloperClientIdentity()
     {
-        guard let range = self.deviceDescription.lowercased().range(of: "(" + bundleID.lowercased()) else { return }
-        
-        var adjustedDescription = self.deviceDescription[..<range.lowerBound]
-        adjustedDescription += "(com.apple.dt.Xcode/3594.4.19)>"
-        
-        self.deviceDescription = String(adjustedDescription)
+        self.deviceDescription = AppleDeveloperClientIdentity.deviceDescription
     }
 }
 
@@ -144,33 +167,13 @@ private extension AnisetteDataManager
             let serialNumber = AOSUtilities.machineSerialNumber ?? "C02LKHBBFD57" // serialNumber can be nil, so provide valid fallback serial number.
             let routingInfo: UInt64 = 84215040 // Other known values: 17106176, 50660608
             
-            let osVersion: OperatingSystemVersion
-            let buildVersion: String
-            
-            if let build = ProcessInfo.processInfo.operatingSystemBuildVersion
-            {
-                osVersion = ProcessInfo.processInfo.operatingSystemVersion
-                buildVersion = build
-            }
-            else
-            {
-                // Unknown build, so fall back to known valid macOS version.
-                osVersion = OperatingSystemVersion(majorVersion: 13, minorVersion: 4, patchVersion: 0)
-                buildVersion = "22F66"
-            }
-            
-            let deviceModel = ProcessInfo.processInfo.deviceModel ?? "iMac21,1"
-            let osName = (osVersion.majorVersion < 11) ? "Mac OS X" : "macOS"
-            
-            let serverFriendlyDescription = "<\(deviceModel)> <\(osName);\(osVersion.stringValue);\(buildVersion)> <com.apple.AuthKit/1 (com.apple.dt.Xcode/3594.4.19)>"
-            
             let anisetteData = ALTAnisetteData(machineID: machineID,
                                                oneTimePassword: oneTimePassword,
                                                localUserID: localUserID,
                                                routingInfo: routingInfo,
                                                deviceUniqueIdentifier: deviceID,
                                                deviceSerialNumber: serialNumber,
-                                               deviceDescription: serverFriendlyDescription,
+                                               deviceDescription: AppleDeveloperClientIdentity.deviceDescription,
                                                date: Date(),
                                                locale: .current,
                                                timeZone: .current)
@@ -190,7 +193,7 @@ private extension AnisetteDataManager
         }) as? AltXPCProtocol else { return }
         
         proxy.requestAnisetteData { (anisetteData, error) in
-            anisetteData?.sanitize(byReplacingBundleID: Bundle.ID.altXPC)
+            anisetteData?.normalizeDeveloperClientIdentity()
             completion(Result(anisetteData, error))
         }
     }
@@ -218,7 +221,7 @@ private extension AnisetteDataManager
             let archivedAnisetteData = userInfo["anisetteData"] as? Data,
             let anisetteData = try? NSKeyedUnarchiver.unarchivedObject(ofClass: ALTAnisetteData.self, from: archivedAnisetteData)
         {
-            anisetteData.sanitize(byReplacingBundleID: Bundle.ID.mail)
+            anisetteData.normalizeDeveloperClientIdentity()
             self.finishRequest(forUUID: requestUUID, result: .success(anisetteData))
         }
         else
