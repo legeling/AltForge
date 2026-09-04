@@ -1,6 +1,6 @@
 # CHG-20260904-001：修复 Apple 认证响应格式失败
 
-- 状态：v2.4.2 release candidate / account E2E pending
+- 状态：Released in v2.4.2 / account E2E pending
 - 日期：2026-09-04
 - 类型：Bugfix / Authentication / Dependency
 
@@ -47,6 +47,7 @@
 - `ruby Scripts/test_repository_contract.rb`、root/submodule `git diff --check` 通过。
 - macOS 26.5.2 / Xcode 26.6 下，AltServer Debug generic macOS build 通过；iOS AltStore Debug generic Simulator build 通过，两者均编译当前 AltSign fork。生成的 AltSign framework 包含 Xcode 27 beta 6 的 `27.0 (27A5252f)` / `25183.54.10`，且不含 `3594.4.19`。
 - `v2.4.2` 预发布批次的 9 项定向 XCTest、unsigned Release-iphoneos build、Universal macOS Release build、IPA/DMG 打包和 Apple 产物校验通过；本地产物版本为 `2.4.2 (999)`，AltSign framework 只命中新身份。
+- GitHub Actions run `33858366269` 的 Apple、Windows 与 publish jobs 通过；公开 Release `v2.4.2` 的 IPA/DMG/Windows ZIP、metadata、checksum 和 latest URL 回读通过，CI build number 为 `20`。
 - 不含账号数据的受控 GSA 请求只能验证 TLS/HTTP 可达性，不能产生有效认证结论；没有把该探测当作 SRP 登录通过。
 - 未执行真实 Apple ID、2FA、团队、证书或设备安装验证；该缺口继续由 `ISSUE-20260904-001` 跟踪。
 

@@ -12,6 +12,7 @@
 - [`altstoreio/AltStore#1747`](https://github.com/altstoreio/AltStore/issues/1747) 的同类错误明确显示响应以 `<html>` 开头，并在 2026-09-04 出现新增集中报告。
 - [`altstoreio/AltStore#1772`](https://github.com/altstoreio/AltStore/issues/1772) 使用登录 harness 确认 Apple 已拒绝旧 Xcode 11 身份，现代且内部一致的 model/macOS/build/client tuple 可完成 token 签发。
 - `v2.4.2` 候选实现固定经该 harness 验证的 Xcode bundle version `25183.54.10`，Mac model、macOS version/build、CFNetwork 与 Darwin 继续从运行环境读取；上游 #1713 的广泛依赖变更和 #1770 的 VM/外部 ADI 方案未合入。
+- `v2.4.2 (20)` 已通过 GitHub hosted Apple/Windows build、定向 XCTest、产物 identity/checksum 与 latest URL 回读并公开发布；这些证据仍不包含真实 Apple 账号或设备安装。
 
 ## 临时规避
 

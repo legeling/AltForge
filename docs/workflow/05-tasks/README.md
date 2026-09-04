@@ -35,8 +35,8 @@
 | `T-025` 增加 iOS 主题色选择 | In progress / visual matrix pending | `FR-037`; `DES-023`; `TEST-036` | 默认锻造红、四主题持久化、设置色板、Launch child 即时刷新路径、官方 source/app/news/detail 统一 effective tint、权限/来源页语义色及 raw metadata 绕过门禁已实现；Debug iOS Simulator build 通过，四主题深浅色真机矩阵待完成 |
 | `T-038` 建立官网与 Cloudflare Pages 下载入口 | Done | `FR-039`; `DES-025`; `TEST-038` | 同仓库双语静态页面、平台识别、Release latest 下载、版本 metadata fallback、安全响应头与品牌资产生成完成；桌面/移动、深浅色浏览器矩阵与 `https://altforge-dz7.pages.dev` 生产回读通过 |
 | `T-039` 重构官网视觉并关联代码仓库 | In progress / hosted deploy secrets pending | `FR-040`; `DES-026`; `TEST-039` | 单一全幅工业品牌图、仓库归属带、下载/流程/能力/FAQ 层级、克制动效和 fail-closed workflow 已实现；production `92c5fb54`、线上 hash/headers/downloads、GitHub homepage、320-1918px 动效/reduced-motion 浏览器矩阵、Git delivery 与 hosted verify `31790637050` 通过。Pages Secrets 与 push 自动部署启用待完成 |
-| `T-040` 修复 Apple 认证响应格式失败 | v2.4.2 release candidate / account E2E pending | `FR-041`; `DES-027`; `TEST-040` | 2026-09-04 的 Duolingo/微信安装均在认证阶段以 Cocoa 3840 失败；认证、2FA、Developer Services 与 anisette 已统一为 Xcode 27 beta 6 product/bundle identity，GSA User-Agent 改为当前 CFNetwork/Darwin，并将畸形响应映射为明确握手失败。Repository contract、macOS/iOS build 与产物 identity 检查通过；真实登录/2FA/团队/证书/安装待验证 |
-| `T-041` 统一错误码与用户提示 | v2.4.2 release candidate / Windows CI pending | `FR-042`; `DES-028`; `TEST-041` | 全部产品错误域已进入统一标题/原因/下一步展示；provider 重新本地化、跨平台编码 contract、AltStore build-for-testing、定向 XCTest 与 AltServer build 通过，相关测试已加入标签流水线；真实中文界面及 Windows 设备待验证 |
+| `T-040` 修复 Apple 认证响应格式失败 | Released in v2.4.2 / account E2E pending | `FR-041`; `DES-027`; `TEST-040` | 2026-09-04 的 Duolingo/微信安装均在认证阶段以 Cocoa 3840 失败；认证、2FA、Developer Services 与 anisette 已统一为 Xcode 27 beta 6 product/bundle identity，GSA User-Agent 改为当前 CFNetwork/Darwin，并将畸形响应映射为明确握手失败。Local/hosted tests、三平台 build、产物 identity/checksum/latest 回读通过并发布 `v2.4.2`；真实登录/2FA/团队/证书/安装待验证 |
+| `T-041` 统一错误码与用户提示 | Released in v2.4.2 / device UI validation pending | `FR-042`; `DES-028`; `TEST-041` | 全部产品错误域已进入统一标题/原因/下一步展示；provider 重新本地化、跨平台编码 contract、本地/hosted 定向 XCTest 与 Apple/Windows build 通过，已随 `v2.4.2` 交付；真实中文界面及 Windows 设备待验证 |
 
 ## Analyze 门禁结果
 

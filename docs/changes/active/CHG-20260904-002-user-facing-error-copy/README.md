@@ -1,6 +1,6 @@
 # CHG-20260904-002：统一错误码与用户提示
 
-- 状态：v2.4.2 release candidate / Windows CI pending
+- 状态：Released in v2.4.2 / device UI validation pending
 - 日期：2026-09-04
 - 类型：Bugfix / UX / Localization / Cross-platform contract
 
@@ -43,7 +43,8 @@
 - AltServer Debug generic macOS build 通过；仅出现已有依赖搜索路径与 Sendable/deprecation 警告。
 - `v2.4.2` 标签流水线已纳入完整错误提示与认证解析两项定向 XCTest；Windows 编译由同一 Release workflow 执行。
 - `v2.4.2` 本地预发布的 9 项定向 XCTest 全部通过，包含 `testAllKnownErrorsHaveCompleteUserFacingPresentations` 与 `testAuthenticationParsingErrorUsesAuthenticationCopy`。
-- Windows 未执行 MSBuild 或设备验证；本机仅完成 C++ 源码与 repository contract 静态检查。
+- GitHub Actions run `33858366269` 的 Windows build 和 Apple 定向回归通过，错误提示实现已随公开 `v2.4.2` 三平台产物交付。
+- 本机没有 Windows MSBuild 环境，仅完成 C++ 源码与 repository contract 静态检查；GitHub `windows-2025` hosted build 已通过，Windows 设备验证仍未执行。
 
 ## 回滚
 
