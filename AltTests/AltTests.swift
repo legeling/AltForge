@@ -10,7 +10,7 @@ import XCTest
 @testable import AltStore
 @testable import AltStoreCore
 
-import AltSign
+@testable import AltSign
 
 extension String
 {
@@ -92,9 +92,125 @@ final class AltTests: XCTestCase
         let presentation = error.userFacingPresentation
 
         XCTAssertEqual(presentation.title, NSLocalizedString("Apple ID Sign-In Failed", comment: "Error presentation title"))
-        XCTAssertEqual(presentation.message, NSLocalizedString("Apple's authentication service returned a response that AltForge Server could not read.", comment: ""))
+        XCTAssertEqual(presentation.message, NSLocalizedString("The secure sign-in with Apple could not be completed.", comment: ""))
         XCTAssertNotEqual(presentation.message, NSError(domain: NSCocoaErrorDomain, code: 3840).localizedDescription)
         XCTAssertNotNil(presentation.recoverySuggestion)
+    }
+
+    func testAuthenticationServiceOutageIdentifiesTokenStepAndHTTPStatus() throws
+    {
+        let error = ALTAppleAPIError(.authenticationHandshakeFailed, userInfo: [
+            ALTAppleAPIRequestOperationErrorKey: "apptokens",
+            ALTAppleAPIHTTPStatusCodeErrorKey: NSNumber(value: 503),
+            ALTAppleAPIResponseMIMETypeErrorKey: "text/html",
+            NSUnderlyingErrorKey: NSError(domain: NSCocoaErrorDomain, code: 3840)
+        ]) as NSError
+        let presentation = error.userFacingPresentation
+
+        XCTAssertEqual(
+            presentation.message,
+            String(
+                format: NSLocalizedString("Apple's authentication service is temporarily unavailable while %@ (HTTP %ld).", comment: "Apple authentication service outage"),
+                NSLocalizedString("issuing the developer token", comment: "Apple authentication step"),
+                503
+            )
+        )
+        XCTAssertEqual(
+            presentation.recoverySuggestion,
+            NSLocalizedString("The sign-in endpoint returned a server error. Wait a few minutes, then retry. If it continues, include the diagnostic details in your report.", comment: "Apple authentication outage recovery")
+        )
+        XCTAssertEqual(error.userInfo[ALTAppleAPIRequestOperationErrorKey] as? String, "apptokens")
+        XCTAssertEqual((error.userInfo[ALTAppleAPIHTTPStatusCodeErrorKey] as? NSNumber)?.intValue, 503)
+
+        let serializedError = error.serialized(provider: nil)
+        XCTAssertEqual(serializedError.userInfo[ALTAppleAPIRequestOperationErrorKey] as? String, "apptokens")
+        XCTAssertEqual((serializedError.userInfo[ALTAppleAPIHTTPStatusCodeErrorKey] as? NSNumber)?.intValue, 503)
+        XCTAssertEqual(serializedError.userInfo[ALTAppleAPIResponseMIMETypeErrorKey] as? String, "text/html")
+    }
+
+    func testAuthenticationHTMLResponseIsNotPresentedAsIPAError() throws
+    {
+        let error = ALTAppleAPIError(.authenticationHandshakeFailed, userInfo: [
+            ALTAppleAPIRequestOperationErrorKey: "complete",
+            ALTAppleAPIHTTPStatusCodeErrorKey: NSNumber(value: 200),
+            ALTAppleAPIResponseMIMETypeErrorKey: "text/html"
+        ]) as NSError
+        let presentation = error.userFacingPresentation
+
+        XCTAssertEqual(
+            presentation.message,
+            String(
+                format: NSLocalizedString("Apple's authentication service returned a web page instead of sign-in data while %@.", comment: "Apple authentication HTML response"),
+                NSLocalizedString("verifying the Apple ID", comment: "Apple authentication step")
+            )
+        )
+        XCTAssertNotNil(presentation.recoverySuggestion)
+    }
+
+    func testAuthenticationResponseParserAndPrivacy() throws
+    {
+        let api = ALTAppleAPI()
+        let url = URL(string: "https://gsa.apple.com/grandslam/GsService2")!
+        let unavailable = HTTPURLResponse(url: url, statusCode: 503, httpVersion: nil,
+                                          headerFields: ["Content-Type": "text/html"])!
+        for operation in ["init", "complete", "apptokens", "complete.decrypted", "apptokens.decrypted"]
+        {
+            XCTAssertThrowsError(try api.authenticationDictionary(from: Data("<html>PRIVATE_FIXTURE</html>".utf8),
+                                                                  operation: operation, response: unavailable)) { error in
+                let error = error as NSError
+                XCTAssertEqual(error.domain, ALTAppleAPIErrorDomain)
+                XCTAssertEqual(error.code, 3020)
+                XCTAssertEqual(error.userInfo[ALTAppleAPIRequestOperationErrorKey] as? String, operation)
+                XCTAssertEqual(error.appleAuthenticationDiagnosticSummary, operation + " · HTTP 503 · text/html")
+                XCTAssertFalse(String(describing: error.userInfo).contains("PRIVATE_FIXTURE"))
+                XCTAssertTrue(((error.userInfo[NSUnderlyingErrorKey] as? NSError)?.userInfo ?? [:]).isEmpty)
+            }
+        }
+        let rawError = NSError(domain: NSCocoaErrorDomain, code: 3840,
+                               userInfo: [NSDebugDescriptionErrorKey: "PRIVATE_FIXTURE"])
+        let unexpectedMIME = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil,
+                                             headerFields: ["Content-Type": "application/private-fixture"])!
+        let sanitized = api.authenticationResponseError(operation: "PRIVATE_FIXTURE", response: unexpectedMIME,
+                                                          underlyingError: rawError) as NSError
+        XCTAssertEqual(sanitized.appleAuthenticationDiagnosticSummary, "unknown · HTTP 200 · other")
+        XCTAssertFalse(String(describing: sanitized.userInfo).contains("PRIVATE_FIXTURE"))
+    }
+
+    func testAuthenticationStructuredErrorsAndTwoFactorHTTP() throws
+    {
+        let api = ALTAppleAPI()
+        let url = URL(string: "https://gsa.apple.com/grandslam/GsService2")!
+        func response(_ code: Int, headers: [String: String] = [:]) -> HTTPURLResponse {
+            return HTTPURLResponse(url: url, statusCode: code, httpVersion: nil, headerFields: headers)!
+        }
+        let credentials = try PropertyListSerialization.data(fromPropertyList: ["Response": ["Status": ["ec": -20101]]],
+                                                              format: .xml, options: 0)
+        XCTAssertThrowsError(try api.authenticationServiceDictionary(from: credentials, operation: "init", response: response(401))) {
+            XCTAssertEqual(($0 as NSError).code, 3002)
+        }
+        let success = try PropertyListSerialization.data(fromPropertyList: ["Response": ["Status": ["ec": 0]]],
+                                                         format: .binary, options: 0)
+        XCTAssertNoThrow(try api.authenticationServiceDictionary(from: success, operation: "complete", response: response(200)))
+        XCTAssertThrowsError(try api.authenticationServiceDictionary(from: success, operation: "complete", response: response(503)))
+        let missingStatusCode = try PropertyListSerialization.data(fromPropertyList: ["Response": ["Status": [:]]],
+                                                                   format: .xml, options: 0)
+        XCTAssertThrowsError(try api.authenticationServiceDictionary(from: missingStatusCode, operation: "init", response: response(200)))
+        let emptyDictionary = try PropertyListSerialization.data(fromPropertyList: [:], format: .xml, options: 0)
+        XCTAssertThrowsError(try api.validateTrustedDeviceResponse(from: emptyDictionary, response: response(200)))
+        let wrongCode = try PropertyListSerialization.data(fromPropertyList: ["ec": -21669], format: .xml, options: 0)
+        XCTAssertThrowsError(try api.validateTrustedDeviceResponse(from: wrongCode, response: response(401))) {
+            XCTAssertEqual(($0 as NSError).code, 3019)
+        }
+        for code in [429, 503]
+        {
+            XCTAssertThrowsError(try api.validateSMSVerificationResponse(response(code))) {
+                XCTAssertEqual(($0 as NSError).code, 3020)
+            }
+        }
+        XCTAssertNoThrow(try api.validateSMSVerificationResponse(response(200, headers: ["x-apple-pe-token": "fixture"])))
+        XCTAssertThrowsError(try api.validateSMSVerificationResponse(response(200))) {
+            XCTAssertEqual(($0 as NSError).code, 3019)
+        }
     }
 
     func testALTApplicationIgnoresMalformedOptionalMetadata() throws

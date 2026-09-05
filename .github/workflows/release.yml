@@ -112,6 +112,10 @@ jobs:
           -only-testing:AltTests/AltTests/testHealthKitCapabilityMapping
           -only-testing:AltTests/AltTests/testAllKnownErrorsHaveCompleteUserFacingPresentations
           -only-testing:AltTests/AltTests/testAuthenticationParsingErrorUsesAuthenticationCopy
+          -only-testing:AltTests/AltTests/testAuthenticationServiceOutageIdentifiesTokenStepAndHTTPStatus
+          -only-testing:AltTests/AltTests/testAuthenticationHTMLResponseIsNotPresentedAsIPAError
+          -only-testing:AltTests/AltTests/testAuthenticationResponseParserAndPrivacy
+          -only-testing:AltTests/AltTests/testAuthenticationStructuredErrorsAndTwoFactorHTTP
 
       - name: Build unsigned iOS application
         env:

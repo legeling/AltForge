@@ -247,7 +247,8 @@ private extension AppleIDAuthenticationWindowController
 
         self.authenticationErrorLabel.textColor = .systemRed
         self.authenticationErrorLabel.font = .systemFont(ofSize: NSFont.smallSystemFontSize, weight: .medium)
-        self.authenticationErrorLabel.maximumNumberOfLines = 3
+        self.authenticationErrorLabel.maximumNumberOfLines = 0
+        self.authenticationErrorLabel.isSelectable = true
         self.authenticationErrorLabel.isHidden = true
 
         self.progressIndicator.style = .spinning

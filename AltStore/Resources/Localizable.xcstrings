@@ -451,12 +451,182 @@
         }
       }
     },
-    "Apple's authentication service returned a response that AltForge Server could not read." : {
+    "The secure sign-in with Apple could not be completed." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apple 认证服务返回了 AltForge Server 无法读取的数据。"
+            "value" : "未能完成 Apple 安全登录。"
+          }
+        }
+      }
+    },
+    "Apple Authentication Step" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 认证步骤"
+          }
+        }
+      }
+    },
+    "Apple's authentication service is temporarily limiting sign-in requests while %@ (HTTP 429)." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 认证服务在%@时暂时限制了登录请求（HTTP 429）。"
+          }
+        }
+      }
+    },
+    "Apple's authentication service is temporarily unavailable while %@ (HTTP %ld)." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 认证服务在%@时暂时不可用（HTTP %ld）。"
+          }
+        }
+      }
+    },
+    "Apple's authentication service returned a web page instead of sign-in data while %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 认证服务在%@时返回了网页，而不是登录数据。"
+          }
+        }
+      }
+    },
+    "The secure sign-in with Apple could not be completed while %@." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在%@时未能完成 Apple 安全登录。"
+          }
+        }
+      }
+    },
+    "HTTP Status Code" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP 状态码"
+          }
+        }
+      }
+    },
+    "issuing the developer token" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "签发开发者令牌"
+          }
+        }
+      }
+    },
+    "preparing the sign-in request" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "准备登录请求"
+          }
+        }
+      }
+    },
+    "processing Apple ID sign-in" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "处理 Apple ID 登录"
+          }
+        }
+      }
+    },
+    "Response Type" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "响应类型"
+          }
+        }
+      }
+    },
+    "starting Apple ID sign-in" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始 Apple ID 登录"
+          }
+        }
+      }
+    },
+    "The sign-in endpoint returned a server error. Wait a few minutes, then retry. If it continues, include the diagnostic details in your report." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录接口返回了服务端错误。请等待几分钟后重试；若问题持续，请反馈诊断详情。"
+          }
+        }
+      }
+    },
+    "Sign-in failed before app signing. Try again later; if it continues, include the diagnostic details in your report." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录在 App 签名前失败。请稍后重试；若问题持续，请反馈诊断详情。"
+          }
+        }
+      }
+    },
+    "verifying the Apple ID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证 Apple ID"
+          }
+        }
+      }
+    },
+    "requesting the two-factor code" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求双重认证码"
+          }
+        }
+      }
+    },
+    "verifying the two-factor code" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证双重认证码"
+          }
+        }
+      }
+    },
+    "Wait several minutes before trying again. Repeated attempts may extend the temporary limit." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请等待几分钟后再试。反复尝试可能延长临时限制。"
           }
         }
       }

@@ -540,7 +540,8 @@ private extension AppDelegate
 
     func localizedAuthenticationFailure(for error: Error) -> String
     {
-        return error.userFacingPresentation.combinedMessage
+        return [error.userFacingPresentation.combinedMessage, (error as NSError).appleAuthenticationDiagnosticSummary]
+            .compactMap { $0 }.joined(separator: "\n\n")
     }
     
     func showErrorAlert(error: Error)

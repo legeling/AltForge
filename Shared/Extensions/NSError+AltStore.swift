@@ -34,12 +34,31 @@ public extension NSError
     var userFacingPresentation: ALTErrorPresentation {
         let primaryError = self.presentationPrimaryError
         let localizedError = primaryError.relocalizedProviderError
+        let authenticationResponsePresentation = localizedError.appleAuthenticationResponsePresentation
 
         let title = self.localizedTitle ?? primaryError.localizedTitle ?? self.localizedFailure ?? primaryError.localizedFailure ?? localizedError.presentationTitle
-        let message = localizedError.presentationMessage
-        let recoverySuggestion = localizedError.localizedRecoverySuggestion ?? primaryError.localizedRecoverySuggestion ?? localizedError.fallbackRecoverySuggestion
+        let message = authenticationResponsePresentation?.message ?? localizedError.presentationMessage
+        let recoverySuggestion = authenticationResponsePresentation?.recoverySuggestion ?? localizedError.localizedRecoverySuggestion ?? primaryError.localizedRecoverySuggestion ?? localizedError.fallbackRecoverySuggestion
 
         return ALTErrorPresentation(title: title, message: message, recoverySuggestion: recoverySuggestion)
+    }
+
+    var appleAuthenticationDiagnosticSummary: String? {
+        let error = self.presentationPrimaryError
+        guard error.domain == ALTAppleAPIErrorDomain, error.code == 3020 else { return nil }
+        let operation = error.userInfo[ALTAppleAPIRequestOperationErrorKey] as? String
+        let operations = ["init", "complete", "apptokens", "complete.decrypted", "apptokens.decrypted",
+                          "trusted-device.request", "trusted-device.verify", "sms.request", "sms.verify", "request.encoding", "unknown"]
+        var parts = [String]()
+        if let operation = operation, operations.contains(operation) { parts.append(operation) }
+        if let code = (error.userInfo[ALTAppleAPIHTTPStatusCodeErrorKey] as? NSNumber)?.intValue,
+           (100...599).contains(code) { parts.append("HTTP \(code)") }
+        if let type = error.userInfo[ALTAppleAPIResponseMIMETypeErrorKey] as? String,
+           ["text/html", "application/xhtml+xml", "text/x-xml-plist", "application/x-plist",
+            "application/x-apple-plist", "application/xml", "text/xml", "application/json", "other"].contains(type) {
+            parts.append(type)
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " · ")
     }
 
     @objc(alt_localizedFailure)
@@ -160,6 +179,9 @@ public extension NSError
             ALTDiagnosticIDErrorKey,
             ALTDiagnosticStageErrorKey,
             ALTDiagnosticTraceErrorKey,
+            ALTAppleAPIRequestOperationErrorKey,
+            ALTAppleAPIHTTPStatusCodeErrorKey,
+            ALTAppleAPIResponseMIMETypeErrorKey,
             ALTSourceFileErrorKey,
             ALTSourceLineErrorKey,
             NSUnderlyingErrorKey
@@ -206,6 +228,9 @@ public extension NSError
             case ALTDiagnosticIDErrorKey: keyName = NSLocalizedString("Diagnostic ID", comment: "")
             case ALTDiagnosticStageErrorKey: keyName = NSLocalizedString("Failure Stage", comment: "")
             case ALTDiagnosticTraceErrorKey: keyName = NSLocalizedString("Operation Trace", comment: "")
+            case ALTAppleAPIRequestOperationErrorKey: keyName = NSLocalizedString("Apple Authentication Step", comment: "")
+            case ALTAppleAPIHTTPStatusCodeErrorKey: keyName = NSLocalizedString("HTTP Status Code", comment: "")
+            case ALTAppleAPIResponseMIMETypeErrorKey: keyName = NSLocalizedString("Response Type", comment: "")
             case ALTSourceFileErrorKey: keyName = NSLocalizedString("Source File", comment: "")
             case ALTSourceLineErrorKey: keyName = NSLocalizedString("Source Line", comment: "")
             case NSUnderlyingErrorKey: keyName = NSLocalizedString("Underlying Error", comment: "")
@@ -255,6 +280,64 @@ public extension Error
 
 private extension NSError
 {
+    var appleAuthenticationResponsePresentation: (message: String, recoverySuggestion: String)? {
+        guard self.domain == ALTAppleAPIErrorDomain, self.code == 3020 else { return nil }
+
+        let operation = self.userInfo[ALTAppleAPIRequestOperationErrorKey] as? String
+        let statusCode = (self.userInfo[ALTAppleAPIHTTPStatusCodeErrorKey] as? NSNumber)?.intValue
+        let mimeType = (self.userInfo[ALTAppleAPIResponseMIMETypeErrorKey] as? String)?.lowercased()
+        guard operation != nil || statusCode != nil || mimeType != nil else { return nil }
+
+        let stage = self.localizedAppleAuthenticationStage(for: operation)
+        let message: String
+        let recoverySuggestion: String
+
+        switch statusCode
+        {
+        case 429:
+            message = String(format: NSLocalizedString("Apple's authentication service is temporarily limiting sign-in requests while %@ (HTTP 429).", comment: "Apple authentication rate limit"), stage)
+            recoverySuggestion = NSLocalizedString("Wait several minutes before trying again. Repeated attempts may extend the temporary limit.", comment: "Apple authentication rate limit recovery")
+
+        case let code? where (500...599).contains(code):
+            message = String(format: NSLocalizedString("Apple's authentication service is temporarily unavailable while %@ (HTTP %ld).", comment: "Apple authentication service outage"), stage, code)
+            recoverySuggestion = NSLocalizedString("The sign-in endpoint returned a server error. Wait a few minutes, then retry. If it continues, include the diagnostic details in your report.", comment: "Apple authentication outage recovery")
+
+        default:
+            if mimeType?.contains("html") == true
+            {
+                message = String(format: NSLocalizedString("Apple's authentication service returned a web page instead of sign-in data while %@.", comment: "Apple authentication HTML response"), stage)
+            }
+            else
+            {
+                message = String(format: NSLocalizedString("The secure sign-in with Apple could not be completed while %@.", comment: "Apple authentication failure"), stage)
+            }
+            recoverySuggestion = NSLocalizedString("Sign-in failed before app signing. Try again later; if it continues, include the diagnostic details in your report.", comment: "Apple authentication malformed response recovery")
+        }
+
+        return (message, recoverySuggestion)
+    }
+
+    func localizedAppleAuthenticationStage(for operation: String?) -> String
+    {
+        switch operation
+        {
+        case "init":
+            return NSLocalizedString("starting Apple ID sign-in", comment: "Apple authentication step")
+        case "complete", "complete.decrypted":
+            return NSLocalizedString("verifying the Apple ID", comment: "Apple authentication step")
+        case "apptokens", "apptokens.decrypted":
+            return NSLocalizedString("issuing the developer token", comment: "Apple authentication step")
+        case "trusted-device.verify", "sms.verify":
+            return NSLocalizedString("verifying the two-factor code", comment: "Apple authentication step")
+        case "trusted-device.request", "sms.request":
+            return NSLocalizedString("requesting the two-factor code", comment: "Apple authentication step")
+        case "request.encoding":
+            return NSLocalizedString("preparing the sign-in request", comment: "Apple authentication step")
+        default:
+            return NSLocalizedString("processing Apple ID sign-in", comment: "Apple authentication step")
+        }
+    }
+
     var presentationPrimaryError: NSError {
         guard self.domain == AltServerErrorDomain,
               self.code == ALTServerError.Code.underlyingError.rawValue,

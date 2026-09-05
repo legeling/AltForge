@@ -592,8 +592,10 @@ assert(altsign_apple_api.scan('@"X-Xcode-Version": ALTAppleXcodeVersion').length
 assert(!altsign_authentication.include?("11.2 (11B41)") && !altsign_apple_api.include?("11.2 (11B41)"), "Apple requests must not advertise the rejected Xcode 11 version")
 assert(altsign_authentication.include?("CFNetwork/\\(version)") && altsign_authentication.include?("Darwin/\\(release)"), "authentication user agent must derive current CFNetwork and Darwin versions")
 assert(!altsign_authentication.include?("CFNetwork/978.0.7") && !altsign_authentication.include?("Darwin/18.7.0"), "authentication must not advertise the legacy Mojave network stack")
-assert(altsign_authentication.include?("ALTAppleAPIError(.authenticationHandshakeFailed, userInfo: [NSUnderlyingErrorKey: error])"), "malformed Apple authentication responses must not surface as raw property-list errors")
-assert(altsign_authentication.include?("without retaining or logging its body"), "authentication parse failures must document response-body privacy")
+assert(altsign_authentication.scan("PropertyListSerialization.propertyList(from:").length == 1, "all Apple authentication response parsing must use the bounded metadata helper")
+assert(altsign_authentication.include?("authenticationDictionary(from: data, operation: operation, response: response)"), "GSA responses must capture the safe authentication operation and HTTP metadata")
+assert(altsign_authentication.include?("ALTAppleAPIHTTPStatusCodeErrorKey") && altsign_authentication.include?("ALTAppleAPIResponseMIMETypeErrorKey"), "malformed Apple authentication responses must preserve safe transport metadata")
+assert(altsign_authentication.include?("never retain or log the response body"), "authentication parse failures must document response-body privacy")
 
 error_presentation = read(root, "Shared/Extensions/NSError+AltStore.swift")
 assert(error_presentation.include?("struct ALTErrorPresentation"), "user-facing errors must use the shared title, reason, and recovery model")
@@ -618,7 +620,20 @@ end
 
 error_copy_keys = [
   "Apple ID Sign-In Failed",
-  "Apple's authentication service returned a response that AltForge Server could not read.",
+  "The secure sign-in with Apple could not be completed.",
+  "Apple's authentication service is temporarily limiting sign-in requests while %@ (HTTP 429).",
+  "Apple's authentication service is temporarily unavailable while %@ (HTTP %ld).",
+  "Apple's authentication service returned a web page instead of sign-in data while %@.",
+  "The secure sign-in with Apple could not be completed while %@.",
+  "The sign-in endpoint returned a server error. Wait a few minutes, then retry. If it continues, include the diagnostic details in your report.",
+  "Sign-in failed before app signing. Try again later; if it continues, include the diagnostic details in your report.",
+  "Wait several minutes before trying again. Repeated attempts may extend the temporary limit.",
+  "starting Apple ID sign-in",
+  "verifying the Apple ID",
+  "issuing the developer token",
+  "verifying the two-factor code",
+  "preparing the sign-in request",
+  "processing Apple ID sign-in",
   "Check the network and device date and time, then update AltForge Server before retrying.",
   "App Package Could Not Be Read",
   "Device Connection Failed",

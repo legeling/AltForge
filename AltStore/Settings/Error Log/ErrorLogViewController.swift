@@ -272,8 +272,8 @@ private extension ErrorLogViewController
         var report = [
             loggedError.localizedFailure,
             NSLocalizedString("Error Code", comment: "") + ": " + loggedError.error.localizedErrorCode,
-            nsError.localizedDescription,
-            nsError.localizedRecoverySuggestion
+            nsError.userFacingPresentation.combinedMessage,
+            nsError.appleAuthenticationDiagnosticSummary
         ].compactMap { $0 }
 
         let diagnosticFields = [
