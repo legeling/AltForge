@@ -1,7 +1,7 @@
 # ISSUE-20260905-003: Device app missing from My Apps
 
 - Priority: P0
-- Status: Code fixes and 28 distinct local regression cases verified across a 27-case run and final three-case follow-up; device acceptance pending
+- Status: Fixes published in v2.4.6 (24); all 28 hosted regressions passed, device acceptance pending
 - Change: CHG-20260905-003; FR-044/FR-045; TEST-043/TEST-044
 
 The user confirmed an app can open on the phone but is absent from AltForge's management list after an installation with no visible progress and screen locking. Code inspection found unsaved installation results, cancellation without finishing the wait, and destructive cleanup based on absent UTI registration. No user device database or credentials were read.

@@ -2,7 +2,7 @@
 
 | Area | FR | DES | Tests | Current coverage | Gap owner |
 |---|---|---|---|---|---|
-| iOS installation tracking/progress | `FR-044`, `FR-045` | `DES-030` | `TEST-043`, `TEST-044` | Local receipt/Core Data/cache/idle/theme and navigation/component regressions passed, including delayed foreground reconciliation, bounded retries and synchronized management reads; 28 distinct selected cases covered in batches, iOS built. Real-device response loss, refresh after recovery and background expiration remain open. Unpublished. | `T-043` |
+| iOS installation tracking/progress | `FR-044`, `FR-045` | `DES-030` | `TEST-043`, `TEST-044` | Local 28 cases covered in batches, all 28 hosted tests and three-platform builds passed; downloaded release packages verified and v2.4.6 published. Real-device response loss, refresh after recovery and background expiration remain open. | `T-043` |
 | AltForge install | `FR-001`-`FR-003` | `DES-001`-`DES-003` | `TEST-001`, `TEST-002`, `TEST-004` | Low | `T-003` |
 | Developer team selection | `FR-017` | `DES-003` | `TEST-016` | Implementation present, real organization account pending | `T-010` |
 | Unicode App ID | `FR-004` | `DES-005` | `TEST-003` | Implementation present, no persistent test | `T-001` |

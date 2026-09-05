@@ -1,6 +1,6 @@
 # CHG-20260905-003: iOS installation tracking, progress and theme consistency
 
-- Status: Implemented and locally verified; v2.4.6 release authorized, real-device acceptance pending
+- Status: Implementation delivered in v2.4.6; real-device acceptance remains open in ISSUE-20260905-003
 - Mapping: FR-044/FR-045 -> DES-030 -> TEST-043/TEST-044 -> T-043
 
 ## Evidence and scope
@@ -49,7 +49,7 @@ Test production receipt recovery with in-memory Core Data: no positive evidence,
 
 No destructive database migration. Receipts are additive private cache files, and malformed receipts are ignored without deleting cached apps. Older versions ignore receipts but retain the unsafe UTI cleanup; returning to an older version can lose tracking again. Preserve device apps and IPA originals. For an app already omitted by an older version with no surviving receipt, import the same IPA under the same Apple ID/team to restore tracking without first uninstalling the device app. App IDs alone cannot reconstruct its signing metadata or refresh payload.
 
-The user subsequently requested publishing the candidate before performing their own real-device installation test. Release preparation targets v2.4.6 across iOS/macOS/Windows; publication requires the tag CI and downloaded Draft verification. Device acceptance remains open in ISSUE-20260905-003. No real device, account or user GUI is controlled during automated verification.
+The user subsequently requested publishing the candidate before performing their own real-device installation test. v2.4.6 was published across iOS/macOS/Windows after tag CI and downloaded asset verification. Device acceptance remains open in ISSUE-20260905-003. No real device, account or user GUI was controlled during automated verification.
 
 ## Local verification, 2026-09-05
 
@@ -67,5 +67,9 @@ The user subsequently requested publishing the candidate before performing their
 - Final static review found the existing management-state reader did not take the progress writer's lock. After adding that lock and a bounded concurrency regression, the final three-case recovery/lifecycle/synchronization run passed with zero failures/skips and rebuilt the changed iOS app/test host. The Release selection now has 28 distinct cases, covered by these two runs; it was not run as one 28-case invocation. Thread Sanitizer was not enabled.
 - Repository/version contracts, Swift parse and diff checks passed; the final lock/source contract also passed. Existing dependency warnings about Roxas target edges, deprecated linker/API usage remain, with no build errors. No physical-device or server/account installation was performed, and recovered-app refresh remains a required device acceptance step. Version remains 2.4.5; no commit, push or release.
 - Owned resources: a unique temporary directory held 977 MiB of DerivedData, test logs and result bundles; a dedicated iPhone 17 Pro simulator was used. Both are removed after reading results, along with their unused temporary package locks. The user's desktop server and unrelated files are preserved.
+
+## Release convergence
+
+User-authorized v2.4.6 tag commit `879d50774078d7ec85d6df14a1a181710ed5b050`, build 24, workflow `33949821997`. All 28 hosted tests and three platform packaging jobs passed. Nine local files matched Draft asset size/digest metadata and all eight manifest entries passed checksums; binaries came from the same run's artifacts after slow Release downloads were stopped, with metadata/checksums downloaded from Draft. Local Apple package identity/version/architecture/signature and Windows version checks passed. Published as latest at 2026-09-05 14:55:36 Asia/Shanghai. See docs/releases/v2.4.6.md for hashes, upgrade guidance and known limitations. Implementation/release work is complete; real-device response loss and refresh acceptance remain explicitly open in ISSUE-20260905-003 and TEST-043/044.
 
 The theme implementation was delegated only to the fixed luna_worker role (gpt-5.6-luna/max), with explicit UI file ownership and no tests/builds allowed before batch convergence. The primary agent reviewed its actual diffs, made the installation/data decisions, added tests and documentation, and ran the unified validation. This background-specific continuation was implemented directly by the primary agent without further delegation.

@@ -27,7 +27,7 @@
 | [`ISSUE-20260811-005`](ISSUE-20260811-005-device-discovery-connectivity.md) | 设备发现与 AltServer 连接缺少跨平台实机矩阵 | P1 | Open | `DES-002`, `TEST-019`, `TEST-026`, `TEST-030`, `T-012`, `T-016`, `T-019` |
 | [`ISSUE-20260811-006`](ISSUE-20260811-006-refresh-backup-lifecycle.md) | 刷新、停用、备份与失败清理缺少完整回归 | P1 | Open | `FR-008`, `TEST-015`, `TEST-017`, `T-008`, `T-010` |
 | [`ISSUE-20260904-001`](ISSUE-20260904-001-apple-authentication-live-validation.md) | Apple 认证与设备安装覆盖缺口 | P0 | macOS 登录已确认；完整安装/平台矩阵待补齐 | `FR-041`, `TEST-040`, `T-040`, `CHG-20260905-002` |
-| [`ISSUE-20260905-003`](ISSUE-20260905-003-ios-installed-app-tracking.md) | 已装 App 未进入管理列表、进度不可见与锁屏中断 | P0 | 修复实现 / 设备验收待完成 | `FR-044`, `FR-045`, `TEST-043`, `TEST-044`, `CHG-20260905-003` |
+| [`ISSUE-20260905-003`](ISSUE-20260905-003-ios-installed-app-tracking.md) | 已装 App 未进入管理列表、进度不可见与锁屏中断 | P0 | v2.4.6 已发布 / 设备验收待完成 | `FR-044`, `FR-045`, `TEST-043`, `TEST-044`, `CHG-20260905-003` |
 
 ## Resolved
 
