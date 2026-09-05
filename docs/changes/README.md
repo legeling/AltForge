@@ -10,7 +10,6 @@
 
 | ID | 标题 | 状态 |
 |---|---|---|
-| [CHG-20260905-001](active/CHG-20260905-001-authentication-review-release/README.md) | 认证修改审查与 2.4.4 发布 | Release gates pending |
 | [`CHG-20260809-002`](active/CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 | [`CHG-20260809-007`](active/CHG-20260809-007-macos-server-identity-settings/README.md) | macOS Server 身份、菜单与设置 | In progress |
 | [`CHG-20260810-002`](active/CHG-20260810-002-macos-menu-icon-scale/README.md) | 放大 macOS 菜单栏图标 | Implemented / menu bar smoke pending |
@@ -21,13 +20,14 @@
 | [`CHG-20260811-004`](active/CHG-20260811-004-ios-install-crash-diagnostics-authentication/README.md) | iOS 安装中断崩溃、恢复日志与认证说明 | In progress / device E2E pending |
 | [`CHG-20260811-006`](active/CHG-20260811-006-ios-theme-color-selection/README.md) | iOS 主题色选择与默认品牌色 | Release build passed / visual matrix pending |
 | [`CHG-20260814-001`](active/CHG-20260814-001-website-visual-repository-link/README.md) | 重构官网视觉并关联代码仓库 | In progress / hosted deploy secrets pending |
-| [`CHG-20260904-001`](active/CHG-20260904-001-apple-authentication-response/README.md) | 修复 Apple 认证响应格式失败 | Follow-up local gates passed / release pending |
+| [`CHG-20260904-001`](active/CHG-20260904-001-apple-authentication-response/README.md) | 修复 Apple 认证响应格式失败 | Released in v2.4.4 / real login unresolved |
 | [`CHG-20260904-002`](active/CHG-20260904-002-user-facing-error-copy/README.md) | 统一错误码与用户提示 | Apple build/tests passed / Windows build pending |
 
 ## Completed
 
 | ID | 标题 | 完成日期 |
 |---|---|---|
+| [CHG-20260905-001](completed/2026/09/CHG-20260905-001-authentication-review-release/README.md) | 认证修改审查与 2.4.4 发布 | 2026-09-05 |
 | [`CHG-20260808-001`](completed/2026/08/CHG-20260808-001-spec-baseline/README.md) | 建立 Spec Init 文档基线 | 2026-08-08 |
 | [`CHG-20260808-002`](completed/2026/08/CHG-20260808-002-unicode-ipa-compatibility/README.md) | Unicode IPA 安装兼容 | 2026-08-08 |
 | [`CHG-20260808-003`](completed/2026/08/CHG-20260808-003-upstream-maintenance-fixes/README.md) | 上游维护修复筛选与移植 | 2026-08-08 |

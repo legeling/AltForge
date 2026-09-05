@@ -1,6 +1,6 @@
 # CHG-20260905-001: Authentication review and v2.4.4
 
-- Status: Implementation complete; release gates pending
+- Status: Completed; published v2.4.4 (22)
 - Mapping: FR-041 / FR-042 -> DES-027 / DES-028 -> TEST-040 / TEST-041 -> T-040 / T-041
 - Related issue: ISSUE-20260904-001 remains open until real-account verification.
 
@@ -21,7 +21,7 @@ The new diagnostic fields are optional NSError userInfo values, carried by exist
 
 ## Validation
 
-Run repository/version/metadata contracts and Swift syntax checks locally, then tag-driven hosted tests, iOS and Universal macOS release builds, Windows build, package checks and downloaded draft checksums. Publish only after the hosted gates and draft checks pass. Real-account, device installation and desktop UI interaction remain manual gaps.
+Repository/version/metadata contracts and Swift syntax checks passed locally. Actions run 33939123589 passed all 13 selected tests, iOS and Universal macOS release builds, Windows build and package checks. Downloaded draft checksums, Apple artifact verification, Windows version resources and public latest download/metadata readback passed. Published v2.4.4 (22) on 2026-09-05. Real-account, device installation and desktop UI interaction remain manual gaps tracked by ISSUE-20260904-001; those gaps are not marked resolved by this release.
 
 ## Upgrade and rollback
 

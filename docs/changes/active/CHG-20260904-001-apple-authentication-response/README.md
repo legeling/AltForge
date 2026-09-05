@@ -1,6 +1,6 @@
 # CHG-20260904-001：修复 Apple 认证响应格式失败
 
-- 状态：Follow-up local gates passed / release pending
+- 状态：Released in v2.4.4 / real login unresolved
 - 日期：2026-09-04
 - 类型：Bugfix / Authentication / Dependency
 
@@ -56,7 +56,7 @@
 - 未执行真实 Apple ID、2FA、团队、证书或设备安装验证；该缺口继续由 `ISSUE-20260904-001` 跟踪。
 - 用户在已安装并运行的 `v2.4.3 (21)` 上再次复现认证失败；现有 3020 提示证明基础映射生效，但该版本没有认证子步骤/HTTP 元数据，无法从现有诊断编号反推出具体响应状态。
 - 本轮 follow-up 的 repository contract、root/submodule diff check、两份 string catalog JSON/编译、三项认证提示 XCTest、iOS Simulator Debug build 与 Universal macOS Debug build 均通过；HTTP/MIME/operation 字段经序列化后仍保留。
-- 上述验证不使用真实 Apple ID，也不能令 Apple 的 503 服务端响应成功；尚未发布新版本，必须在新构建上复测才能确认用户本次失败的具体子步骤和 HTTP 状态。
+- 上述验证不使用真实 Apple ID，也不能令 Apple 的 503 服务端响应成功；后续审查修复已随 v2.4.4 发布，必须在新构建上复测才能确认用户本次失败的具体子步骤和 HTTP 状态。
 
 ## 回滚
 
@@ -67,4 +67,4 @@
 - Apple GSA 是外部、未公开稳定的服务端协议，当前接受的 client version 未来仍可能变化。
 - 上游 `altstoreio/AltStore#1713` 使用 Xcode 26.2 身份但包含大量无关依赖产物且 merge state 为 dirty；`#1770` 处理 macOS 26/27 anisette 生成，仍保留 Xcode 11 身份并引入 VM/外部 ADI 获取，未直接移植。上游 `marketplace` 及 AltSign `master` 当前也没有可直接同步的更新提交。
 - 本轮不读取或保存真实凭据，真实账号/2FA/团队/证书 E2E 需要用户在设备上自行输入并确认。
-- 认证身份与基础 3020 映射已随 `v2.4.2` 交付，直接更新流程已随 `v2.4.3` 交付；本轮阶段化诊断尚未发布，仍需新 AltForge Server 才能取得本次请求的确定 HTTP/operation 证据。
+- 认证身份与基础 3020 映射已随 `v2.4.2` 交付，直接更新流程已随 `v2.4.3` 交付；阶段化诊断已随 v2.4.4 发布，仍需用户复测取得实际 HTTP/operation 证据。
