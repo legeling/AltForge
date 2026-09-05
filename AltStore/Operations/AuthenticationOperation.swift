@@ -15,7 +15,7 @@ import AltSign
 
 private extension UIColor
 {
-    static let altInvertedPrimary = UIColor.altPrimary
+    static var altInvertedPrimary: UIColor { return .altPrimary }
 }
 
 typealias AuthenticationError = AuthenticationErrorCode.Error

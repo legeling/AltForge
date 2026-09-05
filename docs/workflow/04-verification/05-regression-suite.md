@@ -159,6 +159,14 @@ iOS 主题色变化执行 `TEST-036`：先运行偏好 round-trip XCTest、repos
 - 使用简体中文检查 Apple ID 错误、IPA 损坏、Server 断连和未知错误四类代表界面；主提示不得出现 domain、源码路径、命令输出或与阶段无关的“格式错误”。
 - Windows 变更至少执行源码/contract 检查；只有 Windows runner 完成 MSBuild 后才能声明 Windows 构建通过。
 
+## Suite L: iOS installation tracking and UI
+
+- Run the eight Release-selected `testInstallationReceipt*`, `testInstallationCacheRetention`, `testInstallationUnconfirmedOutcomeIsStageSpecific`, `testInstallationScreenActivityLeases`, `testSideloadingStatusLayoutAndThemes`, `testSideloadingPanelRespectsNavigationSafeArea` and `testThemeControlsFollowSelectedColor` regressions locally after the complete implementation batch.
+- Receipts use synthetic in-memory Core Data and private temporary directories, never real account/profile data. Check rollback/idempotency and malformed/symlink inputs. Layout attachments are generated from actual UIKit components; they are not device-installation proof.
+- Test real-device final-response loss, manual lock/foreground return, persistent list membership, refresh of a recovered app and confirmed removal before resolving ISSUE-20260905-003.
+- Background-specific regressions `testBackgroundInstallationReconcilesDelayedRegistration` and `testInstallationRecoveryCoordinatorLifecycleAndBounds` must cover the real coordinator/store code, including delayed registration, active-producer deferral, one database pass, stale callbacks and finite local retry windows.
+- `testInstallationManagementStateSynchronization` checks active/idle transitions and bounded concurrent progress writes/recovery reads. Source contracts require the existing progress lock on the reader; the concurrency smoke is not a Thread Sanitizer result.
+
 ## 命令登记规则
 
 - tag-driven Release workflow 是自动构建命令的真相来源，本文件解释本地预检和触发条件。

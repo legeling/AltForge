@@ -120,6 +120,17 @@ jobs:
           -only-testing:AltTests/AltTests/testAuthenticationRetryLimitAndPrivacy
           -only-testing:AltTests/AltTests/testAuthenticationDoesNotRetryTerminalFailures
           -only-testing:AltTests/AltTests/testAuthenticationRetryDeadline
+          -only-testing:AltTests/AltTests/testInstallationReceiptRecoveryAndIdempotency
+          -only-testing:AltTests/AltTests/testInstallationReceiptValidationAndSaveFailure
+          -only-testing:AltTests/AltTests/testBackgroundInstallationReconcilesDelayedRegistration
+          -only-testing:AltTests/AltTests/testInstallationRecoveryCoordinatorLifecycleAndBounds
+          -only-testing:AltTests/AltTests/testInstallationManagementStateSynchronization
+          -only-testing:AltTests/AltTests/testInstallationCacheRetention
+          -only-testing:AltTests/AltTests/testInstallationUnconfirmedOutcomeIsStageSpecific
+          -only-testing:AltTests/AltTests/testInstallationScreenActivityLeases
+          -only-testing:AltTests/AltTests/testSideloadingStatusLayoutAndThemes
+          -only-testing:AltTests/AltTests/testSideloadingPanelRespectsNavigationSafeArea
+          -only-testing:AltTests/AltTests/testThemeControlsFollowSelectedColor
 
       - name: Build unsigned iOS application
         env:

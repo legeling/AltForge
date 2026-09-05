@@ -19,6 +19,36 @@ class InstallAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
     let context: InstallAppOperationContext
     
     private var didCleanUp = false
+    private var receiptIdentifier: UUID?
+    private let completionLock = NSLock()
+    private var didFinish = false
+    private var responseTimer: DispatchSourceTimer?
+
+    override func cancel()
+    {
+        super.cancel()
+        if self.isExecuting {
+            self.finish(.failure(OperationError.cancelled))
+            self.context.installationConnection?.connection.disconnect()
+        }
+    }
+
+    private func awaitServerResponse()
+    {
+        self.completionLock.lock()
+        defer { self.completionLock.unlock() }
+        guard !self.didFinish else { return }
+        if let timer = self.responseTimer { timer.schedule(deadline: .now() + 180); return }
+        let timer = DispatchSource.makeTimerSource(queue: .global(qos: .utility))
+        timer.schedule(deadline: .now() + 180)
+        timer.setEventHandler { [weak self] in
+            guard let self else { return }
+            self.finish(.failure(OperationError.timedOut))
+            self.context.installationConnection?.connection.disconnect()
+        }
+        self.responseTimer = timer
+        timer.resume()
+    }
     
     init(context: InstallAppOperationContext)
     {
@@ -54,6 +84,7 @@ class InstallAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
         
         let backgroundContext = DatabaseManager.shared.persistentContainer.newBackgroundContext()
         backgroundContext.perform {
+            guard !self.isCancelled else { self.finish(.failure(OperationError.cancelled)); return }
             
             /* App */
             let installedApp: InstalledApp
@@ -118,11 +149,6 @@ class InstallAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
             
             installedApp.appExtensions = installedExtensions
             
-            self.context.beginInstallationHandler?(installedApp)
-            
-            // Temporary directory and resigned .ipa no longer needed, so delete them now to ensure AltStore doesn't quit before we get the chance to.
-            self.cleanUp()
-            
             var activeProfiles: Set<String>?
             if let sideloadedAppsLimit = UserDefaults.standard.activeAppsLimit
             {
@@ -156,10 +182,26 @@ class InstallAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
                 })
             }
             
+            do
+            {
+                // Persist recovery metadata before handing installation to the server.
+                self.receiptIdentifier = try InstallationReceiptStore.shared.stage(installedApp)
+            }
+            catch
+            {
+                self.finish(.failure(error))
+                return
+            }
+            self.context.beginInstallationHandler?(installedApp)
+            self.cleanUp()
+
             let resignedBundleID = installedApp.resignedBundleIdentifier
             
             let request = BeginInstallationRequest(activeProfiles: activeProfiles, bundleIdentifier: resignedBundleID)
+            guard !self.isCancelled else { self.finish(.failure(OperationError.cancelled)); return }
+            self.awaitServerResponse()
             connection.send(request) { (result) in
+                guard !self.isFinished else { return }
                 switch result
                 {
                 case .failure(let error): 
@@ -176,8 +218,17 @@ class InstallAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
                             backgroundContext.perform {
                                 Logger.sideload.notice("Successfully installed resigned app \(resignedBundleID, privacy: .public)!")
                                 
-                                installedApp.refreshedDate = Date()
-                                self.finish(.success(installedApp))
+                                do
+                                {
+                                    installedApp.refreshedDate = Date()
+                                    // A later cancellation or lost UI must not discard a confirmed install.
+                                    try backgroundContext.save()
+                                    if let identifier = self.receiptIdentifier {
+                                        try? InstallationReceiptStore.shared.remove(bundleIdentifier: self.context.bundleIdentifier, matching: identifier)
+                                    }
+                                    self.finish(.success(installedApp))
+                                }
+                                catch { self.finish(.failure(error)) }
                             }
                             
                         case .failure(let error):
@@ -192,6 +243,12 @@ class InstallAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
     
     override func finish(_ result: Result<InstalledApp, Error>)
     {
+        self.completionLock.lock()
+        guard !self.didFinish else { self.completionLock.unlock(); return }
+        self.didFinish = true
+        self.responseTimer?.cancel()
+        self.responseTimer = nil
+        self.completionLock.unlock()
         self.cleanUp()
         
         // Only remove refreshed IPA when finished.
@@ -210,6 +267,9 @@ class InstallAppOperation: ResultOperation<InstalledApp>, @unchecked Sendable
         }
         
         super.finish(result)
+        if case .failure = result, self.receiptIdentifier != nil {
+            AppManager.shared.update()
+        }
     }
 }
 
@@ -217,7 +277,9 @@ private extension InstallAppOperation
 {
     func receive(from connection: ServerConnection, completionHandler: @escaping (Result<Void, Error>) -> Void)
     {
+        self.awaitServerResponse()
         connection.receiveResponse() { (result) in
+            guard !self.isFinished else { return }
             do
             {
                 let response = try result.get()
@@ -264,8 +326,10 @@ private extension InstallAppOperation
     
     func cleanUp()
     {
-        guard !self.didCleanUp else { return }
+        self.completionLock.lock()
+        guard !self.didCleanUp else { self.completionLock.unlock(); return }
         self.didCleanUp = true
+        self.completionLock.unlock()
         
         do
         {

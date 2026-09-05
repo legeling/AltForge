@@ -1,6 +1,36 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Installation Result Unconfirmed" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装结果待确认" } } }
+    },
+    "The device may have finished installing. AltForge will check its installation record when you return to the app." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "设备可能已经完成安装。回到 AltForge 后，会重新核对安装记录。" } } }
+    },
+    "This removes the AltForge record, cached app and backups, not the app on your device. You will need to import its IPA again to refresh it with AltForge." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "这会移除 AltForge 中的管理记录、安装缓存和备份，但不会卸载手机上的 App。移除后，需要重新导入 IPA 才能在 AltForge 中刷新。" } } }
+    },
+    "Dismiss" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "关闭" } } }
+    },
+    "Installation Details" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装详情" } } }
+    },
+    "Installation Complete" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装完成" } } }
+    },
+    "Installation Failed" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装失败" } } }
+    },
+    "Installation Cancelled" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装已取消" } } }
+    },
+    "Elapsed %d:%02d" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已用时 %d:%02d" } } }
+    },
+    "Waiting for a response" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在等待响应" } } }
+    },
     "Deactivate one sideloaded app, then try again. If an offloaded app is still counted, reinstall or delete it before retrying." : {
       "localizations" : {
         "zh-Hans" : {
@@ -8043,25 +8073,25 @@
         }
       }
     },
-    "Open AltForge Server, confirm the device connection, then try again. If the app appears on the Home Screen, remove it before retrying." : {
+    "Keep any app already installed on your device. Check My Apps after returning to AltForge. If its record is still missing, import the original IPA with the same Apple ID without uninstalling the app first." : {
       "comment" : "Unexpected termination recovery suggestion",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AltForge Serverを開き、デバイス接続を確認してから再試行してください。ホーム画面にアプリがある場合は、削除してから再試行してください。"
+            "value" : "端末にインストール済みのアプリは削除しないでください。AltForgeに戻って「マイApp」を確認し、一覧にない場合は、同じApple IDで元のIPAを再読み込みしてください。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abra o AltForge Server, confirme a conexão do dispositivo e tente novamente. Se o app aparecer na Tela de Início, remova-o antes de repetir."
+            "value" : "Mantenha os apps já instalados no dispositivo. Ao voltar ao AltForge, confira Meus Apps. Se o registro ainda não aparecer, importe o IPA original com o mesmo Apple ID, sem desinstalar o app primeiro."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请打开 AltForge Server，确认设备连接后重试。如果主屏幕上已出现该应用，请先删除再重试。"
+            "value" : "请保留手机上已经安装的 App，回到 AltForge 后查看“我的 App”。如果仍没有记录，请使用原 Apple ID 重新导入原 IPA，不要先卸载应用。"
           }
         }
       }

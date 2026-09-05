@@ -18,7 +18,7 @@ import Roxas
 
 import Nuke
 
-private final class SideloadingStatusView: UIView
+final class SideloadingStatusView: UIView
 {
     private let symbolView = UIImageView(image: UIImage(systemName: "iphone.and.arrow.forward"))
     private let titleLabel = UILabel()
@@ -28,6 +28,17 @@ private final class SideloadingStatusView: UIView
     private let progressView = UIProgressView(progressViewStyle: .default)
     private let separatorView = UIView()
     private var progressObservation: NSKeyValueObservation?
+    private let elapsedLabel = UILabel()
+    private let dismissButton = UIButton(type: .system)
+    private let detailButton = UIButton(type: .system)
+    private var timer: Timer?
+    private var startedAt = Date()
+    private var lastChangeAt = Date()
+    private var lastFraction = -1.0
+    private var progressSession = UUID()
+    var dismissHandler: (() -> Void)?
+    var detailHandler: (() -> Void)?
+    var layoutChangeHandler: (() -> Void)?
 
     override init(frame: CGRect)
     {
@@ -45,17 +56,20 @@ private final class SideloadingStatusView: UIView
         self.titleLabel.textColor = .label
         self.titleLabel.adjustsFontForContentSizeCategory = true
         self.titleLabel.lineBreakMode = .byTruncatingMiddle
+        self.titleLabel.numberOfLines = 2
 
         self.stageLabel.translatesAutoresizingMaskIntoConstraints = false
         self.stageLabel.font = .preferredFont(forTextStyle: .subheadline)
         self.stageLabel.textColor = .secondaryLabel
         self.stageLabel.adjustsFontForContentSizeCategory = true
+        self.stageLabel.numberOfLines = 0
 
         self.detailLabel.translatesAutoresizingMaskIntoConstraints = false
         self.detailLabel.font = .preferredFont(forTextStyle: .caption1)
         self.detailLabel.textColor = .tertiaryLabel
         self.detailLabel.adjustsFontForContentSizeCategory = true
         self.detailLabel.lineBreakMode = .byTruncatingMiddle
+        self.detailLabel.numberOfLines = 3
 
         self.percentageLabel.translatesAutoresizingMaskIntoConstraints = false
         self.percentageLabel.font = .monospacedDigitSystemFont(ofSize: 15, weight: .semibold)
@@ -70,7 +84,20 @@ private final class SideloadingStatusView: UIView
         self.separatorView.translatesAutoresizingMaskIntoConstraints = false
         self.separatorView.backgroundColor = .separator
 
-        [self.symbolView, self.titleLabel, self.stageLabel, self.detailLabel, self.percentageLabel, self.progressView, self.separatorView].forEach { self.addSubview($0) }
+        self.elapsedLabel.font = .preferredFont(forTextStyle: .caption1)
+        self.elapsedLabel.adjustsFontForContentSizeCategory = true
+        self.elapsedLabel.textColor = .secondaryLabel
+        self.elapsedLabel.numberOfLines = 0
+        self.dismissButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        self.dismissButton.accessibilityLabel = NSLocalizedString("Dismiss", comment: "Dismiss installation result")
+        self.dismissButton.addAction(UIAction { [weak self] _ in self?.dismissHandler?() }, for: .primaryActionTriggered)
+        self.detailButton.setImage(UIImage(systemName: "info.circle"), for: .normal)
+        self.detailButton.accessibilityLabel = NSLocalizedString("Installation Details", comment: "Installation result details")
+        self.detailButton.addAction(UIAction { [weak self] _ in self?.detailHandler?() }, for: .primaryActionTriggered)
+        [self.symbolView, self.titleLabel, self.stageLabel, self.detailLabel, self.percentageLabel, self.progressView, self.separatorView, self.elapsedLabel, self.dismissButton, self.detailButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            self.addSubview($0)
+        }
 
         NSLayoutConstraint.activate([
             self.symbolView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
@@ -84,19 +111,32 @@ private final class SideloadingStatusView: UIView
 
             self.stageLabel.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
             self.stageLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 2),
-            self.stageLabel.trailingAnchor.constraint(lessThanOrEqualTo: self.percentageLabel.leadingAnchor, constant: -12),
+            self.stageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
 
             self.percentageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             self.percentageLabel.centerYAnchor.constraint(equalTo: self.symbolView.centerYAnchor),
 
             self.progressView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             self.progressView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            self.progressView.topAnchor.constraint(equalTo: self.symbolView.bottomAnchor, constant: 9),
+            self.progressView.topAnchor.constraint(greaterThanOrEqualTo: self.symbolView.bottomAnchor, constant: 9),
+            self.progressView.topAnchor.constraint(equalTo: self.stageLabel.bottomAnchor, constant: 9),
 
             self.detailLabel.leadingAnchor.constraint(equalTo: self.progressView.leadingAnchor),
             self.detailLabel.trailingAnchor.constraint(equalTo: self.progressView.trailingAnchor),
             self.detailLabel.topAnchor.constraint(equalTo: self.progressView.bottomAnchor, constant: 5),
-            self.detailLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor, constant: -8),
+            self.elapsedLabel.leadingAnchor.constraint(equalTo: self.detailLabel.leadingAnchor),
+            self.elapsedLabel.topAnchor.constraint(equalTo: self.detailLabel.bottomAnchor, constant: 6),
+            self.elapsedLabel.trailingAnchor.constraint(equalTo: self.detailButton.leadingAnchor, constant: -8),
+            self.elapsedLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -12),
+            self.dismissButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
+            self.dismissButton.centerYAnchor.constraint(equalTo: self.elapsedLabel.centerYAnchor),
+            self.dismissButton.widthAnchor.constraint(equalToConstant: 44),
+            self.dismissButton.heightAnchor.constraint(equalToConstant: 44),
+            self.detailButton.trailingAnchor.constraint(equalTo: self.dismissButton.leadingAnchor),
+            self.detailButton.centerYAnchor.constraint(equalTo: self.elapsedLabel.centerYAnchor),
+            self.detailButton.widthAnchor.constraint(equalToConstant: 44),
+            self.detailButton.heightAnchor.constraint(equalToConstant: 44),
+            self.elapsedLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
 
             self.separatorView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             self.separatorView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
@@ -112,19 +152,35 @@ private final class SideloadingStatusView: UIView
 
     func begin(title: String, stage: String, progress: Progress)
     {
+        self.end()
+        self.startedAt = Date()
+        self.lastChangeAt = self.startedAt
+        self.lastFraction = -1
+        self.dismissButton.isHidden = true
+        self.detailButton.isHidden = true
+        self.symbolView.image = UIImage(systemName: "iphone.and.arrow.forward")
+        self.symbolView.tintColor = .altPrimary
+        self.progressView.progressTintColor = .altPrimary
         self.titleLabel.text = title
         self.update(stage: stage, detail: nil)
         self.progressView.progress = 0
         self.percentageLabel.text = "0%"
+        let session = self.progressSession
 
         self.progressObservation = progress.observe(\.fractionCompleted, options: [.initial, .new]) { [weak self] progress, _ in
-            let fraction = progress.fractionCompleted.isFinite ? min(max(progress.fractionCompleted, 0), 1) : 0
+            let fraction = progress.fractionCompleted.isFinite ? min(max(progress.fractionCompleted, 0), 0.99) : 0
             DispatchQueue.main.async {
-                self?.progressView.setProgress(Float(fraction), animated: true)
+                guard self?.progressSession == session else { return }
+                if self?.lastFraction != fraction { self?.lastChangeAt = Date(); self?.lastFraction = fraction }
+                self?.progressView.setProgress(Float(fraction), animated: !UIAccessibility.isReduceMotionEnabled)
                 self?.percentageLabel.text = "\(Int((fraction * 100).rounded()))%"
                 self?.updateAccessibilityLabel()
             }
         }
+        self.updateElapsed()
+        let timer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in self?.updateElapsed() }
+        RunLoop.main.add(timer, forMode: .common)
+        self.timer = timer
     }
 
     func update(title: String? = nil, stage: String, detail: String?)
@@ -133,20 +189,79 @@ private final class SideloadingStatusView: UIView
         {
             self.titleLabel.text = title
         }
+        if self.stageLabel.text != stage || self.detailLabel.text != detail { self.lastChangeAt = Date() }
         self.stageLabel.text = stage
         self.detailLabel.text = detail
         self.detailLabel.isHidden = detail?.isEmpty != false
         self.updateAccessibilityLabel()
+        self.layoutChangeHandler?()
     }
 
     func end()
     {
         self.progressObservation = nil
+        self.progressSession = UUID()
+        self.timer?.invalidate()
+        self.timer = nil
+    }
+
+    deinit { self.timer?.invalidate() }
+
+    override func tintColorDidChange()
+    {
+        super.tintColorDidChange()
+        self.progressView.progressTintColor = .altPrimary
+        if self.progressObservation != nil { self.symbolView.tintColor = .altPrimary }
+    }
+
+    static func needsInstallationConfirmation(error: Error, stage: AppOperationDiagnosticStage?) -> Bool
+    {
+        guard stage == .installingApp else { return false }
+        let error = error as NSError
+        let interruptions: [NSError] = [OperationError.timedOut as NSError, OperationError.cancelled as NSError,
+                                        ALTServerError(.lostConnection) as NSError,
+                                        URLError(.timedOut) as NSError, URLError(.networkConnectionLost) as NSError]
+        return interruptions.contains { $0.domain == error.domain && $0.code == error.code }
+    }
+
+    func finish(error: Error?, awaitingConfirmation: Bool = false)
+    {
+        self.end()
+        self.dismissButton.isHidden = false
+        self.detailButton.isHidden = error == nil
+        self.symbolView.image = UIImage(systemName: error == nil ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+        self.symbolView.tintColor = error == nil ? .systemGreen : .systemRed
+        if awaitingConfirmation {
+            self.symbolView.image = UIImage(systemName: "questionmark.circle.fill")
+            self.symbolView.tintColor = .systemOrange
+            self.stageLabel.text = NSLocalizedString("Installation Result Unconfirmed", comment: "Installation response was interrupted")
+        } else if error is CancellationError {
+            self.stageLabel.text = NSLocalizedString("Installation Cancelled", comment: "Installation result")
+        } else {
+            self.stageLabel.text = error == nil ? NSLocalizedString("Installation Complete", comment: "Installation result")
+                : NSLocalizedString("Installation Failed", comment: "Installation result")
+        }
+        self.detailLabel.text = awaitingConfirmation
+            ? NSLocalizedString("The device may have finished installing. AltForge will check its installation record when you return to the app.", comment: "Unconfirmed installation recovery")
+            : error.map { ($0 as NSError).userFacingPresentation.message }
+        self.detailLabel.isHidden = error == nil
+        if error == nil { self.progressView.progress = 1; self.percentageLabel.text = "100%" }
+        self.updateAccessibilityLabel()
+        self.layoutChangeHandler?()
+    }
+
+    private func updateElapsed()
+    {
+        let seconds = max(0, Int(Date().timeIntervalSince(self.startedAt)))
+        let elapsed = String(format: NSLocalizedString("Elapsed %d:%02d", comment: "Installation elapsed minutes and seconds"), seconds / 60, seconds % 60)
+        self.elapsedLabel.text = Date().timeIntervalSince(self.lastChangeAt) >= 20
+            ? elapsed + " · " + NSLocalizedString("Waiting for a response", comment: "Installation waiting status") : elapsed
     }
 
     private func updateAccessibilityLabel()
     {
-        self.isAccessibilityElement = true
+        self.isAccessibilityElement = false
+        self.shouldGroupAccessibilityChildren = true
         self.accessibilityLabel = [self.titleLabel.text, self.stageLabel.text, self.detailLabel.text, self.percentageLabel.text]
             .compactMap { $0 }
             .filter { !$0.isEmpty }
@@ -181,6 +296,11 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
     
     private var prototypeUpdateCell: UpdateCollectionViewCell!
     private var sideloadingStatusView: SideloadingStatusView!
+    private let sideloadingStatusContainer = UIScrollView()
+    private var sideloadingStatusHeight: NSLayoutConstraint?
+    private var sideloadingError: Error?
+    private var sideloadingStage: AppOperationDiagnosticStage?
+    private var sideloadingActivityIdentifier: UUID?
     
     // State
     private var isUpdateSectionCollapsed = true
@@ -239,14 +359,33 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         self.collectionView.refreshControl = refreshControl
         
         self.sideloadingStatusView = SideloadingStatusView()
-        self.sideloadingStatusView.alpha = 0
-        self.sideloadingStatusView.isHidden = true
-        self.view.addSubview(self.sideloadingStatusView)
+        self.sideloadingStatusContainer.translatesAutoresizingMaskIntoConstraints = false
+        self.sideloadingStatusContainer.accessibilityIdentifier = "SideloadingStatusContainer"
+        self.sideloadingStatusContainer.contentInsetAdjustmentBehavior = .never
+        self.sideloadingStatusContainer.isHidden = true
+        self.sideloadingStatusContainer.backgroundColor = .secondarySystemGroupedBackground
+        self.view.addSubview(self.sideloadingStatusContainer)
+        self.sideloadingStatusContainer.addSubview(self.sideloadingStatusView)
+        self.sideloadingStatusHeight = self.sideloadingStatusContainer.heightAnchor.constraint(equalToConstant: 160)
+        self.sideloadingStatusView.dismissHandler = { [weak self] in self?.hideSideloadingStatus() }
+        self.sideloadingStatusView.layoutChangeHandler = { [weak self] in self?.view.setNeedsLayout() }
+        self.sideloadingStatusView.detailHandler = { [weak self] in
+            guard let self, let error = self.sideloadingError else { return }
+            let presentation = (error as NSError).userFacingPresentation
+            let alert = UIAlertController(title: presentation.title, message: presentation.combinedMessage, preferredStyle: .alert)
+            alert.addAction(.ok)
+            self.present(alert, animated: true)
+        }
         NSLayoutConstraint.activate([
-            self.sideloadingStatusView.leadingAnchor.constraint(equalTo: self.collectionView.frameLayoutGuide.leadingAnchor),
-            self.sideloadingStatusView.trailingAnchor.constraint(equalTo: self.collectionView.frameLayoutGuide.trailingAnchor),
-            self.sideloadingStatusView.topAnchor.constraint(equalTo: self.collectionView.frameLayoutGuide.topAnchor),
-            self.sideloadingStatusView.heightAnchor.constraint(equalToConstant: 92)
+            self.sideloadingStatusContainer.leadingAnchor.constraint(equalTo: self.collectionView.frameLayoutGuide.leadingAnchor),
+            self.sideloadingStatusContainer.trailingAnchor.constraint(equalTo: self.collectionView.frameLayoutGuide.trailingAnchor),
+            self.sideloadingStatusContainer.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.sideloadingStatusHeight!,
+            self.sideloadingStatusView.leadingAnchor.constraint(equalTo: self.sideloadingStatusContainer.contentLayoutGuide.leadingAnchor),
+            self.sideloadingStatusView.trailingAnchor.constraint(equalTo: self.sideloadingStatusContainer.contentLayoutGuide.trailingAnchor),
+            self.sideloadingStatusView.topAnchor.constraint(equalTo: self.sideloadingStatusContainer.contentLayoutGuide.topAnchor),
+            self.sideloadingStatusView.bottomAnchor.constraint(equalTo: self.sideloadingStatusContainer.contentLayoutGuide.bottomAnchor),
+            self.sideloadingStatusView.widthAnchor.constraint(equalTo: self.sideloadingStatusContainer.frameLayoutGuide.widthAnchor)
         ])
         
         (self as PeekPopPreviewing).registerForPreviewing(with: self, sourceView: self.collectionView)
@@ -263,6 +402,29 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         AppLifecycleDiagnosticStore.shared.record(.myAppsLoaded)
     }
     
+    override func viewDidLayoutSubviews()
+    {
+        super.viewDidLayoutSubviews()
+        guard !self.sideloadingStatusContainer.isHidden, self.view.bounds.width > 0 else { return }
+        self.view.bringSubviewToFront(self.sideloadingStatusContainer)
+        let preferred = self.sideloadingStatusView.systemLayoutSizeFitting(
+            CGSize(width: self.view.bounds.width, height: 0),
+            withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
+        let available = max(96, self.view.safeAreaLayoutGuide.layoutFrame.height * 0.6)
+        let height = min(preferred, available)
+        if abs((self.sideloadingStatusHeight?.constant ?? 0) - height) > 0.5 {
+            self.sideloadingStatusHeight?.constant = height
+        }
+        if var inset = self.sideloadingContentInset {
+            inset.top += height
+            if self.collectionView.contentInset != inset { self.collectionView.contentInset = inset }
+        }
+        if var inset = self.sideloadingIndicatorInsets {
+            inset.top += height
+            self.collectionView.verticalScrollIndicatorInsets = inset
+        }
+    }
+
     override func viewIsAppearing(_ animated: Bool)
     {
         super.viewIsAppearing(animated)
@@ -1082,6 +1244,7 @@ private extension MyAppsViewController
     
     func sideloadApp(at url: URL, completion: @escaping (Result<Void, Error>) -> Void)
     {
+        self.loadViewIfNeeded()
         guard self.sideloadingProgress == nil else
         {
             completion(.failure(OperationError.cancelled))
@@ -1127,10 +1290,18 @@ private extension MyAppsViewController
         {
             let downloadProgress = Progress.discreteProgress(totalUnitCount: 100)
             downloadOperation = RSTAsyncBlockOperation { (operation) in
-                let downloadTask = URLSession.shared.downloadTask(with: url) { (fileURL, response, error) in
+                let configuration = URLSessionConfiguration.ephemeral
+                configuration.timeoutIntervalForRequest = 30
+                configuration.timeoutIntervalForResource = 600
+                let session = URLSession(configuration: configuration)
+                let downloadTask = session.downloadTask(with: url) { (fileURL, response, error) in
+                    session.finishTasksAndInvalidate()
                     do
                     {
                         let (fileURL, _) = try Result((fileURL, response), error).get()
+                        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                            throw URLError(.badServerResponse)
+                        }
                         
                         try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true, attributes: nil)
                         
@@ -1256,6 +1427,7 @@ private extension MyAppsViewController
                     operation.finish()
                 }
                 group.setInstallationStatusHandler { [weak self] stage, detail in
+                    self?.sideloadingStage = stage
                     self?.sideloadingStatusView.update(stage: stage.localizedName, detail: detail)
                 }
                 installProgress.addChild(group.progress, withPendingUnitCount: 100)
@@ -1272,7 +1444,11 @@ private extension MyAppsViewController
             DispatchQueue.main.async {
                 self.navigationItem.leftBarButtonItem?.isIndicatingActivity = false
                 self.navigationItem.leftBarButtonItem?.isEnabled = true
-                self.hideSideloadingStatus()
+                self.sideloadingProgress = nil
+                if let identifier = self.sideloadingActivityIdentifier {
+                    InstallationScreenActivity.shared.end(identifier)
+                    self.sideloadingActivityIdentifier = nil
+                }
                 
                 let result: Result<InstalledApp, Error>
                 if let installedApp = context.installedApp
@@ -1298,6 +1474,8 @@ private extension MyAppsViewController
                 switch result
                 {
                 case .success(let app):
+                    self.sideloadingError = nil
+                    self.sideloadingStatusView.finish(error: nil)
                     completion(.success(()))
                     
                     app.managedObjectContext?.perform {
@@ -1305,15 +1483,19 @@ private extension MyAppsViewController
                     }
                     
                 case .failure(OperationError.cancelled):
+                    self.sideloadingError = OperationError.cancelled
+                    self.sideloadingStatusView.finish(error: OperationError.cancelled,
+                        awaitingConfirmation: SideloadingStatusView.needsInstallationConfirmation(error: OperationError.cancelled, stage: self.sideloadingStage))
                     completion(.failure((OperationError.cancelled)))
                     
                 case .failure(let error):
-                    let toastView = ToastView(error: error)
-                    toastView.opensErrorLog = true
-                    toastView.show(in: self)
+                    self.sideloadingError = error
+                    self.sideloadingStatusView.finish(error: error,
+                        awaitingConfirmation: SideloadingStatusView.needsInstallationConfirmation(error: error, stage: self.sideloadingStage))
                     
                     completion(.failure(error))
                 }
+                self.view.setNeedsLayout()
             }
         }
         progress.addChild(installProgress, withPendingUnitCount: 65)
@@ -1325,24 +1507,35 @@ private extension MyAppsViewController
         self.operationQueue.addOperations(operations, waitUntilFinished: false)
     }
 
-    private func showSideloadingStatus(progress: Progress, title: String, stage: String)
+}
+
+extension MyAppsViewController
+{
+    func showSideloadingStatus(progress: Progress, title: String, stage: String)
     {
+        if !self.sideloadingStatusContainer.isHidden { self.hideSideloadingStatus() }
+        let identifier = UUID()
+        self.sideloadingActivityIdentifier = identifier
+        InstallationScreenActivity.shared.begin(identifier)
+        self.sideloadingError = nil
+        self.sideloadingStage = nil
         self.sideloadingContentInset = self.collectionView.contentInset
         self.sideloadingIndicatorInsets = self.collectionView.verticalScrollIndicatorInsets
-        self.collectionView.contentInset.top += 92
-        self.collectionView.verticalScrollIndicatorInsets.top += 92
 
         self.sideloadingStatusView.begin(title: title, stage: stage, progress: progress)
-        self.sideloadingStatusView.isHidden = false
-        UIView.animate(withDuration: 0.2) {
-            self.sideloadingStatusView.alpha = 1
-        }
+        self.sideloadingStatusContainer.isHidden = false
+        self.view.setNeedsLayout()
     }
 
-    private func hideSideloadingStatus()
+    func hideSideloadingStatus()
     {
         self.sideloadingProgress = nil
         self.sideloadingStatusView.end()
+        self.sideloadingError = nil
+        if let identifier = self.sideloadingActivityIdentifier {
+            InstallationScreenActivity.shared.end(identifier)
+            self.sideloadingActivityIdentifier = nil
+        }
 
         if let contentInset = self.sideloadingContentInset
         {
@@ -1355,13 +1548,12 @@ private extension MyAppsViewController
         self.sideloadingContentInset = nil
         self.sideloadingIndicatorInsets = nil
 
-        UIView.animate(withDuration: 0.2, animations: {
-            self.sideloadingStatusView.alpha = 0
-        }) { _ in
-            self.sideloadingStatusView.isHidden = true
-        }
+        self.sideloadingStatusContainer.isHidden = true
     }
-    
+}
+
+private extension MyAppsViewController
+{
     @IBAction func activateApp(_ sender: UIButton)
     {
         let point = self.collectionView.convert(sender.center, from: sender.superview)
@@ -1703,16 +1895,7 @@ private extension MyAppsViewController
     func remove(_ installedApp: InstalledApp)
     {
         let title = String(format: NSLocalizedString("Remove “%@” from AltForge?", comment: ""), installedApp.name)
-        let message: String
-        
-        if UserDefaults.standard.isLegacyDeactivationSupported
-        {
-            message = NSLocalizedString("You must also delete it from the home screen to fully uninstall the app.", comment: "")
-        }
-        else
-        {
-            message = NSLocalizedString("This will also erase all backup data for this app.", comment: "")
-        }
+        let message = NSLocalizedString("This removes the AltForge record, cached app and backups, not the app on your device. You will need to import its IPA again to refresh it with AltForge.", comment: "Explicit removal of installation tracking")
 
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         alertController.addAction(.cancel)
@@ -2342,28 +2525,10 @@ extension MyAppsViewController
                 actions.append(deactivateAction)
             }
             
-            #if DEBUG
-            
             if installedApp.bundleIdentifier != StoreApp.altstoreAppID
             {
                 actions.append(removeAction)
             }
-            
-            #else
-            
-            if (UserDefaults.standard.legacySideloadedApps ?? []).contains(installedApp.bundleIdentifier)
-            {
-                // Legacy sideloaded app, so can't detect if it's deleted.
-                actions.append(removeAction)
-            }
-            else if !UserDefaults.standard.isLegacyDeactivationSupported && !installedApp.isActive
-            {
-                // Inactive apps are actually deleted, so we need another way
-                // for user to remove them from AltStore.
-                actions.append(removeAction)
-            }
-            
-            #endif
         }
         
         var title: String?

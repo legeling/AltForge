@@ -40,6 +40,7 @@ class InstructionsViewController: UIViewController
         self.navigationController?.navigationBar.tintColor = .altPrimary
         self.navigationController?.navigationBar.standardAppearance = appearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        NotificationCenter.default.addObserver(self, selector: #selector(InstructionsViewController.themeDidChange), name: .altThemeDidChange, object: nil)
         
         if UIScreen.main.isExtraCompactHeight
         {
@@ -82,6 +83,19 @@ class InstructionsViewController: UIViewController
 
             self.applySemanticTextColors(to: subview)
         }
+    }
+}
+
+private extension InstructionsViewController
+{
+    @objc func themeDidChange()
+    {
+        let tintColor = UIColor.altPrimary
+
+        self.view.tintColor = tintColor
+        self.dismissButton.backgroundColor = tintColor
+        self.dismissButton.setTitleColor(tintColor.contrastingForegroundColor, for: .normal)
+        self.navigationController?.navigationBar.tintColor = tintColor
     }
 }
 

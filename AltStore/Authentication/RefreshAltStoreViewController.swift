@@ -28,14 +28,29 @@ class RefreshAltStoreViewController: UIViewController
 
         self.view.backgroundColor = .systemGroupedBackground
         self.view.tintColor = .altPrimary
+        self.navigationController?.navigationBar.tintColor = .altPrimary
         self.refreshButton.tintColor = .altPrimary
         self.cancelButton.setTitleColor(.altPrimary, for: .normal)
+        NotificationCenter.default.addObserver(self, selector: #selector(RefreshAltStoreViewController.themeDidChange), name: .altThemeDidChange, object: nil)
         
         self.placeholderView.textLabel.isHidden = true
         
         self.placeholderView.detailTextLabel.textAlignment = .left
         self.placeholderView.detailTextLabel.textColor = .secondaryLabel
         self.placeholderView.detailTextLabel.text = NSLocalizedString("AltForge was unable to use an existing signing certificate, so it had to create a new one. This will cause any apps installed with an existing certificate to expire — including AltForge.\n\nTo prevent AltForge from expiring early, please refresh the app now. AltForge will quit once refreshing is complete.", comment: "")
+    }
+}
+
+private extension RefreshAltStoreViewController
+{
+    @objc func themeDidChange()
+    {
+        let tintColor = UIColor.altPrimary
+
+        self.view.tintColor = tintColor
+        self.navigationController?.navigationBar.tintColor = tintColor
+        self.refreshButton.tintColor = tintColor
+        self.cancelButton.setTitleColor(tintColor, for: .normal)
     }
 }
 

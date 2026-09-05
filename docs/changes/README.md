@@ -10,6 +10,7 @@
 
 | ID | 标题 | 状态 |
 |---|---|---|
+| [CHG-20260905-003](active/CHG-20260905-003-ios-install-tracking-progress/README.md) | iOS 安装记录恢复、可见进度与主题一致性 | 本地验证通过 / 设备验收待完成 / 未发布 |
 | [`CHG-20260809-002`](active/CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 | [`CHG-20260809-007`](active/CHG-20260809-007-macos-server-identity-settings/README.md) | macOS Server 身份、菜单与设置 | In progress |
 | [`CHG-20260810-002`](active/CHG-20260810-002-macos-menu-icon-scale/README.md) | 放大 macOS 菜单栏图标 | Implemented / menu bar smoke pending |

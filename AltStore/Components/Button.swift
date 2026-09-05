@@ -51,15 +51,15 @@ private extension Button
 {
     func update()
     {
-        self.setTitleColor(self.tintColor.contrastingForegroundColor, for: .normal)
-
         if self.isEnabled
         {
+            self.setTitleColor(self.tintColor.contrastingForegroundColor, for: .normal)
             self.backgroundColor = self.tintColor
         }
         else
         {
-            self.backgroundColor = .lightGray
+            self.setTitleColor(.secondaryLabel, for: .normal)
+            self.backgroundColor = .tertiarySystemFill
         }
     }
 }

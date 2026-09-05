@@ -87,6 +87,7 @@ class AuthenticationViewController: UIViewController
         
         NotificationCenter.default.addObserver(self, selector: #selector(AuthenticationViewController.textFieldDidChangeText(_:)), name: UITextField.textDidChangeNotification, object: self.appleIDTextField)
         NotificationCenter.default.addObserver(self, selector: #selector(AuthenticationViewController.textFieldDidChangeText(_:)), name: UITextField.textDidChangeNotification, object: self.passwordTextField)
+        NotificationCenter.default.addObserver(self, selector: #selector(AuthenticationViewController.themeDidChange), name: .altThemeDidChange, object: nil)
         
         self.update()
     }
@@ -206,5 +207,19 @@ extension AuthenticationViewController
     @objc func textFieldDidChangeText(_ notification: Notification)
     {
         self.update()
+    }
+}
+
+private extension AuthenticationViewController
+{
+    @objc func themeDidChange()
+    {
+        let tintColor = UIColor.altPrimary
+
+        self.view.tintColor = tintColor
+        self.navigationController?.navigationBar.tintColor = tintColor
+        self.signInButton.backgroundColor = tintColor
+        self.signInButton.setTitleColor(tintColor.contrastingForegroundColor, for: .normal)
+        self.signInButton.activityIndicatorView.color = tintColor.contrastingForegroundColor
     }
 }

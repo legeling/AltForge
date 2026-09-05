@@ -57,6 +57,10 @@ class InsetGroupTableViewCell: UITableViewCell
         self.sendSubviewToBack(self.insetView)
 
         self.tintColor = .altPrimary
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(InsetGroupTableViewCell.themeDidChange),
+                                               name: .altThemeDidChange,
+                                               object: nil)
         
         NSLayoutConstraint.activate([self.separatorView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 30),
                                      self.separatorView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30),
@@ -111,6 +115,11 @@ class InsetGroupTableViewCell: UITableViewCell
 
 private extension InsetGroupTableViewCell
 {
+    @objc func themeDidChange()
+    {
+        self.tintColor = .altPrimary
+    }
+
     func update()
     {
         switch self.style
@@ -141,5 +150,4 @@ private extension InsetGroupTableViewCell
             self.insetView.backgroundColor = .secondarySystemGroupedBackground
         }
     }
-
 }

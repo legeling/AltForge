@@ -34,6 +34,19 @@ class RefreshGroup: NSObject
     
     private let dispatchGroup = DispatchGroup()
     private var operations: [Foundation.Operation] = []
+    private let screenActivityIdentifier = UUID()
+
+    func keepScreenAwake()
+    {
+        let identifier = self.screenActivityIdentifier
+        DispatchQueue.main.async { InstallationScreenActivity.shared.begin(identifier) }
+    }
+
+    deinit
+    {
+        let identifier = self.screenActivityIdentifier
+        DispatchQueue.main.async { InstallationScreenActivity.shared.end(identifier) }
+    }
     
     init(context: AuthenticatedOperationContext = AuthenticatedOperationContext())
     {
@@ -108,6 +121,8 @@ private extension RefreshGroup
     {
         guard !self.isFinished else { return }
         self.isFinished = true
+        let identifier = self.screenActivityIdentifier
+        DispatchQueue.main.async { InstallationScreenActivity.shared.end(identifier) }
         
         self.completionHandler?(self.results)
     }

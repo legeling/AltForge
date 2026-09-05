@@ -8,6 +8,7 @@
 
 | Task | 状态 | 关联 | 完成标准 |
 |---|---|---|---|
+| `T-043` 修复 iOS 安装漏记与不可见进度 | 本地验证通过 / 未发布 | `FR-044`, `FR-045`; `DES-030`; `TEST-043`, `TEST-044` | receipt/事务恢复、延迟登记核对、前后台重试边界、并发状态读取、缓存保留、进度/常亮与主题修复已通过本机 28 项 XCTest 分批验证和布局检查；真机最终回执丢失、锁屏恢复及刷新继续验收 |
 | `T-001` 建立 AltSign Unicode archive/App ID 自动化 fixture | Pending | `FR-004`, `FR-005`; `DES-005`; `TEST-003`, `TEST-005`-`TEST-007` | 测试入库并覆盖 UTF-8、Unicode extra、GBK、traversal、round trip |
 | `T-002` 验证干净 checkout CI 构建 | In progress | `FR-014`; `DES-009`; `TEST-011`, `TEST-012` | iOS Simulator、source ID test、AltServer build 通过，失败依赖有记录 |
 | `T-003` 执行脱敏真实设备安装 smoke | Pending | `FR-001`-`FR-003`; `DES-001`-`DES-003`; `TEST-002` | 英文与中文 fixture 均安装/启动，结果进入 verification |

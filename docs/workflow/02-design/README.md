@@ -283,6 +283,14 @@ DMG 使用单任务 `URLSessionDownloadDelegate`，45 秒 request/600 秒 resour
 
 ## 可选目标与边界
 
+### `DES-030` iOS 安装确认与可见状态
+
+返回前台的核对由 `InstallationRecoveryCoordinator` 管理：实际 didBecomeActive/显式 update 触发，合并重复请求，最多一个数据库核对任务；进入后台停止后续调度，旧回调不能启动旧任务。对延迟注册及仍在运行的安装生产者，按 1/2/5/10/20 秒补查，单次前台窗口最多 6 次本地扫描，无额外网络 I/O。恢复避开活跃生产者，写入前再次核对记录存在性；目录不可读时保留缓存，不当作空目录删除。中断提示不得建议先卸载已安装的 App。
+
+`InstallationReceiptStore` 在发送设备安装请求前于既有 App 缓存目录原子写入 versioned receipt（最大 64 KiB、128 个扩展，无密码、密钥、token 或 profile 正文），保存恢复所需标识/版本/日期/证书序列号元数据。最终成功回执在其 Core Data 队列立即保存 InstalledApp；前台重入只为“有效 receipt + 缓存 App.app + 系统正向 UTI 身份确认”的缺失记录恢复，设置 needsResign 以确保下次完整重签。批量保存失败回滚且保留 receipt；已有记录不覆盖。无 UTI 不触发删除；孤立缓存保留到用户明确移除，移除同时清理 receipt，避免重新出现。
+
+IPA 进度面板固定在 safe area，按内容适配并限制到可用高度的 60%，超出时内部滚动，列表 inset 同步。显示既有 diagnostic stage、Progress、耗时和等待提示，100% 只在终态成功后显示，错误与成功持续保留直到关闭。前台手动操作使用主线程多租约 idle-timer 管理，最后一次释放恢复原值；取消结束异步安装等待，180 秒无响应超时后保留恢复记录。UIKit 主题沿用通知和语义色，不引入新框架或全局递归染色。没有 Core Data schema 或 Server Protocol 变化；恢复扫描/集合查找为线性复杂度。
+
 | Target | 责任 | 核心安装依赖 |
 |---|---|---|
 | AltWidgetExtension | 展示 installed app / expiration snapshot | 否 |

@@ -26,6 +26,11 @@ class SettingsHeaderFooterView: UITableViewHeaderFooterView
         self.secondaryLabel.textColor = .secondaryLabel
         self.button.tintColor = .altPrimary
         self.button.setTitleColor(.altPrimary, for: .normal)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(SettingsHeaderFooterView.themeDidChange),
+                                               name: .altThemeDidChange,
+                                               object: nil)
         
         self.contentView.layoutMargins = .zero
         self.contentView.preservesSuperviewLayoutMargins = true
@@ -37,5 +42,11 @@ class SettingsHeaderFooterView: UITableViewHeaderFooterView
                                      self.stackView.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor),
                                      self.stackView.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor),
                                      self.stackView.bottomAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.bottomAnchor)])
+    }
+
+    @objc private func themeDidChange()
+    {
+        self.button.tintColor = .altPrimary
+        self.button.setTitleColor(.altPrimary, for: .normal)
     }
 }

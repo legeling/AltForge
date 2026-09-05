@@ -12,6 +12,8 @@
 
 | Test | 覆盖 | 层级 | 当前状态 |
 |---|---|---|---|
+| `TEST-043` 安装记录恢复与缓存保护 | `FR-044` | Unit/Contract/Device | 本机恢复、去重、保存失败回滚、路径/文件验证、缓存保护，以及后台回调丢失/延迟登记/活跃任务避让/有限重试/并发状态读取用例通过；真实设备最终回执丢失与恢复后刷新仍待验收 |
+| `TEST-044` 安装进度、常亮与主题 | `FR-045` | Unit/Layout/Device | 本机常亮租约、主题控件、真实导航 safe-area、大字体/深浅色/宽度布局及阶段化“结果待确认”通过；28 项 Release 选择由 27 项完整批次和最终 3 项定向运行覆盖，零失败/跳过，最终模拟器构建通过；真机锁屏及全页面矩阵未验证 |
 | `TEST-001` install operation graph 成功/失败状态 | `FR-002`, `FR-003` | Integration | 缺失 |
 | `TEST-002` AltServer 真实设备安装 smoke | `FR-001`, `FR-002` | Manual E2E | 待执行 |
 | `TEST-003` App ID ASCII sanitize + Unicode display name | `FR-004` | Unit/Integration | 缺失自动化 |

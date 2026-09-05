@@ -396,6 +396,29 @@ class AppManager: ObservableObject
     @Published private var installationProgress = [String: Progress]()
     @Published private var refreshProgress = [String: Progress]()
     private var cancellables: Set<AnyCancellable> = []
+    private lazy var installationRecovery = InstallationRecoveryCoordinator(
+        canRun: { UIApplication.shared.applicationState == .active && DatabaseManager.shared.isStarted },
+        attempt: { [weak self] completion in
+            guard let self else { completion(false); return }
+            DatabaseManager.shared.persistentContainer.performBackgroundTask { context in
+                var hasPending = false
+                do
+                {
+                    let result = try InstallationReceiptStore.shared.reconcile(in: context, isInstalled: { resignedIdentifier in
+                        let uti = InstalledApp.installedAppUTI(forBundleIdentifier: resignedIdentifier)
+                        return UTTypeCopyDeclaration(uti as CFString)?.takeRetainedValue() != nil
+                    }, isManaging: { self.isActivelyManagingApp(withBundleID: $0) })
+                    hasPending = result.pendingCount > 0
+                }
+                catch
+                {
+                    hasPending = true
+                    Logger.main.error("Installation record reconciliation failed. Code: \((error as NSError).code, privacy: .public)")
+                }
+                let shouldRetry = hasPending
+                DispatchQueue.main.async { completion(shouldRetry) }
+            }
+        })
     
     private lazy var progressLock: UnsafeMutablePointer<os_unfair_lock> = {
         // Can't safely pass &os_unfair_lock to os_unfair_lock functions in Swift,
@@ -414,6 +437,16 @@ class AppManager: ObservableObject
         self.serialOperationQueue.maxConcurrentOperationCount = 1
         
         self.prepareSubscriptions()
+        #if !MARKETPLACE
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.installationRecovery.start() }
+            .store(in: &self.cancellables)
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.installationRecovery.stop() }
+            .store(in: &self.cancellables)
+        #endif
     }
     
     deinit
@@ -456,7 +489,7 @@ extension AppManager
             }
 
             let description = NSLocalizedString("AltForge closed before this operation finished, so the result could not be recorded.", comment: "Unexpected termination recovery error")
-            let suggestion = NSLocalizedString("Open AltForge Server, confirm the device connection, then try again. If the app appears on the Home Screen, remove it before retrying.", comment: "Unexpected termination recovery suggestion")
+            let suggestion = NSLocalizedString("Keep any app already installed on your device. Check My Apps after returning to AltForge. If its record is still missing, import the original IPA with the same Apple ID without uninstalling the app first.", comment: "Unexpected termination recovery suggestion")
             let error = NSError(domain: "com.legeling.AltForge.InterruptedOperation",
                                 code: 1,
                                 userInfo: [NSLocalizedDescriptionKey: description,
@@ -507,70 +540,21 @@ extension AppManager
         }
         
         #else
-        
+        DispatchQueue.main.async { self.installationRecovery.start() }
         DatabaseManager.shared.persistentContainer.performBackgroundTask { (context) in
             #if targetEnvironment(simulator)
             // Apps aren't ever actually installed to simulator, so just do nothing rather than delete them from database.
             #else
-            do
-            {
-                let installedApps = InstalledApp.all(in: context)
-                
-                if UserDefaults.standard.legacySideloadedApps == nil
-                {
-                    // First time updating apps since updating AltStore to use custom UTIs,
-                    // so cache all existing apps temporarily to prevent us from accidentally
-                    // deleting them due to their custom UTI not existing (yet).
-                    let apps = installedApps.map { $0.bundleIdentifier }
-                    UserDefaults.standard.legacySideloadedApps = apps
-                }
-                
-                let legacySideloadedApps = Set(UserDefaults.standard.legacySideloadedApps ?? [])
-                
-                for app in installedApps
-                {
-                    guard app.bundleIdentifier != StoreApp.altstoreAppID else {
-                        self.scheduleExpirationWarningLocalNotification(for: app)
-                        continue
-                    }
-                    
-                    guard !self.isActivelyManagingApp(withBundleID: app.bundleIdentifier) else { continue }
-                    
-                    if !UserDefaults.standard.isLegacyDeactivationSupported
-                    {
-                        // We can't (ab)use provisioning profiles to deactivate apps,
-                        // which means we must delete apps to free up active slots.
-                        // So, only check if active apps are installed to prevent
-                        // false positives when checking inactive apps.
-                        guard app.isActive else { continue }
-                    }
-                    
-                    let uti = UTTypeCopyDeclaration(app.installedAppUTI as CFString)?.takeRetainedValue() as NSDictionary?
-                    if uti == nil && !legacySideloadedApps.contains(app.bundleIdentifier)
-                    {
-                        // This UTI is not declared by any apps, which means this app has been deleted by the user.
-                        // This app is also not a legacy sideloaded app, so we can assume it's fine to delete it.
-                        context.delete(app)
-                        
-                        if var patchedApps = UserDefaults.standard.patchedApps, let index = patchedApps.firstIndex(of: app.bundleIdentifier)
-                        {
-                            patchedApps.remove(at: index)
-                            UserDefaults.standard.patchedApps = patchedApps
-                        }
-                    }
-                }
-                
-                try context.save()
-            }
-            catch
-            {
-                print("Error while fetching installed apps.", error)
+            // Missing UTI registration is not proof of removal (especially after install/lock).
+            // Explicit removal operations own deletion of InstalledApp records.
+            if let app = InstalledApp.fetchAltStore(in: context) {
+                self.scheduleExpirationWarningLocalNotification(for: app)
             }
             #endif
             
             do
             {
-                let installedAppBundleIDs = InstalledApp.all(in: context).map { $0.bundleIdentifier }
+                let installedAppBundleIDs = Set(InstalledApp.all(in: context).map { $0.bundleIdentifier })
                                 
                 let cachedAppDirectories = try FileManager.default.contentsOfDirectory(at: InstalledApp.appsDirectoryURL,
                                                                                        includingPropertiesForKeys: [.isDirectoryKey, .nameKey],
@@ -581,8 +565,13 @@ extension AppManager
                     {
                         let resourceValues = try appDirectory.resourceValues(forKeys: [.isDirectoryKey, .nameKey])
                         guard let isDirectory = resourceValues.isDirectory, let bundleID = resourceValues.name else { continue }
+                        let children = Set(try FileManager.default.contentsOfDirectory(atPath: appDirectory.path))
                         
-                        if isDirectory && !installedAppBundleIDs.contains(bundleID) && !self.isActivelyManagingApp(withBundleID: bundleID)
+                        if isDirectory && InstallationReceiptStore.shouldRemoveCache(
+                            hasRecord: installedAppBundleIDs.contains(bundleID),
+                            hasCachedApp: children.contains("App.app"),
+                            hasReceipt: children.contains(InstallationReceiptStore.filename),
+                            isManaging: self.isActivelyManagingApp(withBundleID: bundleID))
                         {
                             print("DELETING CACHED APP:", bundleID)
                             try FileManager.default.removeItem(at: appDirectory)
@@ -1395,9 +1384,19 @@ extension AppManager
         let removeAppOperation = RSTAsyncBlockOperation { (operation) in
             DatabaseManager.shared.persistentContainer.performBackgroundTask { (context) in
                 let installedApp = context.object(with: installedApp.objectID) as! InstalledApp
-                context.delete(installedApp)
-                
-                do { try context.save() }
+                do
+                {
+                    let directory = installedApp.directoryURL
+                    // Explicit removal must not be undone by a stale recovery receipt.
+                    if let receipt = InstallationReceiptStore.shared.load(in: directory) {
+                        try InstallationReceiptStore.shared.remove(bundleIdentifier: installedApp.bundleIdentifier, matching: receipt.identifier)
+                    }
+                    context.delete(installedApp)
+                    try context.save()
+                    if FileManager.default.fileExists(atPath: directory.path) {
+                        try FileManager.default.removeItem(at: directory)
+                    }
+                }
                 catch { appContext.error = error }
                 
                 operation.finish()
@@ -1540,8 +1539,10 @@ extension AppManager
     
     func isActivelyManagingApp(withBundleID bundleID: String) -> Bool
     {
-        let isActivelyManaging = self.installationProgress.keys.contains(bundleID) || self.refreshProgress.keys.contains(bundleID)
-        return isActivelyManaging
+        os_unfair_lock_lock(self.progressLock)
+        defer { os_unfair_lock_unlock(self.progressLock) }
+
+        return self.installationProgress[bundleID] != nil || self.refreshProgress[bundleID] != nil
     }
 }
 
@@ -1650,6 +1651,7 @@ private extension AppManager
         if let viewController = presentingViewController
         {
             group.context.presentingViewController = viewController
+            if !operations.isEmpty { group.keepScreenAwake() }
         }
         
         /* Authenticate (if necessary) */

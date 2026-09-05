@@ -7,10 +7,18 @@
 //
 
 import XCTest
+import CoreData
+import UIKit
+import Roxas
 @testable import AltStore
 @testable import AltStoreCore
 
 @testable import AltSign
+
+private final class InstallationFailingSaveContext: NSManagedObjectContext
+{
+    override func save() throws { throw CocoaError(.persistentStoreSave) }
+}
 
 private struct GSAFixture
 {
@@ -129,6 +137,417 @@ final class AltTests: XCTestCase
     override func tearDownWithError() throws
     {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+
+    @MainActor
+    private func installationContext(failingSave: Bool = false) throws -> NSManagedObjectContext
+    {
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: DatabaseManager.shared.persistentContainer.managedObjectModel)
+        try coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
+        let context: NSManagedObjectContext = failingSave
+            ? InstallationFailingSaveContext(concurrencyType: .mainQueueConcurrencyType)
+            : NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        context.persistentStoreCoordinator = coordinator
+        return context
+    }
+
+    @MainActor
+    private func installationFixture(in context: NSManagedObjectContext) -> InstalledApp
+    {
+        let app = NSEntityDescription.insertNewObject(forEntityName: "InstalledApp", into: context) as! InstalledApp
+        app.name = "Installation Fixture"
+        app.bundleIdentifier = "com.example.installation-fixture"
+        app.resignedBundleIdentifier = "com.example.installation-fixture.fixture"
+        app.version = "1.0"
+        app.buildVersion = "1"
+        app.installedDate = Date(timeIntervalSince1970: 1000)
+        app.refreshedDate = app.installedDate
+        app.expirationDate = Date(timeIntervalSince1970: 100000)
+        app.isActive = true
+        app.needsResign = false
+        app.hasAlternateIcon = false
+        app.appExtensions = []
+        return app
+    }
+
+    @MainActor
+    func testInstallationReceiptRecoveryAndIdempotency() throws
+    {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = InstallationReceiptStore(rootURL: root)
+        let context = try installationContext()
+        let app = installationFixture(in: context)
+        let receipt = InstallationReceipt(app: app)
+        let directory = root.appendingPathComponent(receipt.bundleIdentifier)
+        try FileManager.default.createDirectory(at: directory.appendingPathComponent("App.app"), withIntermediateDirectories: true)
+        try store.write(receipt)
+        context.reset() // The original unsaved installation context was lost.
+        XCTAssertEqual(try store.recover(in: context, isInstalled: { _ in false }), 0)
+        XCTAssertTrue(InstalledApp.all(in: context).isEmpty)
+        XCTAssertNotNil(store.load(in: directory))
+        XCTAssertEqual(try store.recover(in: context, isInstalled: { $0 == receipt.resignedBundleIdentifier }), 1)
+        context.reset()
+        let recovered = try XCTUnwrap(InstalledApp.all(in: context).first)
+        XCTAssertEqual(recovered.bundleIdentifier, receipt.bundleIdentifier)
+        XCTAssertTrue(recovered.needsResign)
+        XCTAssertTrue(recovered.isActive)
+        XCTAssertNil(store.load(in: directory))
+        XCTAssertEqual(try store.recover(in: context, isInstalled: { _ in true }), 0)
+        XCTAssertEqual(InstalledApp.all(in: context).count, 1)
+        recovered.version = "existing-version"
+        try context.save()
+        try store.write(receipt)
+        XCTAssertEqual(try store.recover(in: context, isInstalled: { _ in true }), 0)
+        XCTAssertEqual(recovered.version, "existing-version")
+        try store.remove(bundleIdentifier: receipt.bundleIdentifier, matching: UUID())
+        XCTAssertNotNil(store.load(in: directory), "An older completion must not remove another receipt")
+        try store.remove(bundleIdentifier: receipt.bundleIdentifier, matching: receipt.identifier)
+        XCTAssertNil(store.load(in: directory))
+    }
+
+    @MainActor
+    func testInstallationReceiptValidationAndSaveFailure() throws
+    {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = InstallationReceiptStore(rootURL: root)
+        let context = try installationContext(failingSave: true)
+        let receipt = InstallationReceipt(app: installationFixture(in: context))
+        let directory = root.appendingPathComponent(receipt.bundleIdentifier)
+        try FileManager.default.createDirectory(at: directory.appendingPathComponent("App.app"), withIntermediateDirectories: true)
+        try store.write(receipt)
+        context.reset()
+        XCTAssertThrowsError(try store.recover(in: context, isInstalled: { _ in true }))
+        XCTAssertTrue(InstalledApp.all(in: context).isEmpty)
+        XCTAssertNotNil(store.load(in: directory), "Save failure must retain recovery metadata")
+        let goodContext = try installationContext()
+        XCTAssertEqual(try store.recover(in: goodContext, isInstalled: { _ in true }), 1)
+
+        for identifier in ["", "..", "../escape", "/absolute", String(repeating: "x", count: 256)] {
+            XCTAssertFalse(InstallationReceipt.isValidBundleIdentifier(identifier))
+        }
+        let receiptURL = directory.appendingPathComponent(InstallationReceiptStore.filename)
+        try Data(repeating: 0, count: 65537).write(to: receiptURL)
+        XCTAssertNil(store.load(in: directory))
+        try Data("not a receipt".utf8).write(to: receiptURL)
+        XCTAssertNil(store.load(in: directory))
+        try FileManager.default.removeItem(at: receiptURL)
+        let outside = root.appendingPathComponent("outside.json")
+        try Foundation.JSONEncoder().encode(receipt).write(to: outside)
+        try FileManager.default.createSymbolicLink(at: receiptURL, withDestinationURL: outside)
+        XCTAssertNil(store.load(in: directory))
+    }
+
+    @MainActor
+    func testBackgroundInstallationReconcilesDelayedRegistration() throws
+    {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let producer = try installationContext()
+        let receipt = InstallationReceipt(app: installationFixture(in: producer))
+        let directory = root.appendingPathComponent(receipt.bundleIdentifier)
+        try FileManager.default.createDirectory(at: directory.appendingPathComponent("App.app"), withIntermediateDirectories: true)
+        try InstallationReceiptStore(rootURL: root).write(receipt)
+        producer.reset() // The device installs, but the original context never receives/saves success.
+
+        let consumer = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        consumer.persistentStoreCoordinator = producer.persistentStoreCoordinator
+        let store = InstallationReceiptStore(rootURL: root)
+        var foreground = false
+        var registered = false
+        var liveProducer = false
+        var delays: [TimeInterval] = []
+        var checks: [() -> Void] = []
+        var recovered = 0
+        let coordinator = InstallationRecoveryCoordinator(canRun: { foreground }, attempt: { completion in
+            do {
+                let result = try store.reconcile(in: consumer, isInstalled: { $0 == receipt.resignedBundleIdentifier && registered },
+                                                 isManaging: { _ in liveProducer })
+                recovered += result.recoveredCount
+                completion(result.pendingCount > 0)
+            } catch { XCTFail("Unexpected reconciliation error: \(error)"); completion(false) }
+        }, schedule: { delay, action in
+            delays.append(delay)
+            checks.append(action)
+            return {}
+        })
+        coordinator.start()
+        XCTAssertTrue(checks.isEmpty)
+        foreground = true
+        coordinator.start()
+        XCTAssertTrue(InstalledApp.all(in: consumer).isEmpty)
+        XCTAssertNotNil(store.load(in: directory))
+        registered = true
+        liveProducer = true
+        try XCTUnwrap(checks.first)()
+        checks.removeFirst()
+        XCTAssertEqual(recovered, 0, "Do not race an installation still being managed")
+        liveProducer = false
+        try XCTUnwrap(checks.first)()
+        checks.removeFirst()
+        XCTAssertEqual(recovered, 1)
+        XCTAssertEqual(delays, [1, 2])
+        XCTAssertTrue(checks.isEmpty)
+        consumer.reset()
+        let tracked = try XCTUnwrap(InstalledApp.all(in: consumer).first)
+        XCTAssertEqual(tracked.bundleIdentifier, receipt.bundleIdentifier)
+        XCTAssertTrue(tracked.needsResign)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: directory.appendingPathComponent("App.app").path))
+        coordinator.start()
+        XCTAssertEqual(recovered, 1)
+        XCTAssertEqual(InstalledApp.all(in: consumer).count, 1)
+    }
+
+    @MainActor
+    func testInstallationRecoveryCoordinatorLifecycleAndBounds()
+    {
+        var foreground = true
+        var completions: [(Bool) -> Void] = []
+        var checks: [() -> Void] = []
+        var cancellations = 0
+        let coordinator = InstallationRecoveryCoordinator(canRun: { foreground }, attempt: { completions.append($0) }, schedule: { _, action in
+            checks.append(action)
+            return { cancellations += 1 }
+        })
+        coordinator.start()
+        coordinator.start()
+        XCTAssertEqual(completions.count, 1)
+        foreground = false
+        coordinator.stop()
+        foreground = true
+        coordinator.start()
+        XCTAssertEqual(completions.count, 1, "A foreground transition must not overlap an unfinished database pass")
+        completions[0](true)
+        XCTAssertEqual(completions.count, 2)
+        XCTAssertTrue(checks.isEmpty, "A stale completion must not schedule old-generation work")
+        completions[1](true)
+        XCTAssertEqual(checks.count, 1)
+        coordinator.stop()
+        XCTAssertEqual(cancellations, 1)
+        coordinator.start()
+        checks[0]() // Even an already-dequeued cancelled callback must do nothing.
+        XCTAssertEqual(completions.count, 3)
+        completions[2](false)
+
+        var attempts = 0
+        var delays: [TimeInterval] = []
+        var pending: [() -> Void] = []
+        let bounded = InstallationRecoveryCoordinator(canRun: { foreground }, attempt: { completion in
+            attempts += 1
+            completion(true)
+        }, schedule: { delay, action in
+            delays.append(delay)
+            pending.append(action)
+            return {}
+        })
+        bounded.start()
+        for _ in 0..<5 {
+            XCTAssertFalse(pending.isEmpty)
+            guard !pending.isEmpty else { break }
+            pending.removeFirst()()
+        }
+        XCTAssertEqual(attempts, 6)
+        XCTAssertEqual(delays, [1, 2, 5, 10, 20])
+        XCTAssertTrue(pending.isEmpty)
+        foreground = false
+        bounded.start()
+        XCTAssertEqual(attempts, 6)
+    }
+
+    @MainActor
+    func testInstallationManagementStateSynchronization()
+    {
+        let manager = AppManager.shared
+        let identifier = "com.example.tracking.\(UUID().uuidString)"
+        let app = AnyApp(name: "Tracking Fixture", bundleIdentifier: identifier, url: nil, storeApp: nil)
+        let operation = AppManager.AppOperation.install(app)
+        let progress = Progress(totalUnitCount: 100)
+        manager.set(nil, for: operation)
+        defer { manager.set(nil, for: operation) }
+        XCTAssertFalse(manager.isActivelyManagingApp(withBundleID: identifier))
+        manager.set(progress, for: operation)
+        XCTAssertTrue(manager.isActivelyManagingApp(withBundleID: identifier))
+        DispatchQueue.concurrentPerform(iterations: 2) { worker in
+            for iteration in 0..<100 {
+                if worker == 0 {
+                    manager.set(iteration.isMultiple(of: 2) ? progress : nil, for: operation)
+                } else {
+                    _ = manager.isActivelyManagingApp(withBundleID: identifier)
+                }
+            }
+        }
+        manager.set(nil, for: operation)
+        XCTAssertFalse(manager.isActivelyManagingApp(withBundleID: identifier))
+    }
+
+    func testInstallationCacheRetention()
+    {
+        XCTAssertTrue(InstallationReceiptStore.shouldRemoveCache(hasRecord: false, hasCachedApp: false, hasReceipt: false, isManaging: false))
+        for bit in 0..<4 {
+            XCTAssertFalse(InstallationReceiptStore.shouldRemoveCache(hasRecord: bit == 0, hasCachedApp: bit == 1, hasReceipt: bit == 2, isManaging: bit == 3))
+        }
+    }
+
+    @MainActor
+    func testInstallationUnconfirmedOutcomeIsStageSpecific()
+    {
+        XCTAssertTrue(SideloadingStatusView.needsInstallationConfirmation(error: OperationError.timedOut, stage: .installingApp))
+        XCTAssertTrue(SideloadingStatusView.needsInstallationConfirmation(error: OperationError.cancelled, stage: .installingApp))
+        XCTAssertTrue(SideloadingStatusView.needsInstallationConfirmation(error: ALTServerError(.lostConnection), stage: .installingApp))
+        XCTAssertFalse(SideloadingStatusView.needsInstallationConfirmation(error: OperationError.timedOut, stage: .signingApp))
+        XCTAssertFalse(SideloadingStatusView.needsInstallationConfirmation(error: ALTAppleAPIError(.incorrectCredentials), stage: .installingApp))
+        XCTAssertFalse(SideloadingStatusView.needsInstallationConfirmation(error: ALTServerError(.invalidResponse), stage: .installingApp))
+    }
+
+    @MainActor
+    func testInstallationScreenActivityLeases()
+    {
+        for original in [false, true] {
+            var value = original
+            let controller = InstallationScreenActivity(read: { value }, write: { value = $0 })
+            let first = UUID(), second = UUID()
+            controller.begin(first)
+            controller.begin(first)
+            controller.begin(second)
+            XCTAssertTrue(value)
+            controller.end(first)
+            XCTAssertTrue(value)
+            controller.end(second)
+            XCTAssertEqual(value, original)
+            controller.end(second)
+            XCTAssertEqual(value, original)
+        }
+    }
+
+    @MainActor
+    func testSideloadingStatusLayoutAndThemes() throws
+    {
+        let original = UserDefaults.standard.preferredTheme
+        defer { UserDefaults.standard.preferredTheme = original }
+        for theme in [AltTheme.forgeRed, .oceanBlue] {
+            UserDefaults.standard.preferredTheme = theme
+            for width in [320.0, 375.0, 844.0] {
+                for style in [UIUserInterfaceStyle.light, .dark] {
+                    let window = UIWindow(frame: CGRect(x: 0, y: 0, width: width, height: 1024))
+                    let host = UIViewController()
+                    window.rootViewController = host
+                    window.overrideUserInterfaceStyle = style
+                    host.loadViewIfNeeded()
+                    host.traitOverrides.userInterfaceStyle = style
+                    host.traitOverrides.preferredContentSizeCategory = .accessibilityExtraExtraExtraLarge
+                    window.isHidden = false
+                    defer { window.isHidden = true; window.rootViewController = nil }
+                    let view = SideloadingStatusView()
+                    host.view.addSubview(view)
+                    view.translatesAutoresizingMaskIntoConstraints = true
+                    view.tintColor = .altPrimary
+                    let progress = Progress(totalUnitCount: 100)
+                    view.begin(title: "正在安装一个名称较长的应用", stage: "正在认证 Apple ID", progress: progress)
+                    view.update(stage: "正在安装 App", detail: "正在等待服务器返回安装进度")
+                    window.layoutIfNeeded()
+                    XCTAssertEqual(view.traitCollection.userInterfaceStyle, style)
+                    XCTAssertEqual(view.traitCollection.preferredContentSizeCategory, .accessibilityExtraExtraExtraLarge)
+                    let size = view.systemLayoutSizeFitting(CGSize(width: width, height: 0), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+                    XCTAssertTrue(size.height.isFinite && size.height > 90)
+                    view.frame = CGRect(origin: .zero, size: size)
+                    view.layoutIfNeeded()
+                    XCTAssertFalse(view.hasAmbiguousLayout)
+                    for child in view.subviews where !child.isHidden {
+                        XCTAssertGreaterThanOrEqual(child.frame.minX, -0.5)
+                        XCTAssertLessThanOrEqual(child.frame.maxX, width + 0.5)
+                        XCTAssertLessThanOrEqual(child.frame.maxY, size.height + 0.5)
+                    }
+                    view.finish(error: OperationError.timedOut)
+                    var dismissCount = 0
+                    view.dismissHandler = { dismissCount += 1 }
+                    let dismiss = try XCTUnwrap(view.subviews.compactMap { $0 as? UIButton }.first { $0.accessibilityLabel == NSLocalizedString("Dismiss", comment: "") })
+                    XCTAssertFalse(dismiss.isHidden)
+                    XCTAssertGreaterThanOrEqual(dismiss.bounds.width, 44)
+                    dismiss.sendActions(for: .primaryActionTriggered)
+                    XCTAssertEqual(dismissCount, 1)
+                    view.finish(error: nil)
+                    XCTAssertEqual(view.subviews.compactMap { $0 as? UIProgressView }.first?.progress, 1)
+                    view.layoutIfNeeded()
+                    var image = UIImage()
+                    view.traitCollection.performAsCurrent {
+                        image = UIGraphicsImageRenderer(size: size).image { view.layer.render(in: $0.cgContext) }
+                    }
+                    let attachment = XCTAttachment(image: image)
+                    attachment.name = "Install-status-\(theme)-\(width)-\(style.rawValue)"
+                    attachment.lifetime = .keepAlways
+                    add(attachment)
+                    view.end()
+                    if theme == .oceanBlue && width == 375 && style == .light {
+                        host.traitOverrides.preferredContentSizeCategory = .large
+                        progress.completedUnitCount = 65
+                        let normalView = SideloadingStatusView()
+                        normalView.translatesAutoresizingMaskIntoConstraints = true
+                        host.view.addSubview(normalView)
+                        normalView.tintColor = .altPrimary
+                        normalView.begin(title: "正在安装示例应用", stage: "正在签名 App", progress: progress)
+                        let updated = expectation(description: "Main-queue progress applied")
+                        DispatchQueue.main.async { updated.fulfill() }
+                        wait(for: [updated], timeout: 2)
+                        window.layoutIfNeeded()
+                        let normalSize = normalView.systemLayoutSizeFitting(CGSize(width: width, height: 0), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+                        XCTAssertLessThan(normalSize.height, 220)
+                        normalView.frame.size = normalSize
+                        normalView.layoutIfNeeded()
+                        let preview = XCTAttachment(image: UIGraphicsImageRenderer(size: normalSize).image { normalView.layer.render(in: $0.cgContext) })
+                        preview.name = "Install-status-normal-size"
+                        preview.lifetime = .keepAlways
+                        add(preview)
+                        normalView.end()
+                    }
+                }
+            }
+        }
+    }
+
+    @MainActor
+    func testSideloadingPanelRespectsNavigationSafeArea() throws
+    {
+        let controller = try XCTUnwrap(UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "myAppsViewController") as? MyAppsViewController)
+        let navigation = UINavigationController(rootViewController: controller)
+        navigation.navigationBar.prefersLargeTitles = true
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 375, height: 812))
+        window.rootViewController = navigation
+        window.isHidden = false
+        defer { controller.hideSideloadingStatus(); window.isHidden = true; window.rootViewController = nil }
+        controller.loadViewIfNeeded()
+        let originalInset = controller.collectionView.contentInset
+        controller.showSideloadingStatus(progress: Progress(totalUnitCount: 100), title: "Installing App", stage: "Signing App")
+        window.layoutIfNeeded()
+        controller.view.layoutIfNeeded()
+        let panel = try XCTUnwrap(controller.view.subviews.first { $0.accessibilityIdentifier == "SideloadingStatusContainer" })
+        XCTAssertFalse(panel.isHidden)
+        let panelFrame = panel.convert(panel.bounds, to: window)
+        let barFrame = navigation.navigationBar.convert(navigation.navigationBar.bounds, to: window)
+        XCTAssertGreaterThanOrEqual(panelFrame.minY, barFrame.maxY - 1)
+        XCTAssertGreaterThan(panelFrame.height, 90)
+        XCTAssertLessThan(panelFrame.height, 220)
+        XCTAssertGreaterThan(controller.collectionView.contentInset.top, originalInset.top)
+        controller.hideSideloadingStatus()
+        XCTAssertEqual(controller.collectionView.contentInset, originalInset)
+        XCTAssertTrue(panel.isHidden)
+    }
+
+    @MainActor
+    func testThemeControlsFollowSelectedColor()
+    {
+        let original = UserDefaults.standard.preferredTheme
+        defer { UserDefaults.standard.preferredTheme = original }
+        let button = Button(type: .system)
+        for theme in AltTheme.allCases {
+            UserDefaults.standard.preferredTheme = theme
+            button.tintColor = .altPrimary
+            button.isEnabled = true
+            let traits = UITraitCollection(userInterfaceStyle: .light)
+            XCTAssertEqual(button.backgroundColor?.resolvedColor(with: traits), UIColor.altPrimary.resolvedColor(with: traits))
+            button.isEnabled = false
+            XCTAssertEqual(button.backgroundColor?.resolvedColor(with: traits), UIColor.tertiarySystemFill.resolvedColor(with: traits))
+        }
     }
 
     func testAllKnownErrorsHaveCompleteUserFacingPresentations() throws

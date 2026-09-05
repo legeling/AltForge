@@ -147,7 +147,6 @@ class PillButton: UIButton
         self.accessibilityTraits.formUnion([.updatesFrequently, .button])
         
         self.activityIndicatorView.style = .medium
-        self.activityIndicatorView.color = .white
         self.activityIndicatorView.isUserInteractionEnabled = false
         
         self.progressView.progress = 0
@@ -201,15 +200,19 @@ private extension PillButton
 {
     func update()
     {
+        let foregroundColor = self.tintColor.contrastingForegroundColor
+
         if self.progress == nil
         {
-            self.setTitleColor(self.tintColor.contrastingForegroundColor, for: .normal)
+            self.setTitleColor(foregroundColor, for: .normal)
             self.backgroundColor = self.tintColor
+            self.activityIndicatorView.color = foregroundColor
         }
         else
         {
             self.setTitleColor(self.tintColor, for: .normal)
             self.backgroundColor = self.tintColor.withAlphaComponent(0.15)
+            self.activityIndicatorView.color = self.progressTintColor ?? self.tintColor
         }
         
         self.progressView.progressTintColor = self.progressTintColor ?? self.tintColor
