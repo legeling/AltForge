@@ -1,8 +1,9 @@
 # CHG-20260905-002: GSA AuthKit identity and isolated retries
 
-- Status: Implemented and user-accepted; v2.4.5 release preparation
+- Status: Completed, user-accepted and published in v2.4.5 (23)
 - Mapping: FR-041 -> DES-027 -> TEST-040 -> T-040
 - Related issue: ISSUE-20260904-001
+- Publication: `docs/releases/v2.4.5.md` records successful 17-case hosted regression, three-platform builds, downloaded-artifact verification and public latest readback. Full installation/platform coverage remains explicitly open in the related issue.
 
 ## New evidence
 

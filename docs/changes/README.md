@@ -20,7 +20,7 @@
 | [`CHG-20260811-004`](active/CHG-20260811-004-ios-install-crash-diagnostics-authentication/README.md) | iOS 安装中断崩溃、恢复日志与认证说明 | In progress / device E2E pending |
 | [`CHG-20260811-006`](active/CHG-20260811-006-ios-theme-color-selection/README.md) | iOS 主题色选择与默认品牌色 | Release build passed / visual matrix pending |
 | [`CHG-20260814-001`](active/CHG-20260814-001-website-visual-repository-link/README.md) | 重构官网视觉并关联代码仓库 | In progress / hosted deploy secrets pending |
-| [`CHG-20260904-001`](active/CHG-20260904-001-apple-authentication-response/README.md) | 修复 Apple 认证响应格式失败 | Released in v2.4.4 / real login unresolved |
+| [`CHG-20260904-001`](active/CHG-20260904-001-apple-authentication-response/README.md) | 修复 Apple 认证响应格式失败 | v2.4.5 用户确认 macOS 登录恢复 / 完整安装矩阵待补齐 |
 | [`CHG-20260904-002`](active/CHG-20260904-002-user-facing-error-copy/README.md) | 统一错误码与用户提示 | Apple build/tests passed / Windows build pending |
 
 ## Completed

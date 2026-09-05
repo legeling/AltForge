@@ -1,6 +1,6 @@
 # CHG-20260904-001：修复 Apple 认证响应格式失败
 
-- 状态：Released in v2.4.4 / real login unresolved
+- 状态：诊断已发布；后续 CHG-20260905-002 / v2.4.5 已恢复用户 macOS 登录，完整安装矩阵待补齐
 - 日期：2026-09-04
 - 类型：Bugfix / Authentication / Dependency
 

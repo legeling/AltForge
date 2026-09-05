@@ -20,7 +20,7 @@
 | [`CHG-20260811-004`](CHG-20260811-004-ios-install-crash-diagnostics-authentication/README.md) | iOS 安装中断崩溃、恢复日志与认证说明 | In progress / device E2E pending |
 | [`CHG-20260811-006`](CHG-20260811-006-ios-theme-color-selection/README.md) | iOS 主题色选择与默认品牌色 | Release build passed / visual matrix pending |
 | [`CHG-20260812-001`](CHG-20260812-001-preserve-healthkit-capability/README.md) | 重签名时保留 HealthKit 能力 | In progress / device verification pending |
-| [`CHG-20260904-001`](CHG-20260904-001-apple-authentication-response/README.md) | 修复 Apple 认证响应格式失败 | Released in v2.4.4 / real login unresolved |
+| [`CHG-20260904-001`](CHG-20260904-001-apple-authentication-response/README.md) | 修复 Apple 认证响应格式失败 | v2.4.5 用户确认 macOS 登录恢复 / 完整安装矩阵待补齐 |
 | [`CHG-20260904-002`](CHG-20260904-002-user-facing-error-copy/README.md) | 统一错误码与用户提示 | Released in v2.4.2 / device UI validation pending |
 | [`CHG-20260904-003`](CHG-20260904-003-macos-direct-update-download/README.md) | macOS 检查更新直接下载并打开安装器 | Released in v2.4.3 / manual update UI pending |
 
