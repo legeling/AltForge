@@ -152,12 +152,15 @@ AltForge starts its independent release sequence at `2.4.0`. Upstream AltStore a
 version="$(tr -d '[:space:]' < VERSION)"
 ruby Scripts/check_release_version.rb
 ruby Scripts/test_release_metadata.rb
+python3 -B Scripts/test_release_privacy.py
 ruby Scripts/test_repository_contract.rb
 git tag "v${version}"
 git push origin "v${version}"
 ```
 
 The workflow rejects a tag that differs from `VERSION`, then builds an unsigned IPA, a universal macOS AltServer DMG, and a portable Win32 AltServer archive, generates the source/configuration metadata and checksums, and creates a **draft** GitHub Release. CI build numbers use the GitHub run number and remain distinct from the shared product version. A maintainer must download and verify the draft before publishing it; an unpublished draft does not change `releases/latest`.
+
+`Release/app-permissions.json` owns reviewed source permission declarations. Release gates compare privacy usage-description keys in the built IPA's main app and extensions against this policy and generated `apps.json`; they do not automatically grant newly discovered permissions. For downloaded artifacts, run `python3 Scripts/check_release_privacy.py --ipa /path/to/AltForge.ipa --source /path/to/apps.json` in addition to checksum verification.
 
 </details>
 

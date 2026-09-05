@@ -38,7 +38,7 @@ public extension NSError
 
         let title = self.localizedTitle ?? primaryError.localizedTitle ?? self.localizedFailure ?? primaryError.localizedFailure ?? localizedError.presentationTitle
         let message = authenticationResponsePresentation?.message ?? localizedError.presentationMessage
-        let recoverySuggestion = authenticationResponsePresentation?.recoverySuggestion ?? localizedError.localizedRecoverySuggestion ?? primaryError.localizedRecoverySuggestion ?? localizedError.fallbackRecoverySuggestion
+        let recoverySuggestion = authenticationResponsePresentation?.recoverySuggestion ?? localizedError.undeclaredPermissionsRecoverySuggestion ?? localizedError.localizedRecoverySuggestion ?? primaryError.localizedRecoverySuggestion ?? localizedError.fallbackRecoverySuggestion
 
         return ALTErrorPresentation(title: title, message: message, recoverySuggestion: recoverySuggestion)
     }
@@ -504,6 +504,11 @@ private extension NSError
             }
         }
 
+        if self.domain.hasSuffix(".VerificationError") && self.code == 201
+        {
+            return NSLocalizedString("This app uses permissions that were not declared by its source. Installation was stopped.", comment: "Undeclared permissions error")
+        }
+
         if let failureReason = self.localizedFailureReason?.trimmingCharacters(in: .whitespacesAndNewlines), !failureReason.isEmpty
         {
             return failureReason
@@ -516,6 +521,22 @@ private extension NSError
         }
 
         return NSLocalizedString("AltForge did not receive a recognizable reason for this failure.", comment: "Unknown error fallback")
+    }
+
+    var undeclaredPermissionsRecoverySuggestion: String? {
+        guard self.domain.hasSuffix(".VerificationError"), self.code == 201 else { return nil }
+
+        let recoverySuggestion = NSLocalizedString("Refresh the app source. If the problem continues, contact the source maintainer and ask them to declare the required permissions.", comment: "Undeclared permissions recovery suggestion")
+        let permissionDetails = self.localizedRecoverySuggestion?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let existingFallback = self.fallbackRecoverySuggestion?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let legacyFallback = "For your safety, installation was stopped. Download the app again from its trusted original source."
+
+        guard let permissionDetails, !permissionDetails.isEmpty,
+              permissionDetails != existingFallback, permissionDetails != legacyFallback else {
+            return recoverySuggestion
+        }
+
+        return [recoverySuggestion, permissionDetails].joined(separator: "\n\n")
     }
 
     var fallbackRecoverySuggestion: String? {

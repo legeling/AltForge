@@ -37,6 +37,9 @@ jobs:
       - name: Validate release metadata contract
         run: ruby Scripts/test_release_metadata.rb
 
+      - name: Validate release privacy regression cases
+        run: python3 -B Scripts/test_release_privacy.py
+
       - name: Validate repository release policy
         run: ruby Scripts/test_repository_contract.rb
 
@@ -131,6 +134,7 @@ jobs:
           -only-testing:AltTests/AltTests/testSideloadingStatusLayoutAndThemes
           -only-testing:AltTests/AltTests/testSideloadingPanelRespectsNavigationSafeArea
           -only-testing:AltTests/AltTests/testThemeControlsFollowSelectedColor
+          -only-testing:AltTests/AltTests/testUndeclaredPermissionsPresentationIsActionable
 
       - name: Build unsigned iOS application
         env:
@@ -293,6 +297,12 @@ jobs:
             --date "$(date -u +%Y-%m-%d)" \
             "${cdn_args[@]}" \
             "${previous_args[@]}"
+
+      - name: Verify generated source privacy against IPA
+        run: >-
+          python3 Scripts/check_release_privacy.py
+          --ipa "$RUNNER_TEMP/Artifacts/AltForge.ipa"
+          --source "$RUNNER_TEMP/Artifacts/apps.json"
 
       - name: Publish GitHub Release assets
         env:

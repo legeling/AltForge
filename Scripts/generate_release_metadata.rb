@@ -103,6 +103,13 @@ versions = previous_versions.each_with_object([current_version]) do |entry, resu
   result << entry
 end.first(MAX_VERSION_HISTORY)
 
+permissions_path = File.expand_path("../Release/app-permissions.json", __dir__)
+permissions = JSON.parse(File.read(permissions_path))
+valid_permissions = permissions.is_a?(Hash) && permissions.keys.sort == %w[entitlements privacy] &&
+  permissions["entitlements"].is_a?(Array) && permissions["entitlements"].all? { |key| key.is_a?(String) && !key.empty? } &&
+  permissions["privacy"].is_a?(Hash) && permissions["privacy"].all? { |key, description| key.match?(/\A(?:NS)?.+UsageDescription.*\z/) && description.is_a?(String) && !description.strip.empty? }
+abort("Release app permissions must contain reviewed entitlements and privacy descriptions") unless valid_permissions
+
 source = {
   "name" => "AltForge",
   "identifier" => "com.legeling.AltForge.Source",
@@ -124,14 +131,7 @@ source = {
       "iconURL" => icon_url,
       "tintColor" => "#8E1735",
       "category" => "utilities",
-      "appPermissions" => {
-        "entitlements" => [
-          "aps-environment",
-          "com.apple.developer.siri",
-          "com.apple.security.application-groups"
-        ],
-        "privacy" => {}
-      },
+      "appPermissions" => permissions,
       "versions" => versions
     }
   ]

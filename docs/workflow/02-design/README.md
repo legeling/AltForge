@@ -310,6 +310,10 @@ IPA 进度面板固定在 safe area，按内容适配并限制到可用高度的
 - Windows 依赖 revision 不匹配或 runtime DLL 缺失：立即停止构建/打包，清理本次 staging directory，不覆盖现有依赖 checkout。
 - 自有 metadata 缺失或 schema/host 校验失败：停止 Release，不回退到上游控制面；Classic 不执行 Fediverse enrichment；未配置 OAuth 时不打开浏览器、不发送 token 请求。
 
+### `DES-031` 发布源隐私权限契约
+
+Release/app-permissions.json 是经审核的声明输入，生成器不再固定空 privacy。跨平台标准库脚本从 IPA 有界读取主 App 和直接扩展 Info.plist，不解压或执行 App；分别在 Apple 产物检查和 generated apps.json 上传前检查未声明的 UsageDescription 键。发现新权限时阻止发布，不能自动扩大声明。该门禁覆盖隐私键，不替代既有 entitlement/signature/client 安全检查。Shared 的 201 展示仅修正解释和恢复建议，不改错误域、码或验证分支。
+
 ## 方案取舍
 
 | 方案 | 优点 | 代价 | 决策 |

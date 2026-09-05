@@ -167,6 +167,12 @@ iOS 主题色变化执行 `TEST-036`：先运行偏好 round-trip XCTest、repos
 - Background-specific regressions `testBackgroundInstallationReconcilesDelayedRegistration` and `testInstallationRecoveryCoordinatorLifecycleAndBounds` must cover the real coordinator/store code, including delayed registration, active-producer deferral, one database pass, stale callbacks and finite local retry windows.
 - `testInstallationManagementStateSynchronization` checks active/idle transitions and bounded concurrent progress writes/recovery reads. Source contracts require the existing progress lock on the reader; the concurrency smoke is not a Thread Sanitizer result.
 
+### Suite M: Official source privacy contract
+
+- Run `ruby Scripts/test_release_metadata.rb` and `python3 -B Scripts/test_release_privacy.py` after implementation converges. The empty pre-fix source must reject the local-network fixture; reviewed policy must pass. Include extension, malformed, duplicate, oversized and unsafe-path metadata.
+- On the real release IPA, run `python3 Scripts/check_release_privacy.py --ipa <ipa> --source <apps.json>` against the original and regenerated source. Do not substitute only a hash or version check for this gate.
+- Run `testUndeclaredPermissionsPresentationIsActionable`, adjacent error-presentation cases and Apple builds. Source refresh/update on an old physical client remains tracked by ISSUE-20260905-004.
+
 ## 命令登记规则
 
 - tag-driven Release workflow 是自动构建命令的真相来源，本文件解释本地预检和触发条件。

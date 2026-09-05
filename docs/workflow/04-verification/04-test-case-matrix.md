@@ -2,6 +2,7 @@
 
 | ID | 模块 | 优先级 | 层级 | 覆盖 | 自动化状态 |
 |---|---|---:|---|---|---|
+| `TEST-045` | Official source permissions | P1 | Script/Artifact/Unit/Build | empty/fixed source、built IPA main/extensions、bounded malformed input、201 actionable copy、unchanged security checks | 7 Python, 4 XCTest, real v2.4.6 source comparison and Apple builds passed; publication/device pending |
 | `TEST-001` | AppManager | P1 | Integration | install operation 状态与失败回滚 | Planned |
 | `TEST-002` | AltServer/device | P1 | Manual E2E | 真实设备安装 | Manual pending |
 | `TEST-003` | AltSign Apple API | P1 | Unit | Unicode display name -> ASCII App ID | Planned |

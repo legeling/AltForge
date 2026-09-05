@@ -584,6 +584,49 @@ final class AltTests: XCTestCase
         XCTAssertNotNil(presentation.recoverySuggestion)
     }
 
+    func testUndeclaredPermissionsPresentationIsActionable() throws
+    {
+        let expectedMessage = NSLocalizedString("This app uses permissions that were not declared by its source. Installation was stopped.", comment: "Undeclared permissions error")
+        let expectedRecovery = NSLocalizedString("Refresh the app source. If the problem continues, contact the source maintainer and ask them to declare the required permissions.", comment: "Undeclared permissions recovery suggestion")
+        let legacyError = NSError(domain: VerificationError.errorDomain, code: 201, userInfo: [
+            NSLocalizedDescriptionKey: "The app requires additional permissions not specified by the source.",
+            NSLocalizedFailureReasonErrorKey: "The app requires additional permissions not specified by the source.",
+            NSLocalizedRecoverySuggestionErrorKey: "For your safety, installation was stopped. Download the app again from its trusted original source."
+        ])
+
+        let legacyPresentation = legacyError.userFacingPresentation
+        XCTAssertEqual(legacyPresentation.message, expectedMessage)
+        XCTAssertEqual(legacyPresentation.recoverySuggestion, expectedRecovery)
+        XCTAssertFalse(legacyPresentation.combinedMessage.contains("Download the app again"))
+
+        let app = try XCTUnwrap(ALTApplication(fileURL: Bundle.main.bundleURL))
+        let typedError = VerificationError.undeclaredPermissions([ALTEntitlement.appGroups, ALTAppPrivacyPermission.bluetooth], app: app) as NSError
+        let permissionDetails = try XCTUnwrap(typedError.localizedRecoverySuggestion)
+        let typedPresentation = typedError.userFacingPresentation
+        XCTAssertEqual(typedPresentation.message, expectedMessage)
+        XCTAssertTrue(typedPresentation.recoverySuggestion?.contains(expectedRecovery) == true)
+        XCTAssertTrue(typedPresentation.recoverySuggestion?.contains(permissionDetails) == true)
+        XCTAssertEqual(typedError.domain, VerificationError.errorDomain)
+        XCTAssertEqual(typedError.code, 201)
+
+        let wrappedError = ALTServerError(typedError) as NSError
+        let wrappedPresentation = wrappedError.userFacingPresentation
+        XCTAssertEqual(wrappedError.domain, AltServerErrorDomain)
+        XCTAssertEqual(wrappedError.code, ALTServerError.Code.underlyingError.rawValue)
+        XCTAssertEqual(wrappedPresentation.message, expectedMessage)
+        XCTAssertTrue(wrappedPresentation.recoverySuggestion?.contains(expectedRecovery) == true)
+        XCTAssertTrue(wrappedPresentation.recoverySuggestion?.contains(permissionDetails) == true)
+        XCTAssertEqual((wrappedError.userInfo[NSUnderlyingErrorKey] as? NSError)?.domain, VerificationError.errorDomain)
+        XCTAssertEqual((wrappedError.userInfo[NSUnderlyingErrorKey] as? NSError)?.code, 201)
+
+        let hashError = NSError(domain: VerificationError.errorDomain, code: 103, userInfo: [
+            NSLocalizedFailureReasonErrorKey: "The SHA-256 hash of the app does not match the hash specified by the source."
+        ])
+        let hashPresentation = hashError.userFacingPresentation
+        XCTAssertEqual(hashPresentation.message, hashError.localizedFailureReason)
+        XCTAssertEqual(hashPresentation.recoverySuggestion, NSLocalizedString("For your safety, installation was stopped. Download the app again from its trusted original source.", comment: "Verification recovery suggestion"))
+    }
+
     func testAuthenticationServiceOutageIdentifiesTokenStepAndHTTPStatus() throws
     {
         let error = ALTAppleAPIError(.authenticationHandshakeFailed, userInfo: [

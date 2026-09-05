@@ -65,6 +65,9 @@ Dir.mktmpdir("altforge-release-contract-") do |artifacts|
   versions = app.fetch("versions")
   version = versions.fetch(0)
   raise "unexpected bundle identifier" unless app.fetch("bundleIdentifier") == "com.legeling.AltForge"
+  expected_permissions = JSON.parse(File.read(File.expand_path("../Release/app-permissions.json", __dir__)))
+  raise "source permissions differ from reviewed release policy" unless app.fetch("appPermissions") == expected_permissions
+  raise "source omitted local network permission" unless app.fetch("appPermissions").fetch("privacy").fetch("NSLocalNetworkUsageDescription").include?("local network")
   raise "unexpected version metadata" unless version.values_at("version", "buildVersion", "date") == ["9.8.7", "987", "2026-08-09"]
   expected_download_url = "https://github.com/legeling/AltForge/releases/download/v9.8.7/AltForge.ipa"
   raise "current version download URL is not tag-pinned" unless version.fetch("downloadURL") == expected_download_url

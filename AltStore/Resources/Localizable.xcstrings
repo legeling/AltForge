@@ -881,6 +881,16 @@
         }
       }
     },
+    "Refresh the app source. If the problem continues, contact the source maintainer and ask them to declare the required permissions." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请刷新软件源。如果问题仍然存在，请联系软件源维护者补齐所需的权限声明。"
+          }
+        }
+      }
+    },
     "JIT Could Not Be Enabled" : {
       "localizations" : {
         "zh-Hans" : {
@@ -10823,6 +10833,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此应用支持自定义赞助。在 Patreon 上赞助任意金额即可获得访问权限。"
+          }
+        }
+      }
+    },
+    "This app uses permissions that were not declared by its source. Installation was stopped." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 App 使用了软件源未声明的权限，安装已停止。"
           }
         }
       }

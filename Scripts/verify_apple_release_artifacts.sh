@@ -47,7 +47,7 @@ done
 [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Version must use numeric X.Y.Z form." >&2; exit 64; }
 [[ "$build_number" =~ ^[0-9]+$ ]] || { echo "Build must be numeric." >&2; exit 64; }
 
-for command in codesign hdiutil lipo plutil unzip; do
+for command in codesign hdiutil lipo plutil unzip python3; do
   command -v "$command" >/dev/null || { echo "$command is required" >&2; exit 69; }
 done
 
@@ -56,6 +56,7 @@ ipa_path="$artifacts_path/AltForge.ipa"
 dmg_path="$artifacts_path/AltForge-AltServer-macOS.dmg"
 [[ -s "$ipa_path" ]] || { echo "Missing or empty IPA: $ipa_path" >&2; exit 66; }
 [[ -s "$dmg_path" ]] || { echo "Missing or empty DMG: $dmg_path" >&2; exit 66; }
+python3 "$(dirname "$0")/check_release_privacy.py" --ipa "$ipa_path"
 
 temporary_root="$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/altforge-apple-artifacts.XXXXXX")"
 mount_path="$temporary_root/mount"
