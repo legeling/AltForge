@@ -147,7 +147,7 @@ iOS 主题色变化执行 `TEST-036`：先运行偏好 round-trip XCTest、repos
 - 用 synthetic plist 覆盖正常 `Response/Status`、以 `<html>` 开头的正文、空内容和缺失 `Status`；畸形输入必须返回 `authenticationHandshakeFailed (3020)`，不得在日志、fixture 或 error userInfo 保存响应正文。
 - 构建 AltServer 与 AltStore target，确认 Server 生产者、Server Protocol 编解码和 iOS AltSign 消费者同时兼容；本变更不修改 machine ID、OTP、routing info、SRP 算法或协议 schema。
 - 用专用测试 Apple ID 在真实设备完成登录、2FA、团队和证书查询，再安装最小测试 IPA。账号、密码、验证码、UDID、token、certificate、profile 和 anisette headers 不进入命令输出或验证文档。
-- Apple endpoint 使用既有系统 URLSession 超时和显式用户重试；失败时不得自动无界重试。真实账号门禁未完成前保持 `ISSUE-20260904-001` Open。
+- GSA 传输使用独立 URLSession、最多 5 次尝试和每个 exchange 60 秒总预算；运行四项 `testAuthenticationRetriesRecoverOnFreshSessions`、`testAuthenticationRetryLimitAndPrivacy`、`testAuthenticationDoesNotRetryTerminalFailures`、`testAuthenticationRetryDeadline`，覆盖真实 dataTask/parser 调用、session 回收、错误优先级和超时边界。真实账号门禁未完成前保持 `ISSUE-20260904-001` Open。
 
 ## Suite K：错误码与用户提示
 

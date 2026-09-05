@@ -25,6 +25,8 @@
 
 ## 敏感数据
 
+GSA 传输 fixture 位于 `AltTests.swift`：合成 plist、HTML 和 URLError 通过每个 ephemeral session 专用的 URLProtocol 返回，未注册请求直接失败，不访问 Apple。唯一请求标识隔离场景；注入单调时钟与调度器验证 1/2/4/8 秒退避、60 秒预算及剩余请求超时，无须真实等待或账号。每次尝试必须收到 session invalidation，测试结束注销 handler。
+
 禁止把以下内容放入 fixture：真实 Apple ID、密码、2FA code、UDID、device name、certificate、private key、mobileprovision、Cookie、anisette data、Patreon token。
 
 需要 profile/schema 测试时使用自签名或完全虚构且不可用于生产的最小数据，并在文件头说明来源。

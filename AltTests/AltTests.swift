@@ -12,6 +12,74 @@ import XCTest
 
 @testable import AltSign
 
+private struct GSAFixture
+{
+    let status: Int
+    var data = Data("<html>PRIVATE_FIXTURE</html>".utf8)
+    var error: URLError? = nil
+    var elapsed: TimeInterval = 0
+}
+
+private final class GSAInvalidationObserver: NSObject, URLSessionDelegate
+{
+    let expectation: XCTestExpectation
+
+    init(_ expectation: XCTestExpectation) { self.expectation = expectation }
+
+    func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?)
+    {
+        XCTAssertNil(error)
+        expectation.fulfill()
+    }
+}
+
+// Per-request registrations isolate fixtures; an unregistered request always fails closed.
+private final class GSAFixtureProtocol: URLProtocol
+{
+    private static let lock = NSLock()
+    private static var handlers: [String: (URLRequest) -> GSAFixture] = [:]
+
+    static func register(_ identifier: String, handler: @escaping (URLRequest) -> GSAFixture)
+    {
+        lock.lock()
+        defer { lock.unlock() }
+        handlers[identifier] = handler
+    }
+
+    static func unregister(_ identifier: String)
+    {
+        lock.lock()
+        defer { lock.unlock() }
+        handlers.removeValue(forKey: identifier)
+    }
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading()
+    {
+        Self.lock.lock()
+        let handler = Self.handlers[request.url?.query ?? ""]
+        Self.lock.unlock()
+        guard let handler = handler, let url = request.url else {
+            client?.urlProtocol(self, didFailWithError: URLError(.unsupportedURL))
+            return
+        }
+        let fixture = handler(request)
+        let response = HTTPURLResponse(url: url, statusCode: fixture.status, httpVersion: nil,
+                                       headerFields: ["Content-Type": "text/html"])!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        if let error = fixture.error {
+            client?.urlProtocol(self, didFailWithError: error)
+        } else {
+            client?.urlProtocol(self, didLoad: fixture.data)
+            client?.urlProtocolDidFinishLoading(self)
+        }
+    }
+
+    override func stopLoading() {}
+}
+
 extension String
 {
     static let testDomain = "TestErrorDomain"
@@ -211,6 +279,140 @@ final class AltTests: XCTestCase
         XCTAssertThrowsError(try api.validateSMSVerificationResponse(response(200))) {
             XCTAssertEqual(($0 as NSError).code, 3019)
         }
+    }
+
+    func testAuthenticationRetriesRecoverOnFreshSessions() throws
+    {
+        let success = try PropertyListSerialization.data(fromPropertyList: ["Response": ["Status": ["ec": 0]]], format: .xml, options: 0)
+        for operation in ["init", "complete", "apptokens"]
+        {
+            let result = exerciseGSA([GSAFixture(status: 503), GSAFixture(status: 502),
+                                      GSAFixture(status: 200, data: success)], operation: operation,
+                                     expectedAttempts: 3, expectedDelays: [1, 2])
+            XCTAssertNoThrow(try result.get())
+        }
+    }
+
+    func testAuthenticationRetryLimitAndPrivacy() throws
+    {
+        let result = exerciseGSA(Array(repeating: GSAFixture(status: 503), count: 5),
+                                 expectedAttempts: 5, expectedDelays: [1, 2, 4, 8])
+        XCTAssertThrowsError(try result.get()) {
+            let error = $0 as NSError
+            XCTAssertEqual(error.appleAuthenticationDiagnosticSummary, "apptokens · HTTP 503 · text/html")
+            XCTAssertEqual(error.code, 3020)
+            XCTAssertFalse(String(describing: error.userInfo).contains("PRIVATE_FIXTURE"))
+        }
+    }
+
+    func testAuthenticationDoesNotRetryTerminalFailures() throws
+    {
+        for status in [200, 401, 429]
+        {
+            let result = exerciseGSA([GSAFixture(status: status)], expectedAttempts: 1, expectedDelays: [])
+            XCTAssertThrowsError(try result.get()) { XCTAssertEqual(($0 as NSError).code, 3020) }
+        }
+        for (appleCode, expectedCode) in [(-20101, 3002), (-22421, 3021), (-9999, -9999)]
+        {
+            let data = try PropertyListSerialization.data(fromPropertyList: ["Response": ["Status": ["ec": appleCode]]], format: .xml, options: 0)
+            let result = exerciseGSA([GSAFixture(status: 503, data: data)], expectedAttempts: 1, expectedDelays: [])
+            XCTAssertThrowsError(try result.get()) { XCTAssertEqual(($0 as NSError).code, expectedCode) }
+        }
+        for code in [URLError.Code.timedOut, .cancelled, .networkConnectionLost]
+        {
+            let result = exerciseGSA([GSAFixture(status: 503, error: URLError(code))], expectedAttempts: 1, expectedDelays: [])
+            XCTAssertThrowsError(try result.get()) {
+                XCTAssertEqual(($0 as NSError).domain, NSURLErrorDomain)
+                XCTAssertEqual(($0 as NSError).code, code.rawValue)
+            }
+        }
+        for operation in ["unknown", "sms.verify", "trusted-device.verify"]
+        {
+            let result = exerciseGSA([GSAFixture(status: 503)], operation: operation, expectedAttempts: 1, expectedDelays: [])
+            XCTAssertThrowsError(try result.get())
+        }
+        let result = exerciseGSA([GSAFixture(status: 503)], host: "example.invalid", expectedAttempts: 1, expectedDelays: [])
+        XCTAssertThrowsError(try result.get())
+    }
+
+    func testAuthenticationRetryDeadline() throws
+    {
+        let lateResponse = exerciseGSA([GSAFixture(status: 503, elapsed: 58), GSAFixture(status: 503, elapsed: 2)],
+                                       expectedAttempts: 2, expectedDelays: [1], expectedTimeouts: [15, 1])
+        XCTAssertThrowsError(try lateResponse.get()) { XCTAssertEqual(($0 as NSError).code, 3020) }
+        let delayedScheduler = exerciseGSA([GSAFixture(status: 503)], expectedAttempts: 1, expectedDelays: [1], schedulerStall: 61)
+        XCTAssertThrowsError(try delayedScheduler.get()) { XCTAssertEqual(($0 as NSError).code, 3020) }
+    }
+
+    private func exerciseGSA(_ fixtures: [GSAFixture], operation: String = "apptokens", host: String = "gsa.apple.com",
+                             expectedAttempts: Int, expectedDelays: [TimeInterval], expectedTimeouts: [TimeInterval]? = nil,
+                             schedulerStall: TimeInterval = 0) -> Result<[String: Any], Error>
+    {
+        let completed = expectation(description: "GSA completes once")
+        completed.assertForOverFulfill = true
+        let invalidated = expectation(description: "Every attempt releases its session")
+        invalidated.expectedFulfillmentCount = expectedAttempts
+        invalidated.assertForOverFulfill = true
+        let delegate = GSAInvalidationObserver(invalidated)
+        let identifier = UUID().uuidString
+        var request = URLRequest(url: URL(string: "https://\(host)/grandslam/GsService2?\(identifier)")!)
+        request.httpMethod = "POST"
+        let body = Data("SYNTHETIC_GSA_REQUEST".utf8)
+        request.httpBody = body
+        var attempts = 0
+        var sessions: [URLSession] = []
+        var delays: [TimeInterval] = []
+        var now: TimeInterval = 100
+        var result: Result<[String: Any], Error> = .failure(URLError(.unknown))
+
+        GSAFixtureProtocol.register(identifier) { received in
+            XCTAssertEqual(received.httpMethod, "POST")
+            // URLSession may convert a body into a stream before URLProtocol receives it.
+            if let receivedBody = received.httpBody { XCTAssertEqual(receivedBody, body) }
+            else if let stream = received.httpBodyStream {
+                stream.open()
+                defer { stream.close() }
+                var bytes = [UInt8](repeating: 0, count: 256)
+                let count = stream.read(&bytes, maxLength: bytes.count)
+                XCTAssertEqual(count, body.count)
+                if count > 0 { XCTAssertEqual(Data(bytes.prefix(count)), body) }
+            } else { XCTFail("The retried request lost its body") }
+            guard attempts < fixtures.count else {
+                XCTFail("GSA exceeded the expected request count")
+                return GSAFixture(status: 400)
+            }
+            let fixture = fixtures[attempts]
+            attempts += 1
+            now += fixture.elapsed
+            return fixture
+        }
+        defer { GSAFixtureProtocol.unregister(identifier) }
+
+        ALTAppleAPI().sendGSARequest(request, operation: operation, makeSession: { configuration in
+            XCTAssertNil(configuration.urlCache)
+            XCTAssertNil(configuration.httpCookieStorage)
+            XCTAssertNil(configuration.urlCredentialStorage)
+            XCTAssertEqual(configuration.requestCachePolicy, .reloadIgnoringLocalCacheData)
+            let timeout = expectedTimeouts?[sessions.count] ?? 15
+            XCTAssertEqual(configuration.timeoutIntervalForRequest, timeout)
+            XCTAssertEqual(configuration.timeoutIntervalForResource, timeout)
+            configuration.protocolClasses = [GSAFixtureProtocol.self]
+            let session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
+            sessions.append(session)
+            return session
+        }, schedule: { delay, work in
+            delays.append(delay)
+            now += delay + schedulerStall
+            work()
+        }, uptime: { now }) {
+            result = $0
+            completed.fulfill()
+        }
+        wait(for: [completed, invalidated], timeout: 10)
+        XCTAssertEqual(attempts, expectedAttempts)
+        XCTAssertEqual(delays, expectedDelays)
+        XCTAssertEqual(Set(sessions.map { ObjectIdentifier($0) }).count, expectedAttempts)
+        return result
     }
 
     func testALTApplicationIgnoresMalformedOptionalMetadata() throws

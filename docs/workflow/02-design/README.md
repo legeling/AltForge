@@ -263,9 +263,11 @@ Cloudflare Pages 只托管 `website/` 静态目录；`_headers` 限制脚本、�
 
 ### `DES-027` Apple 认证客户端身份与响应边界
 
-AltForge Server 继续在 `AnisetteDataManager` 生成或规范化 Apple 认证所需的设备描述；Mac model、macOS version 和 build 来自当前 `ProcessInfo`。AltSign 单点定义当前 Xcode 27 beta 6 产品/build `27.0 (27A5252f)` 与已由上游登录 harness 验证的 bundle version `25183.54.10`，认证、2FA、Developer Services、AOSKit、XPC 与 Mail plug-in 共用这组身份；GSA User-Agent 同时读取运行系统的 CFNetwork 与 Darwin 版本，避免 Apple 将真实当前系统与 2018-2019 年客户端标识判为不一致。该变化不修改 machine ID、one-time password、local user ID 或 routing info，也不增加认证请求、重试或持久化。
+AltForge Server 的 anisette 设备描述继续使用当前 Mac model、macOS version/build，以及 AltSign 的 Xcode product/bundle 常量。GSA 的 User-Agent 单独采用 AltSign PR #47 验证的兼容格式 `AuthKit/1 (Macintosh; OS X 26.5.2) (com.apple.dt.Xcode/26.0)`；它是协议兼容身份，不是本机版本显示。仅替换 CFNetwork/Darwin 版本仍保留 `akd/1.0` 类型，未能解决用户的 `apptokens / HTTP 503 / text/html`；该旧设计已由 CHG-20260905-002 取代。此变化不修改 anisette 敏感值；真实令牌签发恢复仍需账号实测。
 
-`ALTAppleAPI.sendAuthenticationRequest` 仍只解析 Apple 的 plist 响应。URLSession 错误优先返回；GSA 原始响应、解密后的 SRP/app-token payload 与 trusted-device 2FA 响应统一经过一个 parser helper。响应不能解析为预期 plist/Response/Status 时，统一转换为 `authenticationHandshakeFailed`，底层解析错误仅作为 `NSUnderlyingErrorKey` 保留；userInfo 只增加 allowlist 中的 `init`/`complete`/`apptokens` 等固定 operation、HTTP status 与 MIME type。共享展示层据此区分 429、5xx、HTML 和其他畸形响应，并把 token 请求明确显示为“签发开发者令牌”。不得打印、持久化或复制响应正文/headers，因为 HTML 拦截页可能包含识别信息。一次认证仍为既有有限 SRP 请求序列，新增判断为 `O(1)`，无额外网络 I/O、自动重试、缓存或长期资源。
+`ALTAppleAPI.sendAuthenticationRequest` 仍只解析 Apple 的 plist 响应。URLSession 错误优先返回；GSA 原始响应、解密后的 SRP/app-token payload 与 trusted-device 2FA 响应统一经过一个 parser helper。响应不能解析为预期 plist/Response/Status 时，统一转换为 `authenticationHandshakeFailed`，底层解析错误仅作为 `NSUnderlyingErrorKey` 保留；userInfo 只增加 allowlist 中的 `init`/`complete`/`apptokens` 等固定 operation、HTTP status 与 MIME type。共享展示层据此区分 429、5xx、HTML 和其他畸形响应，并把 token 请求明确显示为“签发开发者令牌”。不得打印、持久化或复制响应正文/headers，因为 HTML 拦截页可能包含识别信息。
+
+GSA 传输移植 AltSign PR #49 的独立 ephemeral session 与退避方案，仅允许 GsService2 POST 的 init/complete/apptokens 重试，每个 exchange 最多 5 次总尝试，间隔 1/2/4/8 秒；单次请求和 resource timeout 最多 15 秒，受单调时钟 60 秒 exchange 总预算约束，调度延迟后再次检查预算。先解析后判定：Apple 明确错误、401/429、200 HTML、网络错误及超时不重试；只有 5xx 且转换为 3020 的响应可重试。不重启整个登录，不重发 2FA 或证书写操作。每次结束 invalidate session，禁用 cookie/credential/cache 存储。新增状态为 `O(1)`，每个 exchange 最多 5 次串行网络 I/O；不将 5xx 解释为“请求一定未被处理”，实际账号仍需端到端验证。
 
 ### `DES-028` 统一错误展示与跨平台编码
 

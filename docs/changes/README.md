@@ -27,6 +27,7 @@
 
 | ID | 标题 | 完成日期 |
 |---|---|---|
+| [CHG-20260905-002](completed/2026/09/CHG-20260905-002-gsa-authkit-user-agent/README.md) | AuthKit 认证身份与有限独立会话重试，用户确认登录恢复 | 2026-09-05 |
 | [CHG-20260905-001](completed/2026/09/CHG-20260905-001-authentication-review-release/README.md) | 认证修改审查与 2.4.4 发布 | 2026-09-05 |
 | [`CHG-20260808-001`](completed/2026/08/CHG-20260808-001-spec-baseline/README.md) | 建立 Spec Init 文档基线 | 2026-08-08 |
 | [`CHG-20260808-002`](completed/2026/08/CHG-20260808-002-unicode-ipa-compatibility/README.md) | Unicode IPA 安装兼容 | 2026-08-08 |

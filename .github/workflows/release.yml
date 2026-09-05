@@ -116,6 +116,10 @@ jobs:
           -only-testing:AltTests/AltTests/testAuthenticationHTMLResponseIsNotPresentedAsIPAError
           -only-testing:AltTests/AltTests/testAuthenticationResponseParserAndPrivacy
           -only-testing:AltTests/AltTests/testAuthenticationStructuredErrorsAndTwoFactorHTTP
+          -only-testing:AltTests/AltTests/testAuthenticationRetriesRecoverOnFreshSessions
+          -only-testing:AltTests/AltTests/testAuthenticationRetryLimitAndPrivacy
+          -only-testing:AltTests/AltTests/testAuthenticationDoesNotRetryTerminalFailures
+          -only-testing:AltTests/AltTests/testAuthenticationRetryDeadline
 
       - name: Build unsigned iOS application
         env:
