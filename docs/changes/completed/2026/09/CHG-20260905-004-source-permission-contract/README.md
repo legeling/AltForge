@@ -1,6 +1,6 @@
 # CHG-20260905-004: Source privacy declarations and verification error 201
 
-- Status: Implemented and locally verified; user authorized v2.4.7 publication
+- Status: Implementation and release completed in v2.4.7; real-device update acceptance remains open
 - Mapping: FR-046 -> DES-031 -> TEST-045 -> T-044
 - Issue: ISSUE-20260905-004
 
@@ -30,6 +30,10 @@ Run Ruby generation/repository/version contracts and Python privacy regressions 
 ## Release authorization
 
 The user subsequently requested publication. Prepare a new v2.4.7 tag with synchronized iOS/macOS/Windows versions, preserving existing public v2.4.6 assets. The tag workflow must run all 29 selected XCTest, seven Python privacy fixtures, three platform builds and the real-IPA/generated-source privacy gate. Verify downloaded package identities, versions, checksums and privacy declarations before making the Draft public. Real-device source refresh/update remains pending.
+
+## Release convergence
+
+Published v2.4.7 (build 25) at 2026-09-05 16:02:46 Asia/Shanghai. Tag commit `a1a1172a4d5059ab5a5c4caf8d1eda7a5e65b586`, workflow `33952693053`: all 29 XCTest, seven Python fixtures, three platform packaging jobs and the generated-source/IPA privacy gate passed. Three binary downloads came from the same CI run's artifacts, metadata/checksums from Draft; all nine files matched Draft sizes/digests and eight manifest checksums passed. Local Apple identity/version/architecture/signature, Windows version and new IPA/source privacy checks passed. Public latest source is byte-identical to verified Draft and passes the same privacy gate; all three package URLs return HTTP 200. Physical-device updating remains in ISSUE-20260905-004; existing public v2.4.6 assets were not overwritten.
 
 ## Upgrade and rollback
 

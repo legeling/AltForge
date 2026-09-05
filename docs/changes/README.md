@@ -10,7 +10,6 @@
 
 | ID | 标题 | 状态 |
 |---|---|---|
-| [CHG-20260905-004](active/CHG-20260905-004-source-permission-contract/README.md) | 官方源权限声明、真实 IPA 发布检查与 201 提示 | 本地验证通过 / 未发布 |
 | [`CHG-20260809-002`](active/CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 | [`CHG-20260809-007`](active/CHG-20260809-007-macos-server-identity-settings/README.md) | macOS Server 身份、菜单与设置 | In progress |
 | [`CHG-20260810-002`](active/CHG-20260810-002-macos-menu-icon-scale/README.md) | 放大 macOS 菜单栏图标 | Implemented / menu bar smoke pending |
@@ -28,6 +27,7 @@
 
 | ID | 标题 | 完成日期 |
 |---|---|---|
+| [CHG-20260905-004](completed/2026/09/CHG-20260905-004-source-permission-contract/README.md) | v2.4.7 官方源权限修复、真实 IPA 发布检查及 201 提示 | 2026-09-05 |
 | [CHG-20260905-003](completed/2026/09/CHG-20260905-003-ios-install-tracking-progress/README.md) | v2.4.6 安装记录恢复、可见进度与主题一致性；设备验收转 Issue 跟踪 | 2026-09-05 |
 | [CHG-20260905-002](completed/2026/09/CHG-20260905-002-gsa-authkit-user-agent/README.md) | AuthKit 认证身份与有限独立会话重试，用户确认登录恢复 | 2026-09-05 |
 | [CHG-20260905-001](completed/2026/09/CHG-20260905-001-authentication-review-release/README.md) | 认证修改审查与 2.4.4 发布 | 2026-09-05 |

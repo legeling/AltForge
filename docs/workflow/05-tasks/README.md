@@ -8,7 +8,7 @@
 
 | Task | 状态 | 关联 | 完成标准 |
 |---|---|---|---|
-| `T-044` 修复官方源权限声明与 201 提示 | 本地验证通过 / 未发布 | `FR-046`; `DES-031`; `TEST-045` | 真实 IPA 对照、7 项 Python、4 项 XCTest、元数据/repository/version contract 和 iOS/macOS build 通过，发布与真机验收另行确认 |
+| `T-044` 修复官方源权限声明与 201 提示 | v2.4.7 已发布 / 真机更新待确认 | `FR-046`; `DES-031`; `TEST-045` | 全部 29 项 hosted XCTest、7 项 Python、三端构建、下载包 checksum/身份/版本和公开 source 与 IPA 隐私核对通过；旧客户端实际更新继续验收 |
 | `T-043` 修复 iOS 安装漏记与不可见进度 | v2.4.6 已发布 / 设备验收待完成 | `FR-044`, `FR-045`; `DES-030`; `TEST-043`, `TEST-044` | 本地 28 项分批测试及全部 28 项 hosted XCTest、三平台构建、下载包身份/版本/校验和验证通过；真机最终回执丢失、锁屏恢复及刷新由 ISSUE-20260905-003 继续验收 |
 | `T-001` 建立 AltSign Unicode archive/App ID 自动化 fixture | Pending | `FR-004`, `FR-005`; `DES-005`; `TEST-003`, `TEST-005`-`TEST-007` | 测试入库并覆盖 UTF-8、Unicode extra、GBK、traversal、round trip |
 | `T-002` 验证干净 checkout CI 构建 | In progress | `FR-014`; `DES-009`; `TEST-011`, `TEST-012` | iOS Simulator、source ID test、AltServer build 通过，失败依赖有记录 |

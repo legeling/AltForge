@@ -12,7 +12,7 @@
 
 | Test | 覆盖 | 层级 | 当前状态 |
 |---|---|---|---|
-| `TEST-045` 官方源隐私声明与 201 提示 | `FR-046` | Script/Artifact/Unit/Build/Device | 7 项 Python、元数据/repository/version contract、4 项 iOS XCTest 和 iOS/macOS build 通过；真实 v2.4.6 IPA + 原 source 拒绝缺失的本地网络权限，修正 policy/生成 source 均通过。未发布、真机更新未验收 |
+| `TEST-045` 官方源隐私声明与 201 提示 | `FR-046` | Script/Artifact/Unit/Build/Device | 本地对照验证通过；v2.4.7 的 29 项 hosted XCTest、7 项 Python、三端构建、下载包校验和公开 source/实际 IPA 隐私核对通过，已发布；旧客户端真机更新仍待验收 |
 | `TEST-043` 安装记录恢复与缓存保护 | `FR-044` | Unit/Contract/Device | 本地及 v2.4.6 hosted 恢复、去重、保存失败回滚、路径/文件验证、缓存保护，以及后台回调丢失/延迟登记/活跃任务避让/有限重试/并发状态读取用例通过；真实设备最终回执丢失与恢复后刷新仍待验收 |
 | `TEST-044` 安装进度、常亮与主题 | `FR-045` | Unit/Layout/Device | 本机常亮租约、主题控件、真实导航 safe-area、大字体/深浅色/宽度布局及阶段化“结果待确认”通过；本地 28 项分批用例、全部 28 项 hosted XCTest 和三端构建通过，v2.4.6 产物已核验并发布；真机锁屏及全页面矩阵未验证 |
 | `TEST-001` install operation graph 成功/失败状态 | `FR-002`, `FR-003` | Integration | 缺失 |
