@@ -10,8 +10,6 @@
 
 | ID | 标题 | 状态 |
 |---|---|---|
-| [`CHG-20260923-002`](active/CHG-20260923-002-scrolling-install-recovery/README.md) | 安装状态随列表滚动与设备确认 | CI recovery tests passed / release and device validation pending |
-| [`CHG-20260923-001`](active/CHG-20260923-001-ipa-identity-editor/README.md) | IPA 安装前查看与编辑应用标识 | v2.5.0 CI editor fixture failed / release and device validation pending |
 | [`CHG-20260809-002`](active/CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 | [`CHG-20260809-007`](active/CHG-20260809-007-macos-server-identity-settings/README.md) | macOS Server 身份、菜单与设置 | In progress |
 | [`CHG-20260810-002`](active/CHG-20260810-002-macos-menu-icon-scale/README.md) | 放大 macOS 菜单栏图标 | Implemented / menu bar smoke pending |
@@ -29,6 +27,8 @@
 
 | ID | 标题 | 完成日期 |
 |---|---|---|
+| [CHG-20260923-002](completed/2026/09/CHG-20260923-002-scrolling-install-recovery/README.md) | 安装进度随列表滚动与设备确认恢复；真机验收转 Issue 跟踪 | 2026-09-23 |
+| [CHG-20260923-001](completed/2026/09/CHG-20260923-001-ipa-identity-editor/README.md) | IPA 包名和名称编辑、已安装应用改名；真机验收转 Issue 跟踪 | 2026-09-23 |
 | [CHG-20260905-004](completed/2026/09/CHG-20260905-004-source-permission-contract/README.md) | v2.4.7 官方源权限修复、真实 IPA 发布检查及 201 提示 | 2026-09-05 |
 | [CHG-20260905-003](completed/2026/09/CHG-20260905-003-ios-install-tracking-progress/README.md) | v2.4.6 安装记录恢复、可见进度与主题一致性；设备验收转 Issue 跟踪 | 2026-09-05 |
 | [CHG-20260905-002](completed/2026/09/CHG-20260905-002-gsa-authkit-user-agent/README.md) | AuthKit 认证身份与有限独立会话重试，用户确认登录恢复 | 2026-09-05 |

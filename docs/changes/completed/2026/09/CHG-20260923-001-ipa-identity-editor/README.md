@@ -1,6 +1,6 @@
 # CHG-20260923-001: IPA identity editing and installed-app rename
 
-- Status: Implemented locally; iOS platform build and physical-device acceptance pending
+- Status: Implementation and CI preflight complete; physical-device acceptance tracked by ISSUE-20260923-001
 - Mapping: FR-047 -> DES-032 -> TEST-046 -> T-045
 
 ## Goal
@@ -35,5 +35,6 @@ After selecting a local IPA or import link, show its app name, bundle ID, versio
 - `swiftc -frontend -parse` passed for the edited app/controller/test files; `jq empty` passed for the string catalog; `plutil -lint` passed for the Xcode project; `ruby Scripts/test_repository_contract.rb` and `git diff --check` passed.
 - 2026-09-23 follow-up: Installed-app rename was added using the same editor and AppManager reinstall path. A fourth XCTest case covers a name-only edit across two localizations and the deferred cache swap. The actual editor source also passed a macOS Swift synthetic harness for these cases; the new XCTest and rename/reinstall flow have not run on iOS or a device.
 - `xcodebuild` could not find an eligible iOS destination because this Xcode installation reports iOS 26.5 platform not installed, even though its SDK directory exists. No Simulator runtime is installed. The four new XCTest cases, iOS target build, edited IPA signing, side-by-side device installation, rename and refresh remain unverified.
-- The v2.5.0 tag CI compiled iOS and passed the other three new editor tests, but `testIPAIdentityEditorRewritesMainExtensionsAndLocalizedName` crashed on three runs. Exported simulator diagnostics revealed two runtime copies of `ALTApplication` in the test host and a failed cast while bridging `appExtensions`. The editor now walks direct `.appex/Info.plist` files in the extracted temporary bundle rather than bridging extension objects; the test checks those output files directly. The actual editor still passes the macOS synthetic harness, but the corrected iOS test requires a new manual preflight before a replacement version is tagged. The failed v2.5.0 tag never produced a Draft or public Release.
+- The v2.5.0 tag CI compiled iOS and passed the other three new editor tests, but `testIPAIdentityEditorRewritesMainExtensionsAndLocalizedName` crashed on three runs. Exported simulator diagnostics revealed two runtime copies of `ALTApplication` in the test host and a failed cast while bridging `appExtensions`. The editor now walks direct `.appex/Info.plist` files in the extracted temporary bundle rather than bridging extension objects; the test checks those output files directly. The actual editor passed the macOS synthetic harness after this fix. The failed v2.5.0 tag never produced a Draft or public Release.
+- 2026-09-23: Manual three-platform preflight [run 35828141331](https://github.com/legeling/AltForge/actions/runs/35828141331) passed all selected iOS XCTest cases, Apple package checks and Windows build. This is build/simulator acceptance, not physical-device acceptance; the latter is tracked by ISSUE-20260923-001.
 - No third-party IPA or Apple credentials are stored in the repository.
