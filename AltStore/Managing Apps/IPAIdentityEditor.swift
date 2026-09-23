@@ -78,7 +78,7 @@ enum IPAIdentityEditor
         let isChangingBundleIdentifier = changes.bundleIdentifier != originalBundleIdentifier
         var writes: [(url: URL, data: Data)] = []
 
-        func stage(_ url: URL, update: (inout [String: Any]) -> Void) throws
+        func stage(_ url: URL, update: (inout [String: Any]) throws -> Void) throws
         {
             let resolvedURL = url.resolvingSymlinksInPath().standardizedFileURL
             guard resolvedURL.path.hasPrefix(rootURL.path + "/"),
@@ -87,7 +87,7 @@ enum IPAIdentityEditor
             guard var values = (try? PropertyListSerialization.propertyList(from: data, format: &format)) as? [String: Any] else {
                 throw EditError.unreadableMetadata
             }
-            update(&values)
+            try update(&values)
             let outputFormat: PropertyListSerialization.PropertyListFormat = format == .openStep ? .xml : format
             guard let updatedData = try? PropertyListSerialization.data(fromPropertyList: values, format: outputFormat, options: 0) else {
                 throw EditError.unreadableMetadata
@@ -119,28 +119,31 @@ enum IPAIdentityEditor
 
         if isChangingBundleIdentifier
         {
-            let extensions = application.appExtensions.sorted { $0.bundleIdentifier < $1.bundleIdentifier }
             var mappedIdentifiers = Set<String>()
-            for appExtension in extensions
+            let pluginsURL = application.bundle.builtInPlugInsURL ?? application.fileURL.appendingPathComponent("PlugIns", isDirectory: true)
+            if FileManager.default.fileExists(atPath: pluginsURL.path)
             {
-                let oldIdentifier = appExtension.bundleIdentifier
-                let suffix: String
-                if oldIdentifier.hasPrefix(originalBundleIdentifier + ".")
+                guard let extensions = try? FileManager.default.contentsOfDirectory(at: pluginsURL, includingPropertiesForKeys: nil)
+                    .filter({ $0.pathExtension.lowercased() == "appex" }).sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) else {
+                    throw EditError.unreadableMetadata
+                }
+                for extensionURL in extensions
                 {
-                    suffix = String(oldIdentifier.dropFirst(originalBundleIdentifier.count + 1))
-                }
-                else
-                {
-                    suffix = oldIdentifier
-                }
-                let updatedIdentifier = changes.bundleIdentifier + "." + suffix
-                _ = try validate(name: appExtension.name, bundleIdentifier: updatedIdentifier,
-                                 originalBundleIdentifier: oldIdentifier)
-                guard mappedIdentifiers.insert(updatedIdentifier.lowercased()).inserted else {
-                    throw EditError.invalidBundleIdentifier
-                }
-                try stage(appExtension.bundle.infoPlistURL) { values in
-                    values[kCFBundleIdentifierKey as String] = updatedIdentifier
+                    try stage(extensionURL.appendingPathComponent("Info.plist")) { values in
+                        guard let oldIdentifier = values[kCFBundleIdentifierKey as String] as? String else {
+                            throw EditError.unreadableMetadata
+                        }
+                        let suffix = oldIdentifier.hasPrefix(originalBundleIdentifier + ".")
+                            ? String(oldIdentifier.dropFirst(originalBundleIdentifier.count + 1))
+                            : oldIdentifier
+                        let updatedIdentifier = changes.bundleIdentifier + "." + suffix
+                        _ = try validate(name: changes.name, bundleIdentifier: updatedIdentifier,
+                                         originalBundleIdentifier: oldIdentifier)
+                        guard mappedIdentifiers.insert(updatedIdentifier.lowercased()).inserted else {
+                            throw EditError.invalidBundleIdentifier
+                        }
+                        values[kCFBundleIdentifierKey as String] = updatedIdentifier
+                    }
                 }
             }
         }

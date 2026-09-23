@@ -1010,14 +1010,16 @@ final class AltTests: XCTestCase
         }
 
         let app = try XCTUnwrap(ALTApplication(fileURL: appURL))
-        XCTAssertEqual(app.appExtensions.count, 2)
         let changes = try IPAIdentityEditor.validate(name: "微信 2", bundleIdentifier: "com.example.fixture.clone2",
                                                      originalBundleIdentifier: app.bundleIdentifier)
         let edited = try IPAIdentityEditor.apply(changes, to: app, within: root)
         XCTAssertEqual(edited.name, "微信 2")
         XCTAssertEqual(edited.bundleIdentifier, "com.example.fixture.clone2")
-        XCTAssertEqual(Set(edited.appExtensions.map(\.bundleIdentifier)),
-                       Set(["com.example.fixture.clone2.share", "com.example.fixture.clone2.com.other.widget"]))
+        let extensionIdentifiers = try ["Share", "Widget"].map { name in
+            let infoURL = pluginsURL.appendingPathComponent("\(name).appex/Info.plist")
+            return try XCTUnwrap(NSDictionary(contentsOf: infoURL)?["CFBundleIdentifier"] as? String)
+        }
+        XCTAssertEqual(Set(extensionIdentifiers), Set(["com.example.fixture.clone2.share", "com.example.fixture.clone2.com.other.widget"]))
         let localized = try XCTUnwrap(PropertyListSerialization.propertyList(from: Data(contentsOf: stringsURL),
                                                                                   format: nil) as? [String: String])
         XCTAssertEqual(localized["CFBundleDisplayName"], "微信 2")
