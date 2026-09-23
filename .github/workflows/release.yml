@@ -153,8 +153,22 @@ jobs:
         run: |
           result="$(find "$RUNNER_TEMP/DerivedData-Tests/Logs/Test" -maxdepth 1 -name '*.xcresult' -print -quit)"
           if [[ -n "$result" ]]; then
-            xcrun xcresulttool get test-results summary --path "$result"
+            summary="$(xcrun xcresulttool get test-results summary --path "$result" --compact)"
+            echo "$summary" | jq .
+            while IFS= read -r test_id; do
+              xcrun xcresulttool get test-results test-details --path "$result" --test-id "$test_id"
+            done < <(echo "$summary" | jq -r '.testFailures[].testIdentifierString')
+            xcrun xcresulttool export diagnostics --path "$result" --output-path "$RUNNER_TEMP/IOSDiagnostics"
           fi
+
+      - name: Upload iOS failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-failure-diagnostics
+          path: ${{ runner.temp }}/IOSDiagnostics
+          if-no-files-found: warn
+          retention-days: 1
 
       - name: Build unsigned iOS application
         env:
