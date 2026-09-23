@@ -52,6 +52,7 @@ The official download and installation page is [altforge-dz7.pages.dev](https://
 |---|---|
 | **Identity and source** | Uses the AltForge brand, `com.legeling.AltForge` identifier family, and this repository's GitHub Release source. |
 | **Unicode IPA support** | Reads UTF-8 and Info-ZIP Unicode Path metadata, includes bounded fallbacks for common legacy East Asian filename encodings, and writes UTF-8 ZIP paths. |
+| **IPA identity editor** | Review an imported IPA, install it unchanged, or change its app name and bundle ID before signing. Renaming an already managed app reinstalls it with the same bundle ID; changed IDs may disrupt sign-in, shared data, or push notifications. |
 | **Apple App ID compatibility** | Converts only the Apple App ID description to safe ASCII without changing the app's Unicode display name. |
 | **Developer teams** | Supports individual, organization, and free developer-team fallback in both client and AltServer installation paths. |
 | **Reliable desktop installs** | Shows transfer size, speed, source, signing, and device-install progress; deduplicates work per device and supports manual switching among SHA-256-verified GitHub, configured CDN, and mirror routes. |

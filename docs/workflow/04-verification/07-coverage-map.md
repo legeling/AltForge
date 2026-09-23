@@ -2,6 +2,8 @@
 
 | Area | FR | DES | Tests | Current coverage | Gap owner |
 |---|---|---|---|---|---|
+| Scrolling install status and device-confirmed recovery | `FR-048` | `DES-033` | `TEST-047` | Scroll/receipt/protocol XCTest added; Swift parse, repository contract and macOS Server build pass. Local iOS platform is unavailable; Windows build and locked-device refresh remain pending. | `T-046` |
+| IPA identity editing | `FR-047` | `DES-032` | `TEST-046` | Native Swift harness passed import-time ID/name/localization, name-only/deferred-cache-swap and failure checks; four XCTest cases added but local iOS platform is unavailable. Device rename and parallel-install/refresh pending. | `T-045` |
 | Official source privacy | `FR-046` | `DES-031` | `TEST-045` | v2.4.7 published after 29 hosted XCTest, 7 Python fixtures, three platform builds, downloaded-artifact checks and public-source/real-IPA privacy verification. Old-client device update remains pending. | `T-044` |
 | iOS installation tracking/progress | `FR-044`, `FR-045` | `DES-030` | `TEST-043`, `TEST-044` | Local 28 cases covered in batches, all 28 hosted tests and three-platform builds passed; downloaded release packages verified and v2.4.6 published. Real-device response loss, refresh after recovery and background expiration remain open. | `T-043` |
 | AltForge install | `FR-001`-`FR-003` | `DES-001`-`DES-003` | `TEST-001`, `TEST-002`, `TEST-004` | Low | `T-003` |

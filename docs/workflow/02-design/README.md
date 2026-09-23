@@ -285,11 +285,11 @@ DMG 使用单任务 `URLSessionDownloadDelegate`，45 秒 request/600 秒 resour
 
 ### `DES-030` iOS 安装确认与可见状态
 
-返回前台的核对由 `InstallationRecoveryCoordinator` 管理：实际 didBecomeActive/显式 update 触发，合并重复请求，最多一个数据库核对任务；进入后台停止后续调度，旧回调不能启动旧任务。对延迟注册及仍在运行的安装生产者，按 1/2/5/10/20 秒补查，单次前台窗口最多 6 次本地扫描，无额外网络 I/O。恢复避开活跃生产者，写入前再次核对记录存在性；目录不可读时保留缓存，不当作空目录删除。中断提示不得建议先卸载已安装的 App。
+返回前台的核对由 `InstallationRecoveryCoordinator` 管理：实际 didBecomeActive/显式 update 触发，合并重复请求，最多一个数据库核对任务；进入后台停止后续调度，旧回调不能启动旧任务。对延迟注册及仍在运行的安装生产者，按 1/2/5/10/20 秒补查，单次前台窗口最多 6 次本地扫描。新版 Server 的设备确认补充见 `DES-033`。恢复避开活跃生产者，写入前再次核对记录存在性；目录不可读时保留缓存，不当作空目录删除。中断提示不得建议先卸载已安装的 App。
 
 `InstallationReceiptStore` 在发送设备安装请求前于既有 App 缓存目录原子写入 versioned receipt（最大 64 KiB、128 个扩展，无密码、密钥、token 或 profile 正文），保存恢复所需标识/版本/日期/证书序列号元数据。最终成功回执在其 Core Data 队列立即保存 InstalledApp；前台重入只为“有效 receipt + 缓存 App.app + 系统正向 UTI 身份确认”的缺失记录恢复，设置 needsResign 以确保下次完整重签。批量保存失败回滚且保留 receipt；已有记录不覆盖。无 UTI 不触发删除；孤立缓存保留到用户明确移除，移除同时清理 receipt，避免重新出现。
 
-IPA 进度面板固定在 safe area，按内容适配并限制到可用高度的 60%，超出时内部滚动，列表 inset 同步。显示既有 diagnostic stage、Progress、耗时和等待提示，100% 只在终态成功后显示，错误与成功持续保留直到关闭。前台手动操作使用主线程多租约 idle-timer 管理，最后一次释放恢复原值；取消结束异步安装等待，180 秒无响应超时后保留恢复记录。UIKit 主题沿用通知和语义色，不引入新框架或全局递归染色。没有 Core Data schema 或 Server Protocol 变化；恢复扫描/集合查找为线性复杂度。
+IPA 进度面板显示既有 diagnostic stage、Progress、耗时和等待提示，100% 只在终态成功后显示，错误与成功持续保留直到关闭。前台手动操作使用主线程多租约 idle-timer 管理，最后一次释放恢复原值；取消结束异步安装等待，180 秒无响应超时后保留恢复记录。UIKit 主题沿用通知和语义色，不引入新框架或全局递归染色。没有 Core Data schema 变化；恢复扫描/集合查找为线性复杂度。列表定位和新的 Server Protocol 确认见 `DES-033`。
 
 | Target | 责任 | 核心安装依赖 |
 |---|---|---|
@@ -313,6 +313,20 @@ IPA 进度面板固定在 safe area，按内容适配并限制到可用高度的
 ### `DES-031` 发布源隐私权限契约
 
 Release/app-permissions.json 是经审核的声明输入，生成器不再固定空 privacy。跨平台标准库脚本从 IPA 有界读取主 App 和直接扩展 Info.plist，不解压或执行 App；分别在 Apple 产物检查和 generated apps.json 上传前检查未声明的 UsageDescription 键。发现新权限时阻止发布，不能自动扩大声明。该门禁覆盖隐私键，不替代既有 entitlement/signature/client 安全检查。Shared 的 201 展示仅修正解释和恢复建议，不改错误域、码或验证分支。
+
+### `DES-032` IPA 身份编辑与安装后改名
+
+`MyAppsViewController` 在现有解包 operation 后暂停并显示名称、Bundle ID、版本、扩展数量及两种安装操作。直接安装将原 `ALTApplication` 交给现有扩展检查与 AppManager；编辑安装将名称和 ID 交给 `IPAIdentityEditor`，仅修改当前安装任务的临时解包目录。它先读取、校验并准备主 App、直接扩展以及已有 `InfoPlist.strings` 的 plist 数据，全部准备成功后原子写入各文件并重新加载 `ALTApplication`。扩展 ID 收敛到新主 App ID 前缀，使现有 profile 和重签链路使用同一身份。后续缓存、安装回执、Core Data 和刷新仍以编辑后的原始（重签前）ID 为键，不增加持久字段或跨端协议。
+
+已安装且活跃的侧载 App 在长按菜单提供“修改应用名称”。从其刷新缓存复制一个临时 `.app`，仅改名称并保持原包标识符，再通过现有 AppManager 安装链重新签名、安装和更新记录。此路径禁用 AppManager 安装前的缓存替换；设备安装成功后才用临时编辑副本替换原缓存，失败则删除临时副本。缓存缺失时要求重新导入 IPA；改名不提供已安装 App 的包标识符原地修改，后者会成为另一个安装身份，应通过导入 IPA 选择新 ID。
+
+改名是重新签名的一部分。App Group、Keychain 和 APNs 还受 entitlement、团队及第三方服务约束；编辑界面提示能力可能受影响，不宣称仅修改 Bundle ID 就能保证完整多开。对一个 IPA 的 plist 和根目录本地化项只线性遍历一次，I/O 与读取的数据字节数和扩展/语言项数线性相关；没有额外网络请求或长期缓存。
+
+### `DES-033` 随列表滚动的安装状态与设备确认
+
+`MyAppsViewController` 将既有进度控件嵌入 `.noUpdates` section 的普通 header，按内容计算高度；不使用悬浮视图或手动列表 inset。新安装自动滚到列表顶部，之后随列表一同滚动，结果仍可关闭。对当前面板处于“结果待确认”的应用，恢复通知把状态改成“安装完成”。
+
+`InstallationReceiptStore` 保持原有正向 UTI 确认和原子恢复。每个前台会话对仍未确认、缓存存在且无活跃安装者的 receipt，最多向已发现的 Server 发起一次 `InstallationStatusRequest(udid, bundleIdentifiers)`；macOS/Windows Server 用已有 installation_proxy 浏览能力返回集合交集。客户端只接受请求集合内的已安装标识，再由同一 receipt 恢复路径写入 Core Data。查询有 30 秒上限，结束或超时断开连接；旧版 Server 的 unknown-request、设备锁定/断连与传输失败均不改变本地状态，后续前台会话可重新确认。查询不阻塞本地 UTI 补查。浏览成本与设备已安装 App 数和待确认数线性相关，额外网络请求只发生在存在未确认安装时。既有 `ResultOperation` 有限后台任务继续承载安装步骤；iOS 挂起或用户强退后不保证签名及安装在后台继续，回前台只恢复有设备证据的已完成结果。该变更需 iOS 与 Server 同时更新，旧版 Server 只能走既有 UTI 恢复。
 
 ## 方案取舍
 

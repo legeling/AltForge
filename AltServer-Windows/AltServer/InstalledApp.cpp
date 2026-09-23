@@ -1,6 +1,21 @@
 #include "InstalledApp.h"
 #include "ServerError.hpp"
 
+#include <cstdlib>
+#include <memory>
+
+static std::string stringValue(plist_t node)
+{
+	char* value = NULL;
+	plist_get_string_val(node, &value);
+	std::unique_ptr<char, decltype(&std::free)> owned(value, &std::free);
+	if (!owned)
+	{
+		throw ServerError(ServerErrorCode::InvalidApp);
+	}
+	return std::string(owned.get());
+}
+
 InstalledApp::InstalledApp(plist_t plist)
 {
 	auto nameNode = plist_dict_get_item(plist, "CFBundleName");
@@ -12,17 +27,9 @@ InstalledApp::InstalledApp(plist_t plist)
 		throw ServerError(ServerErrorCode::InvalidApp);
 	}
 
-	char* name = NULL;
-	plist_get_string_val(nameNode, &name);
-	this->_name = name;
-
-	char* identifier = NULL;
-	plist_get_string_val(identifierNode, &identifier);
-	this->_bundleIdentifier = identifier;
-
-	char* executable = NULL;
-	plist_get_string_val(executableNode, &executable);
-	this->_executableName = executable;
+	this->_name = stringValue(nameNode);
+	this->_bundleIdentifier = stringValue(identifierNode);
+	this->_executableName = stringValue(executableNode);
 }
 
 InstalledApp::~InstalledApp()

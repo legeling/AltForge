@@ -221,6 +221,27 @@ struct ServerRequestHandler: RequestHandler
             }
         }
     }
+
+    func handleInstallationStatusRequest(_ request: InstallationStatusRequest, for connection: Connection, completionHandler: @escaping (Result<InstallationStatusResponse, Error>) -> Void)
+    {
+        guard let device = ALTDeviceManager.shared.availableDevices.first(where: { $0.identifier == request.udid }) else {
+            return completionHandler(.failure(ALTServerError(.deviceNotFound)))
+        }
+
+        ALTDeviceManager.shared.fetchInstalledApps(on: device) { apps, error in
+            if let error {
+                completionHandler(.failure(ALTServerError(error)))
+            }
+            else if let apps {
+                let installed = Set(apps.map(\.bundleIdentifier)).intersection(request.bundleIdentifiers)
+                completionHandler(.success(InstallationStatusResponse(installedBundleIdentifiers: installed)))
+            }
+            else
+            {
+                completionHandler(.failure(ALTServerError(.invalidResponse)))
+            }
+        }
+    }
     
     func handleEnableUnsignedCodeExecutionRequest(_ request: EnableUnsignedCodeExecutionRequest, for connection: Connection, completionHandler: @escaping (Result<EnableUnsignedCodeExecutionResponse, Error>) -> Void)
     {

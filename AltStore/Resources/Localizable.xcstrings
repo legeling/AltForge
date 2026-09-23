@@ -1,11 +1,68 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Install App" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装 App" } } }
+    },
+    "Name: %@\nBundle ID: %@\nVersion: %@\nExtensions: %@" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "名称：%@\n包标识符：%@\n版本：%@\n扩展：%@" } } }
+    },
+    "Use an unused bundle ID for another copy. Sign-in, shared data, and push notifications may be affected." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "若要多开，请使用未占用的包标识符。登录、共享数据和推送通知可能受影响。" } } }
+    },
+    "App Name" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "App 名称" } } }
+    },
+    "Change App Name" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "修改应用名称" } } }
+    },
+    "AltForge will sign and reinstall this app with the same bundle ID to change its name." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AltForge 将使用原包标识符重新签名并安装此应用，以更新安装后的名称。" } } }
+    },
+    "Save and Reinstall" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "保存并重新安装" } } }
+    },
+    "The saved app file is unavailable. Import the IPA again to change its name." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "找不到已保存的应用文件。请重新导入 IPA 后修改名称。" } } }
+    },
+    "The app was renamed, but its saved file could not be updated. Import the IPA again before refreshing it." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "应用已改名，但保存的安装文件未能更新。刷新前请重新导入 IPA。" } } }
+    },
+    "Name" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "名称" } } }
+    },
+    "Bundle ID" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "包标识符" } } }
+    },
+    "Install Without Changes" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "直接安装" } } }
+    },
+    "Install with Changes" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "按修改安装" } } }
+    },
+    "Reviewing App Information" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在检查 App 信息" } } }
+    },
+    "Editing App Information" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在修改 App 信息" } } }
+    },
+    "Enter an app name without line breaks." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请输入不含换行的 App 名称。" } } }
+    },
+    "Enter a bundle ID like com.example.app using letters, numbers, periods, or hyphens." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请输入类似 com.example.app 的包标识符，只能使用英文字母、数字、句点和连字符。" } } }
+    },
+    "This bundle ID belongs to AltForge. Choose another one." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "这个包标识符属于 AltForge，请换一个。" } } }
+    },
+    "The IPA's app information could not be edited." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法修改此 IPA 的 App 信息。" } } }
+    },
     "Installation Result Unconfirmed" : {
       "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装结果待确认" } } }
     },
-    "The device may have finished installing. AltForge will check its installation record when you return to the app." : {
-      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "设备可能已经完成安装。回到 AltForge 后，会重新核对安装记录。" } } }
+    "AltForge is checking the device. If the app is on your Home Screen but missing here, reconnect AltForge Server and reopen My Apps." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在核对设备上的安装结果。如果主屏幕已有这个 App，但这里仍未显示，请重新连接 AltForge Server，再打开“我的 App”。" } } }
     },
     "This removes the AltForge record, cached app and backups, not the app on your device. You will need to import its IPA again to refresh it with AltForge." : {
       "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "这会移除 AltForge 中的管理记录、安装缓存和备份，但不会卸载手机上的 App。移除后，需要重新导入 IPA 才能在 AltForge 中刷新。" } } }

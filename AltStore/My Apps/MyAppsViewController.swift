@@ -68,8 +68,7 @@ final class SideloadingStatusView: UIView
         self.detailLabel.font = .preferredFont(forTextStyle: .caption1)
         self.detailLabel.textColor = .tertiaryLabel
         self.detailLabel.adjustsFontForContentSizeCategory = true
-        self.detailLabel.lineBreakMode = .byTruncatingMiddle
-        self.detailLabel.numberOfLines = 3
+        self.detailLabel.numberOfLines = 0
 
         self.percentageLabel.translatesAutoresizingMaskIntoConstraints = false
         self.percentageLabel.font = .monospacedDigitSystemFont(ofSize: 15, weight: .semibold)
@@ -242,7 +241,7 @@ final class SideloadingStatusView: UIView
                 : NSLocalizedString("Installation Failed", comment: "Installation result")
         }
         self.detailLabel.text = awaitingConfirmation
-            ? NSLocalizedString("The device may have finished installing. AltForge will check its installation record when you return to the app.", comment: "Unconfirmed installation recovery")
+            ? NSLocalizedString("AltForge is checking the device. If the app is on your Home Screen but missing here, reconnect AltForge Server and reopen My Apps.", comment: "Unconfirmed installation recovery")
             : error.map { ($0 as NSError).userFacingPresentation.message }
         self.detailLabel.isHidden = error == nil
         if error == nil { self.progressView.progress = 1; self.percentageLabel.text = "100%" }
@@ -296,11 +295,12 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
     
     private var prototypeUpdateCell: UpdateCollectionViewCell!
     private var sideloadingStatusView: SideloadingStatusView!
-    private let sideloadingStatusContainer = UIScrollView()
-    private var sideloadingStatusHeight: NSLayoutConstraint?
+    private var isSideloadingStatusVisible = false
     private var sideloadingError: Error?
     private var sideloadingStage: AppOperationDiagnosticStage?
     private var sideloadingActivityIdentifier: UUID?
+    private var sideloadingBundleIdentifier: String?
+    private var isAwaitingInstallationConfirmation = false
     
     // State
     private var isUpdateSectionCollapsed = true
@@ -308,8 +308,6 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
     private var isRefreshingAllApps = false
     private var refreshGroup: RefreshGroup?
     private var sideloadingProgress: Progress?
-    private var sideloadingContentInset: UIEdgeInsets?
-    private var sideloadingIndicatorInsets: UIEdgeInsets?
     private var dropDestinationIndexPath: IndexPath?
     private var isCheckingForUpdates = false
     private var didChangeActiveApps = false
@@ -327,6 +325,7 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         
         NotificationCenter.default.addObserver(self, selector: #selector(MyAppsViewController.didFetchSource(_:)), name: AppManager.didFetchSourceNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyAppsViewController.importApp(_:)), name: AppDelegate.importAppDeepLinkNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyAppsViewController.didRecoverInstallation(_:)), name: AppManager.didRecoverInstallationNotification, object: nil)
     }
     
     override func viewDidLoad()
@@ -349,6 +348,7 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         self.prototypeUpdateCell.contentView.translatesAutoresizingMaskIntoConstraints = false
         
         self.collectionView.register(UpdateCollectionViewCell.nib, forCellWithReuseIdentifier: "UpdateCell")
+        self.collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SideloadingStatusHeader")
         self.collectionView.register(UpdatesCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "UpdatesHeader")
         self.collectionView.register(InstalledAppsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ActiveAppsHeader")
         self.collectionView.register(InstalledAppsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "InactiveAppsHeader")
@@ -359,16 +359,8 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         self.collectionView.refreshControl = refreshControl
         
         self.sideloadingStatusView = SideloadingStatusView()
-        self.sideloadingStatusContainer.translatesAutoresizingMaskIntoConstraints = false
-        self.sideloadingStatusContainer.accessibilityIdentifier = "SideloadingStatusContainer"
-        self.sideloadingStatusContainer.contentInsetAdjustmentBehavior = .never
-        self.sideloadingStatusContainer.isHidden = true
-        self.sideloadingStatusContainer.backgroundColor = .secondarySystemGroupedBackground
-        self.view.addSubview(self.sideloadingStatusContainer)
-        self.sideloadingStatusContainer.addSubview(self.sideloadingStatusView)
-        self.sideloadingStatusHeight = self.sideloadingStatusContainer.heightAnchor.constraint(equalToConstant: 160)
         self.sideloadingStatusView.dismissHandler = { [weak self] in self?.hideSideloadingStatus() }
-        self.sideloadingStatusView.layoutChangeHandler = { [weak self] in self?.view.setNeedsLayout() }
+        self.sideloadingStatusView.layoutChangeHandler = { [weak self] in self?.collectionView.collectionViewLayout.invalidateLayout() }
         self.sideloadingStatusView.detailHandler = { [weak self] in
             guard let self, let error = self.sideloadingError else { return }
             let presentation = (error as NSError).userFacingPresentation
@@ -376,17 +368,6 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
             alert.addAction(.ok)
             self.present(alert, animated: true)
         }
-        NSLayoutConstraint.activate([
-            self.sideloadingStatusContainer.leadingAnchor.constraint(equalTo: self.collectionView.frameLayoutGuide.leadingAnchor),
-            self.sideloadingStatusContainer.trailingAnchor.constraint(equalTo: self.collectionView.frameLayoutGuide.trailingAnchor),
-            self.sideloadingStatusContainer.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.sideloadingStatusHeight!,
-            self.sideloadingStatusView.leadingAnchor.constraint(equalTo: self.sideloadingStatusContainer.contentLayoutGuide.leadingAnchor),
-            self.sideloadingStatusView.trailingAnchor.constraint(equalTo: self.sideloadingStatusContainer.contentLayoutGuide.trailingAnchor),
-            self.sideloadingStatusView.topAnchor.constraint(equalTo: self.sideloadingStatusContainer.contentLayoutGuide.topAnchor),
-            self.sideloadingStatusView.bottomAnchor.constraint(equalTo: self.sideloadingStatusContainer.contentLayoutGuide.bottomAnchor),
-            self.sideloadingStatusView.widthAnchor.constraint(equalTo: self.sideloadingStatusContainer.frameLayoutGuide.widthAnchor)
-        ])
         
         (self as PeekPopPreviewing).registerForPreviewing(with: self, sourceView: self.collectionView)
         
@@ -402,29 +383,6 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
         AppLifecycleDiagnosticStore.shared.record(.myAppsLoaded)
     }
     
-    override func viewDidLayoutSubviews()
-    {
-        super.viewDidLayoutSubviews()
-        guard !self.sideloadingStatusContainer.isHidden, self.view.bounds.width > 0 else { return }
-        self.view.bringSubviewToFront(self.sideloadingStatusContainer)
-        let preferred = self.sideloadingStatusView.systemLayoutSizeFitting(
-            CGSize(width: self.view.bounds.width, height: 0),
-            withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
-        let available = max(96, self.view.safeAreaLayoutGuide.layoutFrame.height * 0.6)
-        let height = min(preferred, available)
-        if abs((self.sideloadingStatusHeight?.constant ?? 0) - height) > 0.5 {
-            self.sideloadingStatusHeight?.constant = height
-        }
-        if var inset = self.sideloadingContentInset {
-            inset.top += height
-            if self.collectionView.contentInset != inset { self.collectionView.contentInset = inset }
-        }
-        if var inset = self.sideloadingIndicatorInsets {
-            inset.top += height
-            self.collectionView.verticalScrollIndicatorInsets = inset
-        }
-    }
-
     override func viewIsAppearing(_ animated: Bool)
     {
         super.viewIsAppearing(animated)
@@ -1351,7 +1309,7 @@ private extension MyAppsViewController
 
                 DispatchQueue.main.async {
                     self.sideloadingStatusView.update(title: String(format: NSLocalizedString("Installing %@", comment: "Third-party IPA installation progress title"), application.name),
-                                                      stage: NSLocalizedString("Reviewing App Extensions", comment: "Third-party IPA installation stage"),
+                                                      stage: NSLocalizedString("Reviewing App Information", comment: "Third-party IPA installation stage"),
                                                       detail: nil)
                 }
                 
@@ -1368,7 +1326,60 @@ private extension MyAppsViewController
         {
             unzipAppOperation.addDependency(downloadOperation)
         }
-        
+
+        let reviewProgress = Progress.discreteProgress(totalUnitCount: 1)
+        let reviewAppOperation = RSTAsyncBlockOperation { [weak self] operation in
+            if context.error != nil
+            {
+                operation.finish()
+                return
+            }
+
+            guard let application = context.application else {
+                context.error = OperationError.invalidParameters
+                operation.finish()
+                return
+            }
+
+            DispatchQueue.main.async {
+                guard let self else {
+                    context.error = OperationError.cancelled
+                    operation.finish()
+                    return
+                }
+
+                self.reviewSideloadedApp(application) { result in
+                    switch result
+                    {
+                    case .failure(let error):
+                        context.error = error
+                        operation.finish()
+
+                    case .success(nil):
+                        reviewProgress.completedUnitCount = 1
+                        operation.finish()
+
+                    case .success(let changes?):
+                        self.sideloadingStatusView.update(stage: NSLocalizedString("Editing App Information", comment: "Third-party IPA installation stage"), detail: nil)
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            do
+                            {
+                                context.application = try IPAIdentityEditor.apply(changes, to: application, within: unzippedAppDirectory)
+                                reviewProgress.completedUnitCount = 1
+                            }
+                            catch
+                            {
+                                context.error = error
+                            }
+                            operation.finish()
+                        }
+                    }
+                }
+            }
+        }
+        reviewAppOperation.addDependency(unzipAppOperation)
+        progress.addChild(reviewProgress, withPendingUnitCount: 5)
+
         let removeAppExtensionsProgress = Progress.discreteProgress(totalUnitCount: 1)
         let removeAppExtensionsOperation = RSTAsyncBlockOperation { [weak self] (operation) in
             do
@@ -1379,7 +1390,7 @@ private extension MyAppsViewController
                 }
                 
                 guard let application = context.application else { throw OperationError.invalidParameters }
-                
+
                 DispatchQueue.main.async {
                     guard let self else
                     {
@@ -1388,6 +1399,8 @@ private extension MyAppsViewController
                         return
                     }
 
+                    self.sideloadingBundleIdentifier = application.bundleIdentifier
+                    self.sideloadingStatusView.update(stage: NSLocalizedString("Reviewing App Extensions", comment: "Third-party IPA installation stage"), detail: nil)
                     self.removeAppExtensions(from: application) { (result) in
                         switch result
                         {
@@ -1404,7 +1417,7 @@ private extension MyAppsViewController
                 operation.finish()
             }
         }
-        removeAppExtensionsOperation.addDependency(unzipAppOperation)
+        removeAppExtensionsOperation.addDependency(reviewAppOperation)
         progress.addChild(removeAppExtensionsProgress, withPendingUnitCount: 5)
         
         let installProgress = Progress.discreteProgress(totalUnitCount: 100)
@@ -1475,6 +1488,7 @@ private extension MyAppsViewController
                 {
                 case .success(let app):
                     self.sideloadingError = nil
+                    self.isAwaitingInstallationConfirmation = false
                     self.sideloadingStatusView.finish(error: nil)
                     completion(.success(()))
                     
@@ -1484,26 +1498,28 @@ private extension MyAppsViewController
                     
                 case .failure(OperationError.cancelled):
                     self.sideloadingError = OperationError.cancelled
+                    self.isAwaitingInstallationConfirmation = SideloadingStatusView.needsInstallationConfirmation(error: OperationError.cancelled, stage: self.sideloadingStage)
                     self.sideloadingStatusView.finish(error: OperationError.cancelled,
-                        awaitingConfirmation: SideloadingStatusView.needsInstallationConfirmation(error: OperationError.cancelled, stage: self.sideloadingStage))
+                        awaitingConfirmation: self.isAwaitingInstallationConfirmation)
                     completion(.failure((OperationError.cancelled)))
                     
                 case .failure(let error):
                     self.sideloadingError = error
+                    self.isAwaitingInstallationConfirmation = SideloadingStatusView.needsInstallationConfirmation(error: error, stage: self.sideloadingStage)
                     self.sideloadingStatusView.finish(error: error,
-                        awaitingConfirmation: SideloadingStatusView.needsInstallationConfirmation(error: error, stage: self.sideloadingStage))
+                        awaitingConfirmation: self.isAwaitingInstallationConfirmation)
                     
                     completion(.failure(error))
                 }
                 self.view.setNeedsLayout()
             }
         }
-        progress.addChild(installProgress, withPendingUnitCount: 65)
+        progress.addChild(installProgress, withPendingUnitCount: 60)
         installAppOperation.addDependency(removeAppExtensionsOperation)
         
         self.sideloadingProgress = progress
         
-        let operations = [downloadOperation, unzipAppOperation, removeAppExtensionsOperation, installAppOperation].compactMap { $0 }
+        let operations = [downloadOperation, unzipAppOperation, reviewAppOperation, removeAppExtensionsOperation, installAppOperation].compactMap { $0 }
         self.operationQueue.addOperations(operations, waitUntilFinished: false)
     }
 
@@ -1513,18 +1529,19 @@ extension MyAppsViewController
 {
     func showSideloadingStatus(progress: Progress, title: String, stage: String)
     {
-        if !self.sideloadingStatusContainer.isHidden { self.hideSideloadingStatus() }
+        if self.isSideloadingStatusVisible { self.hideSideloadingStatus() }
         let identifier = UUID()
         self.sideloadingActivityIdentifier = identifier
         InstallationScreenActivity.shared.begin(identifier)
         self.sideloadingError = nil
         self.sideloadingStage = nil
-        self.sideloadingContentInset = self.collectionView.contentInset
-        self.sideloadingIndicatorInsets = self.collectionView.verticalScrollIndicatorInsets
-
+        self.sideloadingBundleIdentifier = nil
+        self.isAwaitingInstallationConfirmation = false
         self.sideloadingStatusView.begin(title: title, stage: stage, progress: progress)
-        self.sideloadingStatusContainer.isHidden = false
-        self.view.setNeedsLayout()
+        self.isSideloadingStatusVisible = true
+        self.collectionView.reloadSections(IndexSet(integer: Section.noUpdates.rawValue))
+        self.collectionView.layoutIfNeeded()
+        self.collectionView.setContentOffset(CGPoint(x: 0, y: -self.collectionView.adjustedContentInset.top), animated: true)
     }
 
     func hideSideloadingStatus()
@@ -1532,23 +1549,25 @@ extension MyAppsViewController
         self.sideloadingProgress = nil
         self.sideloadingStatusView.end()
         self.sideloadingError = nil
+        self.sideloadingBundleIdentifier = nil
+        self.isAwaitingInstallationConfirmation = false
         if let identifier = self.sideloadingActivityIdentifier {
             InstallationScreenActivity.shared.end(identifier)
             self.sideloadingActivityIdentifier = nil
         }
 
-        if let contentInset = self.sideloadingContentInset
-        {
-            self.collectionView.contentInset = contentInset
-        }
-        if let indicatorInsets = self.sideloadingIndicatorInsets
-        {
-            self.collectionView.verticalScrollIndicatorInsets = indicatorInsets
-        }
-        self.sideloadingContentInset = nil
-        self.sideloadingIndicatorInsets = nil
+        self.isSideloadingStatusVisible = false
+        self.collectionView.reloadSections(IndexSet(integer: Section.noUpdates.rawValue))
+    }
 
-        self.sideloadingStatusContainer.isHidden = true
+    @objc private func didRecoverInstallation(_ notification: Notification)
+    {
+        guard let bundleIdentifier = notification.object as? String,
+              bundleIdentifier == self.sideloadingBundleIdentifier,
+              self.isAwaitingInstallationConfirmation else { return }
+        self.isAwaitingInstallationConfirmation = false
+        self.sideloadingError = nil
+        self.sideloadingStatusView.finish(error: nil)
     }
 }
 
@@ -1645,7 +1664,90 @@ private extension MyAppsViewController
     {
         self.performSegue(withIdentifier: "showAppIDs", sender: sender)
     }
-    
+
+    func reviewSideloadedApp(_ application: ALTApplication, completion: @escaping (Result<IPAIdentityEditor.Changes?, Error>) -> Void)
+    {
+        let details = String(format: NSLocalizedString("Name: %@\nBundle ID: %@\nVersion: %@\nExtensions: %@", comment: "IPA information before installation"),
+                             self.boundedSideloadingLabel(application.name), application.bundleIdentifier,
+                             application.version, NSNumber(value: application.appExtensions.count))
+        let guidance = NSLocalizedString("Use an unused bundle ID for another copy. Sign-in, shared data, and push notifications may be affected.", comment: "IPA identity editor capability warning")
+        let alert = UIAlertController(title: NSLocalizedString("Install App", comment: "Review IPA before installation"),
+                                      message: details + "\n\n" + guidance, preferredStyle: .alert)
+        func label(_ title: String) -> UILabel
+        {
+            let label = UILabel()
+            label.text = title
+            label.font = .preferredFont(forTextStyle: .subheadline)
+            label.textColor = .secondaryLabel
+            label.sizeToFit()
+            label.frame.size.width += 8
+            return label
+        }
+        alert.addTextField { field in
+            field.placeholder = NSLocalizedString("App Name", comment: "IPA identity editor app name field")
+            field.accessibilityLabel = field.placeholder
+            field.text = application.name
+            field.leftView = label(NSLocalizedString("Name", comment: "IPA identity editor name label"))
+            field.leftViewMode = .always
+            field.clearButtonMode = .whileEditing
+        }
+        alert.addTextField { field in
+            field.placeholder = NSLocalizedString("Bundle ID", comment: "IPA identity editor bundle ID field")
+            field.accessibilityLabel = field.placeholder
+            field.text = application.bundleIdentifier
+            field.leftView = label(NSLocalizedString("Bundle ID", comment: "IPA identity editor bundle ID field"))
+            field.leftViewMode = .always
+            field.keyboardType = .asciiCapable
+            field.autocapitalizationType = .none
+            field.autocorrectionType = .no
+            field.clearButtonMode = .whileEditing
+        }
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel Installation", comment: "Cancel third-party IPA installation"), style: .cancel) { _ in
+            completion(.failure(OperationError.cancelled))
+        })
+        let directAction = UIAlertAction(title: NSLocalizedString("Install Without Changes", comment: "Install imported IPA without editing"), style: .default) { _ in
+            completion(.success(nil))
+        }
+        alert.addAction(directAction)
+        let installAction = UIAlertAction(title: NSLocalizedString("Install with Changes", comment: "Install edited IPA"), style: .default) { [weak alert] _ in
+            do
+            {
+                guard let fields = alert?.textFields, fields.count == 2 else { throw IPAIdentityEditor.EditError.unreadableMetadata }
+                let changes = try IPAIdentityEditor.validate(name: fields[0].text ?? "",
+                                                             bundleIdentifier: fields[1].text ?? "",
+                                                             originalBundleIdentifier: application.bundleIdentifier)
+                completion(.success(changes))
+            }
+            catch
+            {
+                completion(.failure(error))
+            }
+        }
+        alert.addAction(installAction)
+        alert.preferredAction = directAction
+
+        for field in alert.textFields ?? []
+        {
+            field.addAction(UIAction { [weak alert, weak installAction] _ in
+                guard let alert, let installAction, let fields = alert.textFields, fields.count == 2 else { return }
+                do
+                {
+                    _ = try IPAIdentityEditor.validate(name: fields[0].text ?? "",
+                                                       bundleIdentifier: fields[1].text ?? "",
+                                                       originalBundleIdentifier: application.bundleIdentifier)
+                    alert.message = details + "\n\n" + guidance
+                    installAction.isEnabled = true
+                }
+                catch
+                {
+                    alert.message = details + "\n\n" + error.localizedDescription
+                    installAction.isEnabled = false
+                }
+            }, for: .editingChanged)
+        }
+        self.present(alert, animated: true)
+    }
+
     func removeAppExtensions(from application: ALTApplication, completion: @escaping (Result<Void, Error>) -> Void)
     {
         guard !application.appExtensions.isEmpty else { return completion(.success(())) }
@@ -1757,6 +1859,148 @@ private extension MyAppsViewController
 
 private extension MyAppsViewController
 {
+    func rename(_ installedApp: InstalledApp)
+    {
+        guard self.sideloadingProgress == nil, !AppManager.shared.isActivelyManagingApp(withBundleID: installedApp.bundleIdentifier) else { return }
+        let originalName = installedApp.name
+        let bundleIdentifier = installedApp.bundleIdentifier
+        let cachedAppURL = installedApp.fileURL
+        let alert = UIAlertController(title: NSLocalizedString("Change App Name", comment: "Rename installed sideloaded app"),
+                                      message: NSLocalizedString("AltForge will sign and reinstall this app with the same bundle ID to change its name.", comment: "Installed app rename explanation"),
+                                      preferredStyle: .alert)
+        alert.addTextField { field in
+            field.placeholder = NSLocalizedString("App Name", comment: "IPA identity editor app name field")
+            field.accessibilityLabel = field.placeholder
+            field.text = originalName
+            field.clearButtonMode = .whileEditing
+        }
+        alert.addAction(.cancel)
+        let saveAction = UIAlertAction(title: NSLocalizedString("Save and Reinstall", comment: "Rename installed app action"), style: .default) { [weak alert] _ in
+            guard let name = alert?.textFields?.first?.text else { return }
+            do
+            {
+                let changes = try IPAIdentityEditor.validate(name: name, bundleIdentifier: bundleIdentifier,
+                                                             originalBundleIdentifier: bundleIdentifier)
+                self.reinstall(installedAppAt: cachedAppURL, with: changes)
+            }
+            catch
+            {
+                ToastView(error: error).show(in: self)
+            }
+        }
+        saveAction.isEnabled = false
+        alert.addAction(saveAction)
+        alert.textFields?.first?.addAction(UIAction { [weak alert, weak saveAction] _ in
+            guard let name = alert?.textFields?.first?.text, let saveAction else { return }
+            saveAction.isEnabled = (try? IPAIdentityEditor.validate(name: name, bundleIdentifier: bundleIdentifier,
+                                                                   originalBundleIdentifier: bundleIdentifier).name) != originalName
+        }, for: .editingChanged)
+        self.present(alert, animated: true)
+    }
+
+    func reinstall(installedAppAt cachedAppURL: URL, with changes: IPAIdentityEditor.Changes)
+    {
+        guard self.sideloadingProgress == nil else { return }
+
+        let progress = Progress.discreteProgress(totalUnitCount: 100)
+        self.sideloadingProgress = progress
+        self.showSideloadingStatus(progress: progress,
+                                   title: String(format: NSLocalizedString("Installing %@", comment: "Third-party IPA installation progress title"), changes.name),
+                                   stage: NSLocalizedString("Editing App Information", comment: "Third-party IPA installation stage"))
+        self.sideloadingBundleIdentifier = changes.bundleIdentifier
+
+        let temporaryDirectory = FileManager.default.uniqueTemporaryURL()
+        DispatchQueue.global(qos: .userInitiated).async {
+            do
+            {
+                guard FileManager.default.fileExists(atPath: cachedAppURL.path) else { throw IPAIdentityEditor.EditError.missingCachedApp }
+                try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true)
+                let copiedAppURL = temporaryDirectory.appendingPathComponent("App.app", isDirectory: true)
+                try FileManager.default.copyItem(at: cachedAppURL, to: copiedAppURL)
+                guard let application = ALTApplication(fileURL: copiedAppURL) else { throw IPAIdentityEditor.EditError.unreadableMetadata }
+                let editedApp = try IPAIdentityEditor.apply(changes, to: application, within: temporaryDirectory)
+                progress.completedUnitCount = 10
+
+                DispatchQueue.main.async {
+                    let group = AppManager.shared.installNonMarketplaceApp(editedApp, presentingViewController: self, cacheApp: false) { result in
+                        DispatchQueue.global(qos: .utility).async {
+                            let finalResult: Result<Void, Error>
+                            switch result
+                            {
+                            case .failure(let error):
+                                finalResult = .failure(error)
+                            case .success:
+                                do
+                                {
+                                    _ = try FileManager.default.replaceItemAt(cachedAppURL, withItemAt: editedApp.fileURL)
+                                    finalResult = .success(())
+                                }
+                                catch
+                                {
+                                    finalResult = .failure(IPAIdentityEditor.EditError.cacheNotUpdated)
+                                }
+                            }
+                            try? FileManager.default.removeItem(at: temporaryDirectory)
+                            DispatchQueue.main.async {
+                                self.finishRenaming(with: finalResult)
+                            }
+                        }
+                    }
+                    group.setInstallationStatusHandler { [weak self] stage, detail in
+                        self?.sideloadingStage = stage
+                        self?.sideloadingStatusView.update(stage: stage.localizedName, detail: detail)
+                    }
+                    progress.addChild(group.progress, withPendingUnitCount: 90)
+                }
+            }
+            catch
+            {
+                try? FileManager.default.removeItem(at: temporaryDirectory)
+                DispatchQueue.main.async { self.finishRenaming(with: .failure(error)) }
+            }
+        }
+    }
+
+    func finishRenaming(with result: Result<Void, Error>)
+    {
+        self.sideloadingProgress = nil
+        if let identifier = self.sideloadingActivityIdentifier
+        {
+            InstallationScreenActivity.shared.end(identifier)
+            self.sideloadingActivityIdentifier = nil
+        }
+
+        switch result
+        {
+        case .success:
+            self.sideloadingError = nil
+            self.isAwaitingInstallationConfirmation = false
+            self.sideloadingStatusView.finish(error: nil)
+            if self.view.window != nil
+            {
+                self.collectionView.reloadSections([Section.activeApps.rawValue, Section.inactiveApps.rawValue])
+            }
+        case .failure(let error):
+            self.sideloadingError = error
+            if let editError = error as? IPAIdentityEditor.EditError, case .cacheNotUpdated = editError
+            {
+                self.sideloadingStatusView.finish(error: nil)
+                if self.view.window != nil
+                {
+                    self.collectionView.reloadSections([Section.activeApps.rawValue, Section.inactiveApps.rawValue])
+                }
+                ToastView(error: error).show(in: self)
+            }
+            else
+            {
+                self.isAwaitingInstallationConfirmation = SideloadingStatusView.needsInstallationConfirmation(error: error, stage: self.sideloadingStage)
+                self.sideloadingStatusView.finish(error: error,
+                    awaitingConfirmation: self.isAwaitingInstallationConfirmation)
+            }
+        }
+        self.view.setNeedsLayout()
+    }
+
     func refresh(_ installedApp: InstalledApp)
     {
         let previousProgress = AppManager.shared.refreshProgress(for: installedApp)
@@ -2267,7 +2511,22 @@ extension MyAppsViewController
         
         switch section
         {
-        case .noUpdates: return UICollectionReusableView()
+        case .noUpdates:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                         withReuseIdentifier: "SideloadingStatusHeader", for: indexPath)
+            header.accessibilityIdentifier = "SideloadingStatusContainer"
+            if self.sideloadingStatusView.superview !== header
+            {
+                self.sideloadingStatusView.removeFromSuperview()
+                header.addSubview(self.sideloadingStatusView)
+                NSLayoutConstraint.activate([
+                    self.sideloadingStatusView.leadingAnchor.constraint(equalTo: header.leadingAnchor),
+                    self.sideloadingStatusView.trailingAnchor.constraint(equalTo: header.trailingAnchor),
+                    self.sideloadingStatusView.topAnchor.constraint(equalTo: header.topAnchor),
+                    self.sideloadingStatusView.bottomAnchor.constraint(equalTo: header.bottomAnchor)
+                ])
+            }
+            return header
         case .updates:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "UpdatesHeader", for: indexPath) as! UpdatesCollectionHeaderView
             
@@ -2391,6 +2650,14 @@ extension MyAppsViewController
         let refreshAction = UIAction(title: NSLocalizedString("Refresh", comment: ""), image: UIImage(systemName: "arrow.clockwise")) { (action) in
             self.refresh(installedApp)
         }
+
+        let renameAction = UIAction(title: NSLocalizedString("Change App Name", comment: "Rename installed sideloaded app"), image: UIImage(systemName: "pencil")) { _ in
+            self.rename(installedApp)
+        }
+        if self.sideloadingProgress != nil || AppManager.shared.isActivelyManagingApp(withBundleID: installedApp.bundleIdentifier)
+        {
+            renameAction.attributes = .disabled
+        }
         
         let activateAction = UIAction(title: NSLocalizedString("Activate", comment: ""), image: UIImage(systemName: "checkmark.circle")) { (action) in
             self.activate(installedApp)
@@ -2464,6 +2731,10 @@ extension MyAppsViewController
             {
                 actions.append(openMenu)
                 actions.append(refreshAction)
+                if installedApp.isSideloaded
+                {
+                    actions.append(renameAction)
+                }
             }
             else
             {
@@ -2646,7 +2917,12 @@ extension MyAppsViewController: UICollectionViewDelegateFlowLayout
         let section = Section.allCases[section]
         switch section
         {
-        case .noUpdates: return .zero
+        case .noUpdates:
+            guard self.isSideloadingStatusVisible else { return .zero }
+            let size = self.sideloadingStatusView.systemLayoutSizeFitting(
+                CGSize(width: collectionView.bounds.width, height: 0),
+                withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            return CGSize(width: collectionView.bounds.width, height: ceil(size.height))
         case .updates:
             let height: CGFloat = (self.updatesDataSource.fetchedResultsController.fetchedObjects?.count ?? 0 > Self.maximumCollapsedUpdatesCount) ? 26 : 0
             return CGSize(width: collectionView.bounds.width, height: height)

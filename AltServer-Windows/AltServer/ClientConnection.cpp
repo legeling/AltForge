@@ -5,6 +5,7 @@
 
 #include <WinSock2.h>
 #include <filesystem>
+#include <set>
 
 #include "DeviceManager.hpp"
 #include "AnisetteDataManager.h"
@@ -24,18 +25,32 @@ namespace fs = std::filesystem;
 
 std::string StringFromWideString(std::wstring wideString)
 {
-	int count = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), wideString.length(), NULL, 0, NULL, NULL);
-	std::string string(count, 0);
-	WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, &string[0], count, NULL, NULL);
-	return string;
+	if (wideString.empty()) return {};
+	if (wideString.size() > INT_MAX) throw ServerError(ServerErrorCode::InvalidRequest);
+	const int length = static_cast<int>(wideString.size());
+	const int count = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, wideString.data(), length, NULL, 0, NULL, NULL);
+	if (count <= 0) throw ServerError(ServerErrorCode::InvalidRequest);
+	std::string result(count, 0);
+	if (WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, wideString.data(), length, &result[0], count, NULL, NULL) != count)
+	{
+		throw ServerError(ServerErrorCode::InvalidRequest);
+	}
+	return result;
 }
 
 std::wstring WideStringFromString(std::string string)
 {
-	int count = MultiByteToWideChar(CP_UTF8, 0, string.c_str(), string.length(), NULL, 0);
-	std::wstring wideString(count, 0);
-	MultiByteToWideChar(CP_UTF8, 0, string.c_str(), string.length(), &wideString[0], count);
-	return wideString;
+	if (string.empty()) return {};
+	if (string.size() > INT_MAX) throw ServerError(ServerErrorCode::InvalidRequest);
+	const int length = static_cast<int>(string.size());
+	const int count = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, string.data(), length, NULL, 0);
+	if (count <= 0) throw ServerError(ServerErrorCode::InvalidRequest);
+	std::wstring result(count, 0);
+	if (MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, string.data(), length, &result[0], count) != count)
+	{
+		throw ServerError(ServerErrorCode::InvalidRequest);
+	}
+	return result;
 }
 
 ClientConnection::ClientConnection()
@@ -75,6 +90,10 @@ pplx::task<void> ClientConnection::ProcessAppRequest()
 		else if (identifier == "RemoveAppRequest")
 		{
 			return this->ProcessRemoveAppRequest(request);
+		}
+		else if (identifier == "InstallationStatusRequest")
+		{
+			return this->ProcessInstallationStatusRequest(request);
 		}
         else if (identifier == "EnableUnsignedCodeExecutionRequest")
         {
@@ -361,6 +380,52 @@ pplx::task<void> ClientConnection::ProcessRemoveAppRequest(web::json::value requ
 		{
 			throw;
 		}
+	});
+}
+
+pplx::task<void> ClientConnection::ProcessInstallationStatusRequest(web::json::value request)
+{
+	const auto udid = StringFromWideString(request.at(L"udid").as_string());
+	const auto& requested = request.at(L"bundleIdentifiers").as_array();
+	std::set<std::string> bundleIdentifiers;
+	for (const auto& identifier : requested)
+	{
+		bundleIdentifiers.insert(StringFromWideString(identifier.as_string()));
+	}
+
+	std::shared_ptr<Device> device;
+	for (const auto& candidate : DeviceManager::instance()->availableDevices())
+	{
+		if (candidate->identifier() == udid)
+		{
+			device = candidate;
+			break;
+		}
+	}
+	if (!device)
+	{
+		throw ServerError(ServerErrorCode::DeviceNotFound);
+	}
+
+	return DeviceManager::instance()->FetchInstalledApps(device).then([this, bundleIdentifiers](std::vector<InstalledApp> apps) {
+		std::vector<std::wstring> matches;
+		for (const auto& app : apps)
+		{
+			if (bundleIdentifiers.count(app.bundleIdentifier()) != 0)
+			{
+				matches.push_back(WideStringFromString(app.bundleIdentifier()));
+			}
+		}
+		auto installed = json::value::array(matches.size());
+		for (size_t index = 0; index < matches.size(); ++index)
+		{
+			installed[index] = json::value::string(matches[index]);
+		}
+		auto response = json::value::object();
+		response[L"version"] = json::value::number(1);
+		response[L"identifier"] = json::value::string(L"InstallationStatusResponse");
+		response[L"installedBundleIdentifiers"] = installed;
+		return this->SendResponse(response);
 	});
 }
 

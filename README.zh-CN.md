@@ -52,6 +52,7 @@ AltForge 是 [AltStore](https://github.com/altstoreio/AltStore) 的独立衍生�
 |---|---|
 | **产品标识与 source** | 使用 AltForge 品牌、`com.legeling.AltForge` identifier 系列，以及本仓库 GitHub Release 提供的官方 source。 |
 | **Unicode IPA 支持** | 读取 UTF-8 和 Info-ZIP Unicode Path 元数据，为常见东亚旧式文件名编码提供有界 fallback，并以 UTF-8 写出 ZIP 路径。 |
+| **IPA 信息编辑** | 导入 IPA 后可核对应用信息，直接安装，或在签名前修改应用名称与包名。已管理应用可保持包名不变并重装改名；改包名可能影响登录、共享数据和推送。 |
 | **Apple App ID 兼容** | 只把 Apple App ID description 转为安全 ASCII，不修改应用的 Unicode 显示名。 |
 | **开发团队** | 客户端和 AltServer 安装链路均支持个人、组织和免费开发团队 fallback。 |
 | **可靠桌面安装** | 显示传输量、速度、线路、签名和设备安装进度；同一设备只执行一条任务，并可在通过 SHA-256 校验的 GitHub、配置 CDN 和镜像线路间手动切换。 |

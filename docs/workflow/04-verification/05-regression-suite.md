@@ -173,6 +173,12 @@ iOS 主题色变化执行 `TEST-036`：先运行偏好 round-trip XCTest、repos
 - On the real release IPA, run `python3 Scripts/check_release_privacy.py --ipa <ipa> --source <apps.json>` against the original and regenerated source. Do not substitute only a hash or version check for this gate.
 - Run `testUndeclaredPermissionsPresentationIsActionable`, adjacent error-presentation cases and Apple builds. Source refresh/update on an old physical client remains tracked by ISSUE-20260905-004.
 
+### Suite N: IPA identity editing
+
+- Run `testIPAIdentityEditorValidation`, `testIPAIdentityEditorRewritesMainExtensionsAndLocalizedName`, `testIPAIdentityEditorChangesInstalledNameWithoutChangingBundleID` and `testIPAIdentityEditorLeavesBundleUntouchedWhenLocalizationIsInvalid` against synthetic `.app` bundles, followed by an iOS Simulator build.
+- Check direct installation uses the unmodified `ALTApplication`; edited installation reaches the existing extension review, provisioning, signing, record and refresh paths under the new bundle ID. Invalid metadata must fail before any plist write or Apple request.
+- On a dedicated real device and test Apple ID, install the same benign IPA first without changes and then with a distinct ID and name. Confirm two separate home-screen apps, two My Apps records and independent refresh. Rename one installed copy from its long-press menu, verify its home-screen and My Apps names change but its bundle ID and the other copy do not. Check cancellation, missing cache and failed-edit cleanup. Do not use a third-party private IPA or store device/account identifiers in the test record.
+
 ## 命令登记规则
 
 - tag-driven Release workflow 是自动构建命令的真相来源，本文件解释本地预检和触发条件。

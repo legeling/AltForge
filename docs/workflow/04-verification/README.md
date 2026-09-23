@@ -12,6 +12,8 @@
 
 | Test | 覆盖 | 层级 | 当前状态 |
 |---|---|---|---|
+| `TEST-047` 安装状态滚动与设备确认 | `FR-048` | XCTest/Protocol/Build/Device | 已补列表 header 滚动、receipt 正向恢复及协议往返测试；Swift 语法检查、仓库 contract 和 macOS Server Debug build 通过。iOS 平台未安装导致 build/XCTest 无法运行，Windows build 与真机锁屏后管理/刷新待验证 |
+| `TEST-046` IPA 身份编辑与安装后改名 | `FR-047` | Unit/Build/Device | 原生 Swift 合成包 harness 已覆盖安装前编辑、名称单改和延后缓存替换；4 项 XCTest 待运行，iOS build 因缺少平台未运行，真机双实例/改名/刷新待验证 |
 | `TEST-045` 官方源隐私声明与 201 提示 | `FR-046` | Script/Artifact/Unit/Build/Device | 本地对照验证通过；v2.4.7 的 29 项 hosted XCTest、7 项 Python、三端构建、下载包校验和公开 source/实际 IPA 隐私核对通过，已发布；旧客户端真机更新仍待验收 |
 | `TEST-043` 安装记录恢复与缓存保护 | `FR-044` | Unit/Contract/Device | 本地及 v2.4.6 hosted 恢复、去重、保存失败回滚、路径/文件验证、缓存保护，以及后台回调丢失/延迟登记/活跃任务避让/有限重试/并发状态读取用例通过；真实设备最终回执丢失与恢复后刷新仍待验收 |
 | `TEST-044` 安装进度、常亮与主题 | `FR-045` | Unit/Layout/Device | 本机常亮租约、主题控件、真实导航 safe-area、大字体/深浅色/宽度布局及阶段化“结果待确认”通过；本地 28 项分批用例、全部 28 项 hosted XCTest 和三端构建通过，v2.4.6 产物已核验并发布；真机锁屏及全页面矩阵未验证 |

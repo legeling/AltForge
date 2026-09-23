@@ -103,6 +103,8 @@ final class InstallationReceiptStore
     {
         let recoveredCount: Int
         let pendingCount: Int
+        let recoveredBundleIdentifiers: Set<String>
+        let unconfirmedResignedBundleIdentifiers: Set<String>
     }
     static let shared = InstallationReceiptStore(rootURL: InstalledApp.appsDirectoryURL)
     static let filename = "InstallationReceipt.json"
@@ -171,13 +173,19 @@ final class InstallationReceiptStore
         let directories = try FileManager.default.contentsOfDirectory(at: rootURL, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles])
         var recovered: [InstallationReceipt] = []
         var pendingCount = 0
+        var unconfirmed = Set<String>()
         for directory in directories
         {
             guard let receipt = load(in: directory), !existing.contains(receipt.bundleIdentifier) else { continue }
             pendingCount += 1
+            let cachedApp = directory.appendingPathComponent("App.app", isDirectory: true)
             guard !isManaging(receipt.bundleIdentifier),
-                  FileManager.default.fileExists(atPath: directory.appendingPathComponent("App.app").path),
-                  isInstalled(receipt.resignedBundleIdentifier) else { continue }
+                  let cachedAppValues = try? cachedApp.resourceValues(forKeys: [.isDirectoryKey, .isSymbolicLinkKey]),
+                  cachedAppValues.isDirectory == true, cachedAppValues.isSymbolicLink != true else { continue }
+            guard isInstalled(receipt.resignedBundleIdentifier) else {
+                unconfirmed.insert(receipt.resignedBundleIdentifier)
+                continue
+            }
             // A producer may have saved since this scan's initial fetch.
             if InstalledApp.first(satisfying: NSPredicate(format: "%K == %@", #keyPath(InstalledApp.bundleIdentifier), receipt.bundleIdentifier), in: context) != nil {
                 pendingCount -= 1
@@ -189,7 +197,9 @@ final class InstallationReceiptStore
         do { if !recovered.isEmpty { try context.save() } }
         catch { context.rollback(); throw error }
         for receipt in recovered { try remove(bundleIdentifier: receipt.bundleIdentifier, matching: receipt.identifier) }
-        return ReconciliationResult(recoveredCount: recovered.count, pendingCount: pendingCount - recovered.count)
+        return ReconciliationResult(recoveredCount: recovered.count, pendingCount: pendingCount - recovered.count,
+                                    recoveredBundleIdentifiers: Set(recovered.map(\.bundleIdentifier)),
+                                    unconfirmedResignedBundleIdentifiers: unconfirmed)
     }
 
     static func shouldRemoveCache(hasRecord: Bool, hasCachedApp: Bool, hasReceipt: Bool, isManaging: Bool) -> Bool

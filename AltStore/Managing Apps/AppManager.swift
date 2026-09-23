@@ -396,12 +396,17 @@ class AppManager: ObservableObject
     @Published private var installationProgress = [String: Progress]()
     @Published private var refreshProgress = [String: Progress]()
     private var cancellables: Set<AnyCancellable> = []
+    static let didRecoverInstallationNotification = Notification.Name("com.altforge.didRecoverInstallation")
+    private static let installationStatusQueryTimeout: TimeInterval = 30
+    private var queriedInstallationIdentifiers = Set<String>()
     private lazy var installationRecovery = InstallationRecoveryCoordinator(
         canRun: { UIApplication.shared.applicationState == .active && DatabaseManager.shared.isStarted },
         attempt: { [weak self] completion in
             guard let self else { completion(false); return }
             DatabaseManager.shared.persistentContainer.performBackgroundTask { context in
                 var hasPending = false
+                var unconfirmed = Set<String>()
+                var recovered = Set<String>()
                 do
                 {
                     let result = try InstallationReceiptStore.shared.reconcile(in: context, isInstalled: { resignedIdentifier in
@@ -409,16 +414,123 @@ class AppManager: ObservableObject
                         return UTTypeCopyDeclaration(uti as CFString)?.takeRetainedValue() != nil
                     }, isManaging: { self.isActivelyManagingApp(withBundleID: $0) })
                     hasPending = result.pendingCount > 0
+                    unconfirmed = result.unconfirmedResignedBundleIdentifiers
+                    recovered = result.recoveredBundleIdentifiers
                 }
                 catch
                 {
                     hasPending = true
                     Logger.main.error("Installation record reconciliation failed. Code: \((error as NSError).code, privacy: .public)")
                 }
-                let shouldRetry = hasPending
-                DispatchQueue.main.async { completion(shouldRetry) }
+                DispatchQueue.main.async {
+                    for bundleIdentifier in recovered {
+                        NotificationCenter.default.post(name: AppManager.didRecoverInstallationNotification, object: bundleIdentifier)
+                    }
+                    let identifiersToQuery = unconfirmed.subtracting(self.queriedInstallationIdentifiers)
+                    guard hasPending, !identifiersToQuery.isEmpty,
+                          UIApplication.shared.applicationState == .active else {
+                        completion(hasPending)
+                        return
+                    }
+                    self.queriedInstallationIdentifiers.formUnion(identifiersToQuery)
+                    completion(hasPending)
+                    self.confirmInstalledAppsOnDevice(identifiersToQuery) { result in
+                        guard case .success(let installed) = result, !installed.isEmpty else {
+                            if case .failure(let error) = result {
+                                Logger.main.notice("Could not confirm installation with AltForge Server. Code: \((error as NSError).code, privacy: .public)")
+                            }
+                            return
+                        }
+                        DatabaseManager.shared.persistentContainer.performBackgroundTask { context in
+                            do {
+                                let result = try InstallationReceiptStore.shared.reconcile(in: context, isInstalled: { resignedIdentifier in
+                                    installed.contains(resignedIdentifier) || UTTypeCopyDeclaration(InstalledApp.installedAppUTI(forBundleIdentifier: resignedIdentifier) as CFString)?.takeRetainedValue() != nil
+                                }, isManaging: { self.isActivelyManagingApp(withBundleID: $0) })
+                                DispatchQueue.main.async {
+                                    for bundleIdentifier in result.recoveredBundleIdentifiers {
+                                        NotificationCenter.default.post(name: AppManager.didRecoverInstallationNotification, object: bundleIdentifier)
+                                    }
+                                }
+                            }
+                            catch {
+                                Logger.main.error("Device-confirmed installation reconciliation failed. Code: \((error as NSError).code, privacy: .public)")
+                            }
+                        }
+                    }
+                }
             }
         })
+
+    private func confirmInstalledAppsOnDevice(_ bundleIdentifiers: Set<String>, completion: @escaping (Result<Set<String>, Error>) -> Void)
+    {
+        precondition(Thread.isMainThread)
+        var didFinish = false
+        var connection: ServerConnection?
+        var timeoutWork: DispatchWorkItem?
+        func finish(_ result: Result<Set<String>, Error>)
+        {
+            precondition(Thread.isMainThread)
+            guard !didFinish else { return }
+            didFinish = true
+            timeoutWork?.cancel()
+            timeoutWork = nil
+            connection?.connection.disconnect()
+            connection = nil
+            completion(result)
+        }
+        let timeout = DispatchWorkItem { finish(.failure(OperationError.timedOut)) }
+        timeoutWork = timeout
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.installationStatusQueryTimeout, execute: timeout)
+        guard let udid = Bundle.main.object(forInfoDictionaryKey: Bundle.Info.deviceID) as? String else {
+            finish(.failure(OperationError.unknownUDID))
+            return
+        }
+        let findServer = FindServerOperation()
+        findServer.resultHandler = { result in
+            DispatchQueue.main.async {
+                guard !didFinish else { return }
+                switch result
+                {
+                case .failure(let error): finish(.failure(error))
+                case .success(let server):
+                    ServerManager.shared.connect(to: server) { result in
+                        DispatchQueue.main.async {
+                            guard !didFinish else { return }
+                            switch result
+                            {
+                            case .failure(let error): finish(.failure(error))
+                            case .success(let serverConnection):
+                                connection = serverConnection
+                                serverConnection.send(InstallationStatusRequest(udid: udid, bundleIdentifiers: bundleIdentifiers)) { result in
+                                    DispatchQueue.main.async {
+                                        guard !didFinish else { return }
+                                        switch result
+                                        {
+                                        case .failure(let error): finish(.failure(error))
+                                        case .success:
+                                            serverConnection.receiveResponse { result in
+                                                DispatchQueue.main.async {
+                                                    switch result
+                                                    {
+                                                    case .failure(let error): finish(.failure(error))
+                                                    case .success(.error(let response)): finish(.failure(response.error))
+                                                    case .success(.installationStatus(let response)):
+                                                        finish(.success(response.installedBundleIdentifiers.intersection(bundleIdentifiers)))
+                                                    case .success: finish(.failure(ALTServerError(.unknownResponse)))
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        self.operationQueue.addOperation(findServer)
+    }
     
     private lazy var progressLock: UnsafeMutablePointer<os_unfair_lock> = {
         // Can't safely pass &os_unfair_lock to os_unfair_lock functions in Swift,
@@ -444,7 +556,10 @@ class AppManager: ObservableObject
             .store(in: &self.cancellables)
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.installationRecovery.stop() }
+            .sink { [weak self] _ in
+                self?.installationRecovery.stop()
+                self?.queriedInstallationIdentifiers.removeAll()
+            }
             .store(in: &self.cancellables)
         #endif
     }
@@ -1191,7 +1306,7 @@ extension AppManager
     // Should never be called anymore, but there are some use cases left for classic AltStore.
     // So rather than making it private (like update()), we rename it to be clear it's not for marketplace apps.
     @discardableResult
-    func installNonMarketplaceApp<T: AppProtocol>(_ app: T, presentingViewController: UIViewController?, context: AuthenticatedOperationContext = AuthenticatedOperationContext(), completionHandler: @escaping (Result<InstalledApp, Error>) -> Void) -> RefreshGroup
+    func installNonMarketplaceApp<T: AppProtocol>(_ app: T, presentingViewController: UIViewController?, context: AuthenticatedOperationContext = AuthenticatedOperationContext(), cacheApp: Bool = true, completionHandler: @escaping (Result<InstalledApp, Error>) -> Void) -> RefreshGroup
     {
         let group = RefreshGroup(context: context)
         group.completionHandler = { (results) in
@@ -1207,7 +1322,7 @@ extension AppManager
         }
         
         let operation = AppOperation.install(app)
-        self.perform([operation], presentingViewController: presentingViewController, group: group)
+        self.perform([operation], presentingViewController: presentingViewController, group: group, cacheApp: cacheApp)
         
         return group
     }
@@ -1627,7 +1742,7 @@ internal extension AppManager
 private extension AppManager
 {
     @discardableResult
-    private func perform(_ operations: [AppOperation], presentingViewController: UIViewController?, group: RefreshGroup) -> RefreshGroup
+    private func perform(_ operations: [AppOperation], presentingViewController: UIViewController?, group: RefreshGroup, cacheApp: Bool = true) -> RefreshGroup
     {
         let operations = operations.filter { self.progress(for: $0) == nil || self.progress(for: $0)?.isCancelled == true }
         
@@ -1693,7 +1808,7 @@ private extension AppManager
                 switch operation
                 {
                 case .install(let app):
-                    let installProgress = self._install(app, operation: operation, group: group, reviewPermissions: .all) { (result) in
+                    let installProgress = self._install(app, operation: operation, group: group, reviewPermissions: .all, cacheApp: cacheApp) { (result) in
                         self.finish(operation, result: result, group: group, progress: progress)
                     }
                     progress?.addChild(installProgress, withPendingUnitCount: 80)

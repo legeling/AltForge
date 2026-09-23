@@ -183,10 +183,14 @@ final class AltTests: XCTestCase
         try FileManager.default.createDirectory(at: directory.appendingPathComponent("App.app"), withIntermediateDirectories: true)
         try store.write(receipt)
         context.reset() // The original unsaved installation context was lost.
-        XCTAssertEqual(try store.recover(in: context, isInstalled: { _ in false }), 0)
+        let unconfirmed = try store.reconcile(in: context, isInstalled: { _ in false })
+        XCTAssertEqual(unconfirmed.recoveredCount, 0)
+        XCTAssertEqual(unconfirmed.unconfirmedResignedBundleIdentifiers, [receipt.resignedBundleIdentifier])
         XCTAssertTrue(InstalledApp.all(in: context).isEmpty)
         XCTAssertNotNil(store.load(in: directory))
-        XCTAssertEqual(try store.recover(in: context, isInstalled: { $0 == receipt.resignedBundleIdentifier }), 1)
+        let confirmed = try store.reconcile(in: context, isInstalled: { $0 == receipt.resignedBundleIdentifier })
+        XCTAssertEqual(confirmed.recoveredCount, 1)
+        XCTAssertEqual(confirmed.recoveredBundleIdentifiers, [receipt.bundleIdentifier])
         context.reset()
         let recovered = try XCTUnwrap(InstalledApp.all(in: context).first)
         XCTAssertEqual(recovered.bundleIdentifier, receipt.bundleIdentifier)
@@ -204,6 +208,45 @@ final class AltTests: XCTestCase
         XCTAssertNotNil(store.load(in: directory), "An older completion must not remove another receipt")
         try store.remove(bundleIdentifier: receipt.bundleIdentifier, matching: receipt.identifier)
         XCTAssertNil(store.load(in: directory))
+    }
+
+    func testInstallationStatusProtocolRoundTrip() throws
+    {
+        let identifiers: Set<String> = ["com.example.one", "com.example.two"]
+        let request = InstallationStatusRequest(udid: "fixture-device", bundleIdentifiers: identifiers)
+        let decodedRequest = try Foundation.JSONDecoder().decode(ServerRequest.self, from: Foundation.JSONEncoder().encode(request))
+        guard case .installationStatus(let parsedRequest) = decodedRequest else {
+            return XCTFail("Installation status request was not decoded")
+        }
+        XCTAssertEqual(parsedRequest.udid, request.udid)
+        XCTAssertEqual(parsedRequest.bundleIdentifiers, identifiers)
+
+        let response = InstallationStatusResponse(installedBundleIdentifiers: ["com.example.one"])
+        let decodedResponse = try Foundation.JSONDecoder().decode(ServerResponse.self, from: Foundation.JSONEncoder().encode(response))
+        guard case .installationStatus(let parsedResponse) = decodedResponse else {
+            return XCTFail("Installation status response was not decoded")
+        }
+        XCTAssertEqual(parsedResponse.installedBundleIdentifiers, ["com.example.one"])
+        XCTAssertTrue(parsedResponse.installedBundleIdentifiers.isSubset(of: identifiers))
+    }
+
+    @MainActor
+    func testInstallationReceiptDoesNotRestoreFromSymlinkedCache() throws
+    {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let context = try installationContext()
+        let receipt = InstallationReceipt(app: installationFixture(in: context))
+        let directory = root.appendingPathComponent(receipt.bundleIdentifier)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let externalApp = root.appendingPathComponent("external.app")
+        try FileManager.default.createDirectory(at: externalApp, withIntermediateDirectories: true)
+        try FileManager.default.createSymbolicLink(at: directory.appendingPathComponent("App.app"), withDestinationURL: externalApp)
+        let store = InstallationReceiptStore(rootURL: root)
+        try store.write(receipt)
+        context.reset()
+        XCTAssertEqual(try store.recover(in: context, isInstalled: { _ in true }), 0)
+        XCTAssertNotNil(store.load(in: directory))
     }
 
     @MainActor
@@ -458,6 +501,16 @@ final class AltTests: XCTestCase
                         XCTAssertLessThanOrEqual(child.frame.maxX, width + 0.5)
                         XCTAssertLessThanOrEqual(child.frame.maxY, size.height + 0.5)
                     }
+                    view.finish(error: OperationError.timedOut, awaitingConfirmation: true)
+                    let confirmationSize = view.systemLayoutSizeFitting(
+                        CGSize(width: width, height: 0), withHorizontalFittingPriority: .required,
+                        verticalFittingPriority: .fittingSizeLevel)
+                    view.frame.size = confirmationSize
+                    view.layoutIfNeeded()
+                    XCTAssertGreaterThanOrEqual(confirmationSize.height, size.height)
+                    for child in view.subviews where !child.isHidden {
+                        XCTAssertLessThanOrEqual(child.frame.maxY, confirmationSize.height + 0.5)
+                    }
                     view.finish(error: OperationError.timedOut)
                     var dismissCount = 0
                     view.dismissHandler = { dismissCount += 1 }
@@ -468,6 +521,7 @@ final class AltTests: XCTestCase
                     XCTAssertEqual(dismissCount, 1)
                     view.finish(error: nil)
                     XCTAssertEqual(view.subviews.compactMap { $0 as? UIProgressView }.first?.progress, 1)
+                    view.frame.size = size
                     view.layoutIfNeeded()
                     var image = UIImage()
                     view.traitCollection.performAsCurrent {
@@ -506,7 +560,7 @@ final class AltTests: XCTestCase
     }
 
     @MainActor
-    func testSideloadingPanelRespectsNavigationSafeArea() throws
+    func testSideloadingPanelScrollsWithMyApps() throws
     {
         let controller = try XCTUnwrap(UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "myAppsViewController") as? MyAppsViewController)
         let navigation = UINavigationController(rootViewController: controller)
@@ -520,17 +574,23 @@ final class AltTests: XCTestCase
         controller.showSideloadingStatus(progress: Progress(totalUnitCount: 100), title: "Installing App", stage: "Signing App")
         window.layoutIfNeeded()
         controller.view.layoutIfNeeded()
-        let panel = try XCTUnwrap(controller.view.subviews.first { $0.accessibilityIdentifier == "SideloadingStatusContainer" })
+        let panel = try XCTUnwrap(controller.collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader)
+            .first { $0.accessibilityIdentifier == "SideloadingStatusContainer" })
         XCTAssertFalse(panel.isHidden)
         let panelFrame = panel.convert(panel.bounds, to: window)
         let barFrame = navigation.navigationBar.convert(navigation.navigationBar.bounds, to: window)
         XCTAssertGreaterThanOrEqual(panelFrame.minY, barFrame.maxY - 1)
         XCTAssertGreaterThan(panelFrame.height, 90)
         XCTAssertLessThan(panelFrame.height, 220)
-        XCTAssertGreaterThan(controller.collectionView.contentInset.top, originalInset.top)
-        controller.hideSideloadingStatus()
         XCTAssertEqual(controller.collectionView.contentInset, originalInset)
-        XCTAssertTrue(panel.isHidden)
+        controller.collectionView.contentInset.bottom += window.bounds.height
+        controller.collectionView.setContentOffset(CGPoint(x: 0, y: controller.collectionView.contentOffset.y + 40), animated: false)
+        window.layoutIfNeeded()
+        XCTAssertEqual(panel.convert(panel.bounds, to: window).minY, panelFrame.minY - 40, accuracy: 1)
+        controller.hideSideloadingStatus()
+        window.layoutIfNeeded()
+        XCTAssertFalse(controller.collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader)
+            .contains { $0.accessibilityIdentifier == "SideloadingStatusContainer" })
     }
 
     @MainActor
@@ -905,6 +965,135 @@ final class AltTests: XCTestCase
         XCTAssertEqual(application.version, "1.0")
         XCTAssertEqual(application.buildVersion, "1")
         XCTAssertNil(application.icon)
+    }
+
+    func testIPAIdentityEditorValidation() throws
+    {
+        let original = "com.example.app"
+        XCTAssertEqual(try IPAIdentityEditor.validate(name: " 微信 2 ", bundleIdentifier: " com.example.app.clone2 ",
+                                                      originalBundleIdentifier: original).name, "微信 2")
+        XCTAssertThrowsError(try IPAIdentityEditor.validate(name: " \n ", bundleIdentifier: original,
+                                                            originalBundleIdentifier: original))
+        for identifier in ["com.example..app", "com.example_app", "com.微信.app", "com.example.app.", "com.Example.App"]
+        {
+            XCTAssertThrowsError(try IPAIdentityEditor.validate(name: "Test", bundleIdentifier: identifier,
+                                                                originalBundleIdentifier: original), identifier)
+        }
+        XCTAssertThrowsError(try IPAIdentityEditor.validate(name: "Test", bundleIdentifier: StoreApp.altstoreAppID,
+                                                            originalBundleIdentifier: original))
+    }
+
+    func testIPAIdentityEditorRewritesMainExtensionsAndLocalizedName() throws
+    {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let appURL = root.appendingPathComponent("Fixture.app", isDirectory: true)
+        let pluginsURL = appURL.appendingPathComponent("PlugIns", isDirectory: true)
+        let localeURL = appURL.appendingPathComponent("zh-Hans.lproj", isDirectory: true)
+        try FileManager.default.createDirectory(at: pluginsURL, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: localeURL, withIntermediateDirectories: true)
+
+        let info: [String: Any] = ["CFBundleName": "Fixture", "CFBundleDisplayName": "Fixture",
+                                   "CFBundleIdentifier": "com.example.fixture", "CFBundlePackageType": "APPL"]
+        let infoData = try PropertyListSerialization.data(fromPropertyList: info, format: .binary, options: 0)
+        try infoData.write(to: appURL.appendingPathComponent("Info.plist"))
+        let stringsURL = localeURL.appendingPathComponent("InfoPlist.strings")
+        try Data("CFBundleDisplayName = \"旧名称\";\nUnrelated = \"保留\";\n".utf8).write(to: stringsURL)
+
+        for (name, identifier) in [("Share", "com.example.fixture.share"), ("Widget", "com.other.widget")]
+        {
+            let extensionURL = pluginsURL.appendingPathComponent("\(name).appex", isDirectory: true)
+            try FileManager.default.createDirectory(at: extensionURL, withIntermediateDirectories: true)
+            let extensionInfo: [String: Any] = ["CFBundleName": name, "CFBundleIdentifier": identifier,
+                                                "CFBundlePackageType": "XPC!"]
+            XCTAssertTrue((extensionInfo as NSDictionary).write(to: extensionURL.appendingPathComponent("Info.plist"), atomically: true))
+        }
+
+        let app = try XCTUnwrap(ALTApplication(fileURL: appURL))
+        XCTAssertEqual(app.appExtensions.count, 2)
+        let changes = try IPAIdentityEditor.validate(name: "微信 2", bundleIdentifier: "com.example.fixture.clone2",
+                                                     originalBundleIdentifier: app.bundleIdentifier)
+        let edited = try IPAIdentityEditor.apply(changes, to: app, within: root)
+        XCTAssertEqual(edited.name, "微信 2")
+        XCTAssertEqual(edited.bundleIdentifier, "com.example.fixture.clone2")
+        XCTAssertEqual(Set(edited.appExtensions.map(\.bundleIdentifier)),
+                       Set(["com.example.fixture.clone2.share", "com.example.fixture.clone2.com.other.widget"]))
+        let localized = try XCTUnwrap(PropertyListSerialization.propertyList(from: Data(contentsOf: stringsURL),
+                                                                                  format: nil) as? [String: String])
+        XCTAssertEqual(localized["CFBundleDisplayName"], "微信 2")
+        XCTAssertEqual(localized["Unrelated"], "保留")
+        XCTAssertTrue(try IPAIdentityEditor.apply(changes, to: edited, within: root) === edited)
+    }
+
+    func testIPAIdentityEditorChangesInstalledNameWithoutChangingBundleID() throws
+    {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let appURL = root.appendingPathComponent("Fixture.app", isDirectory: true)
+        try FileManager.default.createDirectory(at: appURL, withIntermediateDirectories: true)
+        let infoURL = appURL.appendingPathComponent("Info.plist")
+        let info: [String: Any] = ["CFBundleName": "Old", "CFBundleDisplayName": "Old Display",
+                                   "CFBundleIdentifier": "com.example.fixture"]
+        XCTAssertTrue((info as NSDictionary).write(to: infoURL, atomically: true))
+        for language in ["en", "zh-Hans"]
+        {
+            let localeURL = appURL.appendingPathComponent("\(language).lproj", isDirectory: true)
+            try FileManager.default.createDirectory(at: localeURL, withIntermediateDirectories: true)
+            try Data("CFBundleName = \"Old\"; CFBundleDisplayName = \"Old Display\";".utf8)
+                .write(to: localeURL.appendingPathComponent("InfoPlist.strings"))
+        }
+        let cachedAppURL = root.appendingPathComponent("Cached.app", isDirectory: true)
+        try FileManager.default.copyItem(at: appURL, to: cachedAppURL)
+
+        let app = try XCTUnwrap(ALTApplication(fileURL: appURL))
+        let changes = try IPAIdentityEditor.validate(name: "第二个应用", bundleIdentifier: app.bundleIdentifier,
+                                                     originalBundleIdentifier: app.bundleIdentifier)
+        let renamed = try IPAIdentityEditor.apply(changes, to: app, within: root)
+        XCTAssertEqual(renamed.name, "第二个应用")
+        XCTAssertEqual(renamed.bundleIdentifier, "com.example.fixture")
+        let updatedInfo = try XCTUnwrap(NSDictionary(contentsOf: infoURL))
+        XCTAssertEqual(updatedInfo["CFBundleName"] as? String, "第二个应用")
+        XCTAssertEqual(updatedInfo["CFBundleDisplayName"] as? String, "第二个应用")
+        for language in ["en", "zh-Hans"]
+        {
+            let stringsURL = appURL.appendingPathComponent("\(language).lproj/InfoPlist.strings")
+            let localized = try XCTUnwrap(PropertyListSerialization.propertyList(from: Data(contentsOf: stringsURL),
+                                                                                      format: nil) as? [String: String])
+            XCTAssertEqual(localized["CFBundleName"], "第二个应用")
+            XCTAssertEqual(localized["CFBundleDisplayName"], "第二个应用")
+        }
+        let cachedInfoURL = cachedAppURL.appendingPathComponent("Info.plist")
+        XCTAssertEqual(NSDictionary(contentsOf: cachedInfoURL)?["CFBundleDisplayName"] as? String, "Old Display")
+        _ = try FileManager.default.replaceItemAt(cachedAppURL, withItemAt: appURL)
+        XCTAssertEqual(NSDictionary(contentsOf: cachedInfoURL)?["CFBundleDisplayName"] as? String, "第二个应用")
+    }
+
+    func testIPAIdentityEditorLeavesBundleUntouchedWhenLocalizationIsInvalid() throws
+    {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let appURL = root.appendingPathComponent("Fixture.app", isDirectory: true)
+        let localeURL = appURL.appendingPathComponent("en.lproj", isDirectory: true)
+        try FileManager.default.createDirectory(at: localeURL, withIntermediateDirectories: true)
+        let infoURL = appURL.appendingPathComponent("Info.plist")
+        let info: [String: Any] = ["CFBundleName": "Fixture", "CFBundleIdentifier": "com.example.fixture"]
+        XCTAssertTrue((info as NSDictionary).write(to: infoURL, atomically: true))
+        let originalData = try Data(contentsOf: infoURL)
+        try Data("not a strings file".utf8).write(to: localeURL.appendingPathComponent("InfoPlist.strings"))
+        let app = try XCTUnwrap(ALTApplication(fileURL: appURL))
+        let changes = try IPAIdentityEditor.validate(name: "Changed", bundleIdentifier: "com.example.fixture.clone",
+                                                     originalBundleIdentifier: app.bundleIdentifier)
+        XCTAssertThrowsError(try IPAIdentityEditor.apply(changes, to: app, within: root))
+        XCTAssertEqual(try Data(contentsOf: infoURL), originalData)
+
+        let stringsURL = localeURL.appendingPathComponent("InfoPlist.strings")
+        let outsideURL = root.appendingPathComponent("outside.strings")
+        try Data("CFBundleDisplayName = \"Outside\";".utf8).write(to: outsideURL)
+        try FileManager.default.removeItem(at: stringsURL)
+        try FileManager.default.createSymbolicLink(at: stringsURL, withDestinationURL: outsideURL)
+        XCTAssertThrowsError(try IPAIdentityEditor.apply(changes, to: app, within: root))
+        XCTAssertEqual(try String(contentsOf: outsideURL), "CFBundleDisplayName = \"Outside\";")
+        XCTAssertEqual(try Data(contentsOf: infoURL), originalData)
     }
 
     func testHealthKitCapabilityMapping()

@@ -204,6 +204,7 @@
 		BF770E5122BB1CF6002A40FE /* InstallAppOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF770E5022BB1CF6002A40FE /* InstallAppOperation.swift */; };
 		AF2450010000000000000001 /* InstallationRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2450010000000000000002 /* InstallationRecovery.swift */; };
 		AF2450010000000000000003 /* InstallationActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2450010000000000000004 /* InstallationActivity.swift */; };
+		AF2450020000000000000001 /* IPAIdentityEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2450020000000000000002 /* IPAIdentityEditor.swift */; };
 		BF770E5422BC044E002A40FE /* OperationContexts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF770E5322BC044E002A40FE /* OperationContexts.swift */; };
 		BF770E5622BC3C03002A40FE /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF770E5522BC3C02002A40FE /* Server.swift */; };
 		BF770E5822BC3D0F002A40FE /* RefreshGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF770E5722BC3D0F002A40FE /* RefreshGroup.swift */; };
@@ -941,6 +942,7 @@
 		BF74989A23621C0700CED65F /* ForwardingNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardingNavigationController.swift; sourceTree = "<group>"; };
 		BF770E5022BB1CF6002A40FE /* InstallAppOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallAppOperation.swift; sourceTree = "<group>"; };
 		AF2450010000000000000002 /* InstallationRecovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationRecovery.swift; sourceTree = "<group>"; };
+		AF2450020000000000000002 /* IPAIdentityEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPAIdentityEditor.swift; sourceTree = "<group>"; };
 		AF2450010000000000000004 /* InstallationActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationActivity.swift; sourceTree = "<group>"; };
 		BF770E5322BC044E002A40FE /* OperationContexts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationContexts.swift; sourceTree = "<group>"; };
 		BF770E5522BC3C02002A40FE /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
@@ -2121,6 +2123,7 @@
 			children = (
 				AF2450010000000000000002 /* InstallationRecovery.swift */,
 				AF2450010000000000000004 /* InstallationActivity.swift */,
+				AF2450020000000000000002 /* IPAIdentityEditor.swift */,
 				BF0C4EBC22A1BD8B009A2DD7 /* AppManager.swift */,
 				BF88F97124F8727D00BB75DF /* AppManagerErrors.swift */,
 				D5AE997A2B64791E0068B366 /* AppMarketplace.swift */,
@@ -3624,6 +3627,7 @@
 				BF770E5122BB1CF6002A40FE /* InstallAppOperation.swift in Sources */,
 				AF2450010000000000000001 /* InstallationRecovery.swift in Sources */,
 				AF2450010000000000000003 /* InstallationActivity.swift in Sources */,
+				AF2450020000000000000001 /* IPAIdentityEditor.swift in Sources */,
 				BF9ABA4B22DD1380008935CF /* NavigationBar.swift in Sources */,
 				D5AD66932ECFE08800964E26 /* iCloudAPI+Types.swift in Sources */,
 				BF6C8FAC242935ED00125131 /* NSAttributedString+Markdown.m in Sources */,
@@ -3973,7 +3977,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.7;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_MODULE_NAME = AltServer;
 				EXECUTABLE_NAME = "AltForge Server";
@@ -4028,7 +4032,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.7;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.legeling.AltForge.AltServer;
 				PRODUCT_MODULE_NAME = AltServer;
 				EXECUTABLE_NAME = "AltForge Server";
@@ -4398,7 +4402,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.4.7;
+				MARKETING_VERSION = 2.5.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -4462,7 +4466,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.4.7;
+				MARKETING_VERSION = 2.5.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_CPLUSPLUSFLAGS = (

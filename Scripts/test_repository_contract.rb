@@ -308,8 +308,14 @@ assert(ios_install_operation.index("InstallationReceiptStore.shared.stage") < io
 assert(ios_install_operation.include?("try backgroundContext.save()"), "confirmed device installations must save before delivering an operation result")
 assert(ios_install_operation.include?("timer.schedule(deadline: .now() + 180)"), "installation response waits must be bounded")
 ios_install_ui = read(root, "AltStore/My Apps/MyAppsViewController.swift")
-assert(ios_install_ui.include?("self.view.safeAreaLayoutGuide.topAnchor"), "installation progress must be below navigation chrome")
+assert(ios_install_ui.include?('withReuseIdentifier: "SideloadingStatusHeader"') &&
+       ios_install_ui.include?("case .noUpdates:\n            guard self.isSideloadingStatusVisible") &&
+       !ios_install_ui.include?("sideloadingStatusContainer"), "installation progress must scroll with the My Apps list")
 assert(ios_install_ui.include?("self.sideloadingStatusView.finish(error:"), "installation results must remain visible until dismissed")
+assert(ios_app_manager.include?("InstallationStatusRequest(udid:") &&
+       read(root, "Shared/Server Protocol/ServerProtocol.swift").include?('case "InstallationStatusResponse"') &&
+       server_request_handler.include?("fetchInstalledApps(on: device)") &&
+       read(root, "AltServer-Windows/AltServer/ClientConnection.cpp").include?("ProcessInstallationStatusRequest"), "device-confirmed recovery must share one client/macOS/Windows protocol")
 assert(!read(root, "AltStore/Base.lproj/Main.storyboard").include?('name="Primary"'), "main storyboard must inherit the selected theme instead of a fixed brand red")
 assert(ios_app_manager.include?("PendingAppOperations.json"), "pending iOS operations must use an atomic on-disk journal")
 assert(ios_app_manager.include?("try data.write(to: self.fileURL, options: .atomic)"), "pending iOS operation journal writes must be atomic")
@@ -877,5 +883,11 @@ end
 
 assert(File.file?(File.join(root, "website/index.html")), "the official static website entrypoint is missing")
 assert(File.file?(File.join(root, "Scripts/test_website.rb")), "the static website contract is missing")
+
+release_workflow = read(root, ".github/workflows/release.yml")
+ios_tests = Dir.glob(File.join(root, "AltTests", "*.swift")).map { |path| File.read(path) }.join("\n")
+release_workflow.scan(/-only-testing:AltTests\/AltTests\/(\w+)/).flatten.each do |test_name|
+  assert(ios_tests.match?(/func #{Regexp.escape(test_name)}\s*\(/), "release workflow selects missing iOS test #{test_name}")
+end
 
 puts "repository release policy contract passed"

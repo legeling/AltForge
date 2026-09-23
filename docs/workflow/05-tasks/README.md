@@ -8,6 +8,8 @@
 
 | Task | 状态 | 关联 | 完成标准 |
 |---|---|---|---|
+| `T-046` 安装进度随列表滚动与设备确认 | Implemented locally / iOS and device validation pending | `FR-048`; `DES-033`; `TEST-047` | macOS build 已通过；iOS build/XCTest 因平台未安装阻塞，Windows 需 CI build，真机锁屏/切后台安装后入列及刷新待确认 |
+| `T-045` IPA 身份编辑与安装后改名 | Implemented locally / iOS build and device validation pending | `FR-047`; `DES-032`; `TEST-046` | 合成包编辑器检查通过；Xcode 缺少 iOS 平台，新增安装后改名 XCTest、iOS build 与真机双实例、改名、刷新待验收 |
 | `T-044` 修复官方源权限声明与 201 提示 | v2.4.7 已发布 / 真机更新待确认 | `FR-046`; `DES-031`; `TEST-045` | 全部 29 项 hosted XCTest、7 项 Python、三端构建、下载包 checksum/身份/版本和公开 source 与 IPA 隐私核对通过；旧客户端实际更新继续验收 |
 | `T-043` 修复 iOS 安装漏记与不可见进度 | v2.4.6 已发布 / 设备验收待完成 | `FR-044`, `FR-045`; `DES-030`; `TEST-043`, `TEST-044` | 本地 28 项分批测试及全部 28 项 hosted XCTest、三平台构建、下载包身份/版本/校验和验证通过；真机最终回执丢失、锁屏恢复及刷新由 ISSUE-20260905-003 继续验收 |
 | `T-001` 建立 AltSign Unicode archive/App ID 自动化 fixture | Pending | `FR-004`, `FR-005`; `DES-005`; `TEST-003`, `TEST-005`-`TEST-007` | 测试入库并覆盖 UTF-8、Unicode extra、GBK、traversal、round trip |

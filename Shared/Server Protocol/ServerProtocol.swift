@@ -25,6 +25,7 @@ public enum ServerRequest: Decodable
     case installProvisioningProfiles(InstallProvisioningProfilesRequest)
     case removeProvisioningProfiles(RemoveProvisioningProfilesRequest)
     case removeApp(RemoveAppRequest)
+    case installationStatus(InstallationStatusRequest)
     case enableUnsignedCodeExecution(EnableUnsignedCodeExecutionRequest)
     case unknown(identifier: String, version: Int)
     
@@ -37,6 +38,7 @@ public enum ServerRequest: Decodable
         case .installProvisioningProfiles(let request): return request.identifier
         case .removeProvisioningProfiles(let request): return request.identifier
         case .removeApp(let request): return request.identifier
+        case .installationStatus(let request): return request.identifier
         case .enableUnsignedCodeExecution(let request): return request.identifier
         case .unknown(let identifier, _): return identifier
         }
@@ -51,6 +53,7 @@ public enum ServerRequest: Decodable
         case .installProvisioningProfiles(let request): return request.version
         case .removeProvisioningProfiles(let request): return request.version
         case .removeApp(let request): return request.version
+        case .installationStatus(let request): return request.version
         case .enableUnsignedCodeExecution(let request): return request.version
         case .unknown(_, let version): return version
         }
@@ -94,6 +97,9 @@ public enum ServerRequest: Decodable
         case "RemoveAppRequest":
             let request = try RemoveAppRequest(from: decoder)
             self = .removeApp(request)
+
+        case "InstallationStatusRequest":
+            self = .installationStatus(try InstallationStatusRequest(from: decoder))
             
         case "EnableUnsignedCodeExecutionRequest":
             let request = try EnableUnsignedCodeExecutionRequest(from: decoder)
@@ -112,6 +118,7 @@ public enum ServerResponse: Decodable
     case installProvisioningProfiles(InstallProvisioningProfilesResponse)
     case removeProvisioningProfiles(RemoveProvisioningProfilesResponse)
     case removeApp(RemoveAppResponse)
+    case installationStatus(InstallationStatusResponse)
     case enableUnsignedCodeExecution(EnableUnsignedCodeExecutionResponse)
     case error(ErrorResponse)
     case unknown(identifier: String, version: Int)
@@ -124,6 +131,7 @@ public enum ServerResponse: Decodable
         case .installProvisioningProfiles(let response): return response.identifier
         case .removeProvisioningProfiles(let response): return response.identifier
         case .removeApp(let response): return response.identifier
+        case .installationStatus(let response): return response.identifier
         case .enableUnsignedCodeExecution(let response): return response.identifier
         case .error(let response): return response.identifier
         case .unknown(let identifier, _): return identifier
@@ -138,6 +146,7 @@ public enum ServerResponse: Decodable
         case .installProvisioningProfiles(let response): return response.version
         case .removeProvisioningProfiles(let response): return response.version
         case .removeApp(let response): return response.version
+        case .installationStatus(let response): return response.version
         case .enableUnsignedCodeExecution(let response): return response.version
         case .error(let response): return response.version
         case .unknown(_, let version): return version
@@ -178,6 +187,9 @@ public enum ServerResponse: Decodable
         case "RemoveAppResponse":
             let response = try RemoveAppResponse(from: decoder)
             self = .removeApp(response)
+
+        case "InstallationStatusResponse":
+            self = .installationStatus(try InstallationStatusResponse(from: decoder))
             
         case "EnableUnsignedCodeExecutionResponse":
             let response = try EnableUnsignedCodeExecutionResponse(from: decoder)
@@ -437,6 +449,34 @@ public struct RemoveAppResponse: ServerMessageProtocol
     
     public init()
     {
+    }
+}
+
+public struct InstallationStatusRequest: ServerMessageProtocol
+{
+    public var version = 1
+    public var identifier = "InstallationStatusRequest"
+
+    public var udid: String
+    public var bundleIdentifiers: Set<String>
+
+    public init(udid: String, bundleIdentifiers: Set<String>)
+    {
+        self.udid = udid
+        self.bundleIdentifiers = bundleIdentifiers
+    }
+}
+
+public struct InstallationStatusResponse: ServerMessageProtocol
+{
+    public var version = 1
+    public var identifier = "InstallationStatusResponse"
+
+    public var installedBundleIdentifiers: Set<String>
+
+    public init(installedBundleIdentifiers: Set<String>)
+    {
+        self.installedBundleIdentifiers = installedBundleIdentifiers
     }
 }
 

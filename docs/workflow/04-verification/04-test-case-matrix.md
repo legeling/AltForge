@@ -2,6 +2,8 @@
 
 | ID | 模块 | 优先级 | 层级 | 覆盖 | 自动化状态 |
 |---|---|---:|---|---|---|
+| `TEST-047` | iOS install status and device confirmation | P1 | XCTest/Protocol/Build/Device | section header scrolls with list, request/response round trip, UTI and server-positive recovery, false/old-server/offline retention, background return and refresh on device | Swift parse/repository contract and macOS build pass; iOS/Windows build and device pending |
+| `TEST-046` | iOS IPA identity editor | P1 | Unit/Build/Device | direct path no rewrite, edited main/extension/localized identity, name-only edit and reinstall, invalid ID, partial failure cleanup, separate records and refresh on device | Partial |
 | `TEST-045` | Official source permissions | P1 | Script/Artifact/Unit/Build | empty/fixed source、built IPA main/extensions、bounded malformed input、201 actionable copy、unchanged security checks | v2.4.7 published; hosted tests/builds and public source/IPA check passed; device pending |
 | `TEST-001` | AppManager | P1 | Integration | install operation 状态与失败回滚 | Planned |
 | `TEST-002` | AltServer/device | P1 | Manual E2E | 真实设备安装 | Manual pending |
