@@ -1,6 +1,7 @@
 name: Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "v*"
@@ -30,7 +31,11 @@ jobs:
         id: version
         shell: bash
         run: |
-          ruby Scripts/check_release_version.rb --tag "$GITHUB_REF_NAME"
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            ruby Scripts/check_release_version.rb --tag "$GITHUB_REF_NAME"
+          else
+            ruby Scripts/check_release_version.rb
+          fi
           echo "version=$(tr -d '[:space:]' < VERSION)" >> "$GITHUB_OUTPUT"
           echo "vcpkg_baseline=$(ruby -rjson -e 'puts JSON.parse(File.read("AltServer-Windows/vcpkg.json")).fetch("builtin-baseline")')" >> "$GITHUB_OUTPUT"
 
@@ -141,6 +146,15 @@ jobs:
           -only-testing:AltTests/AltTests/testIPAIdentityEditorLeavesBundleUntouchedWhenLocalizationIsInvalid
           -only-testing:AltTests/AltTests/testThemeControlsFollowSelectedColor
           -only-testing:AltTests/AltTests/testUndeclaredPermissionsPresentationIsActionable
+
+      - name: Report iOS test failures
+        if: failure()
+        shell: bash
+        run: |
+          result="$(find "$RUNNER_TEMP/DerivedData-Tests/Logs/Test" -maxdepth 1 -name '*.xcresult' -print -quit)"
+          if [[ -n "$result" ]]; then
+            xcrun xcresulttool get test-results summary --path "$result"
+          fi
 
       - name: Build unsigned iOS application
         env:
@@ -260,6 +274,7 @@ jobs:
           retention-days: 3
 
   publish:
+    if: startsWith(github.ref, 'refs/tags/')
     needs: [prepare, apple, windows]
     runs-on: ubuntu-24.04
     timeout-minutes: 10

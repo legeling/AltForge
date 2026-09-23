@@ -4,7 +4,7 @@
 
 - AltForge 从 `2.4.0` 开始独立使用语义版本：兼容修复递增 patch，兼容新功能递增 minor，不兼容的产品、数据或协议变化递增 major。
 - 上游 AltStore、AltServer 或依赖的版本/revision 只作为来源基线记录；同步上游不自动继承其版本号，也不得倒退 AltForge 已发布版本。
-- 自动构建和 Draft Release 创建只能由纯数字 `vX.Y.Z` tag 触发；普通 branch push 与 pull request 不触发 workflow。
+- 自动构建和 Draft Release 创建只能由纯数字 `vX.Y.Z` tag 触发；普通 branch push 与 pull request 不触发 workflow。可在分支上手动启动同一 workflow 预检，手动运行不得创建 Release。
 - 根目录 `VERSION` 是产品版本唯一来源，tag 必须严格等于 `v$(cat VERSION)`；iOS、macOS 与 Windows 产品版本必须同步，CI build number 独立使用 GitHub run number。
 - Release 必须对应明确版本/tag、completed changes、已解决/已知 issues 和可复现构建配置。
 - 核对 Classic/Marketplace 形态、bundle/version、最低系统、entitlement、submodule gitlink 和 dependency lockfile。

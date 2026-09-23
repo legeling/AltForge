@@ -10,8 +10,8 @@
 
 | ID | 标题 | 状态 |
 |---|---|---|
-| [`CHG-20260923-002`](active/CHG-20260923-002-scrolling-install-recovery/README.md) | 安装状态随列表滚动与设备确认 | Implemented locally / iOS and device validation pending |
-| [`CHG-20260923-001`](active/CHG-20260923-001-ipa-identity-editor/README.md) | IPA 安装前查看与编辑应用标识 | Implemented locally / iOS build and device validation pending |
+| [`CHG-20260923-002`](active/CHG-20260923-002-scrolling-install-recovery/README.md) | 安装状态随列表滚动与设备确认 | CI recovery tests passed / release and device validation pending |
+| [`CHG-20260923-001`](active/CHG-20260923-001-ipa-identity-editor/README.md) | IPA 安装前查看与编辑应用标识 | v2.5.0 CI editor fixture failed / release and device validation pending |
 | [`CHG-20260809-002`](active/CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 | [`CHG-20260809-007`](active/CHG-20260809-007-macos-server-identity-settings/README.md) | macOS Server 身份、菜单与设置 | In progress |
 | [`CHG-20260810-002`](active/CHG-20260810-002-macos-menu-icon-scale/README.md) | 放大 macOS 菜单栏图标 | Implemented / menu bar smoke pending |

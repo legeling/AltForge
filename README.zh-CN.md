@@ -158,7 +158,7 @@ git tag "v${version}"
 git push origin "v${version}"
 ```
 
-流程会拒绝与 `VERSION` 不一致的 tag，然后构建未签名 IPA、Universal macOS AltServer DMG 和便携式 Win32 AltServer，生成 source/远程配置 metadata 与 checksum，并创建 **Draft GitHub Release**。CI build number 使用 GitHub run number，与统一的产品版本分开管理。维护者必须先下载并核验 Draft，再人工公开发布；未发布的 Draft 不会改变 `releases/latest`。
+也可以在分支上手动启动该 workflow，先验证三端构建，但不会创建 Release。标签运行会拒绝与 `VERSION` 不一致的 tag，然后构建未签名 IPA、Universal macOS AltServer DMG 和便携式 Win32 AltServer，生成 source/远程配置 metadata 与 checksum，并创建 **Draft GitHub Release**。CI build number 使用 GitHub run number，与统一的产品版本分开管理。维护者必须先下载并核验 Draft，再人工公开发布；未发布的 Draft 不会改变 `releases/latest`。
 
 </details>
 
