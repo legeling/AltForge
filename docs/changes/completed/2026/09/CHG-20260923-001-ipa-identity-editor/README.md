@@ -1,6 +1,6 @@
 # CHG-20260923-001: IPA identity editing and installed-app rename
 
-- Status: Implementation and CI preflight complete; physical-device acceptance tracked by ISSUE-20260923-001
+- Status: Published in v2.5.1; physical-device acceptance tracked by ISSUE-20260923-001
 - Mapping: FR-047 -> DES-032 -> TEST-046 -> T-045
 
 ## Goal
@@ -37,4 +37,5 @@ After selecting a local IPA or import link, show its app name, bundle ID, versio
 - `xcodebuild` could not find an eligible iOS destination because this Xcode installation reports iOS 26.5 platform not installed, even though its SDK directory exists. No Simulator runtime is installed. The four new XCTest cases, iOS target build, edited IPA signing, side-by-side device installation, rename and refresh remain unverified.
 - The v2.5.0 tag CI compiled iOS and passed the other three new editor tests, but `testIPAIdentityEditorRewritesMainExtensionsAndLocalizedName` crashed on three runs. Exported simulator diagnostics revealed two runtime copies of `ALTApplication` in the test host and a failed cast while bridging `appExtensions`. The editor now walks direct `.appex/Info.plist` files in the extracted temporary bundle rather than bridging extension objects; the test checks those output files directly. The actual editor passed the macOS synthetic harness after this fix. The failed v2.5.0 tag never produced a Draft or public Release.
 - 2026-09-23: Manual three-platform preflight [run 35828141331](https://github.com/legeling/AltForge/actions/runs/35828141331) passed all selected iOS XCTest cases, Apple package checks and Windows build. This is build/simulator acceptance, not physical-device acceptance; the latter is tracked by ISSUE-20260923-001.
+- The v2.5.1 tag [release run 35830942397](https://github.com/legeling/AltForge/actions/runs/35830942397) passed and the Draft artifacts were downloaded and checksummed before public release. Device acceptance remains open.
 - No third-party IPA or Apple credentials are stored in the repository.

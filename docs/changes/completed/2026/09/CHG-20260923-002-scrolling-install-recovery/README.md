@@ -1,6 +1,6 @@
 # CHG-20260923-002: Scrolling install status and device-confirmed recovery
 
-- Status: Implementation and CI preflight complete; physical-device acceptance tracked by ISSUE-20260905-003
+- Status: Published in v2.5.1; physical-device acceptance tracked by ISSUE-20260905-003
 - Mapping: FR-048 -> DES-033 -> TEST-047 -> T-046
 
 ## Problem and decision
@@ -23,4 +23,5 @@ The panel becomes a normal list header at the top. Existing receipt-based recove
 - iOS Simulator build could not start: Xcode reports that iOS 26.5 platform/runtime is not installed, despite an SDK directory being present. The added XCTest cases have not executed. This macOS host cannot perform a Windows MSBuild; the Windows branch and locked-device install/refresh still need CI and sanitized physical-device acceptance.
 - The v2.5.0 tag CI passed the Windows build and compiled iOS, including the new recovery protocol. Its Apple test job failed on an IPA editor fixture, so it did not produce a Draft or public Release. The new recovery tests selected by CI passed; locked-device install and refresh still require physical-device acceptance.
 - 2026-09-23: Manual three-platform preflight [run 35828141331](https://github.com/legeling/AltForge/actions/runs/35828141331) passed selected iOS XCTest, Apple artifact checks and Windows build after the separate editor-test fix. Locked-device installation and refresh remain in ISSUE-20260905-003.
+- The v2.5.1 tag [release run 35830942397](https://github.com/legeling/AltForge/actions/runs/35830942397) passed and the Draft artifacts were downloaded and checksummed before public release. Locked-device acceptance remains open.
 - Revert this change's list-header and status-query code together to return to the prior fixed panel and UTI-only recovery. Existing receipts and Core Data records remain readable; no migration is required.

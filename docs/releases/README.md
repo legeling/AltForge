@@ -10,7 +10,7 @@
 - 只有与根目录 `VERSION` 完全一致的纯数字 `vX.Y.Z` tag 才触发 GitHub Actions Release workflow；branch push 与 pull request 不触发构建。
 - `VERSION` 统一 iOS、macOS 和 Windows 产品版本；CI build number 使用 GitHub run number，不与产品版本混用。
 - 产物：`AltForge.ipa`、`AltForge-AltServer-macOS.dmg`、`AltForge-AltServer-Windows.zip`、`apps.json`、`flags.json`、`sources.json`、`recommended-sources.json`、`developerdisks.json`、`SHA256SUMS.txt`。
-- workflow 只创建 Draft Release；维护者核对版本、文件列表、checksum、安装说明与已知风险后才能在 GitHub UI 人工发布。Draft 不改变 `releases/latest`。
+- workflow 只创建 Draft Release；维护者核对版本、文件列表、checksum、安装说明与已知风险后才能人工公开发布。Draft 不改变 `releases/latest`。
 - `apps.json` 当前版本使用 tag 固定 IPA URL，并从上一正式 source 保留最多 19 个旧版本；总版本数上限为 20。
 - IPA 是 unsigned build，由 AltServer 在安装时针对用户/设备签名。
 - `developerdisks.json` 只是经审核的第三方下载索引，不表示 AltForge 拥有或镜像其中的 Apple/社区文件；修改条目必须检查 schema、HTTPS、host 和来源许可证/可信度。
@@ -24,6 +24,7 @@
 
 ## 正式版本
 
+- [`v2.5.1`](v2.5.1.md)：IPA 包名与名称编辑、已安装应用改名、随列表滚动的安装进度和设备确认后的记录恢复；真机回归仍待完成。
 - [`v2.4.7`](v2.4.7.md)：补齐官方源本地网络权限声明、真实 IPA 隐私发布门禁及准确的 201 提示。
 - [`v2.4.6`](v2.4.6.md)：安装记录持久恢复、后台返回核对、可见进度、常亮与主题一致性；真机回归由用户继续验收。
 - [`v2.4.5`](v2.4.5.md)：AuthKit 认证身份与有限独立会话重试，用户确认 macOS 登录恢复。

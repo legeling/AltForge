@@ -1,7 +1,7 @@
 # ISSUE-20260923-001: IPA 身份编辑真机验收
 
 - Priority: P1
-- Status: Open
+- Status: Open; implementation published in v2.5.1, physical-device acceptance pending
 - Related: `FR-047`, `DES-032`, `TEST-046`, `T-045`, `CHG-20260923-001`
 
 ## 风险
