@@ -2,7 +2,7 @@
 
 | Area | FR | DES | Tests | Current coverage | Gap owner |
 |---|---|---|---|---|---|
-| iOS/macOS IPA install options and icon crop | `FR-049` | `DES-034` | `TEST-048` | Native macOS fixture/build, iOS SDK typecheck and static contracts pass; hosted preflight 35985608497 iOS XCTest and three-platform builds pass; device install/icon/refresh pending. | `T-047` |
+| iOS/macOS IPA install options and icon crop | `FR-049` | `DES-034` | `TEST-048` | Native macOS fixture/build, iOS SDK typecheck, static contracts, hosted preflight 35985608497, v2.6.0 tag CI 35987685997 and downloaded checksums pass; device install/icon/refresh pending. | `T-047` |
 | Scrolling install status and device-confirmed recovery | `FR-048` | `DES-033` | `TEST-047` | Scroll/receipt/protocol XCTest added; Swift parse, repository contract and macOS Server build pass. Local iOS platform is unavailable; Windows build and locked-device refresh remain pending. | `T-046` |
 | IPA identity editing | `FR-047` | `DES-032` | `TEST-046` | Native Swift harness passed import-time ID/name/localization, name-only/deferred-cache-swap and failure checks; four XCTest cases added but local iOS platform is unavailable. Device rename and parallel-install/refresh pending. | `T-045` |
 | Official source privacy | `FR-046` | `DES-031` | `TEST-045` | v2.4.7 published after 29 hosted XCTest, 7 Python fixtures, three platform builds, downloaded-artifact checks and public-source/real-IPA privacy verification. Old-client device update remains pending. | `T-044` |

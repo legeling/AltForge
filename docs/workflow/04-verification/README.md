@@ -12,7 +12,7 @@
 
 | Test | 覆盖 | 层级 | 当前状态 |
 |---|---|---|---|
-| `TEST-048` 跨端 IPA 安装与图标裁切 | `FR-049` | Fixture/XCTest/Contract/Build/Device | 非正方形裁切/缩放 fixture、macOS Debug build、iOS SDK 类型检查、静态与发布契约，以及 hosted 预检 35985608497 的 iOS XCTest/三平台构建通过；真机双路径、图标呈现及刷新待验收 |
+| `TEST-048` 跨端 IPA 安装与图标裁切 | `FR-049` | Fixture/XCTest/Contract/Build/Device | 非正方形裁切/缩放 fixture、macOS Debug build、iOS SDK 类型检查、静态与发布契约、hosted 预检 35985608497 和 v2.6.0 标签 CI 35987685997 通过；下载 checksum 通过，真机双路径、图标呈现及刷新待验收 |
 | `TEST-047` 安装状态滚动与设备确认 | `FR-048` | XCTest/Protocol/Build/Device | 已补列表 header 滚动、receipt 正向恢复及协议往返测试；Swift 语法检查、仓库 contract 和 macOS Server Debug build 通过。iOS 平台未安装导致 build/XCTest 无法运行，Windows build 与真机锁屏后管理/刷新待验证 |
 | `TEST-046` IPA 身份编辑与安装后改名 | `FR-047` | Unit/Build/Device | 原生 Swift 合成包 harness 已覆盖安装前编辑、名称单改和延后缓存替换；4 项 XCTest 待运行，iOS build 因缺少平台未运行，真机双实例/改名/刷新待验证 |
 | `TEST-045` 官方源隐私声明与 201 提示 | `FR-046` | Script/Artifact/Unit/Build/Device | 本地对照验证通过；v2.4.7 的 29 项 hosted XCTest、7 项 Python、三端构建、下载包校验和公开 source/实际 IPA 隐私核对通过，已发布；旧客户端真机更新仍待验收 |

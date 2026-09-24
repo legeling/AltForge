@@ -1,14 +1,14 @@
 # ISSUE-20260923-001: IPA 身份编辑真机验收
 
 - Priority: P1
-- Status: Open; implementation published in v2.5.1, physical-device acceptance pending
+- Status: Open; identity editing published in v2.5.1 and icon editing in v2.6.0, physical-device acceptance pending
 - Related: `FR-047`, `DES-032`, `TEST-046`, `T-045`, `CHG-20260923-001`; `FR-049`, `DES-034`, `TEST-048`, `T-047`, `CHG-20260924-001`
 
 ## 风险
 
 CI 已验证 iOS 模拟器上的临时 `.app` 信息改写、扩展 ID、本地化名称和缓存替换，但没有用真实设备、Apple 开发者账号和可合法测试的 IPA 验证并排安装、主屏幕名称、App ID/profile 注册和后续刷新。改包名还可能影响第三方 App 的登录、共享数据、Keychain 和推送，这些能力不能从 plist 测试推断。
 
-2.6.0 候选版本增加 macOS 与 iOS 导入时自选并裁切图标，仍需在真机核对主屏幕图标、刷新后保留图标，以及 iOS 锁屏/切后台后的安装记录。模拟器的 plist/图像测试不能证明 SpringBoard 的实际选择结果。
+v2.6.0 增加 macOS 与 iOS 导入时自选并裁切图标，仍需在真机核对主屏幕图标、刷新后保留图标，以及 iOS 锁屏/切后台后的安装记录。模拟器的 plist/图像测试不能证明 SpringBoard 的实际选择结果。
 
 ## 验收
 
