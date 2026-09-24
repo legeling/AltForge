@@ -244,11 +244,11 @@ private extension ALTDeviceManager
 
 extension ALTDeviceManager
 {
-    func installApplication(at ipaFileURL: URL?, to altDevice: ALTDevice, appleID: String, password: String, authenticationCompletion: @escaping () -> Void, teamCompletion: @escaping (ALTTeam) -> Void, downloadControl: ALTInstallationDownloadControl, progressHandler: @escaping (ALTInstallationProgressUpdate) -> Void, completion: @escaping (Result<ALTApplication, Error>) -> Void)
+    func installApplication(at ipaFileURL: URL?, applicationName: String? = nil, preparedAppBundleURL: URL? = nil, to altDevice: ALTDevice, appleID: String, password: String, authenticationCompletion: @escaping () -> Void, teamCompletion: @escaping (ALTTeam) -> Void, downloadControl: ALTInstallationDownloadControl, progressHandler: @escaping (ALTInstallationProgressUpdate) -> Void, completion: @escaping (Result<ALTApplication, Error>) -> Void)
     {
         let destinationDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         
-        var appName = ipaFileURL?.deletingPathExtension().lastPathComponent ?? NSLocalizedString("AltForge", comment: "")
+        var appName = applicationName ?? ipaFileURL?.deletingPathExtension().lastPathComponent ?? NSLocalizedString("AltForge", comment: "")
         
         func finish(_ result: Result<ALTApplication, Error>, failure: String? = nil)
         {
@@ -341,9 +341,16 @@ extension ALTDeviceManager
 
                                                                 progressHandler(ALTInstallationProgressUpdate(stage: .preparingApplication))
                                                                 
-                                                                try FileManager.default.createDirectory(at: destinationDirectoryURL, withIntermediateDirectories: true, attributes: nil)
-                                                                
-                                                                let appBundleURL = try FileManager.default.unzipAppBundle(at: fileURL, toDirectory: destinationDirectoryURL)
+                                                                let appBundleURL: URL
+                                                                if let preparedAppBundleURL
+                                                                {
+                                                                    appBundleURL = preparedAppBundleURL
+                                                                }
+                                                                else
+                                                                {
+                                                                    try FileManager.default.createDirectory(at: destinationDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+                                                                    appBundleURL = try FileManager.default.unzipAppBundle(at: fileURL, toDirectory: destinationDirectoryURL)
+                                                                }
                                                                 guard let application = ALTApplication(fileURL: appBundleURL) else { throw ALTError(.invalidApp) }
                                                                 
                                                                 appName = application.name

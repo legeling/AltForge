@@ -981,6 +981,50 @@ final class AltTests: XCTestCase
         }
         XCTAssertThrowsError(try IPAIdentityEditor.validate(name: "Test", bundleIdentifier: StoreApp.altstoreAppID,
                                                             originalBundleIdentifier: original))
+        XCTAssertEqual(try IPAIdentityEditor.validate(name: "Renamed AltForge", bundleIdentifier: StoreApp.altstoreAppID,
+                                                      originalBundleIdentifier: StoreApp.altstoreAppID).name, "Renamed AltForge")
+    }
+
+    func testIPAIconEditorUpdatesTemporaryAppOnly() throws
+    {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let appURL = root.appendingPathComponent("Fixture.app", isDirectory: true)
+        try FileManager.default.createDirectory(at: appURL, withIntermediateDirectories: true)
+        let infoURL = appURL.appendingPathComponent("Info.plist")
+        let info: [String: Any] = ["CFBundleIcons": ["CFBundlePrimaryIcon": ["CFBundleIconName": "CatalogIcon"]],
+                                   "CFBundleIcons~ipad": ["CFBundlePrimaryIcon": ["CFBundleIconName": "CatalogIcon"]]]
+        try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0).write(to: infoURL)
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = true
+        format.scale = 1
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 240, height: 240), format: format).image { context in
+            UIColor.systemTeal.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 240, height: 240))
+        }
+        let sourceURL = root.appendingPathComponent("Source.png")
+        try XCTUnwrap(image.pngData()).write(to: sourceURL)
+        let originalData = try Data(contentsOf: sourceURL)
+
+        let rendered = try IPAIconEditor.applyCustomIcon(at: sourceURL, to: appURL, within: root)
+        XCTAssertEqual(rendered.width, 1024)
+        XCTAssertEqual(rendered.height, 1024)
+        XCTAssertEqual(try Data(contentsOf: sourceURL), originalData)
+        let edited = try XCTUnwrap(PropertyListSerialization.propertyList(from: Data(contentsOf: infoURL),
+                                                                          format: nil) as? [String: Any])
+        for key in ["CFBundleIcons", "CFBundleIcons~ipad"]
+        {
+            let icons = try XCTUnwrap(edited[key] as? [String: Any])
+            let primary = try XCTUnwrap(icons["CFBundlePrimaryIcon"] as? [String: Any])
+            XCTAssertNil(primary["CFBundleIconName"])
+            let iconName = try XCTUnwrap((primary["CFBundleIconFiles"] as? [String])?.first)
+            XCTAssertTrue(FileManager.default.fileExists(atPath: appURL.appendingPathComponent(iconName + ".png").path))
+            for suffix in ["@2x.png", "@3x.png", "@2x~ipad.png"]
+            {
+                XCTAssertTrue(FileManager.default.fileExists(atPath: appURL.appendingPathComponent(iconName + suffix).path))
+            }
+        }
+        XCTAssertThrowsError(try IPAIconEditor.applyCustomIcon(at: sourceURL, to: root, within: root))
     }
 
     func testIPAIdentityEditorRewritesMainExtensionsAndLocalizedName() throws

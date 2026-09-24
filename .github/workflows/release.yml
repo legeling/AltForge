@@ -141,6 +141,7 @@ jobs:
           -only-testing:AltTests/AltTests/testSideloadingStatusLayoutAndThemes
           -only-testing:AltTests/AltTests/testSideloadingPanelScrollsWithMyApps
           -only-testing:AltTests/AltTests/testIPAIdentityEditorValidation
+          -only-testing:AltTests/AltTests/testIPAIconEditorUpdatesTemporaryAppOnly
           -only-testing:AltTests/AltTests/testIPAIdentityEditorRewritesMainExtensionsAndLocalizedName
           -only-testing:AltTests/AltTests/testIPAIdentityEditorChangesInstalledNameWithoutChangingBundleID
           -only-testing:AltTests/AltTests/testIPAIdentityEditorLeavesBundleUntouchedWhenLocalizationIsInvalid
@@ -212,6 +213,11 @@ jobs:
           MARKETING_VERSION="$VERSION"
           CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER"
           CODE_SIGNING_ALLOWED=NO
+
+      - name: Test macOS IPA icon editor
+        run: |
+          swiftc AltServer/IPAIconEditor.swift Scripts/test_mac_ipa_icon.swift -o "$RUNNER_TEMP/test-mac-ipa-icon"
+          "$RUNNER_TEMP/test-mac-ipa-icon" "$GITHUB_WORKSPACE"
 
       - name: Package macOS application
         run: |

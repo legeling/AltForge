@@ -566,13 +566,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Sideload .ipa…"
+            "value" : "Install IPA…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "侧载 IPA…"
+            "value" : "安装 IPA…"
           }
         }
       }
@@ -1250,13 +1250,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Sideload .ipa…"
+            "value" : "Install IPA…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "侧载 IPA…"
+            "value" : "安装 IPA…"
           }
         }
       }

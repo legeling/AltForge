@@ -1,6 +1,30 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Choose Icon…" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "选择图标…" } } }
+    },
+    "Custom icon selected" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已选择自定义图标" } } }
+    },
+    "Could Not Use Icon" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法使用此图标" } } }
+    },
+    "Remove Custom Icon" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "移除自定义图标" } } }
+    },
+    "Choose a PNG or JPEG image between 180 and 4096 pixels on each side." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请选择宽、高均为 180 至 4096 像素的 PNG 或 JPEG 图片。" } } }
+    },
+    "Crop the image to a square before installing." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装前请先把图片裁切为正方形。" } } }
+    },
+    "The app icon can only be changed in a temporary installation copy." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "只能在临时安装副本中修改应用图标。" } } }
+    },
+    "The IPA's icon information could not be updated." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法更新 IPA 的图标信息。" } } }
+    },
     "Install App" : {
       "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装 App" } } }
     },

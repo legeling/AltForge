@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "NSPhotoLibraryUsageDescription" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AltForge lets you select and crop a photo for an app icon." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AltForge 需要访问照片，以便选择并裁切应用图标。" } }
+      }
+    },
     "NSLocalNetworkUsageDescription" : {
       "localizations" : {
         "en" : {

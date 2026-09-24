@@ -9,6 +9,7 @@
 import Cocoa
 import ServiceManagement
 import UserNotifications
+import UniformTypeIdentifiers
 
 import AltSign
 
@@ -67,6 +68,13 @@ private final class ActiveInstallation
     }
 }
 
+private enum IPAInstallationChoice
+{
+    case cancelled
+    case unchanged
+    case edited(IPAIdentityEditor.Changes, iconURL: URL?)
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -75,6 +83,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let aboutWindowController = AboutWindowController()
     private let serverUpdateController = ServerUpdateController()
     private var activeInstallations = [String: ActiveInstallation]()
+    private var preparingIPAWindows = [String: NSWindow]()
+    private var choosingIPADevices = Set<String>()
     private static let languagePreferenceKey = "AltForgePreferredLanguage"
     
     private var statusItem: NSStatusItem?
@@ -127,13 +137,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.appMenu.delegate = self
         
-        self.sideloadAppMenuItem.keyEquivalentModifierMask = .option
-        self.sideloadAppMenuItem.isAlternate = true
-
         let installImage = NSImage(systemSymbolName: "arrow.down.app", accessibilityDescription: self.installAltStoreMenuItem.title)
             ?? NSImage(systemSymbolName: "square.and.arrow.down", accessibilityDescription: self.installAltStoreMenuItem.title)
         installImage?.isTemplate = true
         self.installAltStoreMenuItem.image = installImage
+
+        self.sideloadAppMenuItem.image = NSImage(systemSymbolName: "square.and.arrow.down", accessibilityDescription: self.sideloadAppMenuItem.title)
 
         let menuIcons: [(menuItem: NSMenuItem, symbolName: String)] = [
             (self.settingsMenuItem, "gearshape"),
@@ -344,15 +353,215 @@ private extension AppDelegate
     
     @objc func sideloadIPA(to device: ALTDevice)
     {
+        guard !self.choosingIPADevices.contains(device.identifier) else { return }
+        if let preparationWindow = self.preparingIPAWindows[device.identifier]
+        {
+            preparationWindow.makeKeyAndOrderFront(nil)
+            return
+        }
+        if let activeInstallation = self.activeInstallations[device.identifier]
+        {
+            activeInstallation.focus()
+            return
+        }
+
         NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
         
         let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = false
         openPanel.allowsMultipleSelection = false
         openPanel.allowedFileTypes = ["ipa"]
+        self.choosingIPADevices.insert(device.identifier)
         openPanel.begin { (response) in
+            self.choosingIPADevices.remove(device.identifier)
             guard let fileURL = openPanel.url, response == .OK else { return }
-            self.installApplication(at: fileURL, to: device)
+            self.prepareIPA(at: fileURL, for: device)
+        }
+    }
+
+    private func prepareIPA(at fileURL: URL, for device: ALTDevice)
+    {
+        let temporaryDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let preparationWindow = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 360, height: 100),
+                                         styleMask: [.titled], backing: .buffered, defer: false)
+        preparationWindow.title = NSLocalizedString("Reading IPA", comment: "Preparing an imported IPA for review")
+        preparationWindow.isReleasedWhenClosed = false
+        let label = NSTextField(labelWithString: NSLocalizedString("Checking app information…", comment: "Preparing an imported IPA for review"))
+        let spinner = NSProgressIndicator()
+        spinner.style = .spinning
+        let content = NSStackView(views: [spinner, label])
+        content.orientation = .horizontal
+        content.spacing = 12
+        content.edgeInsets = NSEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        preparationWindow.contentView = content
+        preparationWindow.center()
+        preparationWindow.makeKeyAndOrderFront(nil)
+        self.preparingIPAWindows[device.identifier] = preparationWindow
+        spinner.startAnimation(nil)
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            let result: Result<ALTApplication, Error>
+            do
+            {
+                try FileManager.default.createDirectory(at: temporaryDirectoryURL, withIntermediateDirectories: true)
+                let appBundleURL = try FileManager.default.unzipAppBundle(at: fileURL, toDirectory: temporaryDirectoryURL)
+                guard let application = ALTApplication(fileURL: appBundleURL) else { throw ALTError(.invalidApp) }
+                result = .success(application)
+            }
+            catch
+            {
+                result = .failure(error)
+            }
+
+            DispatchQueue.main.async {
+                spinner.stopAnimation(nil)
+                preparationWindow.close()
+                self.preparingIPAWindows[device.identifier] = nil
+                switch result
+                {
+                case .failure(let error):
+                    try? FileManager.default.removeItem(at: temporaryDirectoryURL)
+                    self.showErrorAlert(error: error)
+
+                case .success(let application):
+                    do
+                    {
+                        var selectedApplication = application
+                        var applicationIcon = IPAIconEditor.preview(in: application.fileURL)
+                        switch self.reviewIPA(application)
+                        {
+                        case .cancelled:
+                            try? FileManager.default.removeItem(at: temporaryDirectoryURL)
+                            return
+                        case .unchanged:
+                            break
+                        case .edited(let changes, let iconURL):
+                            selectedApplication = try IPAIdentityEditor.apply(changes, to: application, within: temporaryDirectoryURL)
+                            if let iconURL
+                            {
+                                let renderedIcon = try IPAIconEditor.applyCustomIcon(at: iconURL, to: selectedApplication.fileURL,
+                                                                                     within: temporaryDirectoryURL)
+                                applicationIcon = NSImage(cgImage: renderedIcon, size: NSSize(width: 1024, height: 1024))
+                            }
+                        }
+                        self.installApplication(at: fileURL, to: device, applicationName: selectedApplication.name,
+                                                applicationIcon: applicationIcon ?? NSWorkspace.shared.icon(forFileType: "app"),
+                                                preparedAppBundleURL: selectedApplication.fileURL,
+                                                temporaryDirectoryURL: temporaryDirectoryURL)
+                    }
+                    catch
+                    {
+                        try? FileManager.default.removeItem(at: temporaryDirectoryURL)
+                        self.showErrorAlert(error: error)
+                    }
+                }
+            }
+        }
+    }
+
+    private func reviewIPA(_ application: ALTApplication) -> IPAInstallationChoice
+    {
+        let alert = NSAlert()
+        alert.icon = IPAIconEditor.preview(in: application.fileURL)
+            ?? NSWorkspace.shared.icon(forFileType: "app")
+        alert.messageText = NSLocalizedString("Install App", comment: "Review a local IPA before installation")
+        alert.informativeText = String(format: NSLocalizedString("Name: %@\nBundle ID: %@\nVersion: %@\nExtensions: %d", comment: "Imported IPA details"),
+                                      application.name, application.bundleIdentifier, application.version, application.appExtensions.count)
+        alert.addButton(withTitle: NSLocalizedString("Install Without Changes", comment: "Install imported IPA as-is"))
+        alert.addButton(withTitle: NSLocalizedString("Edit Details…", comment: "Edit imported IPA name and bundle ID"))
+        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel imported IPA installation"))
+        switch alert.runModal()
+        {
+        case .alertFirstButtonReturn: return .unchanged
+        case .alertSecondButtonReturn: return self.editIPA(application)
+        default: return .cancelled
+        }
+    }
+
+    private func editIPA(_ application: ALTApplication) -> IPAInstallationChoice
+    {
+        let nameField = NSTextField(string: application.name)
+        let bundleIDField = NSTextField(string: application.bundleIdentifier)
+        nameField.setAccessibilityLabel(NSLocalizedString("App Name", comment: "Imported IPA name field"))
+        bundleIDField.setAccessibilityLabel(NSLocalizedString("Bundle ID", comment: "Imported IPA bundle ID field"))
+        nameField.widthAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
+        let fields = NSGridView(views: [
+            [NSTextField(labelWithString: NSLocalizedString("App Name", comment: "Imported IPA name field")), nameField],
+            [NSTextField(labelWithString: NSLocalizedString("Bundle ID", comment: "Imported IPA bundle ID field")), bundleIDField]
+        ])
+        fields.columnSpacing = 12
+        fields.rowSpacing = 10
+
+        var message = NSLocalizedString("Use a different bundle ID for another copy. Sign-in, shared data, and notifications may be affected.", comment: "Imported IPA identity warning")
+        var selectedIconURL: URL?
+        var selectedIconImage = IPAIconEditor.preview(in: application.fileURL)
+        while true
+        {
+            let alert = NSAlert()
+            alert.icon = selectedIconImage ?? NSWorkspace.shared.icon(forFileType: "app")
+            alert.messageText = NSLocalizedString("Edit App Details", comment: "Imported IPA identity editor")
+            alert.informativeText = message
+            alert.accessoryView = fields
+            alert.addButton(withTitle: NSLocalizedString("Install with Changes", comment: "Install edited IPA"))
+            alert.addButton(withTitle: NSLocalizedString("Choose Icon…", comment: "Choose a custom icon for the imported app"))
+            alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel imported IPA installation"))
+            let response = alert.runModal()
+            if response == .alertSecondButtonReturn
+            {
+                let panel = NSOpenPanel()
+                panel.canChooseDirectories = false
+                panel.allowsMultipleSelection = false
+                panel.allowedContentTypes = [.png, .jpeg]
+                if panel.runModal() == .OK, let iconURL = panel.url
+                {
+                    do
+                    {
+                        let source = try IPAIconEditor.cropSource(at: iconURL)
+                        let cropView = IPAIconCropView(image: source)
+                        let zoom = NSSlider(value: 1, minValue: 1, maxValue: 4, target: cropView,
+                                            action: #selector(IPAIconCropView.changeZoom(_:)))
+                        let accessory = NSStackView(views: [cropView, zoom])
+                        accessory.orientation = .vertical
+                        accessory.spacing = 12
+                        accessory.frame = NSRect(x: 0, y: 0, width: 320, height: 360)
+                        accessory.widthAnchor.constraint(equalToConstant: 320).isActive = true
+                        let cropAlert = NSAlert()
+                        cropAlert.messageText = NSLocalizedString("Crop App Icon", comment: "Crop a custom icon before installation")
+                        cropAlert.informativeText = NSLocalizedString("Drag to position the image, then adjust the zoom.", comment: "Custom icon crop instructions")
+                        cropAlert.accessoryView = accessory
+                        cropAlert.addButton(withTitle: NSLocalizedString("Use Icon", comment: "Confirm cropped app icon"))
+                        cropAlert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Cancel cropped app icon"))
+                        if cropAlert.runModal() == .alertFirstButtonReturn
+                        {
+                            let iconData = try cropView.croppedPNGData()
+                            let croppedURL = application.fileURL.deletingLastPathComponent()
+                                .appendingPathComponent("CustomIcon-\(UUID().uuidString).png")
+                            try iconData.write(to: croppedURL, options: .atomic)
+                            if let previousIconURL = selectedIconURL { try? FileManager.default.removeItem(at: previousIconURL) }
+                            selectedIconURL = croppedURL
+                            selectedIconImage = NSImage(data: iconData)
+                        }
+                        message = NSLocalizedString("Use a different bundle ID for another copy. Sign-in, shared data, and notifications may be affected.", comment: "Imported IPA identity warning")
+                    }
+                    catch
+                    {
+                        message = error.localizedDescription
+                    }
+                }
+                continue
+            }
+            guard response == .alertFirstButtonReturn else { return .cancelled }
+            do
+            {
+                let changes = try IPAIdentityEditor.validate(name: nameField.stringValue,
+                                                              bundleIdentifier: bundleIDField.stringValue,
+                                                              originalBundleIdentifier: application.bundleIdentifier)
+                return .edited(changes, iconURL: selectedIconURL)
+            }
+            catch
+            {
+                message = error.localizedDescription
+            }
         }
     }
     
@@ -406,17 +615,21 @@ private extension AppDelegate
         }
     }
     
-    func installApplication(at fileURL: URL?, to device: ALTDevice)
+    func installApplication(at fileURL: URL?, to device: ALTDevice, applicationName: String? = nil, applicationIcon: NSImage? = nil,
+                            preparedAppBundleURL: URL? = nil, temporaryDirectoryURL: URL? = nil)
     {
         if let activeInstallation = self.activeInstallations[device.identifier]
         {
+            if let temporaryDirectoryURL { try? FileManager.default.removeItem(at: temporaryDirectoryURL) }
             activeInstallation.focus()
             return
         }
 
         let authenticationController = AppleIDAuthenticationWindowController(credentialStore: self.appleIDCredentialStore)
         let downloadControl = ALTInstallationDownloadControl()
-        let progressController = InstallationProgressWindowController(deviceName: device.name, downloadControl: downloadControl)
+        let progressController = InstallationProgressWindowController(deviceName: device.name, applicationName: applicationName,
+                                                                      applicationIcon: applicationIcon,
+                                                                      downloadControl: downloadControl)
         let activeInstallation = ActiveInstallation(authenticationController: authenticationController, progressController: progressController)
         self.activeInstallations[device.identifier] = activeInstallation
         var didAuthenticate = false
@@ -425,6 +638,7 @@ private extension AppDelegate
         {
             guard self.activeInstallations[device.identifier] === activeInstallation else { return }
             self.activeInstallations[device.identifier] = nil
+            if let temporaryDirectoryURL { try? FileManager.default.removeItem(at: temporaryDirectoryURL) }
         }
 
         func notifyAccountSaveFailure()
@@ -441,6 +655,8 @@ private extension AppDelegate
 
             ALTDeviceManager.shared.installApplication(
                 at: fileURL,
+                applicationName: applicationName,
+                preparedAppBundleURL: preparedAppBundleURL,
                 to: device,
                 appleID: submission.account,
                 password: submission.password,
@@ -494,6 +710,7 @@ private extension AppDelegate
                 switch result
                 {
                 case .success(let application):
+                    if let temporaryDirectoryURL { try? FileManager.default.removeItem(at: temporaryDirectoryURL) }
                     progressController.showCompletion {
                         finishActiveInstallation()
                     }
@@ -775,27 +992,6 @@ extension AppDelegate: NSMenuDelegate
         self.enableJITMenuController.submenuHandler = nil
     }
     
-    func menu(_ menu: NSMenu, willHighlight item: NSMenuItem?)
-    {
-        guard menu == self.appMenu else { return }
-        
-        // The submenu won't update correctly if the user holds/releases
-        // the Option key while the submenu is visible.
-        // Workaround: temporarily set submenu to nil to dismiss it,
-        // which will then cause the correct submenu to appear.
-        
-        let previousItem: NSMenuItem
-        switch item
-        {
-        case self.sideloadAppMenuItem: previousItem = self.installAltStoreMenuItem
-        case self.installAltStoreMenuItem: previousItem = self.sideloadAppMenuItem
-        default: return
-        }
-
-        let submenu = previousItem.submenu
-        previousItem.submenu = nil
-        previousItem.submenu = submenu
-    }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate

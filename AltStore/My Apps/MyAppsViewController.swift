@@ -18,6 +18,12 @@ import Roxas
 
 import Nuke
 
+struct SideloadInstallationEdit
+{
+    let identity: IPAIdentityEditor.Changes
+    let iconData: Data?
+}
+
 final class SideloadingStatusView: UIView
 {
     private let symbolView = UIImageView(image: UIImage(systemName: "iphone.and.arrow.forward"))
@@ -196,6 +202,12 @@ final class SideloadingStatusView: UIView
         self.layoutChangeHandler?()
     }
 
+    func showApplicationIcon(_ image: UIImage?)
+    {
+        self.symbolView.image = image?.withRenderingMode(.alwaysOriginal)
+            ?? UIImage(systemName: "iphone.and.arrow.forward")
+    }
+
     func end()
     {
         self.progressObservation = nil
@@ -313,6 +325,7 @@ class MyAppsViewController: UICollectionViewController, PeekPopPreviewing
     private var didChangeActiveApps = false
     
     private var _imagePickerInstalledApp: InstalledApp?
+    private var pendingSideloadIconSelection: ((UIImage?) -> Void)?
     private var _viewDidAppear = false
     
     // Cache
@@ -1356,15 +1369,28 @@ private extension MyAppsViewController
                         operation.finish()
 
                     case .success(nil):
+                        self.sideloadingStatusView.showApplicationIcon(application.icon)
                         reviewProgress.completedUnitCount = 1
                         operation.finish()
 
-                    case .success(let changes?):
+                    case .success(let edit?):
                         self.sideloadingStatusView.update(stage: NSLocalizedString("Editing App Information", comment: "Third-party IPA installation stage"), detail: nil)
                         DispatchQueue.global(qos: .userInitiated).async {
                             do
                             {
-                                context.application = try IPAIdentityEditor.apply(changes, to: application, within: unzippedAppDirectory)
+                                let editedApplication = try IPAIdentityEditor.apply(edit.identity, to: application, within: unzippedAppDirectory)
+                                if let iconData = edit.iconData
+                                {
+                                    let iconURL = unzippedAppDirectory.appendingPathComponent("CustomIcon-\(UUID().uuidString).png")
+                                    try iconData.write(to: iconURL, options: .atomic)
+                                    defer { try? FileManager.default.removeItem(at: iconURL) }
+                                    _ = try IPAIconEditor.applyCustomIcon(at: iconURL, to: editedApplication.fileURL,
+                                                                          within: unzippedAppDirectory)
+                                }
+                                context.application = ALTApplication(fileURL: editedApplication.fileURL)
+                                guard context.application != nil else { throw OperationError.invalidApp }
+                                let icon = edit.iconData.flatMap(UIImage.init(data:)) ?? context.application?.icon
+                                DispatchQueue.main.async { self.sideloadingStatusView.showApplicationIcon(icon) }
                                 reviewProgress.completedUnitCount = 1
                             }
                             catch
@@ -1665,14 +1691,16 @@ private extension MyAppsViewController
         self.performSegue(withIdentifier: "showAppIDs", sender: sender)
     }
 
-    func reviewSideloadedApp(_ application: ALTApplication, completion: @escaping (Result<IPAIdentityEditor.Changes?, Error>) -> Void)
+    func reviewSideloadedApp(_ application: ALTApplication, name: String? = nil, bundleID: String? = nil,
+                           iconData: Data? = nil, completion: @escaping (Result<SideloadInstallationEdit?, Error>) -> Void)
     {
         let details = String(format: NSLocalizedString("Name: %@\nBundle ID: %@\nVersion: %@\nExtensions: %@", comment: "IPA information before installation"),
                              self.boundedSideloadingLabel(application.name), application.bundleIdentifier,
                              application.version, NSNumber(value: application.appExtensions.count))
         let guidance = NSLocalizedString("Use an unused bundle ID for another copy. Sign-in, shared data, and push notifications may be affected.", comment: "IPA identity editor capability warning")
+        let iconStatus = iconData == nil ? "" : "\n" + NSLocalizedString("Custom icon selected", comment: "Selected imported IPA icon status")
         let alert = UIAlertController(title: NSLocalizedString("Install App", comment: "Review IPA before installation"),
-                                      message: details + "\n\n" + guidance, preferredStyle: .alert)
+                                      message: details + "\n\n" + guidance + iconStatus, preferredStyle: .alert)
         func label(_ title: String) -> UILabel
         {
             let label = UILabel()
@@ -1686,7 +1714,7 @@ private extension MyAppsViewController
         alert.addTextField { field in
             field.placeholder = NSLocalizedString("App Name", comment: "IPA identity editor app name field")
             field.accessibilityLabel = field.placeholder
-            field.text = application.name
+            field.text = name ?? application.name
             field.leftView = label(NSLocalizedString("Name", comment: "IPA identity editor name label"))
             field.leftViewMode = .always
             field.clearButtonMode = .whileEditing
@@ -1694,7 +1722,7 @@ private extension MyAppsViewController
         alert.addTextField { field in
             field.placeholder = NSLocalizedString("Bundle ID", comment: "IPA identity editor bundle ID field")
             field.accessibilityLabel = field.placeholder
-            field.text = application.bundleIdentifier
+            field.text = bundleID ?? application.bundleIdentifier
             field.leftView = label(NSLocalizedString("Bundle ID", comment: "IPA identity editor bundle ID field"))
             field.leftViewMode = .always
             field.keyboardType = .asciiCapable
@@ -1709,6 +1737,66 @@ private extension MyAppsViewController
             completion(.success(nil))
         }
         alert.addAction(directAction)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Choose Icon…", comment: "Choose and crop a custom imported IPA icon"), style: .default) { [weak self, weak alert] _ in
+            guard let self else { return }
+            let selectedName = alert?.textFields?.first?.text ?? application.name
+            let selectedBundleID = alert?.textFields?.last?.text ?? application.bundleIdentifier
+            let picker = UIImagePickerController()
+            picker.sourceType = .photoLibrary
+            picker.allowsEditing = true
+            picker.delegate = self
+            self.pendingSideloadIconSelection = { [weak self] image in
+                guard let self else { completion(.failure(OperationError.cancelled)); return }
+                do
+                {
+                    let selectedData: Data?
+                    if let image
+                    {
+                        guard let cgImage = image.cgImage, min(cgImage.width, cgImage.height) >= 180 else {
+                            throw IPAIconEditor.IconError.invalidImage
+                        }
+                        let format = UIGraphicsImageRendererFormat()
+                        format.opaque = true
+                        format.scale = 1
+                        let size = CGSize(width: 1024, height: 1024)
+                        let rendered = UIGraphicsImageRenderer(size: size, format: format).image { _ in
+                            image.draw(in: CGRect(origin: .zero, size: size))
+                        }
+                        guard let data = rendered.pngData() else { throw IPAIconEditor.IconError.invalidImage }
+                        selectedData = data
+                    }
+                    else
+                    {
+                        selectedData = iconData
+                    }
+                    self.reviewSideloadedApp(application, name: selectedName, bundleID: selectedBundleID,
+                                            iconData: selectedData, completion: completion)
+                }
+                catch
+                {
+                    let errorAlert = UIAlertController(title: NSLocalizedString("Could Not Use Icon", comment: "Custom IPA icon failed validation"),
+                                                       message: error.localizedDescription, preferredStyle: .alert)
+                    errorAlert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Return to IPA review"), style: .default) { _ in
+                        self.reviewSideloadedApp(application, name: selectedName, bundleID: selectedBundleID,
+                                                iconData: iconData, completion: completion)
+                    })
+                    self.present(errorAlert, animated: true)
+                }
+            }
+            DispatchQueue.main.async { self.present(picker, animated: true) }
+        })
+        if iconData != nil
+        {
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Remove Custom Icon", comment: "Revert imported IPA icon selection"), style: .default) { [weak self, weak alert] _ in
+                guard let self else { return }
+                let selectedName = alert?.textFields?.first?.text ?? application.name
+                let selectedBundleID = alert?.textFields?.last?.text ?? application.bundleIdentifier
+                DispatchQueue.main.async {
+                    self.reviewSideloadedApp(application, name: selectedName, bundleID: selectedBundleID,
+                                            completion: completion)
+                }
+            })
+        }
         let installAction = UIAlertAction(title: NSLocalizedString("Install with Changes", comment: "Install edited IPA"), style: .default) { [weak alert] _ in
             do
             {
@@ -1716,7 +1804,7 @@ private extension MyAppsViewController
                 let changes = try IPAIdentityEditor.validate(name: fields[0].text ?? "",
                                                              bundleIdentifier: fields[1].text ?? "",
                                                              originalBundleIdentifier: application.bundleIdentifier)
-                completion(.success(changes))
+                completion(.success(SideloadInstallationEdit(identity: changes, iconData: iconData)))
             }
             catch
             {
@@ -1735,7 +1823,7 @@ private extension MyAppsViewController
                     _ = try IPAIdentityEditor.validate(name: fields[0].text ?? "",
                                                        bundleIdentifier: fields[1].text ?? "",
                                                        originalBundleIdentifier: application.bundleIdentifier)
-                    alert.message = details + "\n\n" + guidance
+                    alert.message = details + "\n\n" + guidance + iconStatus
                     installAction.isEnabled = true
                 }
                 catch
@@ -3330,6 +3418,13 @@ extension MyAppsViewController: UIImagePickerControllerDelegate, UINavigationCon
 {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
     {
+        if let selection = self.pendingSideloadIconSelection
+        {
+            self.pendingSideloadIconSelection = nil
+            let image = info[.editedImage] as? UIImage
+            picker.dismiss(animated: true) { selection(image) }
+            return
+        }
         defer {
             picker.dismiss(animated: true, completion: nil)
             self._imagePickerInstalledApp = nil
@@ -3341,6 +3436,12 @@ extension MyAppsViewController: UIImagePickerControllerDelegate, UINavigationCon
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
     {
+        if let selection = self.pendingSideloadIconSelection
+        {
+            self.pendingSideloadIconSelection = nil
+            picker.dismiss(animated: true) { selection(nil) }
+            return
+        }
         picker.dismiss(animated: true, completion: nil)
         self._imagePickerInstalledApp = nil
     }

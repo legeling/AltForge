@@ -328,6 +328,10 @@ Release/app-permissions.json 是经审核的声明输入，生成器不再固定
 
 `InstallationReceiptStore` 保持原有正向 UTI 确认和原子恢复。每个前台会话对仍未确认、缓存存在且无活跃安装者的 receipt，最多向已发现的 Server 发起一次 `InstallationStatusRequest(udid, bundleIdentifiers)`；macOS/Windows Server 用已有 installation_proxy 浏览能力返回集合交集。客户端只接受请求集合内的已安装标识，再由同一 receipt 恢复路径写入 Core Data。查询有 30 秒上限，结束或超时断开连接；旧版 Server 的 unknown-request、设备锁定/断连与传输失败均不改变本地状态，后续前台会话可重新确认。查询不阻塞本地 UTI 补查。浏览成本与设备已安装 App 数和待确认数线性相关，额外网络请求只发生在存在未确认安装时。既有 `ResultOperation` 有限后台任务继续承载安装步骤；iOS 挂起或用户强退后不保证签名及安装在后台继续，回前台只恢复有设备证据的已完成结果。该变更需 iOS 与 Server 同时更新，旧版 Server 只能走既有 UTI 恢复。
 
+### `DES-034` 跨端 IPA 安装选项与自定义图标
+
+AltForge Server 取消菜单项的 Option alternate 属性，保留设备子菜单作为独立常显入口。文件选择后在后台通过现有 AltSign ZIP 解包器解包一次，显示应用名称、Bundle ID、版本、扩展数量和可读取图标，再提供直接安装或编辑安装。编辑复用 iOS 的 `IPAIdentityEditor`；macOS 以 ImageIO 校验 PNG/JPEG，`IPAIconCropView` 用拖动及缩放选择方形裁切，iOS 以系统照片选择器内置裁切并归一化为 PNG。两端使用同一个 `IPAIconEditor`，仅在临时 `.app` 写入 1024/120/180/152 像素无透明度 PNG，替换 iPhone/iPad primary icon 文件引用并保留 alternate icon，不改原 IPA 或 `Assets.car`。iOS 在解包后、扩展检查和 AppManager 安装前应用编辑并重载 `ALTApplication`；macOS 签名链路收到已准备 `.app` 后跳过二次解包。其余认证、provisioning、缓存、设备安装与记录恢复仍走现有流程。图标预览仅读包内独立 PNG/JPEG；只有 `Assets.car` 时显示通用占位图。取消、失败或终态清理临时目录。无协议、数据库迁移；图像文件上限 20 MiB，每边 180–4096 像素，解码/输出有界。回滚可移除导入时图标选择与桌面独立入口，已有已签名 App 不需迁移。主屏幕图标与刷新需真机验收。
+
 ## 方案取舍
 
 | 方案 | 优点 | 代价 | 决策 |

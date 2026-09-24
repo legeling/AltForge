@@ -55,9 +55,9 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
-                                        <menuItem title="Sideload .ipa…" id="x0e-zI-0A2" userLabel="Install .ipa">
+                                        <menuItem title="Install IPA…" id="x0e-zI-0A2" userLabel="Install IPA">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Sideload .ipa…" id="IuI-bV-fTY">
+                                            <menu key="submenu" title="Install IPA…" id="IuI-bV-fTY">
                                                 <items>
                                                     <menuItem title="No Connected Devices" id="in5-an-MD0">
                                                         <modifierMask key="keyEquivalentModifierMask"/>

@@ -5,6 +5,7 @@
     "com.apple.security.application-groups"
   ],
   "privacy": {
-    "NSLocalNetworkUsageDescription": "AltForge uses the local network to find and communicate with AltServer."
+    "NSLocalNetworkUsageDescription": "AltForge uses the local network to find and communicate with AltServer.",
+    "NSPhotoLibraryUsageDescription": "AltForge lets you select and crop a photo for an app icon."
   }
 }

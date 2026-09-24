@@ -1,7 +1,9 @@
 import Foundation
 
 import AltSign
+#if canImport(AltStoreCore)
 import AltStoreCore
+#endif
 
 enum IPAIdentityEditor
 {
@@ -58,7 +60,12 @@ enum IPAIdentityEditor
             throw EditError.invalidBundleIdentifier
         }
 
-        guard bundleIdentifier.caseInsensitiveCompare(StoreApp.altstoreAppID) != .orderedSame else {
+        #if canImport(AltStoreCore)
+        let reservedBundleIdentifier = StoreApp.altstoreAppID
+        #else
+        let reservedBundleIdentifier = ALTApplication.altstoreBundleID
+        #endif
+        guard bundleIdentifier.caseInsensitiveCompare(reservedBundleIdentifier) != .orderedSame || bundleIdentifier == originalBundleIdentifier else {
             throw EditError.reservedBundleIdentifier
         }
 

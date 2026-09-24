@@ -129,6 +129,8 @@ struct ALTInstallationProgressUpdate
 final class InstallationProgressWindowController: NSWindowController
 {
     private let deviceName: String
+    private let applicationName: String
+    private let applicationIcon: NSImage?
     private let downloadControl: ALTInstallationDownloadControl
     private let titleLabel = NSTextField(labelWithString: "")
     private let detailLabel = NSTextField(wrappingLabelWithString: "")
@@ -142,9 +144,13 @@ final class InstallationProgressWindowController: NSWindowController
     private let sourceStack = NSStackView()
     private var completionCloseHandler: (() -> Void)?
 
-    init(deviceName: String, downloadControl: ALTInstallationDownloadControl)
+    init(deviceName: String, applicationName: String? = nil, applicationIcon: NSImage? = nil,
+         downloadControl: ALTInstallationDownloadControl)
     {
         self.deviceName = deviceName
+        let requestedName = applicationName?.components(separatedBy: .newlines).first ?? NSLocalizedString("AltForge", comment: "")
+        self.applicationName = String(requestedName.prefix(60))
+        self.applicationIcon = applicationIcon
         self.downloadControl = downloadControl
 
         let window = NSWindow(
@@ -222,20 +228,20 @@ final class InstallationProgressWindowController: NSWindowController
                 : NSLocalizedString("Downloading the IPA from the AltForge GitHub Release…", comment: "")
 
         case .preparingApplication:
-            self.titleLabel.stringValue = NSLocalizedString("Preparing AltForge", comment: "")
+            self.titleLabel.stringValue = String(format: NSLocalizedString("Preparing %@", comment: "Preparing an app for signing"), self.applicationName)
             self.detailLabel.stringValue = NSLocalizedString("Reading the IPA and preparing provisioning profiles…", comment: "")
 
         case .signing:
-            self.titleLabel.stringValue = NSLocalizedString("Signing AltForge", comment: "")
+            self.titleLabel.stringValue = String(format: NSLocalizedString("Signing %@", comment: "Signing an app"), self.applicationName)
             self.detailLabel.stringValue = NSLocalizedString("Signing the app for your device…", comment: "")
 
         case .installing:
-            self.titleLabel.stringValue = NSLocalizedString("Installing AltForge", comment: "")
-            self.detailLabel.stringValue = String(format: NSLocalizedString("Sending and installing AltForge on %@…", comment: ""), self.deviceName)
+            self.titleLabel.stringValue = String(format: NSLocalizedString("Installing %@", comment: "Installing an app"), self.applicationName)
+            self.detailLabel.stringValue = String(format: NSLocalizedString("Sending and installing %@ on %@…", comment: ""), self.applicationName, self.deviceName)
 
         case .completed:
             self.titleLabel.stringValue = NSLocalizedString("Installation Complete", comment: "")
-            self.detailLabel.stringValue = String(format: NSLocalizedString("AltForge was successfully installed on %@.", comment: ""), self.deviceName)
+            self.detailLabel.stringValue = String(format: NSLocalizedString("%@ was successfully installed on %@.", comment: ""), self.applicationName, self.deviceName)
         }
 
         self.setDownloadControlsVisible(update.stage == .downloading)
@@ -296,7 +302,7 @@ private extension InstallationProgressWindowController
         let contentView = NSView()
         window.contentView = contentView
 
-        let iconView = NSImageView(image: NSApplication.shared.applicationIconImage)
+        let iconView = NSImageView(image: self.applicationIcon ?? NSApplication.shared.applicationIconImage)
         iconView.imageScaling = .scaleProportionallyUpOrDown
         iconView.translatesAutoresizingMaskIntoConstraints = false
 

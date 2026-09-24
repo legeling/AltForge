@@ -8,6 +8,8 @@
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>AltForge lets you select and crop a photo for an app icon.</string>
 	<key>CFBundleDisplayName</key>
 	<string>AltForge</string>
 	<key>CFBundleDocumentTypes</key>

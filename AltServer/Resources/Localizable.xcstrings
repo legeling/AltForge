@@ -1,6 +1,21 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Choose a PNG or JPEG image between 180 and 4096 pixels on each side." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请选择宽、高均为 180 至 4096 像素的 PNG 或 JPEG 图片。" } } }
+    },
+    "Crop the image to a square before installing." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装前请先把图片裁切为正方形。" } } }
+    },
+    "Crop App Icon" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "裁切应用图标" } } }
+    },
+    "Drag to position the image, then adjust the zoom." : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "拖动图片调整位置，再用滑块缩放。" } } }
+    },
+    "Use Icon" : {
+      "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "使用此图标" } } }
+    },
     "Deactivate one sideloaded app, then try again. If an offloaded app is still counted, reinstall or delete it before retrying." : {
       "localizations" : {
         "zh-Hans" : {
@@ -4263,6 +4278,29 @@
         }
       }
     },
+    "Reading IPA" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在读取 IPA" } } } },
+    "Checking app information…" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在检查应用信息…" } } } },
+    "Install App" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "安装应用" } } } },
+    "Name: %@\nBundle ID: %@\nVersion: %@\nExtensions: %d" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "名称：%1$@\n包标识符：%2$@\n版本：%3$@\n扩展：%4$d 个" } } } },
+    "Install Without Changes" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "直接安装" } } } },
+    "Edit Details…" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "编辑信息…" } } } },
+    "Edit App Details" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "编辑应用信息" } } } },
+    "Install with Changes" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "按修改安装" } } } },
+    "Choose Icon…" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "选择图标…" } } } },
+    "Choose a square PNG or JPEG image between 180 and 4096 pixels." : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请选择边长为 180 至 4096 像素的正方形 PNG 或 JPEG 图片。" } } } },
+    "The app icon can only be changed in a temporary installation copy." : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "只能在安装用的临时副本中修改应用图标。" } } } },
+    "The IPA's icon information could not be updated." : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法更新这个 IPA 的图标信息。" } } } },
+    "App Name" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "应用名称" } } } },
+    "Bundle ID" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "包标识符" } } } },
+    "Use a different bundle ID for another copy. Sign-in, shared data, and notifications may be affected." : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "多开时请使用不同的包标识符；登录、共享数据和通知可能受影响。" } } } },
+    "Enter an app name without line breaks." : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请输入不含换行的应用名称。" } } } },
+    "Enter a bundle ID like com.example.app using letters, numbers, periods, or hyphens." : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请输入类似 com.example.app 的包标识符，只能使用英文字母、数字、句点和连字符。" } } } },
+    "This bundle ID belongs to AltForge. Choose another one." : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "这个包标识符属于 AltForge，请换一个。" } } } },
+    "The IPA's app information could not be edited." : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法编辑这个 IPA 的应用信息。" } } } },
+    "Preparing %@" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在准备%@" } } } },
+    "Signing %@" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在签名%@" } } } },
+    "Installing %@" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在安装%@" } } } },
+    "Sending and installing %@ on %@…" : { "localizations" : { "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在向%2$@传送并安装%1$@…" } } } },
     "This app uses permissions that were not declared by its source. Installation was stopped." : {
       "localizations" : {
         "zh-Hans" : {

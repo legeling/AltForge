@@ -52,10 +52,10 @@ The official download and installation page is [altforge-dz7.pages.dev](https://
 |---|---|
 | **Identity and source** | Uses the AltForge brand, `com.legeling.AltForge` identifier family, and this repository's GitHub Release source. |
 | **Unicode IPA support** | Reads UTF-8 and Info-ZIP Unicode Path metadata, includes bounded fallbacks for common legacy East Asian filename encodings, and writes UTF-8 ZIP paths. |
-| **IPA identity editor** | Review an imported IPA, install it unchanged, or change its app name and bundle ID before signing. Renaming an already managed app reinstalls it with the same bundle ID; changed IDs may disrupt sign-in, shared data, or push notifications. |
+| **IPA identity editor** | On iOS or macOS, review an imported IPA, install it unchanged, or change its app name, bundle ID, and icon before signing. Pick and crop a photo on iOS or a PNG/JPEG file on macOS. Renaming an already managed app reinstalls it with the same bundle ID; changed IDs may disrupt sign-in, shared data, or push notifications. |
 | **Apple App ID compatibility** | Converts only the Apple App ID description to safe ASCII without changing the app's Unicode display name. |
 | **Developer teams** | Supports individual, organization, and free developer-team fallback in both client and AltServer installation paths. |
-| **Reliable desktop installs** | Shows transfer size, speed, source, signing, and device-install progress; deduplicates work per device and supports manual switching among SHA-256-verified GitHub, configured CDN, and mirror routes. |
+| **Reliable desktop installs** | The macOS menu keeps **Install IPA** separate from **Install AltForge**. It reviews a local IPA before Apple ID sign-in, then installs unchanged or edits its name, bundle ID, and optional cropped icon in a temporary copy. The existing installer shows transfer, signing, and device progress. |
 | **Maintenance fixes** | Prevents negative expiration-day displays and makes macOS error details selectable without discarding attributed formatting. |
 | **Build and documentation** | Uses one tag-driven workflow for bounded iOS, macOS, and Windows validation, packaging, and release, with a complete spec and change history under [`docs/`](docs/README.md). |
 
@@ -67,7 +67,7 @@ General compatibility fixes remain separate from branding where practical so the
   <tr>
     <td width="50%" valign="top">
       <strong>Install a release</strong><br><br>
-      Download AltServer for macOS or Windows, connect and trust the device, then choose <strong>Install AltForge</strong> from the AltServer menu. The macOS server keeps one visible task per device, reports transfer size and speed, and lets users switch verified download routes.<br><br>
+      Download AltServer for macOS or Windows, connect and trust the device, then choose <strong>Install AltForge</strong> from the AltServer menu. On macOS, choose <strong>Install IPA</strong> to inspect a local package and optionally edit its name, bundle ID, or icon before signing. The original IPA is not changed.<br><br>
       <a href="https://github.com/legeling/AltForge/releases"><strong>Open GitHub Releases →</strong></a>
     </td>
     <td width="50%" valign="top">

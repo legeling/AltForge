@@ -27,10 +27,12 @@ class ReleasePrivacyTests(unittest.TestCase):
                 archive.writestr(name, plistlib.dumps(content, fmt=plistlib.FMT_BINARY) if isinstance(content, dict) else content)
 
     def test_original_empty_privacy_source_fails_and_reviewed_policy_passes(self):
+        self.main["NSPhotoLibraryUsageDescription"] = "Select and crop an icon"
         self.write_ipa()
         with self.assertRaisesRegex(ValueError, "NSLocalNetworkUsageDescription"):
             verify_ipa(self.ipa, {})
         self.assertEqual(verify_ipa(self.ipa, self.privacy), 1)
+        self.assertIn("NSPhotoLibraryUsageDescription", self.privacy)
 
     def test_extension_privacy_cannot_be_silently_added(self):
         self.write_ipa([(MAIN_INFO, self.main),

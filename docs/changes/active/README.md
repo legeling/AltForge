@@ -10,6 +10,7 @@
 
 | ID | 标题 | 状态 |
 |---|---|---|
+| [`CHG-20260924-001`](CHG-20260924-001-macos-ipa-install-options/README.md) | 跨端 IPA 安装选项与自定义图标 | 本地实现 / 验证中 |
 | [`CHG-20260809-002`](CHG-20260809-002-windows-altserver-monorepo/README.md) | 将 Windows AltServer 纳入单仓库交付 | In progress |
 | [`CHG-20260809-007`](CHG-20260809-007-macos-server-identity-settings/README.md) | macOS Server 身份、菜单与设置 | In progress |
 | [`CHG-20260810-002`](CHG-20260810-002-macos-menu-icon-scale/README.md) | 放大 macOS 菜单栏图标 | Implemented / menu bar smoke pending |
