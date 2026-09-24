@@ -27,6 +27,7 @@
 
 | ID | 标题 | 完成日期 |
 |---|---|---|
+| [CHG-20260924-001](completed/2026/09/CHG-20260924-001-ipa-install-options-and-icons/README.md) | 跨端 IPA 安装选项与自定义图标；真机验收转 Issue 跟踪 | 2026-09-24 |
 | [CHG-20260923-002](completed/2026/09/CHG-20260923-002-scrolling-install-recovery/README.md) | 安装进度随列表滚动与设备确认恢复；真机验收转 Issue 跟踪 | 2026-09-23 |
 | [CHG-20260923-001](completed/2026/09/CHG-20260923-001-ipa-identity-editor/README.md) | IPA 包名和名称编辑、已安装应用改名；真机验收转 Issue 跟踪 | 2026-09-23 |
 | [CHG-20260905-004](completed/2026/09/CHG-20260905-004-source-permission-contract/README.md) | v2.4.7 官方源权限修复、真实 IPA 发布检查及 201 提示 | 2026-09-05 |

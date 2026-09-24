@@ -1,6 +1,6 @@
 # CHG-20260924-001 跨端 IPA 安装选项与自定义图标
 
-- 状态：本地门禁通过，CI 与真机验收中
+- 状态：实现完成；2.6.0 发布中，真机验收转 `ISSUE-20260923-001` 跟踪
 - 类型：功能 / iOS 与 macOS UX
 - 日期：2026-09-24
 
@@ -20,4 +20,6 @@
 
 ## 本地结果（2026-09-24）
 
-macOS 图标 fixture 已覆盖非正方形裁切/缩放、方形输出、四种图标尺寸、元数据与临时目录边界；macOS Debug build、共享编辑器的 iOS SDK 类型检查、Swift 语法、版本契约、仓库契约、发布隐私测试、本地化 JSON 和 plist 检查通过。iOS XCTest 已加入发布 workflow，但本机未安装 iOS 26.5 平台，无法在本机运行 iOS target build / 模拟器测试，待 CI 验证。真机上的裁切 UI、主屏幕图标、双开、刷新与后台安装仍需用户验收。没有使用真实 Apple ID、证书或设备执行签名安装。
+macOS 图标 fixture 已覆盖非正方形裁切/缩放、方形输出、四种图标尺寸、元数据与临时目录边界；macOS Debug build、共享编辑器的 iOS SDK 类型检查、Swift 语法、版本契约、仓库契约、发布隐私测试、本地化 JSON 和 plist 检查通过。本机未安装 iOS 26.5 平台，无法在本机运行 iOS target build / 模拟器测试；下方 hosted 预检已补足。真机上的裁切 UI、主屏幕图标、双开、刷新与后台安装仍需用户验收。没有使用真实 Apple ID、证书或设备执行签名安装。
+
+提交 `70215e5f` 的手动 Release 预检 [run 35985608497](https://github.com/legeling/AltForge/actions/runs/35985608497) 成功：iOS Simulator 定向 XCTest（含 `testIPAIconEditorUpdatesTemporaryAppOnly`）、unsigned iOS IPA、macOS Universal DMG、macOS 裁切 fixture 和 Windows ZIP 均通过。分支预检没有创建 Release；标签流水线与下载校验仍需单独执行。真机验收仍在 `ISSUE-20260923-001`，不把 CI 视为设备安装证明。
